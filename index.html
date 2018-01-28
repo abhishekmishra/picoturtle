@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Pico Turtle</title>
-  </head>
-  <body>
-    <h1>Pico Turtle</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pico Turtle</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body class="container-fluid">
+  <div class="row">
+    <div class="col-md-4 col-xs-4">
+    </div>
+    <div class="col-md-8 col-xs-8">
+      <div class="w-100 h-100 border" id="turtleCanvasContainre">
+        <canvas class="w-100 h-100" id="turtleCanvas">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <!-- All of the Node.js APIs are available in this renderer process. -->
+  <!-- We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>
-  </body>
-  
+    and Electron <script>document.write(process.versions.electron)</script>. -->
+
   <script>
     // You can also require other files to run in this process
-    require('./dist/renderer.js')
+    require('./renderer.js')
   </script>
+</body>
+
 </html>

@@ -2,9 +2,10 @@
   "name": "picoturtle",
   "version": "0.0.1",
   "description": "A very tiny turtle",
-  "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "build": "tsc",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
   },
   "repository": "https://github.com/abhishekmishra/picoturtle.git",
   "keywords": [
@@ -13,9 +14,8 @@
   "author": "Abhishek Mishra",
   "license": "MIT License",
   "devDependencies": {
-    "bootstrap": "^4.0.0",
     "electron": "^1.7.11",
-    "jquery": "^3.3.1",
-    "popper.js": "^1.12.9"
+    "tslint": "^5.9.1",
+    "typescript": "^2.6.2"
   }
 }
