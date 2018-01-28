@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start-typescript",
-  "version": "1.0.0",
-  "description": "A minimal Electron application written with Typescript",
+  "name": "picoturtle",
+  "version": "0.0.1",
+  "description": "A very tiny turtle",
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
@@ -9,15 +9,10 @@
   },
   "repository": "https://github.com/electron/electron-quick-start-typescript",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo",
-    "typescript"
+    "pico turtle"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Abhishek Mishra",
+  "license": "MIT License",
   "devDependencies": {
     "electron": "^1.7.11",
     "tslint": "^5.9.1",
