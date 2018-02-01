@@ -7,3 +7,6 @@ require('bootstrap');
 
 let Turtle = require('./src/turtle');
 let t = new Turtle('turtleCanvas');
+
+let BiwaScheme = require("biwascheme"); 
+console.log(BiwaScheme.run("(+ 1 2)")); // or // BiwaScheme.run_file("a.scm");

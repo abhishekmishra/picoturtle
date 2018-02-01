@@ -17,5 +17,8 @@
     "electron": "^1.7.11",
     "jquery": "^3.3.1",
     "popper.js": "^1.12.9"
+  },
+  "dependencies": {
+    "biwascheme": "^0.6.8"
   }
 }
