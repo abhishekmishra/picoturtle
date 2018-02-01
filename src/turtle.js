@@ -22,7 +22,7 @@ class Turtle {
     initTurtle() {
         let c = new Point(this.width/2, this.height/2);
         this.ctx.fillStyle = 'rgb(200,0,0)';
-        this.ctx.fillRect(c.x, c.y, 10, 10);
+        this.ctx.fillRect(c.x, c.y, 3, 3);
     }
 }
 

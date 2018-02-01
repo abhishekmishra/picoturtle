@@ -19,6 +19,7 @@
     "popper.js": "^1.12.9"
   },
   "dependencies": {
-    "biwascheme": "^0.6.8"
+    "biwascheme": "^0.6.8",
+    "fabric": "^1.7.22"
   }
 }
