@@ -49,15 +49,15 @@ class Turtle {
         let y2 = d * (Math.sin(theta)) + this.location.y;
         let x2 = d * (Math.cos(theta)) + this.location.x;
 
-        console.log('current point is ' + this.location.x + ', ' + this.location.y + ', new point is ' + x2 + ', ' + y2);
+        // console.log('current point is ' + this.location.x + ', ' + this.location.y + ', new point is ' + x2 + ', ' + y2);
         this.ctx.beginPath();
 
         this.ctx.moveTo(this.location.x, this.location.y);
         if (this.penup) {
-            console.log('moving');
+            // console.log('moving');
             this.ctx.moveTo(x2, y2);
         } else {
-            console.log('drawing line');
+            // console.log('drawing line');
             this.ctx.lineTo(x2, y2);
         }
 

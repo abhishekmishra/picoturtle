@@ -16,9 +16,9 @@ t.right(-90);
 t.forward(50);
 
 function circle(t) {
-    for(var i = 0; i < 360; i++) {
-        t.forward(1);
-        t.right(1);
+    for(var i = 0; i < 3600; i++) {
+        t.forward(.1);
+        t.right(.1);
     }
 }
 
