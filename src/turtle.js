@@ -18,16 +18,14 @@ class Turtle {
         console.log(this.canvas);
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        console.log('Canvas size is ' + this.width + ', ' + this.height);
         this.ctx = this.canvas.getContext('2d');
     }
 
     initTurtle() {
         this.location = new Point(this.width / 2, this.height / 2);
-        //     this.ctx.fillStyle = 'rgb(200,0,0)';
-        //     this.ctx.fillRect(c.x, c.y, 3, 3);
         this.ctx.beginPath();
         this.ctx.moveTo(this.location.x, this.location.y);
-        // this.ctx.lineTo(100, 100);
         this.ctx.stroke();
         this.angle = 0;
         this.penDown();
@@ -54,10 +52,8 @@ class Turtle {
 
         this.ctx.moveTo(this.location.x, this.location.y);
         if (this.penup) {
-            // console.log('moving');
             this.ctx.moveTo(x2, y2);
         } else {
-            // console.log('drawing line');
             this.ctx.lineTo(x2, y2);
         }
 
@@ -70,4 +66,9 @@ class Turtle {
     }
 }
 
-module.exports = Turtle;
+function createTurtle(canvas_id) {
+    return new Turtle(canvas_id);
+}
+
+module.exports.Turtle = Turtle;
+module.exports.createTurtle = createTurtle;
