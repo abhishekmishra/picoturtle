@@ -4,6 +4,4 @@ class TurtleState {
         this.location = location;
         this.heading = heading;
     }
-
-    
 }
