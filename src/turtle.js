@@ -10,6 +10,8 @@ class Turtle {
         this.angle = 90;
         this.initCanvas();
         this.initTurtle();
+
+        this.history = [];
     }
 
     initCanvas() {
@@ -64,13 +66,59 @@ class Turtle {
 
     //style methods
 
-    color(pencolor='black', turtlecolor='black') {
+    color(pencolor = 'black', turtlecolor = 'black') {
         this.ctx.strokeStyle = pencolor;
     }
 
-    reset() {
+    clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.initTurtle();
+    }
+
+    reset() {
+        this.clear();
+        this.clearHistory();
+    }
+
+    addToHistory(cmd) {
+        this.history.push(cmd);
+    }
+
+    clearHistory() {
+        this.history = [];
+    }
+
+    drawTurtle() {
+        let color = this.ctx.strokeStyle;
+        this.ctx.strokeStyle = 'black';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(this.location.x - 5, this.location.y - 5, 10, 10);
+        this.color(color);
+    }
+
+    exec() {
+        if (arguments.length > 0) {
+            this.clear();
+
+            for(let i = 0; i < this.history.length; i++) {
+                var cmdArgs = this.history[i];
+                if(cmdArgs.length == 1) {
+                    this[cmdArgs[0]]();
+                } else if(cmdArgs.length == 2) {
+                    this[cmdArgs[0]](cmdArgs[1]);
+                }
+            }
+
+            let command = arguments[0];
+            this.addToHistory(arguments);
+            if(arguments.length == 1) {
+                this[command]();
+            } else if(arguments.length == 2) {
+                this[command](arguments[1]);
+            }
+
+            this.drawTurtle();
+        }
     }
 }
 
