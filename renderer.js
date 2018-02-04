@@ -7,7 +7,9 @@ require('bootstrap');
 let turtle = require('./src/turtle.js');
 let turtle_editor = require('./src/turtle_editor.js');
 let turtle_commands = require('./src/turtle_commands.js');
+let turtle_config = require('./src/turtle_config.js');
 
+let tconfig = new turtle_config.TurtleConfig();
 let teditor = new turtle_editor.TurtleEditor();
 
 let BiwaScheme = require("biwascheme"); 
