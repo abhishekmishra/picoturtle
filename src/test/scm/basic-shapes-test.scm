@@ -1,0 +1,2 @@
+(pencolor "red")
+(circle)

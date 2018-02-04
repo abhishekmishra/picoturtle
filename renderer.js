@@ -24,6 +24,12 @@ require('bootstrap');
 
 // circle(t);
 
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/scheme");
+
 let BiwaScheme = require("biwascheme"); 
 //console.log(BiwaScheme.run("(+ 1 2)")); // or 
-BiwaScheme.run_file("./src/scm/first.scm");
+BiwaScheme.run_file("./src/lib/scm/scheme-turtle-bindings.scm");
+BiwaScheme.run_file("./src/lib/scm/basic-shapes.scm");
+BiwaScheme.run_file("./src/test/scm/basic-shapes-test.scm");

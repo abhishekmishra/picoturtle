@@ -5,13 +5,36 @@
   <meta charset="UTF-8">
   <title>Pico Turtle</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+  <script src="node_modules/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+  <style type="text/css" media="screen">
+    #editor {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+
 </head>
 
-<body class="container-fluid">
+<body class="container-fluid bg-dark">
   <div class="row">
-    <div class="col-md-2 col-xs-2">
+    <div class="col-md-12 col-xs-12 m-1">
+      <button class="btn btn-info">Run</button>
+      <button class="btn btn-info">Reset</button>
     </div>
-    <div class="col-md-10 col-xs-10">
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-xs-4">
+      <div id="editor">
+        (define (hello)
+          (console-log "hello world!"))
+      </div>
+    </div>
+    <div class="col-md-8 col-xs-8">
       <div class="w-100 h-100 border" id="turtleCanvasContainre">
         <canvas class="w-100 h-100" id="turtleCanvas">
         </canvas>

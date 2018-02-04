@@ -64,6 +64,13 @@ class Turtle {
     right(angle) {
         this.angle = this.angle + angle;
     }
+
+    //style methods
+
+    color(pencolor='black', turtlecolor='black') {
+        console.log('stroke color is now ' + pencolor);
+        this.ctx.strokeStyle = pencolor;
+    }
 }
 
 function createTurtle(canvas_id) {
