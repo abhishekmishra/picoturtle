@@ -68,14 +68,41 @@ class Turtle {
     //style methods
 
     color(pencolor='black', turtlecolor='black') {
-        console.log('stroke color is now ' + pencolor);
         this.ctx.strokeStyle = pencolor;
+    }
+
+    reset() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.initTurtle();
     }
 }
 
+let t = null;
+
 function createTurtle(canvas_id) {
-    return new Turtle(canvas_id);
+    let t = new Turtle(canvas_id);
+    module.exports.t = t;
+    return t;
 }
 
 module.exports.Turtle = Turtle;
 module.exports.createTurtle = createTurtle;
+
+// let Turtle = require('./src/turtle');
+// let t = new Turtle('turtleCanvas');
+// t.forward(50);
+// t.right(-90);
+// t.forward(50);
+// t.right(-90);
+// t.forward(50);
+// t.right(-90);
+// t.forward(50);
+
+// function circle(t) {
+//     for(var i = 0; i < 3600; i++) {
+//         t.forward(.1);
+//         t.right(.1);
+//     }
+// }
+
+// circle(t);

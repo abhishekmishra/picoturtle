@@ -15,3 +15,9 @@
 
 (define (pencolor pc)
     (js-invoke t 'color pc))
+
+(define (backward d)
+    (forward (- d)))
+
+(define (left angle)
+    (right (- angle)))

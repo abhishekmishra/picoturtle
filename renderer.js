@@ -2,34 +2,30 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-console.log('we are in the index window file');
 require('bootstrap');
 
-// let Turtle = require('./src/turtle');
-// let t = new Turtle('turtleCanvas');
-// t.forward(50);
-// t.right(-90);
-// t.forward(50);
-// t.right(-90);
-// t.forward(50);
-// t.right(-90);
-// t.forward(50);
+let turtle = require('./src/turtle.js');
+let turtle_editor = require('./src/turtle_editor.js');
+let turtle_commands = require('./src/turtle_commands.js');
 
-// function circle(t) {
-//     for(var i = 0; i < 3600; i++) {
-//         t.forward(.1);
-//         t.right(.1);
-//     }
-// }
-
-// circle(t);
-
-var editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
-editor.session.setMode("ace/mode/scheme");
+let teditor = new turtle_editor.TurtleEditor();
 
 let BiwaScheme = require("biwascheme"); 
-//console.log(BiwaScheme.run("(+ 1 2)")); // or 
 BiwaScheme.run_file("./src/lib/scm/scheme-turtle-bindings.scm");
 BiwaScheme.run_file("./src/lib/scm/basic-shapes.scm");
 BiwaScheme.run_file("./src/test/scm/basic-shapes-test.scm");
+
+let t = turtle.t;
+let tcmd = new turtle_commands.TurtleCommands(t);
+
+module.exports.tcmd = tcmd;
+
+function run() {
+    tcmd.reset();
+    let txt = teditor.getText();
+    //console.log(txt);
+    BiwaScheme.run(txt);
+}
+
+module.exports.run = run;
+run();
