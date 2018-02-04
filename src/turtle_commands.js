@@ -1,3 +1,5 @@
+const {dialog} = require('electron').remote
+
 class TurtleCommands {
     constructor(t) {
         this.t = t;
@@ -5,6 +7,14 @@ class TurtleCommands {
 
     reset() {
         this.t.reset();
+    }
+
+    open() {
+        console.log(dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}));
+    }
+
+    save() {
+        
     }
 }
 
