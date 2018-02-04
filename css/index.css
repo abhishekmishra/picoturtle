@@ -33,9 +33,41 @@
     font-size: 20px;
  }
 
- footer {
-    position: fixed;
-    height: 100px;
-    bottom: 0;
-    width: 100%;
-}
+ html,
+ body {
+     height: 100%;
+     padding: 0px;
+     margin: 0px;
+ }
+
+ /*
+ See https://stackoverflow.com/questions/90178/make-a-div-fill-the-height-of-the-remaining-screen-space
+ for making row fillup the container
+ */
+ .box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+  
+  .box .row {
+    border: 1px dotted grey;
+  }
+  
+  .box .row.header {
+    border: 0;
+    flex: 0 1 auto;
+    /* The above is shorthand for:
+    flex-grow: 0,
+    flex-shrink: 1,
+    flex-basis: auto
+    */
+  }
+  
+  .box .row.content {
+    flex: 1 1 auto;
+  }
+  
+  .box .row.footer {
+    flex: 0 1 40px;
+  }

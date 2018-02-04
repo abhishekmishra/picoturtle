@@ -15,9 +15,10 @@ let START_VALUE =
 class TurtleEditor {
     constructor() {
         this.editor = ace.edit("editor");
-        this.editor.setTheme("ace/theme/clouds");
+        this.editor.setTheme("ace/theme/monokai");
         this.editor.session.setMode("ace/mode/scheme");
-        this.editor.setValue(START_VALUE);
+        this.editor.setValue(START_VALUE, 1);
+        this.editor.focus();
     }
 
     getText() {
