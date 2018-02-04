@@ -1,5 +1,3 @@
-(console-log 'hello')
-
 (define Turtle (js-eval "require('../../../src/turtle')"))
 (define t (js-invoke Turtle 'createTurtle "turtleCanvas"))
 
