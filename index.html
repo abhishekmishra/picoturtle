@@ -5,8 +5,10 @@
   <meta charset="UTF-8">
   <title>Pico Turtle</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
 
   <script src="node_modules/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script defer src="./fonts/fontawesome-all.min.js"></script>
 
   <style type="text/css" media="screen">
     #editor {
@@ -21,23 +23,46 @@
 </head>
 
 <body class="container-fluid bg-dark">
-  <div class="row">
-    <div class="col-md-12 col-xs-12 m-1 mb-2">
-      <button class="btn btn-primary btn-sm" onclick="r.run()">Run</button>
-      <button class="btn btn-info btn-sm" onclick="r.tcmd.reset();">Reset</button>
+  <div class="row m-1 md-2">
+    <div class="col-md-5 col-xs-5">
+      <span id="turtleHeader" class="h1 text-light">&#128034; Pico Turtle</span>
+    </div>
+    <div class="col-md-7 col-xs-7">
+      <button class="btn btn-primary float-center btn-lg p-1" onclick="r.run()">
+        <span class="h3">RUN <i class="fas fa-play fa-sm"></i></span>
+      </button>
+      <button class="btn btn-dark btn-outline-light float-center btn-lg p-1" onclick="r.tcmd.reset();">
+        <span class="h3">CLEAR <i class="fas fa-eraser fa-sm"></i></span>
+      </button>
+
+      <button class="btn btn-danger float-right btn-lg p-1 ml-1" onclick="">
+        <span class="h3">QUIT <i class="fas fa-sign-out-alt fa-sm"></i></span>
+      </button>
+      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="">
+        <span class="h3">SAVE <i class="fas fa-save fa-sm"></i></span>
+      </button>
+      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="">
+        <span class="h3">OPEN <i class="fas fa-file fa-sm"></i></span>
+      </button>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4 col-xs-4">
-      <div id="editor">
+    <div class="col-md-5 col-xs-5 h-90">
+      <div id="editor" class="h-90">
       </div>
     </div>
-    <div class="col-md-8 col-xs-8">
-      <div class="w-100 h-100" id="turtleCanvasContainre">
-        <canvas class="w-100 h-80 bg-light" height=768 width=1080 id="turtleCanvas">
+    <div class="col-md-7 col-xs-7">
+      <div class="" id="turtleCanvasContainer">
+        <canvas class="w-100 h-90 bg-light" height=768 width=1080 id="turtleCanvas">
         </canvas>
       </div>
     </div>
+  </div>
+
+  <div class="row">
+    <footer class="fixed-bottom">
+      file name: untitled
+    </footer>
   </div>
   <!-- All of the Node.js APIs are available in this renderer process. -->
   <!-- We are using Node.js <script>document.write(process.versions.node)</script>,

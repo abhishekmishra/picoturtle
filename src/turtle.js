@@ -13,12 +13,9 @@ class Turtle {
     }
 
     initCanvas() {
-        console.log(this.canvas_id);
         this.canvas = $('#' + this.canvas_id)[0];
-        console.log(this.canvas);
         this.width = this.canvas.width;
         this.height = this.canvas.height;
-        console.log('Canvas size is ' + this.width + ', ' + this.height);
         this.ctx = this.canvas.getContext('2d');
     }
 

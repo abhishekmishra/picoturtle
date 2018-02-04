@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Handlee";
+    src: url('../fonts/Handlee/Handlee-Regular.ttf') format("truetype");
+  }
+
+  @font-face {
+    font-family: "Oxygen_Mono";
+    src: url('../fonts/Oxygen_Mono/OxygenMono-Regular.ttf') format("truetype");
+  }
+
+  @font-face {
+    font-family: "Bungee_Inline";
+    src: url('../fonts/Bungee_Inline/BungeeInline-Regular.ttf') format("truetype");
+  }
+
+  @font-face {
+    font-family: "Abril_Fatface";
+    src: url('../fonts/Abril_Fatface/AbrilFatface-Regular.ttf') format("truetype");
+  }
+
+  body {
+    font-family: "Abril_Fatface", cursive;
+    font-size: 20px;
+}
+
+#turtleHeader  { 
+    font-family: "Handlee";
+ }
+
+#editor { 
+    font-family: "Oxygen_Mono";
+    font-weight: 400;
+    font-size: 20px;
+ }
+
+ footer {
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+}
