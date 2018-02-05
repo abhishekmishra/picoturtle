@@ -79,6 +79,7 @@ class Turtle {
     reset() {
         this.clear();
         this.clearHistory();
+        this.drawTurtle();
     }
 
     addToHistory(cmd) {
