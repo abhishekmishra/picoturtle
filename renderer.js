@@ -24,7 +24,9 @@ function run() {
     tcmd.reset();
     let txt = teditor.getText();
     //console.log(txt);
+    t.batchStart();
     BiwaScheme.run(txt);
+    t.batchEnd();
 }
 
 module.exports.tcmd = tcmd;

@@ -12,6 +12,8 @@ class Turtle {
         this.initTurtle();
 
         this.history = [];
+
+        this.batchEnabled = false;
     }
 
     initCanvas() {
@@ -117,14 +119,16 @@ class Turtle {
 
     exec() {
         if (arguments.length > 0) {
-            this.clear();
+            if (!this.batchEnabled) {
+                this.clear();
 
-            for (let i = 0; i < this.history.length; i++) {
-                var cmdArgs = this.history[i];
-                if (cmdArgs.length == 1) {
-                    this[cmdArgs[0]]();
-                } else if (cmdArgs.length == 2) {
-                    this[cmdArgs[0]](cmdArgs[1]);
+                for (let i = 0; i < this.history.length; i++) {
+                    var cmdArgs = this.history[i];
+                    if (cmdArgs.length == 1) {
+                        this[cmdArgs[0]]();
+                    } else if (cmdArgs.length == 2) {
+                        this[cmdArgs[0]](cmdArgs[1]);
+                    }
                 }
             }
 
@@ -135,9 +139,41 @@ class Turtle {
             } else if (arguments.length == 2) {
                 this[command](arguments[1]);
             }
-
-            this.drawTurtle();
+            if (!this.batchEnabled) {
+                this.drawTurtle();
+            }
         }
+    }
+
+    batchStart() {
+        this.batchEnabled = true;
+        this.clear();
+
+        for (let i = 0; i < this.history.length; i++) {
+            var cmdArgs = this.history[i];
+            if (cmdArgs.length == 1) {
+                this[cmdArgs[0]]();
+            } else if (cmdArgs.length == 2) {
+                this[cmdArgs[0]](cmdArgs[1]);
+            }
+        }
+    }
+
+    batchExec() {
+        if (arguments.length > 0) {
+            let command = arguments[0];
+            this.addToHistory(arguments);
+            if (arguments.length == 1) {
+                this[command]();
+            } else if (arguments.length == 2) {
+                this[command](arguments[1]);
+            }
+        }
+    }
+
+    batchEnd() {
+        this.drawTurtle();
+        this.batchEnabled = false;
     }
 }
 
