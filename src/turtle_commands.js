@@ -1,8 +1,11 @@
-const {dialog} = require('electron').remote
+const { dialog } = require('electron').remote;
+const fs = require('fs');
+const $ = require('jquery');
 
 class TurtleCommands {
-    constructor(t) {
+    constructor(t, teditor) {
         this.t = t;
+        this.teditor = teditor;
     }
 
     reset() {
@@ -10,11 +13,27 @@ class TurtleCommands {
     }
 
     open() {
-        console.log(dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}));
+        console.log(dialog.showOpenDialog({
+            filters: [
+                { name: 'Turtle files', extensions: ['turtle', 'scm', 'ss'] }],
+            properties: ['openFile']
+        }));
     }
 
     save() {
-        
+        if (!this.teditor.filename) {
+            let saveFile = dialog.showSaveDialog({
+                defaultPath: 'untitled.turtle',
+                filters: [
+                    { name: 'Turtle files', extentions: ['turtle'] }
+                ]
+            });
+            console.log('Save to file -> ' + saveFile);
+            this.teditor.filename = saveFile
+        }
+        fs.writeFileSync(this.teditor.filename, this.teditor.getText());
+        $('#filename').html(this.teditor.filename);
+        return this.teditor.filename;
     }
 }
 

@@ -41,7 +41,6 @@ class Turtle {
     }
 
     forward(d) {
-        debugger;
         let theta = this.angle * Math.PI / 180;
         // y2 = d sin (theta) + y1
         // x2 = d cos (theta) + x1 

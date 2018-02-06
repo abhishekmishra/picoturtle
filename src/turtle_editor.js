@@ -19,6 +19,7 @@ class TurtleEditor {
         this.editor.session.setMode("ace/mode/scheme");
         this.editor.setValue(START_VALUE, 1);
         this.editor.focus();
+        this.filename = null;
     }
 
     getText() {
@@ -27,6 +28,10 @@ class TurtleEditor {
 
     setTheme(theme) {
         return this.editor.setTheme("ace/theme/" + theme);
+    }
+
+    getFileName() {
+        return this.filename ? this.filename: 'untitled';
     }
 }
 

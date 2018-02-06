@@ -18,7 +18,7 @@ BiwaScheme.run_file("./src/lib/scm/basic-shapes.scm");
 // BiwaScheme.run_file("./src/test/scm/basic-shapes-test.scm");
 
 let t = turtle.t;
-let tcmd = new turtle_commands.TurtleCommands(t);
+let tcmd = new turtle_commands.TurtleCommands(t, teditor);
 
 function run() {
     tcmd.reset();

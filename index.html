@@ -35,13 +35,13 @@
         <span class="h4">CLEAR <i class="fas fa-eraser fa-sm"></i></span>
       </button>
 
-      <button class="btn btn-danger float-right btn-lg p-1 ml-1" onclick="">
+      <button class="btn btn-danger float-right btn-lg p-1 ml-1" onclick="r.tcmd.exit()">
         <span class="h4">QUIT <i class="fas fa-sign-out-alt fa-sm"></i></span>
       </button>
-      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="">
+      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="r.tcmd.save()">
         <span class="h4">SAVE <i class="fas fa-save fa-sm"></i></span>
       </button>
-      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="">
+      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="r.tcmd.open()">
         <span class="h4">OPEN <i class="fas fa-file fa-sm"></i></span>
       </button>
     </div>
@@ -61,7 +61,7 @@
 
   <div class="row footer">
     <footer class="fixed-bottom bg-info">
-      file name: untitled
+      file name: <div id='filename'></div>
     </footer>
   </div>
   <!-- All of the Node.js APIs are available in this renderer process. -->
