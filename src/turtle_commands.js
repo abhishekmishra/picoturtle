@@ -13,11 +13,17 @@ class TurtleCommands {
     }
 
     open() {
-        console.log(dialog.showOpenDialog({
+        let openFile = dialog.showOpenDialog({
             filters: [
                 { name: 'Turtle files', extensions: ['turtle', 'scm', 'ss'] }],
             properties: ['openFile']
-        }));
+        });
+        console.log('file to open ' + openFile);
+        let text = fs.readFileSync('' + openFile);
+        this.teditor.setText(text);
+        this.teditor.filename = openFile;
+        $('#filename').html(this.teditor.filename);
+        return openFile;
     }
 
     save() {

@@ -26,6 +26,10 @@ class TurtleEditor {
         return this.editor.getValue();
     }
 
+    setText(txt) {
+        this.editor.setValue(txt.toString(), 1);
+    }
+
     setTheme(theme) {
         return this.editor.setTheme("ace/theme/" + theme);
     }
