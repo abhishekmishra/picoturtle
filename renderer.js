@@ -32,4 +32,3 @@ function run() {
 module.exports.tcmd = tcmd;
 module.exports.run = run;
 module.exports.teditor = teditor;
-run();
