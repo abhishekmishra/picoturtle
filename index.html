@@ -24,32 +24,35 @@
 
 <body class="container-fluid bg-dark box">
   <div class="row m-0 mt-1 md-2 header">
-    <div class="col-md-5 col-xs-5">
-      <span id="turtleHeader" class="h1" style="color: #99ffcc">Pico Turtle Graphics</span>
-    </div>
-    <div class="col-md-7 col-xs-7 m-0 p-0">
-      <button class="btn btn-primary float-center btn-lg p-1" onclick="r.run()">
+    <div class="col-md-4 col-xs-4">
+      <button class="btn bg-light btn-outline-dark float-center btn-lg p-1" onclick="r.run()">
         <span class="h4">RUN
           <i class="fas fa-play fa-sm"></i>
         </span>
       </button>
-      <button class="btn btn-dark btn-outline-light float-center btn-lg p-1" onclick="r.tcmd.reset();">
+      <button class="btn bg-light btn-outline-dark float-center btn-lg p-1" onclick="r.tcmd.reset();">
         <span class="h4">CLEAR
           <i class="fas fa-eraser fa-sm"></i>
         </span>
       </button>
+    </div>
 
-      <button class="btn btn-danger float-right btn-lg p-1 ml-1" onclick="r.tcmd.exit()">
+    <div class="col-md-4 col-xs-4">
+      <span id="turtleHeader" class="h1 float-center" style="color: #99ffcc">Pico Turtle Graphics</span>
+    </div>
+    <div class="col-md-4 col-xs-4 m-0 p-0">
+
+      <button class="btn bg-light btn-outline-dark float-right btn-lg p-1 ml-1" onclick="r.tcmd.exit()">
         <span class="h4">QUIT
           <i class="fas fa-sign-out-alt fa-sm"></i>
         </span>
       </button>
-      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="r.tcmd.save()">
+      <button class="btn bg-light btn-outline-dark float-right btn-lg p-1 ml-1" onclick="r.tcmd.save()">
         <span class="h4">SAVE
           <i class="fas fa-save fa-sm"></i>
         </span>
       </button>
-      <button class="btn btn-dark btn-outline-light float-right btn-lg p-1 ml-1" onclick="r.tcmd.open()">
+      <button class="btn bg-light btn-outline-dark float-right btn-lg p-1 ml-1" onclick="r.tcmd.open()">
         <span class="h4">OPEN
           <i class="fas fa-file fa-sm"></i>
         </span>
