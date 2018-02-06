@@ -21,9 +21,9 @@ class TurtleCommands {
         console.log('file to open ' + openFile);
         let text = fs.readFileSync('' + openFile);
         this.teditor.setText(text);
-        this.teditor.filename = openFile;
+        this.teditor.filename = openFile.toString();
         $('#filename').html(this.teditor.filename);
-        return openFile;
+        return openFile.toString();
     }
 
     save() {
