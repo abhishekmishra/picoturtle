@@ -25,10 +25,8 @@ class Turtle {
 
     initTurtle() {
         this.location = new Point(this.width / 2, this.height / 2);
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.location.x, this.location.y);
-        this.ctx.stroke();
         this.angle = 0;
+        this.history = [];
         this.penDown();
         this.drawTurtle();
     }
@@ -74,13 +72,11 @@ class Turtle {
 
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        // this.initTurtle();
     }
 
     reset() {
         this.clear();
-        this.clearHistory();
-        this.drawTurtle();
+        this.initTurtle();
     }
 
     addToHistory(cmd) {
