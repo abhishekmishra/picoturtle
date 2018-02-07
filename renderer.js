@@ -22,3 +22,5 @@ let tcmd = new turtle_commands.TurtleCommands(t, teditor);
 
 module.exports.tcmd = tcmd;
 module.exports.teditor = teditor;
+
+tcmd.newFile();

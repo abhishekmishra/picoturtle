@@ -21,6 +21,13 @@ class TurtleCommands {
         this.t.batchEnd();
     }
 
+    newFile() {
+        this.reset();
+        this.teditor.setText(';Empty file\n');
+        this.teditor.filename = null;
+        $('#filename').html('noname.turtle');
+    }
+
 
     open() {
         let openFile = dialog.showOpenDialog({
@@ -34,9 +41,11 @@ class TurtleCommands {
             this.teditor.setText(text);
             this.teditor.filename = openFile.toString();
             $('#filename').html(this.teditor.filename);
+            $('#filename').html(this.teditor.filename);
             return openFile.toString();
         } else {
             console.log('No file selected.');
+            $('#filename').html('noname.turtle');
             return null;
         }
     }
@@ -54,6 +63,7 @@ class TurtleCommands {
                 this.teditor.filename = saveFile
             } else {
                 console.log('No file selected.');
+                $('#filename').html('noname.turtle');
                 return null;
             }
         }
