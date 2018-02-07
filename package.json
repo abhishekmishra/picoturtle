@@ -14,7 +14,7 @@
   "license": "MIT License",
   "devDependencies": {
     "bootstrap": "^4.0.0",
-    "electron": "^1.7.11",
+    "electron": "^1.8.2",
     "jquery": "^3.3.1",
     "popper.js": "^1.12.9"
   },
