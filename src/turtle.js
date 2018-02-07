@@ -30,6 +30,7 @@ class Turtle {
         this.ctx.stroke();
         this.angle = 0;
         this.penDown();
+        this.drawTurtle();
     }
 
     penUp() {
@@ -73,7 +74,7 @@ class Turtle {
 
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.initTurtle();
+        // this.initTurtle();
     }
 
     reset() {

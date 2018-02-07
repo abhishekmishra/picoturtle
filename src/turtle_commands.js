@@ -1,6 +1,7 @@
 const { dialog } = require('electron').remote;
 const fs = require('fs');
 const $ = require('jquery');
+const BiwaScheme = require("biwascheme"); 
 
 class TurtleCommands {
     constructor(t, teditor) {
@@ -12,6 +13,15 @@ class TurtleCommands {
         this.t.reset();
     }
 
+    run() {
+        this.reset();
+        let txt = this.teditor.getText();
+        this.t.batchStart();
+        BiwaScheme.run(txt);
+        this.t.batchEnd();
+    }
+    
+    
     open() {
         let openFile = dialog.showOpenDialog({
             filters: [

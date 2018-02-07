@@ -4,15 +4,15 @@
 
 require('bootstrap');
 
-let turtle = require('./src/turtle.js');
-let turtle_editor = require('./src/turtle_editor.js');
-let turtle_commands = require('./src/turtle_commands.js');
-let turtle_config = require('./src/turtle_config.js');
+const turtle = require('./src/turtle.js');
+const turtle_editor = require('./src/turtle_editor.js');
+const turtle_commands = require('./src/turtle_commands.js');
+const turtle_config = require('./src/turtle_config.js');
 
 let tconfig = new turtle_config.TurtleConfig();
 let teditor = new turtle_editor.TurtleEditor();
 
-let BiwaScheme = require("biwascheme"); 
+const BiwaScheme = require("biwascheme"); 
 BiwaScheme.run_file("./src/lib/scm/scheme-turtle-bindings.scm");
 BiwaScheme.run_file("./src/lib/scm/basic-shapes.scm");
 // BiwaScheme.run_file("./src/test/scm/basic-shapes-test.scm");
@@ -20,15 +20,5 @@ BiwaScheme.run_file("./src/lib/scm/basic-shapes.scm");
 let t = turtle.t;
 let tcmd = new turtle_commands.TurtleCommands(t, teditor);
 
-function run() {
-    tcmd.reset();
-    let txt = teditor.getText();
-    //console.log(txt);
-    t.batchStart();
-    BiwaScheme.run(txt);
-    t.batchEnd();
-}
-
 module.exports.tcmd = tcmd;
-module.exports.run = run;
 module.exports.teditor = teditor;
