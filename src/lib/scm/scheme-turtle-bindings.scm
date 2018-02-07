@@ -24,3 +24,9 @@
 
 (define (home)
     (js-invoke t 'exec "home"))
+
+(define (clear)
+    (js-invoke t 'exec "clear"))
+
+(define (reset)
+    (js-invoke t 'exec "reset"))
