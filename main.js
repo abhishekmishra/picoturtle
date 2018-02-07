@@ -39,7 +39,7 @@ function createWindow () {
     mainWindow = null
   })
 
-  Menu.setApplicationMenu(null);
+  const appmenu = require('./mainmenu.js');
 }
 
 // This method will be called when Electron has finished
