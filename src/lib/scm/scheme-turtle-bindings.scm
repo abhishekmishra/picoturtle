@@ -21,3 +21,6 @@
 
 (define (left angle)
     (right (- angle)))
+
+(define (home)
+    (js-invoke t 'exec "home"))

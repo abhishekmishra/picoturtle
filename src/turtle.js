@@ -79,6 +79,11 @@ class Turtle {
         this.initTurtle();
     }
 
+    home() {
+        this.location = new Point(this.width / 2, this.height / 2);
+        this.angle = 0;
+    }
+
     addToHistory(cmd) {
         this.history.push(cmd);
     }
