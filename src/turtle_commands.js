@@ -1,7 +1,7 @@
 const { dialog } = require('electron').remote;
 const fs = require('fs');
 const $ = require('jquery');
-const BiwaScheme = require("biwascheme"); 
+const BiwaScheme = require("biwascheme");
 
 class TurtleCommands {
     constructor(t, teditor) {
@@ -20,20 +20,25 @@ class TurtleCommands {
         BiwaScheme.run(txt);
         this.t.batchEnd();
     }
-    
-    
+
+
     open() {
         let openFile = dialog.showOpenDialog({
             filters: [
                 { name: 'Turtle files', extensions: ['turtle', 'scm', 'ss'] }],
             properties: ['openFile']
         });
-        console.log('file to open ' + openFile);
-        let text = fs.readFileSync('' + openFile);
-        this.teditor.setText(text);
-        this.teditor.filename = openFile.toString();
-        $('#filename').html(this.teditor.filename);
-        return openFile.toString();
+        if (openFile) {
+            console.log('file to open ' + openFile);
+            let text = fs.readFileSync('' + openFile);
+            this.teditor.setText(text);
+            this.teditor.filename = openFile.toString();
+            $('#filename').html(this.teditor.filename);
+            return openFile.toString();
+        } else {
+            console.log('No file selected.');
+            return null;
+        }
     }
 
     save() {
@@ -44,8 +49,13 @@ class TurtleCommands {
                     { name: 'Turtle files', extentions: ['turtle'] }
                 ]
             });
-            console.log('Save to file -> ' + saveFile);
-            this.teditor.filename = saveFile
+            if (saveFile) {
+                console.log('Save to file -> ' + saveFile);
+                this.teditor.filename = saveFile
+            } else {
+                console.log('No file selected.');
+                return null;
+            }
         }
         fs.writeFileSync(this.teditor.filename, this.teditor.getText());
         $('#filename').html(this.teditor.filename);
