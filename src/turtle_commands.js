@@ -2,6 +2,7 @@ const { dialog } = require('electron').remote;
 const fs = require('fs');
 const $ = require('jquery');
 const BiwaScheme = require("biwascheme");
+const remote = require('electron').remote;
 
 class TurtleCommands {
     constructor(t, teditor) {
@@ -70,6 +71,10 @@ class TurtleCommands {
         fs.writeFileSync(this.teditor.filename, this.teditor.getText());
         $('#filename').html(this.teditor.filename);
         return this.teditor.filename;
+    }
+
+    exit() {
+        remote.getCurrentWindow().close();
     }
 }
 
