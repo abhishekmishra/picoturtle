@@ -76,6 +76,14 @@ class TurtleCommands {
     exit() {
         remote.getCurrentWindow().close();
     }
+
+    about() {
+        dialog.showMessageBox({
+            type: "info",
+            title: "About PicoTurtle",
+            message: "PicoTurtle is a very tiny turtle.\nMade by Abhishek Mishra.\n\nPicoTurtle (c) 2018 Abhishek Mishra."
+        })
+    }
 }
 
 module.exports.TurtleCommands = TurtleCommands;
