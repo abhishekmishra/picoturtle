@@ -71,7 +71,6 @@
   }
   
   .box .row.footer {
-    flex: 0 1 40px;
     border: 0;
   }
 
@@ -80,5 +79,9 @@
 }
 
 .turtle-footer {
-  background: silver;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  border: 1px solid silver;
+  background: black;
+  color: aqua;
 }
