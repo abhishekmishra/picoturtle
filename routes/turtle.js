@@ -7,12 +7,23 @@ var lock = Lock();
 
 TURTLES = {};
 
+// see https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
 class Colour {
     constructor(r, g, b, a = 1.0) {
         this.r = r;
         this.g = g;
         this.b = b;
         this.a = a;
+        this.hex = rgbToHex(r, g, b);
     }
 }
 
@@ -69,6 +80,7 @@ class Turtle {
         this.history = [];
         this.canvas = new DummyTurtleCanvas();
         this.last = -1;
+        this.start_state = this.state();
     }
 
     command(cmd, args) {
@@ -116,6 +128,10 @@ class Turtle {
         this.angle -= angle;
     }
 
+    pencolour(colour) {
+        this.colour = colour;
+    }
+
     forward(distance) {
         let theta = this.angle * Math.PI / 180;
         let y2 = distance * (Math.sin(theta)) + this.location.y;// y2 = d sin (theta) + y1
@@ -160,6 +176,19 @@ router.get('/create', function (req, res, next) {
     }
 });
 
+router.get('/list', function (req, res, next) {
+    let names = [];
+    for(var name in TURTLES) {
+        names.push(name);
+    }
+    res.send(names);
+});
+
+router.get('/:name/start_state', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    res.send(t.start_state);
+});
+
 router.get('/:name/stop', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
     t.command('stop', null);
@@ -195,6 +224,13 @@ router.get('/:name/forward', function (req, res, next) {
     t.command('forward', [parseInt(req.query.d)]);
     res.send(t.state());
 });
+
+router.get('/:name/pencolour', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    t.command('pencolour', [new Colour(parseInt(req.query.r), parseInt(req.query.g), parseInt(req.query.b))]);
+    res.send(t.state());
+});
+
 
 router.get('/:name/command', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
