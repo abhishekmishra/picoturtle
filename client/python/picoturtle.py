@@ -12,7 +12,7 @@ class Turtle:
     def __init__(self, turtle_url="http://localhost:3000"):
         self.turtle_url = turtle_url
         self.name = None
-        self.turtle_init();
+        self.turtle_init()
 
     def turtle_init(self):
         url = self.turtle_url + '/turtle/create?x=250&y=250'
