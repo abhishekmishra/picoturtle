@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const uuidv4 = require('uuid/v4');
 const generate = require('project-name-generator');
+var Lock = require('lock').Lock;
+var lock = Lock();
 
 TURTLES = {};
 
@@ -69,15 +71,21 @@ class Turtle {
         this.last = -1;
     }
 
-    command(name, args) {
-        this.history.push(new TurtleCommand(this.history.length - 1, name, args, () => {
-            this._command(name, args);
-        }));
-        this._command(name, args);
+    command(cmd, args) {
+        lock(this.name, (release) => {
+            console.log('Locked - ' + this.name);
+            this.history.push(new TurtleCommand(this.history.length - 1, cmd, args, () => {
+                this._command(cmd, args);
+            }));
+            this._command(cmd, args);
+            release(() => {
+                console.log('Released - ' + this.name);
+            })();
+        });
     }
 
-    _command(name, args) {
-        this[name].apply(this, args);
+    _command(cmd, args) {
+        this[cmd].apply(this, args);
     }
 
     state() {

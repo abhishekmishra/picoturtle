@@ -19,7 +19,7 @@ function getJSON(url, success, error = null) {
     request.send();
 }
 
-getJSON('/turtle/create?x=150&y=100', (t) => {
+getJSON('/turtle/create?x=250&y=200', (t) => {
     console.log('Created turtle with name ' + t.name);
     track_turtle(t);
     getJSON('/turtle/' + t.name + '/penup', (t) => {
@@ -87,7 +87,7 @@ async function fetch_commands(local_turtle, cmd_id) {
             fetch_commands(local_turtle, cmd_id += 1);
         } else {
             if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
-                sleep(1000);
+                sleep(5000);
                 fetch_commands(local_turtle, cmd_id);
             } else {
                 console.log(local_turtle);
