@@ -40,4 +40,28 @@ async function run_turtle() {
     await track_turtle(turtle_name);
 };
 
-run_turtle();
+/**
+ * Check if details and list columns are to be shown.
+ * 
+ * If there is a name in the url, track the turtle with that name
+ */
+var url = new URL(window.location.href);
+var name = url.searchParams.get("name");
+var show_details = url.searchParams.get('details');
+var show_list = url.searchParams.get('list');
+
+if(show_details != null && show_details == 0) {
+    let details_container = document.getElementById('turtle_details_container');
+    details_container.hidden = true;
+}
+
+if(show_list != null && show_list == 0) {
+    let list_container = document.getElementById('turtle_list_container');
+    list_container.hidden = true;
+}
+
+if (name != null) {
+    track_turtle(name);
+} else {
+    run_turtle();
+}

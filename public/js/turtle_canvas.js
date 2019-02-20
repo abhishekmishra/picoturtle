@@ -4,7 +4,6 @@ import { Colour } from './colour_utils.js';
 async function list_turtles() {
     let req = await fetch('/turtle/list');
     let ls = await req.json();
-    console.log(ls);
     let turtle_list = document.getElementById('turtle_list');
     turtle_list.innerHTML = '';
     ls.forEach(element => {
@@ -66,7 +65,7 @@ async function track_turtle(name) {
 async function fetch_commands(local_turtle, cmd_id) {
     let req = await fetch('/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
     let cmd = await req.json();
-    console.log(cmd);
+    //console.log(cmd);
     if ('cmd' in cmd) {
         let args = [cmd.cmd];
         if (cmd.args != null) {
@@ -87,7 +86,7 @@ async function fetch_commands(local_turtle, cmd_id) {
             await sleep(5000);
             fetch_commands(local_turtle, cmd_id);
         } else {
-            console.log(local_turtle);
+            //console.log(local_turtle);
         }
     }
 }
@@ -258,7 +257,7 @@ class Turtle {
 
             let command = arguments[0];
             this.addToHistory(arguments);
-            console.log('command = ' + command);
+            // console.log('command = ' + command);
             if (arguments.length == 1) {
                 this[command]();
             } else if (arguments.length == 2) {

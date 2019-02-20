@@ -10,9 +10,8 @@ export default class TurtleProxy {
         if (name == null) {
             let res = await fetch('/turtle/create?x=250&y=250');
             let t = await res.json();
-            console.log('Response json is ' + t);
             this.name = t.name;
-            console.log('Created turtle with name ' + t.name);
+            // console.log('Created turtle with name ' + t.name);
             return t;
         } else {
             this.name = name;
