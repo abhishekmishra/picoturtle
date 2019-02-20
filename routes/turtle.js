@@ -26,7 +26,8 @@ class Point {
 }
 
 class TurtleCommand {
-    constructor(cmd, args, doit) {
+    constructor(id, cmd, args, doit) {
+        this.id = id;
         this.cmd = cmd;
         this.args = args;
         this.doit = doit;
@@ -55,19 +56,21 @@ class DummyTurtleCanvas {
 }
 
 class Turtle {
-    constructor() {
-        this.location = new Point(100, 100);
+    constructor(x = 100, y = 100) {
+        this.location = new Point(x, y);
         this.colour = new Colour(0, 0, 0);
         this.angle = 90;
         this.pen = true;
         this.id = uuidv4();
-        this.name = generate({ number: true }).dashed;
+        this._generated_name = generate({ number: true })
+        this.name = this._generated_name.dashed;
         this.history = [];
         this.canvas = new DummyTurtleCanvas();
+        this.last = -1;
     }
 
     command(name, args) {
-        this.history.push(new TurtleCommand(name, args, () => {
+        this.history.push(new TurtleCommand(this.history.length - 1, name, args, () => {
             this._command(name, args);
         }));
         this._command(name, args);
@@ -75,6 +78,18 @@ class Turtle {
 
     _command(name, args) {
         this[name].apply(this, args);
+    }
+
+    state() {
+        return {
+            location: this.location,
+            colour: this.colour,
+            angle: this.angle,
+            pen: this.pen,
+            id: this.id,
+            name: this.name,
+            last: this.last
+        }
     }
 
     penup() {
@@ -86,7 +101,6 @@ class Turtle {
     }
 
     left(angle) {
-        // this.history.push(new TurtleCommand('left', [angle]));
         this.angle += angle;
     }
 
@@ -95,23 +109,27 @@ class Turtle {
     }
 
     forward(distance) {
-        // TODO: draw and change position
         let theta = this.angle * Math.PI / 180;
-        // y2 = d sin (theta) + y1
-        // x2 = d cos (theta) + x1 
-        let y2 = distance * (Math.sin(theta)) + this.location.y;
-        let x2 = distance * (Math.cos(theta)) + this.location.x;
+        let y2 = distance * (Math.sin(theta)) + this.location.y;// y2 = d sin (theta) + y1
+        let x2 = distance * (Math.cos(theta)) + this.location.x;// x2 = d cos (theta) + x1 
         let new_location = new Point(x2, y2);
+
         console.log('current point is ' + this.location + ', new point is ' + new_location);
+
         if (this.pen) {
             this.canvas.line(this.location, new_location);
         }
+
         this.location = new_location;
+    }
+
+    stop() {
+        this.last = this.history.length - 1;
     }
 }
 
-function create_turtle() {
-    var t = new Turtle();
+function create_turtle(x = 100, y = 100) {
+    var t = new Turtle(x, y);
     TURTLES[t.name] = t;
     return t;
 }
@@ -124,47 +142,71 @@ function get_turtle_by_name(name) {
     }
 }
 
-/* GET users listing. */
 router.get('/create', function (req, res, next) {
-    var t = create_turtle();
-    // t.command('penup', null);
-    // t.command('forward', [100]);
-    // t.command('pendown', null);
-    // t.command('forward', [100]);
-    // t.command('right', [90]);
-    // t.command('forward', [100]);
+    if ('x' in req.query && 'y' in req.query) {
+        var t = create_turtle(parseInt(req.query.x), parseInt(req.query.y));
+        res.send(t.state());
+    } else {
+        var t = create_turtle();
+        res.send(t.state());
+    }
+});
 
-    res.send(t);
+router.get('/:name/stop', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    t.command('stop', null);
+    res.send(t.state());
 });
 
 router.get('/:name/penup', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
     t.command('penup', null);
-    res.send(t);
+    res.send(t.state());
 });
 
 router.get('/:name/pendown', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
     t.command('pendown', null);
-    res.send(t);
+    res.send(t.state());
 });
 
-router.get('/:name/left/:angle', function (req, res, next) {
+router.get('/:name/left', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
-    t.command('left', [parseFloat(req.params['angle'])]);
-    res.send(t);
+    t.command('left', [parseFloat(req.query.a)]);
+    res.send(t.state());
 });
 
-router.get('/:name/right/:angle', function (req, res, next) {
+router.get('/:name/right', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
-    t.command('right', [parseFloat(req.params['angle'])]);
-    res.send(t);
+    t.command('right', [parseFloat(req.query.a)]);
+    res.send(t.state());
 });
 
-router.get('/:name/forward/:distance', function (req, res, next) {
+router.get('/:name/forward', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
-    t.command('forward', [parseInt(req.params['distance'])]);
-    res.send(t);
+    t.command('forward', [parseInt(req.query.d)]);
+    res.send(t.state());
 });
+
+router.get('/:name/command', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    var id_req = parseInt(req.query.id);
+    if (t.history.length <= id_req) {
+        res.send({
+            hasmore: false,
+            turtle: t.state()
+        });
+    } else {
+        var cmd = t.history[id_req];
+        cmd['turtle'] = t.state();
+        if (t.history.length <= (id_req + 1)) {
+            cmd['hasmore'] = false;
+        } else {
+            cmd['hasmore'] = true;
+        }
+        res.send(cmd);
+    }
+});
+
 
 module.exports = router;
