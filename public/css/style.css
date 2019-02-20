@@ -69,6 +69,8 @@ body {
   overflow-x: visible;
   margin: 2px;
   padding: 2px;
+  color: lightcoral;
+  font-size: 0.85em;
 }
 
 .header {

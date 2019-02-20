@@ -8,7 +8,7 @@ export default class TurtleProxy {
 
     async init(name) {
         if (name == null) {
-            let res = await fetch('/turtle/create?x=400&y=250');
+            let res = await fetch('/turtle/create?x=250&y=250');
             let t = await res.json();
             console.log('Response json is ' + t);
             this.name = t.name;
