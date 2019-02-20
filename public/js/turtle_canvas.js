@@ -1,7 +1,62 @@
 import { sleep } from './utils.js';
 import { Colour } from './colour_utils.js';
 
+async function list_turtles() {
+    let req = await fetch('/turtle/list');
+    let ls = await req.json();
+    console.log(ls);
+    let turtle_list = document.getElementById('turtle_list');
+    turtle_list.innerHTML = '';
+    ls.forEach(element => {
+        turtle_list.innerHTML += '<li id="' + element + '">' + element + '</li>';
+    });
+    ls.forEach(element => {
+        let el = document.getElementById(element);
+        el.className += " name-li";
+        el.onclick = function () {
+            track_turtle(element);
+        };
+    });
+}
+
+function mark_selected(name) {
+    let els = document.getElementsByClassName("name-li selected");
+    for (var i = 0; i < els.length; i++) {
+        var e = els[i];
+        e.className = "name-li";
+    }
+
+    let sel = document.getElementById(name);
+    if (sel != null) {
+        sel.className += " selected";
+    }
+    let turtle_name = document.getElementById('turtle_name');
+    turtle_name.innerHTML = name;
+}
+
+function add_object_code_line(cmd_args) {
+    let oc = document.getElementById('object_code');
+    oc.innerText += '\n';
+    for (var i = 0; i < cmd_args.length; i++) {
+        if (typeof cmd_args[i] == 'object') {
+            if ('hex' in cmd_args[i]) {
+                oc.innerText += ' ' + cmd_args[i].hex;
+            } else {
+                oc.innerText += ' ' + JSON.stringify(cmd_args[i]);
+            }
+        } else {
+            oc.innerText += ' ' + cmd_args[i];
+        }
+    }
+}
+
 async function track_turtle(name) {
+    await list_turtles();
+    mark_selected(name);
+
+    let oc = document.getElementById('object_code');
+    oc.innerText = '';
+
     let req = await fetch('/turtle/' + name + '/start_state');
     let t = await req.json();
     var local_turtle = new Turtle("turtle_canvas", t);
@@ -17,14 +72,15 @@ async function fetch_commands(local_turtle, cmd_id) {
         if (cmd.args != null) {
             Array.prototype.push.apply(args, cmd.args);
         }
-        console.log(args);
+        // console.log(args);
         local_turtle.reset();
         local_turtle.batchStart();
         local_turtle.exec.apply(local_turtle, args);
         local_turtle.batchEnd();
+        add_object_code_line(args);
     }
     if (cmd.hasmore) {
-        console.log('there are more commands pending, after ' + cmd_id);
+        // console.log('there are more commands pending, after ' + cmd_id);
         fetch_commands(local_turtle, cmd_id += 1);
     } else {
         if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
@@ -134,7 +190,6 @@ class Turtle {
     pencolour(colour) {
         this.colour = new Colour(colour.r, colour.g, colour.b, colour.a);
         this.ctx.strokeStyle = this.colour.hex;
-        console.log('pen colour is now ' + this.colour.hex);
     }
 
     clear() {
@@ -247,4 +302,4 @@ class Turtle {
     }
 }
 
-export { track_turtle, Point, Turtle };
+export { list_turtles, track_turtle, Point, Turtle };
