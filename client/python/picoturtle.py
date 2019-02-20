@@ -20,7 +20,7 @@ class Turtle:
         t = json.loads(res.read().decode('utf-8'))
         self.name = t['name']
         webbrowser.open(self.turtle_url +
-                        '/index.html?details=1&list=0&name=' + self.name)
+                        '/index.html?details=0&list=0&name=' + self.name)
         return t
 
     def penup(self):
