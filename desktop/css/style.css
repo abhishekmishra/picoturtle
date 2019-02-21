@@ -1,0 +1,100 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#turtle_canvas {
+  border: 1px solid lightcoral;
+}
+
+body {
+  background: black;
+  color: lightgreen;
+  margin: 1px;
+  padding: 5px;
+}
+
+.container {
+  display: flex;
+}
+
+#turtle_list_container {
+  flex-grow: 1;
+  border-right: 1px solid lightgray;
+  margin-right: 2px;
+}
+
+#turtle_canvas_container {
+  flex-grow: 8;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#turtle_canvas {
+  background: white;
+}
+
+#turtle_details_container {
+  flex-grow: 3;
+  margin-left: 2px;
+  border-left: 1px solid lightgray;
+}
+
+.name-li {
+  background: black;
+  margin: 1px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.name-li.selected {
+  background: dimgray;
+}
+
+#turtle_list {
+  list-style-type: none;
+  margin: 1px;
+  padding: 1px;
+}
+
+#object_code {
+  font-family: monospace;
+  max-height: 800px;
+  min-width: 300px;
+  overflow-y: auto;
+  overflow-x: visible;
+  margin: 2px;
+  padding: 2px;
+  color: lightcoral;
+  font-size: 0.85em;
+}
+
+.header {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+  margin: 2px;
+  padding: 1px;
+}
+
+#turtle_details_container_child {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+#object_code_container {
+  flex-grow: 2;
+  margin: 2px;
+  padding: 1px;
+}
+
+#turtle_info_container {
+  flex-grow: 2;
+  margin: 2px;
+  padding: 1px;
+}

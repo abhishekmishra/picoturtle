@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Pico Turtle Desktop</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="container">
+  <div class="container">
+    <div id="turtle_list_container">
+      <h4 class="header">Turtles</h4>
+      <ul id="turtle_list">
+      </ul>
+    </div>
+    <div id="turtle_canvas_container">
+      <h4 class="header"><span id="turtle_name">-</span></h4>
+      <canvas id="turtle_canvas" width="500" height="500"></canvas>
+    </div>
+    <div id="turtle_details_container">
+      <h4 class="header">Details</h4>
+      <div id="turtle_details_container_child">
+        <div id="object_code_container">
+          <h5 class="header">Object Code</h5>
+          <pre id="object_code">
+
+          </pre>
+        </div>
+        <!-- <div id="turtle_info_container">
+                  <h5 class="header">Info</h5>
+                </div> -->
+      </div>
+    </div>
+  </div>
+
+  <h1>Hello World!</h1>
+  <!-- All of the Node.js APIs are available in this renderer process. -->
+  We are using Node.js
+  <script>document.write(process.versions.node)</script>,
+  Chromium
+  <script>document.write(process.versions.chrome)</script>,
+  and Electron
+  <script>document.write(process.versions.electron)</script>.
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+</body>
+
 </html>
