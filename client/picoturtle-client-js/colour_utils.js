@@ -32,4 +32,9 @@ class Colour {
     }
 }
 
+// module.exports.componentToHex = componentToHex;
+// module.exports.rgbToHex = rgbToHex;
+// module.exports.hexToRgb = hexToRgb;
+// module.exports.hexToColour = hexToColour;
+// module.exports.Colour = Colour;
 export { componentToHex, rgbToHex, hexToRgb, hexToColour, Colour };
