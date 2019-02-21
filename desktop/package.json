@@ -17,6 +17,7 @@
     "electron": "^4.0.4"
   },
   "dependencies": {
+    "picoturtle-client-js": "file:../client/picoturtle-client-js",
     "picoturtle-server": "file:../server"
   }
 }
