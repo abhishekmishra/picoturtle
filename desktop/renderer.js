@@ -72,7 +72,7 @@ class TurtleEditor {
         this.setLanguage('python');
         $('#open_button').on('click', { editor: this }, this.openFile);
         $('#run_button').on('click', { editor: this }, this.run_turtle);
-        $('#editor_language_select').on('change', { editor: this }, function(event) {
+        $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
     }
@@ -90,7 +90,7 @@ class TurtleEditor {
     }
 
     setSelectedFile(selected_file = null) {
-        if(selected_file == null) {
+        if (selected_file == null) {
             this.file = 'Untitled';
         } else {
             this.file = selected_file;
@@ -124,7 +124,7 @@ class TurtleEditor {
 
     async run_turtle(event) {
         let text = event.data.editor.editor.getValue();
-        
+
         var t = new TurtleProxy();
         let state = await t.init();
         track_turtle(state.name);
@@ -138,33 +138,41 @@ class TurtleEditor {
             await f(t);
         } else if (editor.language == 'python') {
             //const ls = spawn('ls', ['-lh', '/usr']);
+            let penv = JSON.parse(JSON.stringify(process.env));
+            penv['PYTHONPATH'] = __dirname + '/../client/python'
             let options = {
-                env: {
-                    'PYTHONPATH': __dirname + '/../client/python'
-                }
+                cwd: __dirname,
+                env: penv
             };
             console.log(options);
+            console.log( process.env.PATH );
             let command_args = [editor.file, state.name];
             if (editor.file == 'Untitled') {
                 command_args = ['-c', text, state.name]
             }
-            const ls = spawn('python3',
-                command_args,
-                options);
 
-            ls.stdout.on('data', (data) => {
-                console.log(`stdout: ${data}`);
-            });
+            try {
+                console.log(command_args)
+                const ls = spawn('python3',
+                    command_args,
+                    options);
 
-            ls.stderr.on('data', (data) => {
-                console.log(`stderr: ${data}`);
-                t.stop();
-            });
+                ls.stdout.on('data', (data) => {
+                    console.log(`stdout: ${data}`);
+                });
 
-            ls.on('close', (code) => {
-                console.log(`child process exited with code ${code}`);
-                t.stop();
-            });
+                ls.stderr.on('data', (data) => {
+                    console.log(`stderr: ${data}`);
+                    t.stop();
+                });
+
+                ls.on('close', (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    t.stop();
+                });
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 }
