@@ -11,75 +11,11 @@ const { dialog } = require('electron').remote;
 
 list_turtles();
 
-// async function square(t, side) {
-//     for (var i = 0; i < 4; i++) {
-//         await t.forward(side);
-//         await t.right(90);
-//     }
-// }
-
-// async function poly(t, side, angle, incs, inca) {
-//     for (var i = 0; i < 100; i++) {
-//         await t.forward(side);
-//         await t.right(angle);
-//         side += incs;
-//         angle += inca;
-//     }
-// }
-
-// async function my_turtle() {
-//     try {
-//         var t = new TurtleProxy();
-//         let state = await t.init();
-//         await t.pencolour(255, 0, 0);
-//         await t.pendown();
-//         // for(var i = 0; i < 2; i++) {
-//         //     await t.penup();
-//         //     await t.forward(60);
-//         //     await t.pendown();
-//         //     await square(t, 50);
-//         // }
-//         await poly(t, 5, 120, 3, 0);
-//         await t.stop();
-//         return t.name;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// async function run_turtle() {
-//     let turtle_name = await my_turtle();
-//     await track_turtle(turtle_name);
-// };
-
-/**
- * Check if details and list columns are to be shown.
- * 
- * If there is a name in the url, track the turtle with that name
- */
-// var url = new URL(window.location.href);
-// var name = url.searchParams.get("name");
-// var show_details = url.searchParams.get('details');
-// var show_list = url.searchParams.get('list');
-
-// if(show_details != null && show_details == 0) {
-//     let details_container = document.getElementById('turtle_details_container');
-//     details_container.hidden = true;
-// }
-
 let show_list = 0;
 if (show_list != null && show_list == 0) {
     let list_container = document.getElementById('turtle_list_container');
     list_container.hidden = true;
 }
-
-// if (name != null) {
-//     track_turtle(name);
-// } else {
-//     run_turtle();
-// }
-
-// run_turtle();
 
 let START_TEMPLATES = {};
 
@@ -108,16 +44,29 @@ return await my_turtle(t);
 `;
 
 START_TEMPLATES['python'] = `from picoturtle import *
-create_turtle()`;
+create_turtle()
+
+### Your code goes here ###
+
+def square(side):
+    for i in range(4):
+        forward(side)
+        right(90)
+
+pendown()
+square(50)
+
+### Your code ends here ###
+
+# Always stop the turtle
+stop()`;
 
 class TurtleEditor {
     constructor() {
         this.editor = monaco.editor.create(document.getElementById('turtle_code'), {
             value: [
                 ''
-            ].join('\n'),
-            //language: 'javascript'
-            // language: this.language
+            ].join('\n')
         });
         this.setSelectedFile();
         this.setLanguage('python');

@@ -8,12 +8,12 @@ a {
 }
 
 #turtle_canvas {
-  border: 1px solid lightcoral;
+  border: 1px solid coral;
 }
 
 body {
-  background: black;
-  color: lightgreen;
+  /* background: black; */
+  /* color: lightgreen; */
   margin: 1px;
   padding: 5px;
 }
@@ -80,18 +80,17 @@ body {
 #object_code {
   font-family: monospace;
   max-height: 800px;
-  min-width: 300px;
   overflow-y: auto;
   overflow-x: visible;
   margin: 2px;
   padding: 2px;
-  color: lightcoral;
+  color: red;
   font-size: 0.85em;
 }
 
 .header {
   text-align: center;
-  border-bottom: 1px solid lightgray;
+  /* border-bottom: 1px solid lightgray; */
   margin: 2px;
   padding: 1px;
 }
