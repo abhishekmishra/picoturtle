@@ -2,6 +2,8 @@ import urllib.request
 import urllib.parse
 import json
 import webbrowser
+import builtins
+import sys
 
 
 class Turtle:
@@ -68,23 +70,38 @@ class Turtle:
         return t
 
 
+def create_turtle():
+    name = None
+    if len(sys.argv) > 1:
+        name = sys.argv[1]
+
+    t = Turtle(name)
+    builtins.t = t
+
+
 def penup():
     t.penup()
+
 
 def pendown():
     t.pendown()
 
+
 def stop():
     t.stop()
+
 
 def forward(d):
     t.forward(d)
 
+
 def left(a):
     t.left(a)
 
+
 def right(a):
     t.right(a)
+
 
 def pencolour(r, g, b):
     t.pencolour(r, g, b)

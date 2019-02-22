@@ -6,6 +6,8 @@ const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('./turtle_canvas').track_turtle;
 const TurtleProxy = require('./turtle_proxy').TurtleProxy;
 const { spawn } = require('child_process');
+const fs = require('fs');
+const { dialog } = require('electron').remote;
 
 list_turtles();
 
@@ -79,22 +81,9 @@ if (show_list != null && show_list == 0) {
 
 // run_turtle();
 
+let START_TEMPLATES = {};
 
-
-const {dialog} = require('electron').remote;
-
-document.querySelector('#open_button').addEventListener('click', function (event) {
-    dialog.showOpenDialog({
-        properties: ['openFile', 'multiSelections']
-    }, function (files) {
-        if (files !== undefined) {
-            // handle files
-        }
-    });
-});
-
-
-let start_text = `async function square(t, side) {
+START_TEMPLATES['javascript'] = `async function square(t, side) {
     for (var i = 0; i < 4; i++) {
         await t.forward(side);
         await t.right(90);
@@ -118,53 +107,87 @@ async function my_turtle(t) {
 return await my_turtle(t);
 `;
 
-let py_start_text = `# a simple turtle program to print a polygon
-def poly(num, side, angle):
-    for i in range(num):
-        forward(side)
-        right(angle)
-
-#draw a hexagon in red
-pendown()
-pencolour(255, 0, 0)
-poly(6, 50, 60)
-
-#move up 100
-penup()
-forward(-100)
-right(90)
-
-#draw a pentagon in blue
-pendown()
-pencolour(0, 0, 255)
-poly(5, 50, 72)
-
-stop()
-`;
+START_TEMPLATES['python'] = `from picoturtle import *
+create_turtle()`;
 
 class TurtleEditor {
     constructor() {
-        this.language = 'python';
         this.editor = monaco.editor.create(document.getElementById('turtle_code'), {
             value: [
-                py_start_text
+                ''
             ].join('\n'),
             //language: 'javascript'
-            language: this.language
+            // language: this.language
+        });
+        this.setSelectedFile();
+        this.setLanguage('python');
+        $('#open_button').on('click', { editor: this }, this.openFile);
+        $('#run_button').on('click', { editor: this }, this.run_turtle);
+        $('#editor_language_select').on('change', { editor: this }, function(event) {
+            event.data.editor.setLanguage(this.value);
         });
     }
 
-    async run_turtle() {
-        let text = this.editor.getValue();
+    setLanguage(name) {
+        this.language = name;
+        monaco.editor.setModelLanguage(this.editor.getModel(), name);
+        $('#editor_language_select').val(this.language);
+        if (this.file != 'Untitled') {
+            $('#editor_language_select').prop('disabled', 'disabled');
+        } else {
+            $('#editor_language_select').prop('disabled', false);
+            this.editor.setValue(START_TEMPLATES[this.language]);
+        }
+    }
+
+    setSelectedFile(selected_file = null) {
+        if(selected_file == null) {
+            this.file = 'Untitled';
+        } else {
+            this.file = selected_file;
+        }
+        $('#editor_file').html(this.file);
+
+        if (this.file.endsWith('.js')) {
+            this.setLanguage('javascript');
+        }
+        if (this.file.endsWith('.py')) {
+            this.setLanguage('python');
+        }
+    }
+
+    openFile(event) {
+        dialog.showOpenDialog({
+            properties: ['openFile']
+        }, (files) => {
+            if (files !== undefined) {
+                if (files.length == 1) {
+                    let editor = event.data.editor;
+                    let selected_file = files[0];
+                    editor.setSelectedFile(selected_file);
+                    let text = fs.readFileSync(selected_file, { encoding: 'utf-8' });
+                    console.log(editor.language);
+                    editor.editor.setValue(text);
+                }
+            }
+        });
+    }
+
+    async run_turtle(event) {
+        let text = event.data.editor.editor.getValue();
+        
         var t = new TurtleProxy();
         let state = await t.init();
         track_turtle(state.name);
-        if (this.language == 'javascript') {
+
+        let editor = event.data.editor;
+
+        if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
             const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
             var f = new AsyncFunction('t', text);
             await f(t);
-        } else if (this.language == 'python') {
+        } else if (editor.language == 'python') {
             //const ls = spawn('ls', ['-lh', '/usr']);
             let options = {
                 env: {
@@ -172,8 +195,12 @@ class TurtleEditor {
                 }
             };
             console.log(options);
+            let command_args = [editor.file, state.name];
+            if (editor.file == 'Untitled') {
+                command_args = ['-c', text, state.name]
+            }
             const ls = spawn('python3',
-                ['-c', 'from picoturtle import *;t = Turtle("' + state.name + '");__builtins__.t = t;' + text],
+                command_args,
                 options);
 
             ls.stdout.on('data', (data) => {
@@ -182,10 +209,12 @@ class TurtleEditor {
 
             ls.stderr.on('data', (data) => {
                 console.log(`stderr: ${data}`);
+                t.stop();
             });
 
             ls.on('close', (code) => {
                 console.log(`child process exited with code ${code}`);
+                t.stop();
             });
         }
     }
@@ -210,6 +239,6 @@ amdRequire.config({
 self.module = undefined;
 amdRequire(['vs/editor/editor.main'], async function () {
     let t = new TurtleEditor();
-    await t.run_turtle();
+    // await t.run_turtle();
 });
 // })();

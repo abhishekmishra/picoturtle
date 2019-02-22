@@ -12,10 +12,11 @@
     <button id="open_button">Open File</button>
     <button id="save_button">Save File</button>
     <button id="run_button">Run</button>
-    <select id="language_select">
+    <select id="editor_language_select">
       <option value="python">Python</option>
       <option value="javascript">JavaScript</option>
     </select>
+    <!-- Language: <span id="editor_language"></span> -->
   </div>
   <div class="container" id="turtle_container">
     <div id="turtle_list_container">
@@ -24,7 +25,8 @@
       </ul>
     </div>
     <div id="turtle_code_container">
-      <h4 class="header">Your Code</h4>
+      <h4 class="header"> File: <span id="editor_file"></span>
+      </h4>
       <div id="turtle_code">
       </div>
     </div>
@@ -56,6 +58,16 @@
       </div>
     </div>
   </div>
+  <!-- See https://stackoverflow.com/questions/50283710/is-not-defined-using-jquery-with-electron-js -->
+  <!-- Insert this line above script imports  -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+
+  <!-- normal script imports etc  -->
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <!-- <script src="scripts/vendor.js"></script> -->
+
+  <!-- Insert this line after script imports -->
+  <script>if (window.module) module = window.module;</script>
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
