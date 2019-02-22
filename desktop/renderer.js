@@ -75,6 +75,10 @@ class TurtleEditor {
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
+        $( window ).resize(()=> {
+            //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+            this.editor.layout();
+          });
     }
 
     setLanguage(name) {
@@ -195,6 +199,7 @@ amdRequire.config({
 // workaround monaco-css not understanding the environment
 self.module = undefined;
 amdRequire(['vs/editor/editor.main'], async function () {
+    //monaco.editor.setTheme('vs-dark');
     let t = new TurtleEditor();
     // await t.run_turtle();
 });
