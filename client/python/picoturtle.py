@@ -9,10 +9,11 @@ class Turtle:
     proxy to turtle remote api
     """
 
-    def __init__(self, turtle_url="http://localhost:3000"):
+    def __init__(self, name=None, turtle_url="http://localhost:3000"):
         self.turtle_url = turtle_url
-        self.name = None
-        self.turtle_init()
+        self.name = name
+        if self.name == None:
+            self.turtle_init()
 
     def turtle_init(self):
         url = self.turtle_url + '/turtle/create?x=250&y=250'
@@ -65,6 +66,28 @@ class Turtle:
         res = urllib.request.urlopen(url)
         t = json.loads(res.read().decode('utf-8'))
         return t
+
+
+def penup():
+    t.penup()
+
+def pendown():
+    t.pendown()
+
+def stop():
+    t.stop()
+
+def forward(d):
+    t.forward(d)
+
+def left(a):
+    t.left(a)
+
+def right(a):
+    t.right(a)
+
+def pencolour(r, g, b):
+    t.pencolour(r, g, b)
 
 
 if __name__ == "__main__":

@@ -2,102 +2,10 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-const Turtle = require('./turtle_canvas').Turtle;
-const axios = require('axios');
+const list_turtles = require('./turtle_canvas').list_turtles;
+const track_turtle = require('./turtle_canvas').track_turtle;
 const TurtleProxy = require('./turtle_proxy').TurtleProxy;
-const sleep = require('./utils').sleep;
-
-const TURTLE_SERVER_URL = 'http://localhost:3000';
-
-async function list_turtles() {
-    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/list');
-    let ls = await req.data;
-    let turtle_list = document.getElementById('turtle_list');
-    turtle_list.innerHTML = '';
-    ls.forEach(element => {
-        turtle_list.innerHTML += '<li id="' + element + '">' + element + '</li>';
-    });
-    ls.forEach(element => {
-        let el = document.getElementById(element);
-        el.className += " name-li";
-        el.onclick = function () {
-            track_turtle(element);
-        };
-    });
-}
-
-function mark_selected(name) {
-    let els = document.getElementsByClassName("name-li selected");
-    for (var i = 0; i < els.length; i++) {
-        var e = els[i];
-        e.className = "name-li";
-    }
-
-    let sel = document.getElementById(name);
-    if (sel != null) {
-        sel.className += " selected";
-    }
-    let turtle_name = document.getElementById('turtle_name');
-    turtle_name.innerHTML = name;
-}
-
-function add_object_code_line(cmd_args) {
-    let oc = document.getElementById('object_code');
-    oc.innerText += '\n';
-    for (var i = 0; i < cmd_args.length; i++) {
-        if (typeof cmd_args[i] == 'object') {
-            if ('hex' in cmd_args[i]) {
-                oc.innerText += ' ' + cmd_args[i].hex;
-            } else {
-                oc.innerText += ' ' + JSON.stringify(cmd_args[i]);
-            }
-        } else {
-            oc.innerText += ' ' + cmd_args[i];
-        }
-    }
-}
-
-async function track_turtle(name) {
-    await list_turtles();
-    mark_selected(name);
-
-    let oc = document.getElementById('object_code');
-    oc.innerText = '';
-
-    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + name + '/start_state');
-    let t = await req.data;
-    var local_turtle = new Turtle("turtle_canvas", t);
-    await fetch_commands(local_turtle, 0);
-}
-
-async function fetch_commands(local_turtle, cmd_id) {
-    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
-    let cmd = await req.data;
-    //console.log(cmd);
-    if ('cmd' in cmd) {
-        let args = [cmd.cmd];
-        if (cmd.args != null) {
-            Array.prototype.push.apply(args, cmd.args);
-        }
-        // console.log(args);
-        local_turtle.reset();
-        local_turtle.batchStart();
-        local_turtle.exec.apply(local_turtle, args);
-        local_turtle.batchEnd();
-        add_object_code_line(args);
-    }
-    if (cmd.hasmore) {
-        // console.log('there are more commands pending, after ' + cmd_id);
-        fetch_commands(local_turtle, cmd_id += 1);
-    } else {
-        if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
-            await sleep(5000);
-            fetch_commands(local_turtle, cmd_id);
-        } else {
-            //console.log(local_turtle);
-        }
-    }
-}
+const { spawn } = require('child_process');
 
 list_turtles();
 
@@ -195,13 +103,39 @@ async function my_turtle(t) {
 return await my_turtle(t);
 `;
 
+let py_start_text = `# a simple turtle program to print a polygon
+def poly(num, side, angle):
+    for i in range(num):
+        forward(side)
+        right(angle)
+
+#draw a hexagon in red
+pendown()
+pencolour(255, 0, 0)
+poly(6, 50, 60)
+
+#move up 100
+penup()
+forward(-100)
+right(90)
+
+#draw a pentagon in blue
+pendown()
+pencolour(0, 0, 255)
+poly(5, 50, 72)
+
+stop()
+`;
+
 class TurtleEditor {
     constructor() {
+        this.language = 'python';
         this.editor = monaco.editor.create(document.getElementById('turtle_code'), {
             value: [
-                start_text
+                py_start_text
             ].join('\n'),
-            language: 'javascript'
+            //language: 'javascript'
+            language: this.language
         });
     }
 
@@ -209,11 +143,36 @@ class TurtleEditor {
         let text = this.editor.getValue();
         var t = new TurtleProxy();
         let state = await t.init();
-        // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
-        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-        var f = new AsyncFunction('t', text);
-        let turtle_name = await f(t);
-        return await track_turtle(turtle_name);
+        track_turtle(state.name);
+        if (this.language == 'javascript') {
+            // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
+            const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
+            var f = new AsyncFunction('t', text);
+            await f(t);
+        } else if (this.language == 'python') {
+            //const ls = spawn('ls', ['-lh', '/usr']);
+            let options = {
+                env: {
+                    'PYTHONPATH': __dirname + '/../client/python'
+                }
+            };
+            console.log(options);
+            const ls = spawn('python3',
+                ['-c', 'from picoturtle import *;t = Turtle("' + state.name + '");__builtins__.t = t;' + text],
+                options);
+
+            ls.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+            });
+
+            ls.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`);
+            });
+
+            ls.on('close', (code) => {
+                console.log(`child process exited with code ${code}`);
+            });
+        }
     }
 }
 

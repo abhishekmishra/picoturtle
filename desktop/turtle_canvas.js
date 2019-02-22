@@ -1,9 +1,12 @@
-const { sleep } = require('./utils.js');
 const { Colour } = require('./colour_utils.js');
+const axios = require('axios');
+const sleep = require('./utils').sleep;
+
+const TURTLE_SERVER_URL = 'http://localhost:3000';
 
 async function list_turtles() {
-    let req = await fetch('/turtle/list');
-    let ls = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/list');
+    let ls = await req.data;
     let turtle_list = document.getElementById('turtle_list');
     turtle_list.innerHTML = '';
     ls.forEach(element => {
@@ -56,15 +59,15 @@ async function track_turtle(name) {
     let oc = document.getElementById('object_code');
     oc.innerText = '';
 
-    let req = await fetch('/turtle/' + name + '/start_state');
-    let t = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + name + '/start_state');
+    let t = await req.data;
     var local_turtle = new Turtle("turtle_canvas", t);
     await fetch_commands(local_turtle, 0);
 }
 
 async function fetch_commands(local_turtle, cmd_id) {
-    let req = await fetch('/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
-    let cmd = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
+    let cmd = await req.data;
     //console.log(cmd);
     if ('cmd' in cmd) {
         let args = [cmd.cmd];
@@ -83,7 +86,7 @@ async function fetch_commands(local_turtle, cmd_id) {
         fetch_commands(local_turtle, cmd_id += 1);
     } else {
         if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
-            await sleep(5000);
+            await sleep(500);
             fetch_commands(local_turtle, cmd_id);
         } else {
             //console.log(local_turtle);
