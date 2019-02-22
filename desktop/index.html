@@ -18,9 +18,22 @@
       <h4 class="header"><span id="turtle_name">-</span></h4>
       <canvas id="turtle_canvas" width="500" height="500"></canvas>
     </div>
+    <div id="turtle_code_container">
+      <h4 class="header">Your Code</h4>
+      <div id="turtle_code">
+      </div>
+    </div>
     <div id="turtle_details_container">
       <h4 class="header">Details</h4>
-      <div id="turtle_code_container" style="width:500px;height:300px;border:1px solid #ccc"></div>
+      <!-- <h1>Hello World!</h1> -->
+      <!-- All of the Node.js APIs are available in this renderer process. -->
+      <!-- We are using Node.js
+      <script>document.write(process.versions.node)</script>,
+      Chromium
+      <script>document.write(process.versions.chrome)</script>,
+      and Electron
+      <script>document.write(process.versions.electron)</script>.
+       -->
       <div id="turtle_details_container_child">
         <div id="object_code_container">
           <h5 class="header">Object Code</h5>
@@ -34,50 +47,13 @@
       </div>
     </div>
   </div>
-
-  <h1>Hello World!</h1>
-  <!-- All of the Node.js APIs are available in this renderer process. -->
-  We are using Node.js
-  <script>document.write(process.versions.node)</script>,
-  Chromium
-  <script>document.write(process.versions.chrome)</script>,
-  and Electron
-  <script>document.write(process.versions.electron)</script>.
-
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
   </script>
-  <script>
-    (function() {
-      const path = require('path');
-      const amdLoader = require('./node_modules/monaco-editor/min/vs/loader.js');
-      const amdRequire = amdLoader.require;
-      const amdDefine = amdLoader.require.define;
-      function uriFromPath(_path) {
-        var pathName = path.resolve(_path).replace(/\\/g, '/');
-        if (pathName.length > 0 && pathName.charAt(0) !== '/') {
-          pathName = '/' + pathName;
-        }
-        return encodeURI('file://' + pathName);
-      }
-      amdRequire.config({
-        baseUrl: uriFromPath(path.join(__dirname, './node_modules/monaco-editor/min'))
-      });
-      // workaround monaco-css not understanding the environment
-      self.module = undefined;
-      amdRequire(['vs/editor/editor.main'], function() {
-        var editor = monaco.editor.create(document.getElementById('turtle_code_container'), {
-          value: [
-            'function x() {',
-            '\tconsole.log("Hello world!");',
-            '}'
-          ].join('\n'),
-          language: 'javascript'
-        });
-      });
-    })();
-    </script>
+  <!-- <script>
+      
+  </script> -->
 </body>
 
 </html>

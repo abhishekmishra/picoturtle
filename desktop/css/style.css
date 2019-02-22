@@ -34,6 +34,18 @@ body {
   margin-right: 5px;
 }
 
+#turtle_code_container {
+  flex-grow: 8;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#turtle_code {
+  width: 500px; 
+  height: 500px; 
+  border:1px solid #ccc;
+}
+
 #turtle_canvas {
   background: white;
 }

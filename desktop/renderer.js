@@ -101,46 +101,46 @@ async function fetch_commands(local_turtle, cmd_id) {
 
 list_turtles();
 
-async function square(t, side) {
-    for (var i = 0; i < 4; i++) {
-        await t.forward(side);
-        await t.right(90);
-    }
-}
+// async function square(t, side) {
+//     for (var i = 0; i < 4; i++) {
+//         await t.forward(side);
+//         await t.right(90);
+//     }
+// }
 
-async function poly(t, side, angle, incs, inca) {
-    for (var i = 0; i < 100; i++) {
-        await t.forward(side);
-        await t.right(angle);
-        side += incs;
-        angle += inca;
-    }
-}
+// async function poly(t, side, angle, incs, inca) {
+//     for (var i = 0; i < 100; i++) {
+//         await t.forward(side);
+//         await t.right(angle);
+//         side += incs;
+//         angle += inca;
+//     }
+// }
 
-async function my_turtle() {
-    try {
-        var t = new TurtleProxy();
-        let state = await t.init();
-        await t.pencolour(255, 0, 0);
-        await t.pendown();
-        // for(var i = 0; i < 2; i++) {
-        //     await t.penup();
-        //     await t.forward(60);
-        //     await t.pendown();
-        //     await square(t, 50);
-        // }
-        await poly(t, 5, 120, 3, 0);
-        await t.stop();
-        return t.name;
-    } catch (error) {
-        console.log(error);
-    }
-}
+// async function my_turtle() {
+//     try {
+//         var t = new TurtleProxy();
+//         let state = await t.init();
+//         await t.pencolour(255, 0, 0);
+//         await t.pendown();
+//         // for(var i = 0; i < 2; i++) {
+//         //     await t.penup();
+//         //     await t.forward(60);
+//         //     await t.pendown();
+//         //     await square(t, 50);
+//         // }
+//         await poly(t, 5, 120, 3, 0);
+//         await t.stop();
+//         return t.name;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
-async function run_turtle() {
-    let turtle_name = await my_turtle();
-    await track_turtle(turtle_name);
-};
+// async function run_turtle() {
+//     let turtle_name = await my_turtle();
+//     await track_turtle(turtle_name);
+// };
 
 /**
  * Check if details and list columns are to be shown.
@@ -157,10 +157,11 @@ async function run_turtle() {
 //     details_container.hidden = true;
 // }
 
-// if(show_list != null && show_list == 0) {
-//     let list_container = document.getElementById('turtle_list_container');
-//     list_container.hidden = true;
-// }
+let show_list = 0;
+if (show_list != null && show_list == 0) {
+    let list_container = document.getElementById('turtle_list_container');
+    list_container.hidden = true;
+}
 
 // if (name != null) {
 //     track_turtle(name);
@@ -168,4 +169,73 @@ async function run_turtle() {
 //     run_turtle();
 // }
 
-run_turtle();
+// run_turtle();
+
+let start_text = `async function square(t, side) {
+    for (var i = 0; i < 4; i++) {
+        await t.forward(side);
+        await t.right(90);
+    }
+}
+
+async function my_turtle(t) {
+    await t.penup();
+    await t.pencolour(255, 0, 0);
+    await t.pendown();
+    for(var i = 0; i < 2; i++) {
+        await t.penup();
+        await t.forward(60);
+        await t.pendown();
+        await square(t, 50);
+    }
+    await t.stop();
+    return t.name;
+}
+
+return await my_turtle(t);
+`;
+
+class TurtleEditor {
+    constructor() {
+        this.editor = monaco.editor.create(document.getElementById('turtle_code'), {
+            value: [
+                start_text
+            ].join('\n'),
+            language: 'javascript'
+        });
+    }
+
+    async run_turtle() {
+        let text = this.editor.getValue();
+        var t = new TurtleProxy();
+        let state = await t.init();
+        // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+        var f = new AsyncFunction('t', text);
+        let turtle_name = await f(t);
+        return await track_turtle(turtle_name);
+    }
+}
+
+// (function () {
+const path = require('path');
+const amdLoader = require('./node_modules/monaco-editor/min/vs/loader.js');
+const amdRequire = amdLoader.require;
+const amdDefine = amdLoader.require.define;
+function uriFromPath(_path) {
+    var pathName = path.resolve(_path).replace(/\\/g, '/');
+    if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+        pathName = '/' + pathName;
+    }
+    return encodeURI('file://' + pathName);
+}
+amdRequire.config({
+    baseUrl: uriFromPath(path.join(__dirname, './node_modules/monaco-editor/min'))
+});
+// workaround monaco-css not understanding the environment
+self.module = undefined;
+amdRequire(['vs/editor/editor.main'], async function () {
+    let t = new TurtleEditor();
+    await t.run_turtle();
+});
+// })();
