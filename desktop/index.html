@@ -8,73 +8,92 @@
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
 
-<body class="container-fluid">
-  <div class="row">
-    <div class="toolbar m-0 p-1 col-12 mb-1">
-      <div class="row">
-        <div class="col-3">
-          <button id="open_button" class="btn btn-secondary btn-sm">Open File</button>
-          <button id="save_button" class="btn btn-secondary btn-sm disabled">Save File</button>
-          <button id="run_button" class="btn btn-secondary btn-sm">Run</button>
-        </div>
-        <div class="col-6">
-          <p class="header"><span class="text text-dark" id="editor_file"></span>
-            <span class="text text-sm text-info">(Turtle: <span class="" id="turtle_name">...</span>)</span>
-          </p>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-2">
-          <div class="input-group input-group-smmb-3 input-group-sm">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Language</label>
+<body class="container-fluid h-100 m-0 p-0">
+  <div class="d-flex flex-column container-fluid h-100">
+    <div class="row">
+      <div class="toolbar m-0 p-2 col-12 mb-2">
+        <div class="row">
+          <div class="col-5">
+            <button id="save_button" class="btn btn-secondary btn-sm disabled">New</button>
+            <button id="open_button" class="btn btn-secondary btn-sm">Open</button>
+            <button id="save_button" class="btn btn-secondary btn-sm disabled">Save</button>
+            <button id="run_button" class="btn btn-secondary btn-sm">Run</button>
+            <button id="save_button" class="btn btn-secondary btn-sm disabled">Export</button>
+          </div>
+          <div class="col-2">
+            <div class="input-group input-group-smmb-3 input-group-sm">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Language</label>
+              </div>
+              <select id="editor_language_select" class="form-control">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+              </select>
             </div>
-            <select id="editor_language_select" class="form-control">
-              <option value="python">Python</option>
-              <option value="javascript">JavaScript</option>
-            </select>
+          </div>
+          <div class="col-5 text-right">
+              <button id="save_button" class="btn btn-secondary btn-sm disabled">?</button>
           </div>
         </div>
+        <!-- Language: <span id="editor_language"></span> -->
       </div>
-      <!-- Language: <span id="editor_language"></span> -->
     </div>
-  </div>
-  <div class="row h-100">
-    <div id="turtle_list_container" class="">
-      <p class="header">Turtles</p>
-      <ul id="turtle_list">
-      </ul>
-    </div>
-    <div id="turtle_code_container" class="col-6">
-      <!-- <p class="header"> File: <span id="editor_file"></span>
+    <div class="row flex-grow-1">
+      <div id="turtle_list_container" class="">
+        <p class="header">Turtles</p>
+        <ul id="turtle_list">
+        </ul>
+      </div>
+      <div id="turtle_code_container" class="col-6">
+        <!-- <p class="header"> File: <span id="editor_file"></span>
       </p> -->
-      <div id="turtle_code">
+        <div id="turtle_code">
+        </div>
       </div>
-    </div>
-    <div id="turtle_canvas_container" class="col-5">
-      <!-- <p class="header"> Turtle: <span id="turtle_name"></span></p> -->
-      <canvas id="turtle_canvas" width="500" height="500"></canvas>
-    </div>
-    <div id="turtle_details_container" class="col-1">
-      <!-- <p class="header small">Obj. Code</p> -->
-      <!-- <h1>Hello World!</h1> -->
-      <!-- All of the Node.js APIs are available in this renderer process. -->
-      <!-- We are using Node.js
+      <div id="turtle_canvas_container" class="col-6">
+        <!-- <p class="header"> Turtle: <span id="turtle_name"></span></p> -->
+        <canvas id="turtle_canvas" width="500" height="500" class="border border-secondary"></canvas>
+      </div>
+      <div id="turtle_details_container" class="col-2">
+        <!-- <p class="header small">Obj. Code</p> -->
+        <!-- <h1>Hello World!</h1> -->
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        <!-- We are using Node.js
       <script>document.write(process.versions.node)</script>,
       Chromium
       <script>document.write(process.versions.chrome)</script>,
       and Electron
       <script>document.write(process.versions.electron)</script>.
        -->
-      <div id="turtle_details_container_child">
-        <div id="object_code_container">
-          <!-- <h5 class="header">Object Code</h5> -->
-          <pre id="object_code">
+        <div id="turtle_details_container_child">
+          <div id="object_code_container">
+            <!-- <h5 class="header">Object Code</h5> -->
+            <pre id="object_code">
 
           </pre>
-        </div>
-        <!-- <div id="turtle_info_container">
+          </div>
+          <!-- <div id="turtle_info_container">
                   <h5 class="header">Info</h5>
                 </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="toolbar m-0 p-0 pl-1 pr-1 col-12">
+        <div class="row">
+          <div class="col-6">
+            <span class="text text-dark" id="editor_file"></span>,
+            Turtle: <span class="" id="turtle_name">...</span>
+          </div>
+          <div class="col-3">
+
+          </div>
+          <div class="col-3 text-right">
+            <a href="https://github.com/abhishekmishra/picoturtle" target="_blank">
+              PicoTurtle v0.0.1 © 2019 Abhishek Mishra
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

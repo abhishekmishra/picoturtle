@@ -12,9 +12,15 @@ const { dialog } = require('electron').remote;
 list_turtles();
 
 let show_list = 0;
+let show_obj_code = 0;
 if (show_list != null && show_list == 0) {
     let list_container = document.getElementById('turtle_list_container');
     list_container.hidden = true;
+}
+
+if (show_obj_code != null && show_obj_code == 0) {
+    let obj_code_container = document.getElementById('turtle_details_container');
+    obj_code_container.hidden = true;
 }
 
 let START_TEMPLATES = {};
