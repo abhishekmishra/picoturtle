@@ -22,6 +22,10 @@ body {
   display: flex;
 }
 
+#top_container {
+  flex-direction: column;
+}
+
 #turtle_list_container {
   flex-grow: 1;
   border-right: 1px solid lightgray;

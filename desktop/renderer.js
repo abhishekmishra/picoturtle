@@ -79,6 +79,21 @@ if (show_list != null && show_list == 0) {
 
 // run_turtle();
 
+
+
+const {dialog} = require('electron').remote;
+
+document.querySelector('#open_button').addEventListener('click', function (event) {
+    dialog.showOpenDialog({
+        properties: ['openFile', 'multiSelections']
+    }, function (files) {
+        if (files !== undefined) {
+            // handle files
+        }
+    });
+});
+
+
 let start_text = `async function square(t, side) {
     for (var i = 0; i < 4; i++) {
         await t.forward(side);
