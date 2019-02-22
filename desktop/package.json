@@ -17,8 +17,7 @@
     "electron": "^4.0.4"
   },
   "dependencies": {
-    "node-fetch": "^2.3.0",
-    "picoturtle-client-js": "file:../client/picoturtle-client-js",
-    "picoturtle-server": "file:../server"
+    "concurrently": "^4.1.0",
+    "node-fetch": "^2.3.0"
   }
 }
