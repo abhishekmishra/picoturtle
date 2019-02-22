@@ -4,7 +4,9 @@
   "description": "PicoTurtle Desktop",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": "https://github.com/abhishekmishra/picoturtle",
   "keywords": [
@@ -14,10 +16,43 @@
   "author": "Abhishek Mishra",
   "license": "MIT",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.33",
+    "@electron-forge/maker-deb": "^6.0.0-beta.33",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.33",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.33",
+    "@electron-forge/maker-zip": "^6.0.0-beta.33",
     "electron": "^4.0.4"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "concurrently": "^4.1.0",
-    "node-fetch": "^2.3.0"
+    "electron-squirrel-startup": "^1.0.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "picoturtle_desktop"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

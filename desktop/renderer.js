@@ -3,15 +3,15 @@
 // All of the Node.js APIs are available in this process.
 
 const Turtle = require('./turtle_canvas').Turtle;
-const fetch = require('node-fetch');
+const axios = require('axios');
 const TurtleProxy = require('./turtle_proxy').TurtleProxy;
 const sleep = require('./utils').sleep;
 
 const TURTLE_SERVER_URL = 'http://localhost:3000';
 
 async function list_turtles() {
-    let req = await fetch(TURTLE_SERVER_URL + '/turtle/list');
-    let ls = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/list');
+    let ls = await req.data;
     let turtle_list = document.getElementById('turtle_list');
     turtle_list.innerHTML = '';
     ls.forEach(element => {
@@ -64,15 +64,15 @@ async function track_turtle(name) {
     let oc = document.getElementById('object_code');
     oc.innerText = '';
 
-    let req = await fetch(TURTLE_SERVER_URL + '/turtle/' + name + '/start_state');
-    let t = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + name + '/start_state');
+    let t = await req.data;
     var local_turtle = new Turtle("turtle_canvas", t);
     await fetch_commands(local_turtle, 0);
 }
 
 async function fetch_commands(local_turtle, cmd_id) {
-    let req = await fetch(TURTLE_SERVER_URL + '/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
-    let cmd = await req.json();
+    let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
+    let cmd = await req.data;
     //console.log(cmd);
     if ('cmd' in cmd) {
         let args = [cmd.cmd];
@@ -118,19 +118,23 @@ async function poly(t, side, angle, incs, inca) {
 }
 
 async function my_turtle() {
-    var t = new TurtleProxy();
-    let state = await t.init();
-    await t.pencolour(255, 0, 0);
-    await t.pendown();
-    // for(var i = 0; i < 2; i++) {
-    //     await t.penup();
-    //     await t.forward(60);
-    //     await t.pendown();
-    //     await square(t, 50);
-    // }
-    await poly(t, 5, 120, 3, 0);
-    await t.stop();
-    return t.name;
+    try {
+        var t = new TurtleProxy();
+        let state = await t.init();
+        await t.pencolour(255, 0, 0);
+        await t.pendown();
+        // for(var i = 0; i < 2; i++) {
+        //     await t.penup();
+        //     await t.forward(60);
+        //     await t.pendown();
+        //     await square(t, 50);
+        // }
+        await poly(t, 5, 120, 3, 0);
+        await t.stop();
+        return t.name;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 async function run_turtle() {
