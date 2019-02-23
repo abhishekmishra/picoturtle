@@ -25,11 +25,6 @@ html {
   height: 100%; 
 }
 
-#turtle_canvas {
-  /* width: 100%; */
-  /* background: white; */
-}
-
 .name-li {
   background: black;
   margin: 1px;
