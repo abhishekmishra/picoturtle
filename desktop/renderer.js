@@ -160,7 +160,7 @@ class TurtleEditor {
 
     writeContents() {
         let text = this.editor.getValue();
-        fs.writeFile(this.file, text, function (err) {
+        fs.writeFile(this.file, text, (err) => {
             if (err) {
                 return console.log(err);
             }
@@ -223,7 +223,7 @@ class TurtleEditor {
             // console.log(options);
             // console.log( process.env.PATH );
             let command_args = [editor.file, state.name];
-            if (editor.file == 'Untitled') {
+            if (editor.file == 'Untitled' || editor.isDirty()) {
                 command_args = ['-c', text, state.name]
             }
 
