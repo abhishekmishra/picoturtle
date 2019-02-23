@@ -154,16 +154,21 @@ class TurtleEditor {
                 cwd: __dirname,
                 env: penv
             };
-            console.log(options);
-            console.log( process.env.PATH );
+            // console.log(options);
+            // console.log( process.env.PATH );
             let command_args = [editor.file, state.name];
             if (editor.file == 'Untitled') {
                 command_args = ['-c', text, state.name]
             }
 
             try {
-                console.log(command_args)
-                const ls = spawn('python3',
+                // console.log(command_args)
+                let python_exec = 'python3';
+                let isWin = process.platform === "win32";
+                if(isWin) {
+                    python_exec = 'python';
+                }
+                const ls = spawn(python_exec,
                     command_args,
                     options);
 
