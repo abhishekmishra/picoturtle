@@ -77,6 +77,12 @@ class TurtleEditor {
                 ''
             ].join('\n')
         });
+        this.markVersion();
+        this.editor.getModel().onDidChangeContent((event) => {
+            if(this.isDirty()) {
+                document.title = '* Pico Turtle Desktop';
+            }
+        });
         this.setSelectedFile();
         this.setLanguage('python');
         $('#open_button').on('click', { editor: this }, this.openFile);
@@ -93,6 +99,15 @@ class TurtleEditor {
         });
         this.local_turtle = new Turtle("turtle_canvas");
         this.local_turtle.drawTurtle();
+    }
+
+    markVersion() {
+        this.lastSavedVersionId = this.editor.getModel().getAlternativeVersionId();
+        document.title = 'Pico Turtle Desktop';
+    }
+
+    isDirty() {
+        return (this.lastSavedVersionId !== this.editor.getModel().getAlternativeVersionId());
     }
 
     setLanguage(name) {
@@ -137,6 +152,7 @@ class TurtleEditor {
                     let text = fs.readFileSync(selected_file, { encoding: 'utf-8' });
                     console.log(editor.language);
                     editor.editor.setValue(text);
+                    editor.markVersion();
                 }
             }
         });
@@ -149,6 +165,7 @@ class TurtleEditor {
                 return console.log(err);
             }
             console.log("The file was saved!");
+            this.markVersion();
         });
     }
 
