@@ -59,9 +59,18 @@ const template = [
   {
     label: 'File',
     submenu: [
-      { label: '&New' },
-      { label: '&Open' },
-      { label: '&Save' },
+      {
+        label: 'New',
+        accelerator: 'CommandOrControl+N'
+      },
+      {
+        label: 'Open',
+        accelerator: 'CommandOrControl+O'
+      },
+      {
+        label: 'Save',
+        accelerator: 'CommandOrControl+S'
+      },
       { label: 'Save As' },
       { type: 'separator' },
       { role: 'close' }
