@@ -34,10 +34,22 @@ class TurtleProxy {
         // console.log('pendown for - ' + t.name);
     }
 
+    async penwidth(w) {
+        let res = await axios.get(url + '/turtle/' + this.name + '/penwidth?w=' + w);
+        let t = await res.data;
+        // console.log('penwidth ' + w + ' for - ' + t.name);
+    }
+
     async stop() {
         let res = await axios.get(url + '/turtle/' + this.name + '/stop');
         let t = await res.data;
         // console.log('stop for - ' + t.name);
+    }
+
+    async clear() {
+        let res = await axios.get(url + '/turtle/' + this.name + '/clear');
+        let t = await res.data;
+        // console.log('clear for - ' + t.name);
     }
 
     async forward(d) {

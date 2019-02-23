@@ -36,6 +36,7 @@ START_TEMPLATES['javascript'] = `async function square(t, side) {
 async function my_turtle(t) {
     await t.penup();
     await t.pencolour(255, 0, 0);
+    await t.penwidth(3);
     await t.pendown();
     for(var i = 0; i < 2; i++) {
         await t.penup();
@@ -61,6 +62,7 @@ def square(side):
         right(90)
 
 pendown()
+penwidth(4)
 square(50)
 
 ### Your code ends here ###

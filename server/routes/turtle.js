@@ -55,16 +55,6 @@ class DummyTurtleCanvas {
 
     line(p1, p2) {
         console.log('Line from ' + p1 + ' to ' + p2);
-        // this.ctx.beginPath();
-
-        // this.ctx.moveTo(this.location.x, this.location.y);
-        // if (this.penup) {
-        //     this.ctx.moveTo(x2, y2);
-        // } else {
-        //     this.ctx.lineTo(x2, y2);
-        // }
-
-        // this.ctx.stroke();
     }
 }
 
@@ -74,6 +64,7 @@ class Turtle {
         this.colour = new Colour(0, 0, 0);
         this.angle = 90;
         this.pen = true;
+        this.pen_width = 1;
         this.id = uuidv4();
         this._generated_name = generate({ number: true })
         this.name = this._generated_name.dashed;
@@ -106,6 +97,7 @@ class Turtle {
             colour: this.colour,
             angle: this.angle,
             pen: this.pen,
+            pen_width: this.pen_width,
             id: this.id,
             name: this.name,
             last: this.last
@@ -118,6 +110,10 @@ class Turtle {
 
     pendown() {
         this.pen = true;
+    }
+
+    penwidth(w) {
+        this.pen_width = w;
     }
 
     left(angle) {
@@ -149,6 +145,11 @@ class Turtle {
 
     stop() {
         this.last = this.history.length - 1;
+    }
+
+    clear() {
+        //clears the canvas
+        //no state change, only side-effect
     }
 }
 
@@ -195,6 +196,12 @@ router.get('/:name/stop', function (req, res, next) {
     res.send(t.state());
 });
 
+router.get('/:name/clear', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    t.command('clear', null);
+    res.send(t.state());
+});
+
 router.get('/:name/penup', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
     t.command('penup', null);
@@ -204,6 +211,12 @@ router.get('/:name/penup', function (req, res, next) {
 router.get('/:name/pendown', function (req, res, next) {
     var t = get_turtle_by_name(req.params['name']);
     t.command('pendown', null);
+    res.send(t.state());
+});
+
+router.get('/:name/penwidth', function (req, res, next) {
+    var t = get_turtle_by_name(req.params['name']);
+    t.command('penwidth', [parseFloat(req.query.w)]);
     res.send(t.state());
 });
 

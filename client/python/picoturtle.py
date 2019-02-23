@@ -38,8 +38,21 @@ class Turtle:
         t = json.loads(res.read().decode('utf-8'))
         return t
 
+    def penwidth(self, w):
+        url = self.turtle_url + '/turtle/' + self.name + '/penwidth?w=' + str(
+            w)
+        res = urllib.request.urlopen(url)
+        t = json.loads(res.read().decode('utf-8'))
+        return t
+
     def stop(self):
         url = self.turtle_url + '/turtle/' + self.name + '/stop'
+        res = urllib.request.urlopen(url)
+        t = json.loads(res.read().decode('utf-8'))
+        return t
+
+    def clear(self):
+        url = self.turtle_url + '/turtle/' + self.name + '/clear'
         res = urllib.request.urlopen(url)
         t = json.loads(res.read().decode('utf-8'))
         return t
@@ -87,8 +100,16 @@ def pendown():
     t.pendown()
 
 
+def penwidth(w):
+    t.penwidth(w)
+
+
 def stop():
     t.stop()
+
+
+def clear():
+    t.clear()
 
 
 def forward(d):

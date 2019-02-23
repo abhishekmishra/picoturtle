@@ -120,6 +120,8 @@ class Turtle {
         this.location_canvas = new Point(this.location.x, this.height - this.location.y);
         this.angle = 90;
         this.canvas_angle = this.angle + 180;
+        this.pen_width = 1;
+        this.ctx.lineWidth = 1;
     }
 
     init(t) {
@@ -142,6 +144,7 @@ class Turtle {
         this.angle = this.orig_t.angle;
         this.canvas_angle = this.angle + 180;
         this.pen = this.orig_t.pen;
+        this.pen_width = this.orig_t.pen_width;
         this.pencolour(new Colour(
             this.orig_t.colour.r,
             this.orig_t.colour.g,
@@ -165,6 +168,11 @@ class Turtle {
 
     pendown() {
         this.pen = false;
+    }
+
+    penwidth(w) {
+        this.pen_width = w;
+        this.ctx.lineWidth = w;
     }
 
     forward(d) {
@@ -239,7 +247,7 @@ class Turtle {
         this.ctx.save();
         let hexColour = this.ctx.strokeStyle;
         this.ctx.strokeStyle = 'black';
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'red';
         this.ctx.lineWidth = 3;
         // this.ctx.fillRect(this.location.x - 5, this.location.y - 5, 10, 10);
 
