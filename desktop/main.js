@@ -61,7 +61,10 @@ const template = [
     submenu: [
       {
         label: 'New',
-        accelerator: 'CommandOrControl+N'
+        accelerator: 'CommandOrControl+N',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('ping', 'whoooooooh!')
+        }
       },
       {
         label: 'Open',

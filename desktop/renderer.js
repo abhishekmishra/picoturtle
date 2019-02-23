@@ -9,6 +9,11 @@ const TurtleProxy = require('./turtle_proxy').TurtleProxy;
 const { spawn } = require('child_process');
 const fs = require('fs');
 const { dialog } = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
+
+ipcRenderer.on('ping', (event, message) => {
+    console.log(message) // Prints 'whoooooooh!'
+});
 
 list_turtles();
 
@@ -79,7 +84,7 @@ class TurtleEditor {
         });
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
-            if(this.isDirty()) {
+            if (this.isDirty()) {
                 document.title = '* Pico Turtle Desktop';
             }
         });
