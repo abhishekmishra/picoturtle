@@ -130,7 +130,7 @@ if (process.platform === 'darwin') {
   })
 
   // Edit menu
-  template[1].submenu.push(
+  template[2].submenu.push(
     { type: 'separator' },
     {
       label: 'Speech',
@@ -142,7 +142,7 @@ if (process.platform === 'darwin') {
   )
 
   // Window menu
-  template[3].submenu = [
+  template[4].submenu = [
     { role: 'close' },
     { role: 'minimize' },
     { role: 'zoom' },

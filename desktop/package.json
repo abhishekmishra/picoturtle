@@ -1,5 +1,6 @@
 {
   "name": "picoturtle-desktop",
+  "productName": "PicoTurtle",
   "version": "1.0.0",
   "description": "PicoTurtle Desktop",
   "main": "main.js",
