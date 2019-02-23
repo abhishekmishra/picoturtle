@@ -4,6 +4,7 @@
 
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('./turtle_canvas').track_turtle;
+const Turtle = require('./turtle_canvas').Turtle;
 const TurtleProxy = require('./turtle_proxy').TurtleProxy;
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -85,6 +86,8 @@ class TurtleEditor {
             //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
             this.editor.layout();
           });
+        this.local_turtle = new Turtle("turtle_canvas");
+        this.local_turtle.drawTurtle();
     }
 
     setLanguage(name) {
@@ -133,13 +136,12 @@ class TurtleEditor {
     }
 
     async run_turtle(event) {
-        let text = event.data.editor.editor.getValue();
+        let editor = event.data.editor;
+        let text = editor.editor.getValue();
 
         var t = new TurtleProxy();
         let state = await t.init();
-        track_turtle(state.name);
-
-        let editor = event.data.editor;
+        track_turtle(editor.local_turtle, state.name);
 
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage

@@ -52,7 +52,7 @@ function add_object_code_line(cmd_args) {
     }
 }
 
-async function track_turtle(name) {
+async function track_turtle(local_turtle, name) {
     await list_turtles();
     mark_selected(name);
 
@@ -61,7 +61,8 @@ async function track_turtle(name) {
 
     let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + name + '/start_state');
     let t = await req.data;
-    var local_turtle = new Turtle("turtle_canvas", t);
+    //var local_turtle = new Turtle("turtle_canvas", t);
+    local_turtle.init(t);
     await fetch_commands(local_turtle, 0);
 }
 
@@ -107,14 +108,24 @@ class Point {
 
 class Turtle {
 
-    constructor(canvas_id, t) {
-        this.orig_t = t;
+    constructor(canvas_id, t = null) {
         this.canvas_id = canvas_id;
         this.history = [];
         this.batchEnabled = false;
+        if (t != null) {
+            this.init(t);
+        }
         this.initCanvas();
+        this.location = new Point(this.width/2, this.height/2);
+        this.location_canvas = new Point(this.location.x, this.height - this.location.y);
+        this.angle = 90;
+        this.canvas_angle = this.angle + 180;
+    }
+
+    init(t) {
+        this.orig_t = t;
         this.initTurtle();
-        this.history = [];
+        this.clearHistory();
     }
 
     initCanvas() {
@@ -127,7 +138,9 @@ class Turtle {
     initTurtle() {
         this.name = this.orig_t.name;
         this.location = this.orig_t.location;
+        this.location_canvas = new Point(this.location.x, this.height - this.location.y);
         this.angle = this.orig_t.angle;
+        this.canvas_angle = this.angle + 180;
         this.pen = this.orig_t.pen;
         this.pencolour(new Colour(
             this.orig_t.colour.r,
@@ -156,31 +169,37 @@ class Turtle {
 
     forward(d) {
         let theta = this.angle * Math.PI / 180;
+        let canvas_theta = this.canvas_angle * Math.PI / 180;
         // y2 = d sin (theta) + y1
         // x2 = d cos (theta) + x1 
         let y2 = d * (Math.sin(theta)) + this.location.y;
         let x2 = d * (Math.cos(theta)) + this.location.x;
+        let cy2 = d * (Math.sin(canvas_theta)) + this.location_canvas.y;
+        let cx2 = d * (Math.cos(canvas_theta)) + this.location_canvas.x;
 
         // console.log('current point is ' + this.location.x + ', ' + this.location.y + ', new point is ' + x2 + ', ' + y2);
         this.ctx.beginPath();
 
-        this.ctx.moveTo(this.location.x, this.location.y);
+        this.ctx.moveTo(this.location_canvas.x, this.location_canvas.y);
         if (this.pen) {
-            this.ctx.moveTo(x2, y2);
+            this.ctx.moveTo(cx2, cy2);
         } else {
-            this.ctx.lineTo(x2, y2);
+            this.ctx.lineTo(cx2, cy2);
         }
 
         this.location = new Point(x2, y2);
+        this.location_canvas = new Point(cx2, cy2);
         this.ctx.stroke();
     }
 
     right(angle) {
-        this.angle = this.angle + angle;
+        this.angle = this.angle - angle;
+        this.canvas_angle = this.canvas_angle + angle;
     }
 
     left(angle) {
-        this.angle = this.angle - angle;
+        this.angle = this.angle + angle;
+        this.canvas_angle = this.canvas_angle - angle;
     }
 
     stop() {
@@ -225,19 +244,19 @@ class Turtle {
         // this.ctx.fillRect(this.location.x - 5, this.location.y - 5, 10, 10);
 
         let d = 25;
-        let theta1 = (this.angle - 145) * Math.PI / 180;
-        let y2 = d * (Math.sin(theta1)) + this.location.y;
-        let x2 = d * (Math.cos(theta1)) + this.location.x;
+        let theta1 = (this.canvas_angle - 145) * Math.PI / 180;
+        let y2 = d * (Math.sin(theta1)) + this.location_canvas.y;
+        let x2 = d * (Math.cos(theta1)) + this.location_canvas.x;
 
-        let theta2 = (this.angle + 145) * Math.PI / 180;
-        let y3 = d * (Math.sin(theta2)) + this.location.y;
-        let x3 = d * (Math.cos(theta2)) + this.location.x;
+        let theta2 = (this.canvas_angle + 145) * Math.PI / 180;
+        let y3 = d * (Math.sin(theta2)) + this.location_canvas.y;
+        let x3 = d * (Math.cos(theta2)) + this.location_canvas.x;
 
         this.ctx.beginPath();
-        this.ctx.moveTo(this.location.x, this.location.y);
+        this.ctx.moveTo(this.location_canvas.x, this.location_canvas.y);
         this.ctx.lineTo(x2, y2);
         this.ctx.lineTo(x3, y3);
-        this.ctx.lineTo(this.location.x, this.location.y);
+        this.ctx.lineTo(this.location_canvas.x, this.location_canvas.y);
         this.ctx.stroke();
 
         this.ctx.restore();
