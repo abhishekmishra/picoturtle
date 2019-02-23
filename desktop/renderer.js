@@ -81,13 +81,16 @@ class TurtleEditor {
         this.setLanguage('python');
         $('#open_button').on('click', { editor: this }, this.openFile);
         $('#run_button').on('click', { editor: this }, this.run_turtle);
+        $('#save_button').on('click', { editor: this }, this.saveFile);
+        $('#save_as_button').on('click', { editor: this }, this.saveAsFile);
+        $('#new_button').on('click', { editor: this }, this.newFile);
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
-        $( window ).resize(()=> {
+        $(window).resize(() => {
             //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
             this.editor.layout();
-          });
+        });
         this.local_turtle = new Turtle("turtle_canvas");
         this.local_turtle.drawTurtle();
     }
@@ -107,8 +110,10 @@ class TurtleEditor {
     setSelectedFile(selected_file = null) {
         if (selected_file == null) {
             this.file = 'Untitled';
+            $('#save_button').prop('disabled', 'disabled');
         } else {
             this.file = selected_file;
+            $('#save_button').prop('disabled', false);
         }
         $('#editor_file').html(this.file);
 
@@ -135,6 +140,46 @@ class TurtleEditor {
                 }
             }
         });
+    }
+
+    writeContents() {
+        let text = this.editor.getValue();
+        fs.writeFile(this.file, text, function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
+    }
+
+    saveFile(event) {
+        let editor = event.data.editor;
+        if (this.file != 'Untitled') {
+            editor.writeContents();
+        } else {
+            editor.saveAsFile(event);
+        }
+    }
+
+    saveAsFile(event) {
+        let editor = event.data.editor;
+        try {
+            dialog.showSaveDialog({
+                // no options
+            }, (selected_file) => {
+                editor.setSelectedFile(selected_file);
+                console.log('Selected file ' + selected_file);
+                editor.writeContents();
+            });
+        } catch (error) {
+            console.log('Error selecting file to save - ' + error);
+        }
+    }
+
+    newFile(event) {
+        let editor = event.data.editor;
+        editor.editor.setValue(``);
+        editor.setSelectedFile();
     }
 
     async run_turtle(event) {
@@ -169,7 +214,7 @@ class TurtleEditor {
                 // console.log(command_args)
                 let python_exec = 'python3';
                 let isWin = process.platform === "win32";
-                if(isWin) {
+                if (isWin) {
                     python_exec = 'python';
                 }
                 const ls = spawn(python_exec,
