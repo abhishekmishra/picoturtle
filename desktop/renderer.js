@@ -11,8 +11,28 @@ const fs = require('fs');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 
+// Non-Editor Messages are handled here
+// All Editor Message Callbacks are registered in the TurtleEditor Class
 ipcRenderer.on('ping', (event, message) => {
     console.log(message) // Prints 'whoooooooh!'
+});
+
+let about_msg = `PicoTurtle is a tiny turtle graphics program.
+
+You can write turtle graphics programs in your favourite programming language.
+
+Author: Abhishek Mishra
+Version: 0.0.1a
+Homepage: https://github.com/abhishekmishra/picoturtle
+`;
+
+ipcRenderer.on('help.about', (event, message) => {
+    dialog.showMessageBox(require('electron').remote.getCurrentWindow(), {
+        type: "info",
+        title: 'About PicoTurtle',
+        message: about_msg,
+        buttons: ['ok']
+    }, (response, checkboxChecked) => { });
 });
 
 list_turtles();
@@ -263,7 +283,7 @@ class TurtleEditor {
     }
 }
 
-// (function () {
+// Here we setup the monaco editor.
 const path = require('path');
 const amdLoader = require('./node_modules/monaco-editor/min/vs/loader.js');
 const amdRequire = amdLoader.require;
@@ -283,6 +303,4 @@ self.module = undefined;
 amdRequire(['vs/editor/editor.main'], async function () {
     //monaco.editor.setTheme('vs-dark');
     let t = new TurtleEditor();
-    // await t.run_turtle();
 });
-// })();

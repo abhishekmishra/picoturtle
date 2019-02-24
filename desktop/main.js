@@ -120,6 +120,12 @@ const template = [
       {
         label: 'Learn More',
         click() { require('electron').shell.openExternal('https://electronjs.org') }
+      },
+      {
+        role: 'about',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('help.about', '');
+        }
       }
     ]
   }
