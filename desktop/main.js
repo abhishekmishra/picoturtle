@@ -1,5 +1,52 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron');
+const appenv = require('./env');
+const path = require('path');
+
+console.log(appenv.env);
+process.env.NODE_ENV = appenv.env;
+console.log(process.execPath);
+
+function getEnv() {
+  return process.env.NODE_ENV;
+}
+
+function isProd() {
+  return getEnv() == 'prod';
+}
+
+function isDev() {
+  return getEnv() == 'dev';
+}
+
+function getPicoTurtleServer() {
+  let execName = process.platform === "win32" ? "picoturtle-server.exe" : "picoturtle-server";
+  if (isDev()) {
+    return path.join(__dirname, '..', 'server', 'dist', execName);
+  }
+  if (isProd()) {
+    return path.join(__dirname, '..', execName);
+  }
+}
+
+let picoTurtleServerProc = null;
+const runPicoTurtleServer = () => {
+  picoTurtleServerProc = require('child_process').spawn(getPicoTurtleServer(), []);
+
+  if (picoTurtleServerProc != null) {
+    //console.log(picoTurtleServerProc)
+    console.log('child process success on port 3000');
+  }
+}
+
+const exitPicoTurtleServer = () => {
+  picoTurtleServerProc.kill()
+  picoTurtleServerProc = null
+  pyPort = null
+}
+
+app.on('ready', runPicoTurtleServer)
+app.on('will-quit', exitPicoTurtleServer)
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

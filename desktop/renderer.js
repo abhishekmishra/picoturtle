@@ -11,10 +11,37 @@ const fs = require('fs');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
+const appenv = require('./env');
 
-fs.readdirSync(path.join(__dirname, '..')).forEach(file => {
-  console.log(file);
-});
+console.log(appenv.env);
+process.env.NODE_ENV = appenv.env;
+console.log(process.execPath);
+
+function getEnv() {
+    return process.env.NODE_ENV;
+}
+
+function isProd() {
+    return getEnv() == 'prod';
+}
+
+function isDev() {
+    return getEnv() == 'dev';
+}
+
+function getPicoTurtleServer() {
+    let execName = process.platform === "win32"? "picoturtle-server.exe": "picoturtle-server";
+    if(isDev()) {
+        return path.join(__dirname, '..', 'server', 'dist', execName);
+    }
+    if(isProd()) {
+        return path.join(__dirname, '..', execName);
+    }
+}
+
+// fs.readdirSync(path.join(__dirname, '..')).forEach(file => {
+//   console.log(file);
+// });
 
 //in windows server is at ../picoturtle-server.exe
 
@@ -247,9 +274,9 @@ class TurtleEditor {
         } else if (editor.language == 'python') {
             //const ls = spawn('ls', ['-lh', '/usr']);
             let penv = JSON.parse(JSON.stringify(process.env));
-            penv['PYTHONPATH'] = __dirname + '/../client/python'
+            penv['PYTHONPATH'] = path.join(__dirname, '..', 'client', 'python');
             let options = {
-                cwd: __dirname,
+                cwd: path.join(__dirname, '..'),
                 env: penv
             };
             // console.log(options);
@@ -266,6 +293,7 @@ class TurtleEditor {
                 if (isWin) {
                     python_exec = 'python';
                 }
+                console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
                 const ls = spawn(python_exec,
                     command_args,
                     options);

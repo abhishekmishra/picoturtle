@@ -1,43 +1,48 @@
+const fs = require('fs');
+const path = require('path');
 var isWin = process.platform === "win32";
 
 let extraResource = ["../server/dist/picoturtle-server"];
 if (isWin) {
-    extraResource = ["../server/dist/picoturtle-server.exe"];
+  extraResource = ["../server/dist/picoturtle-server.exe"];
 }
-extraResource.push()
 
 let config = {
-    "packagerConfig": {
-      "extraResource": extraResource,
-      "asar": true
-    },
-    "makers": [
-      {
-        "name": "@electron-forge/maker-squirrel",
-        "config": {
-          "name": "picoturtle_desktop"
-        }
-      },
-      {
-        "name": "@electron-forge/maker-zip",
-        "platforms": [
-          "darwin"
-        ]
-      },
-      {
-        "name": "@electron-forge/maker-deb",
-        "config": {}
-      },
-      {
-        "name": "@electron-forge/maker-rpm",
-        "config": {}
+  "packagerConfig": {
+    "extraResource": extraResource,
+    "asar": true
+  },
+  "makers": [
+    {
+      "name": "@electron-forge/maker-squirrel",
+      "config": {
+        "name": "picoturtle_desktop"
       }
-    ],
-    hooks: {
-        packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
-            console.log(buildPath);
-        }
+    },
+    {
+      "name": "@electron-forge/maker-zip",
+      "platforms": [
+        "darwin"
+      ]
+    },
+    {
+      "name": "@electron-forge/maker-deb",
+      "config": {}
+    },
+    {
+      "name": "@electron-forge/maker-rpm",
+      "config": {}
     }
-  };
+  ],
+  hooks: {
+    packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
+      fs.copyFileSync(path.join(buildPath, 'env-prod.js'), path.join(buildPath, 'env.js'));
+      let resourcesFolder = path.join(buildPath, '..');
+      fs.mkdirSync(path.join(resourcesFolder, 'client'));
+      fs.mkdirSync(path.join(resourcesFolder, 'client', 'python'));
+      fs.copyFileSync('../client/python/picoturtle.py', path.join(resourcesFolder, 'client', 'python', 'picoturtle.py'));
+    }
+  }
+};
 
-  module.exports = config;
+module.exports = config;
