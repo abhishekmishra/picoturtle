@@ -3,6 +3,8 @@ matrix:
     - language: node_js
       before_script:
         - cd server
+      install:
+        - npm install
       script:
         - npm run pkg-local
 
