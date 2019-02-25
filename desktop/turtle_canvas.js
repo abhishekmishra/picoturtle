@@ -1,6 +1,9 @@
 const { Colour } = require('./colour_utils.js');
 const axios = require('axios');
 const sleep = require('./utils').sleep;
+var Lock = require('lock').Lock;
+
+var lock = Lock();
 
 const TURTLE_SERVER_URL = 'http://localhost:3000';
 
@@ -116,7 +119,7 @@ class Turtle {
             this.init(t);
         }
         this.initCanvas();
-        this.location = new Point(this.width/2, this.height/2);
+        this.location = new Point(this.width / 2, this.height / 2);
         this.location_canvas = new Point(this.location.x, this.height - this.location.y);
         this.angle = 90;
         this.canvas_angle = this.angle + 180;
@@ -154,8 +157,14 @@ class Turtle {
     }
 
     command(cmd) {
-        this.history.push(cmd);
-        this._command(cmd.name, cmd.args);
+        lock(this.name, (release) => {
+            console.log('Locked - ' + this.name);
+            this.history.push(cmd);
+            this._command(cmd.name, cmd.args);
+            release(() => {
+                console.log('Released - ' + this.name);
+            })();
+        });
     }
 
     _command(name, args) {
@@ -271,32 +280,38 @@ class Turtle {
     }
 
     exec() {
-        if (arguments.length > 0) {
-            if (!this.batchEnabled) {
-                this.clear();
+        lock(this.name, (release) => {
+            console.log('Locked - ' + this.name);
+            if (arguments.length > 0) {
+                if (!this.batchEnabled) {
+                    this.clear();
 
-                for (let i = 0; i < this.history.length; i++) {
-                    var cmdArgs = this.history[i];
-                    if (cmdArgs.length == 1) {
-                        this[cmdArgs[0]]();
-                    } else if (cmdArgs.length == 2) {
-                        this[cmdArgs[0]](cmdArgs[1]);
+                    for (let i = 0; i < this.history.length; i++) {
+                        var cmdArgs = this.history[i];
+                        if (cmdArgs.length == 1) {
+                            this[cmdArgs[0]]();
+                        } else if (cmdArgs.length == 2) {
+                            this[cmdArgs[0]](cmdArgs[1]);
+                        }
                     }
                 }
-            }
 
-            let command = arguments[0];
-            this.addToHistory(arguments);
-            // console.log('command = ' + command);
-            if (arguments.length == 1) {
-                this[command]();
-            } else if (arguments.length == 2) {
-                this[command](arguments[1]);
+                let command = arguments[0];
+                this.addToHistory(arguments);
+                // console.log('command = ' + command);
+                if (arguments.length == 1) {
+                    this[command]();
+                } else if (arguments.length == 2) {
+                    this[command](arguments[1]);
+                }
+                if (!this.batchEnabled) {
+                    this.drawTurtle();
+                }
             }
-            if (!this.batchEnabled) {
-                this.drawTurtle();
-            }
-        }
+            release(() => {
+                console.log('Released - ' + this.name);
+            })();
+        });
     }
 
     batchStart() {
