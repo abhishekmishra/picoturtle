@@ -4,10 +4,12 @@ let extraResource = ["../server/dist/picoturtle-server"];
 if (isWin) {
     extraResource = ["../server/dist/picoturtle-server.exe"];
 }
+extraResource.push()
 
 let config = {
     "packagerConfig": {
-      "extraResource": extraResource
+      "extraResource": extraResource,
+      "asar": true
     },
     "makers": [
       {
@@ -30,7 +32,12 @@ let config = {
         "name": "@electron-forge/maker-rpm",
         "config": {}
       }
-    ]
+    ],
+    hooks: {
+        packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
+            console.log(buildPath);
+        }
+    }
   };
 
   module.exports = config;

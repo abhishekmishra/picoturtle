@@ -16,6 +16,8 @@ fs.readdirSync(path.join(__dirname, '..')).forEach(file => {
   console.log(file);
 });
 
+//in windows server is at ../picoturtle-server.exe
+
 // Non-Editor Messages are handled here
 // All Editor Message Callbacks are registered in the TurtleEditor Class
 ipcRenderer.on('ping', (event, message) => {
@@ -289,7 +291,7 @@ class TurtleEditor {
 }
 
 // Here we setup the monaco editor.
-const path = require('path');
+// const path = require('path');
 const amdLoader = require('./node_modules/monaco-editor/min/vs/loader.js');
 const amdRequire = amdLoader.require;
 const amdDefine = amdLoader.require.define;
