@@ -293,7 +293,7 @@ class TurtleEditor {
                 if (isWin) {
                     python_exec = 'python';
                 }
-                console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
+                //console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
                 const ls = spawn(python_exec,
                     command_args,
                     options);
