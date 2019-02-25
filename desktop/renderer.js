@@ -10,6 +10,11 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
+const path = require('path');
+
+fs.readdirSync(path.join(__dirname, '..')).forEach(file => {
+  console.log(file);
+});
 
 // Non-Editor Messages are handled here
 // All Editor Message Callbacks are registered in the TurtleEditor Class
