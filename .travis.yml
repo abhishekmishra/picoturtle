@@ -4,7 +4,7 @@ matrix:
       before_script:
         - cd server
       script:
-        - node run pkg-local
+        - npm run pkg-local
 
 notifications:
   email:
