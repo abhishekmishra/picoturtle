@@ -55,9 +55,11 @@ function add_object_code_line(cmd_args) {
     }
 }
 
+var x = 0;
 async function track_turtle(local_turtle, name) {
-    await list_turtles();
-    mark_selected(name);
+    console.log('running turtle -> ' + name);
+    //    await list_turtles();
+    //    mark_selected(name);
 
     let oc = document.getElementById('object_code');
     oc.innerText = '';
@@ -66,32 +68,54 @@ async function track_turtle(local_turtle, name) {
     let t = await req.data;
     //var local_turtle = new Turtle("turtle_canvas", t);
     local_turtle.init(t);
-    await fetch_commands(local_turtle, 0);
+
+    // let y = x++;
+    // console.log('started ' + y);
+    fetch_commands(local_turtle, 0);
+    // console.log('done ' + y);
 }
+
 
 async function fetch_commands(local_turtle, cmd_id) {
     let req = await axios.get(TURTLE_SERVER_URL + '/turtle/' + local_turtle.name + '/command?id=' + cmd_id);
     let cmd = await req.data;
-    //console.log(cmd);
+    // console.log(cmd);
+    // await lock(local_turtle.name, (release) => {
+    //     console.log('Locked - ' + local_turtle.name);
+
     if ('cmd' in cmd) {
         let args = [cmd.cmd];
         if (cmd.args != null) {
             Array.prototype.push.apply(args, cmd.args);
         }
-        // console.log(args);
+        console.log(args);
         local_turtle.reset();
         local_turtle.batchStart();
         local_turtle.exec.apply(local_turtle, args);
         local_turtle.batchEnd();
         add_object_code_line(args);
     }
+
+    //     release(() => {
+    //         console.log('Released - ' + local_turtle.name);
+    //     })();
+    // });
+    if ('cmd' in cmd) {
+        cmd_id += 1;
+    }
     if (cmd.hasmore) {
-        // console.log('there are more commands pending, after ' + cmd_id);
-        fetch_commands(local_turtle, cmd_id += 1);
+        console.log('there are more commands pending, after ' + cmd_id - 1);
+        // let y = x++;
+        // console.log('A: started ' + y);
+        fetch_commands(local_turtle, cmd_id);
+        // console.log('next complete' + y);
     } else {
         if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
-            await sleep(500);
+            await sleep(1000);
+            // let y = x++;
+            // console.log('B: started ' + y);
             fetch_commands(local_turtle, cmd_id);
+            // console.log('new complete' + y);
         } else {
             //console.log(local_turtle);
         }
@@ -280,38 +304,32 @@ class Turtle {
     }
 
     exec() {
-        lock(this.name, (release) => {
-            console.log('Locked - ' + this.name);
-            if (arguments.length > 0) {
-                if (!this.batchEnabled) {
-                    this.clear();
+        if (arguments.length > 0) {
+            if (!this.batchEnabled) {
+                this.clear();
 
-                    for (let i = 0; i < this.history.length; i++) {
-                        var cmdArgs = this.history[i];
-                        if (cmdArgs.length == 1) {
-                            this[cmdArgs[0]]();
-                        } else if (cmdArgs.length == 2) {
-                            this[cmdArgs[0]](cmdArgs[1]);
-                        }
+                for (let i = 0; i < this.history.length; i++) {
+                    var cmdArgs = this.history[i];
+                    if (cmdArgs.length == 1) {
+                        this[cmdArgs[0]]();
+                    } else if (cmdArgs.length == 2) {
+                        this[cmdArgs[0]](cmdArgs[1]);
                     }
                 }
-
-                let command = arguments[0];
-                this.addToHistory(arguments);
-                // console.log('command = ' + command);
-                if (arguments.length == 1) {
-                    this[command]();
-                } else if (arguments.length == 2) {
-                    this[command](arguments[1]);
-                }
-                if (!this.batchEnabled) {
-                    this.drawTurtle();
-                }
             }
-            release(() => {
-                console.log('Released - ' + this.name);
-            })();
-        });
+
+            let command = arguments[0];
+            this.addToHistory(arguments);
+            // console.log('command = ' + command);
+            if (arguments.length == 1) {
+                this[command]();
+            } else if (arguments.length == 2) {
+                this[command](arguments[1]);
+            }
+            if (!this.batchEnabled) {
+                this.drawTurtle();
+            }
+        }
     }
 
     batchStart() {

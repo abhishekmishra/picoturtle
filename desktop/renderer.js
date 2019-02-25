@@ -264,8 +264,6 @@ class TurtleEditor {
 
         var t = new TurtleProxy();
         let state = await t.init();
-        track_turtle(editor.local_turtle, state.name);
-
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
             const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
@@ -315,6 +313,7 @@ class TurtleEditor {
                 console.log(error);
             }
         }
+        track_turtle(editor.local_turtle, state.name);
     }
 }
 

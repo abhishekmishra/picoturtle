@@ -77,7 +77,7 @@ class Turtle {
     command(cmd, args) {
         lock(this.name, (release) => {
             console.log('Locked - ' + this.name);
-            this.history.push(new TurtleCommand(this.history.length - 1, cmd, args, () => {
+            this.history.push(new TurtleCommand(this.history.length, cmd, args, () => {
                 this._command(cmd, args);
             }));
             this._command(cmd, args);

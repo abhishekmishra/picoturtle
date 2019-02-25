@@ -11,7 +11,7 @@ async function square(t, side) {
 }
 
 async function poly(t, side, angle, incs, inca) {
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 10; i++) {
         await t.forward(side);
         await t.right(angle);
         side += incs;
