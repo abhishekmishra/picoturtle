@@ -1,52 +1,40 @@
-matrix:
-  include:
-    - language: node_js
-      node_js:
-        - "10"
-      before_install:
-        - cd server
-      install:
-        - npm install
-      script:
-        - npm run pkg-local
-  include:
-    - language: node_js
-      node_js: 
-        - "10"
-      os:
-        - linux
-        - osx
-      dist: trusty
-      osx_image: xcode8.3
-      sudo: false
+language: node_js
+node_js: 
+  - "10"
+os:
+  - linux
+  - osx
+dist: trusty
+osx_image: xcode8.3
+sudo: false
 
-      cache:
-        directories:
-        - node_modules
-        - $HOME/.cache/electron
+cache:
+  directories:
+  - node_modules
+  - $HOME/.cache/electron
 
-      addons:
-        apt:
-          packages:
-          - fakeroot
-          - rpm
+addons:
+  apt:
+    packages:
+    - fakeroot
+    - rpm
 
-      branches:
-        only:
-        - master
-        - /^v\d+\.\d+\.\d+/
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+/
 
-      before_install:
-        - cd desktop
-      
-      install:
-      - npm install
-      - npm update
+before_install:
+  - cd desktop
 
-      script:
-      - npm run build-server
-      - if test -z "$TRAVIS_TAG"; then npm run make; fi
-      after_success: if test -n "$TRAVIS_TAG"; then npm run publish; fi
+install:
+- npm install
+- npm update
+
+script:
+- npm run build-server
+- if test -z "$TRAVIS_TAG"; then npm run make; fi
+after_success: if test -n "$TRAVIS_TAG"; then npm run publish; fi
 
 notifications:
   email:
