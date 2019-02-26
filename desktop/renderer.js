@@ -142,7 +142,9 @@ class TurtleEditor {
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
             if (this.isDirty()) {
-                document.title = '* Pico Turtle Desktop';
+                document.title = '* PicoTurtle';
+            } else {
+                document.title = 'PicoTurtle';
             }
         });
         this.setSelectedFile();
@@ -209,7 +211,7 @@ class TurtleEditor {
 
     markVersion() {
         this.lastSavedVersionId = this.editor.getModel().getAlternativeVersionId();
-        document.title = 'Pico Turtle Desktop';
+        document.title = 'PicoTurtle';
     }
 
     isDirty() {

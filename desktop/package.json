@@ -1,8 +1,8 @@
 {
   "name": "picoturtle-desktop",
   "productName": "PicoTurtle",
-  "version": "1.0.0",
-  "description": "PicoTurtle Desktop",
+  "version": "0.0.1a",
+  "description": "PicoTurtle is a tiny turtle",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
