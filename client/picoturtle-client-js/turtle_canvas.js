@@ -78,9 +78,12 @@ async function fetch_commands(local_turtle, cmd_id) {
         local_turtle.batchEnd();
         add_object_code_line(args);
     }
+    if ('cmd' in cmd) {
+        cmd_id += 1;
+    }
     if (cmd.hasmore) {
-        // console.log('there are more commands pending, after ' + cmd_id);
-        fetch_commands(local_turtle, cmd_id += 1);
+        console.log('there are more commands pending, after ' + (cmd_id - 1));
+        fetch_commands(local_turtle, cmd_id);
     } else {
         if (cmd.turtle.last == -1 || cmd.turtle.last > cmd_id) {
             await sleep(5000);
