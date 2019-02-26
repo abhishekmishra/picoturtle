@@ -36,6 +36,9 @@ matrix:
         - master
         - /^v\d+\.\d+\.\d+/
 
+      before_install:
+        - cd desktop
+      
       install:
       - npm install
       - npm update
