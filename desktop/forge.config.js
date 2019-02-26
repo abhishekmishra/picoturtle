@@ -34,6 +34,18 @@ let config = {
       "config": {}
     }
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'abhishekmishra',
+          name: 'picoturtle'
+        },
+        prerelease: true
+      }
+    }
+  ],
   hooks: {
     packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
       fs.copyFileSync(path.join(buildPath, 'env-prod.js'), path.join(buildPath, 'env.js'));
