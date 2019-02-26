@@ -35,7 +35,8 @@
     "get-port": "^4.1.0",
     "jquery": "^3.3.1",
     "lock": "^1.1.0",
-    "monaco-editor": "^0.15.6"
+    "monaco-editor": "^0.15.6",
+    "showdown": "^1.9.0"
   },
   "config": {
     "forge": "./forge.config.js"

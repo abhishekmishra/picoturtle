@@ -13,6 +13,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
 const getTurtlePort = require('./utils').getTurtlePort;
+const { BrowserWindow } = require('electron').remote
 
 console.log(appenv.env);
 process.env.NODE_ENV = appenv.env;
@@ -50,10 +51,6 @@ function getPicoTurtleServer() {
 
 // Non-Editor Messages are handled here
 // All Editor Message Callbacks are registered in the TurtleEditor Class
-ipcRenderer.on('ping', (event, message) => {
-    console.log(message) // Prints 'whoooooooh!'
-});
-
 let about_msg = `PicoTurtle is a tiny turtle graphics program.
 
 You can write turtle graphics programs in your favourite programming language.
@@ -158,6 +155,7 @@ class TurtleEditor {
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
+        $('#help_button').on('click', { editor: this }, this.help);
 
         ipcRenderer.on('file.new', (event, message) => {
             event.data = {
@@ -199,6 +197,13 @@ class TurtleEditor {
                 editor: this
             };
             this.export(event);
+        });
+
+        ipcRenderer.on('help.docs', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.help(event);
         });
 
         $(window).resize(() => {
@@ -382,6 +387,26 @@ class TurtleEditor {
         } catch (error) {
             console.log('Error selecting file to save - ' + error);
         }
+    }
+
+    help(event) {
+        let editor = event.data.editor;
+        let win = new BrowserWindow({
+            width: 800,
+            height: 600,
+            show: false,
+            backgroundColor: 'whitesmoke',
+            parent: require('electron').remote.getCurrentWindow(),
+            modal: true
+        });
+        win.on('closed', () => {
+            win = null
+        });
+
+        win.loadURL(`file://${__dirname}/help.html`);
+        win.once('ready-to-show', () => {
+            win.show()
+        });
     }
 }
 

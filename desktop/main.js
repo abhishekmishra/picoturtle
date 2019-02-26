@@ -230,6 +230,13 @@ const template = [
     role: 'help',
     submenu: [
       {
+        label: 'Docs',
+        accelerator: 'F1',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('help.docs', '');
+        }
+      },
+      {
         label: 'Learn More',
         click() { require('electron').shell.openExternal('https://electronjs.org') }
       },
