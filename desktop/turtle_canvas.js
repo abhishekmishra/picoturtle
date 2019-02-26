@@ -2,6 +2,7 @@ const { Colour } = require('./colour_utils.js');
 const axios = require('axios');
 const sleep = require('./utils').sleep;
 var Lock = require('lock').Lock;
+const fs = require('fs');
 
 var lock = Lock();
 
@@ -362,6 +363,17 @@ class Turtle {
     batchEnd() {
         this.drawTurtle();
         this.batchEnabled = false;
+    }
+
+    export(filePath) {
+        // Get the DataUrl from the Canvas
+        const url = this.canvas.toDataURL('image/png');
+        console.log(url);
+        // remove Base64 stuff from the Image
+        const base64Data = url.replace(/^data:image\/png;base64,/, "");
+        fs.writeFile(filePath, base64Data, 'base64', function (err) {
+            console.log(err);
+        });
     }
 }
 

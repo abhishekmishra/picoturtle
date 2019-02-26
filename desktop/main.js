@@ -87,7 +87,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   console.log('Loading ' + 'index.html?port=' + port)
-  mainWindow.loadFile('index.html',{
+  mainWindow.loadFile('index.html', {
     query: {
       'port': port
     }
@@ -147,20 +147,50 @@ const template = [
         label: 'New',
         accelerator: 'CommandOrControl+N',
         click: (menuItem, browserWindow, event) => {
-          browserWindow.webContents.send('ping', 'whoooooooh!')
+          browserWindow.webContents.send('file.new', '')
         }
       },
       {
         label: 'Open',
-        accelerator: 'CommandOrControl+O'
+        accelerator: 'CommandOrControl+O',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('file.open', '')
+        }
       },
       {
         label: 'Save',
-        accelerator: 'CommandOrControl+S'
+        accelerator: 'CommandOrControl+S',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('file.save', '')
+        }
       },
-      { label: 'Save As' },
+      {
+        label: 'Save As',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('file.save_as', '')
+        }
+      },
       { type: 'separator' },
       { role: 'close' }
+    ]
+  },
+  {
+    label: 'Turtle',
+    submenu: [
+      {
+        label: 'Run',
+        accelerator: 'CommandOrControl+/',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('turtle.run', '')
+        }
+      },
+      {
+        label: 'Export',
+        accelerator: 'CommandOrControl+.',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('turtle.export', '')
+        }
+      }
     ]
   },
   {
@@ -232,7 +262,7 @@ if (process.platform === 'darwin') {
   })
 
   // Edit menu
-  template[2].submenu.push(
+  template[3].submenu.push(
     { type: 'separator' },
     {
       label: 'Speech',
@@ -244,7 +274,7 @@ if (process.platform === 'darwin') {
   )
 
   // Window menu
-  template[4].submenu = [
+  template[5].submenu = [
     { role: 'close' },
     { role: 'minimize' },
     { role: 'zoom' },

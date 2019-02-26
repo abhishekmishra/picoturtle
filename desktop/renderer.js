@@ -8,7 +8,7 @@ const Turtle = require('./turtle_canvas').Turtle;
 const TurtleProxy = require('./turtle_proxy').TurtleProxy;
 const { spawn } = require('child_process');
 const fs = require('fs');
-const { dialog } = require('electron').remote;
+const { dialog, app } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
@@ -33,11 +33,11 @@ function isDev() {
 }
 
 function getPicoTurtleServer() {
-    let execName = process.platform === "win32"? "picoturtle-server.exe": "picoturtle-server";
-    if(isDev()) {
+    let execName = process.platform === "win32" ? "picoturtle-server.exe" : "picoturtle-server";
+    if (isDev()) {
         return path.join(__dirname, '..', 'server', 'dist', execName);
     }
-    if(isProd()) {
+    if (isProd()) {
         return path.join(__dirname, '..', execName);
     }
 }
@@ -152,9 +152,53 @@ class TurtleEditor {
         $('#save_button').on('click', { editor: this }, this.saveFile);
         $('#save_as_button').on('click', { editor: this }, this.saveAsFile);
         $('#new_button').on('click', { editor: this }, this.newFile);
+        $('#export_button').on('click', { editor: this }, this.export);
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
+
+        ipcRenderer.on('file.new', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.newFile(event);
+        });
+
+        ipcRenderer.on('file.open', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.openFile(event);
+        });
+
+        ipcRenderer.on('file.save', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.saveFile(event);
+        });
+
+        ipcRenderer.on('file.save_as', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.saveAsFile(event);
+        });
+
+        ipcRenderer.on('turtle.run', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.run_turtle(event);
+        });
+
+        ipcRenderer.on('turtle.export', (event, message) => {
+            event.data = {
+                editor: this
+            };
+            this.export(event);
+        });
+
         $(window).resize(() => {
             //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
             this.editor.layout();
@@ -317,6 +361,25 @@ class TurtleEditor {
             }
         }
         track_turtle(editor.local_turtle, state.name);
+    }
+
+    export(event) {
+        let editor = event.data.editor;
+        try {
+            dialog.showSaveDialog({
+                defaultPath: path.join(app.getPath('pictures'), 'canvas.png'),
+                filters: [
+                    { name: 'PNG', extensions: ['png'] }
+                ]
+            }, (selected_file) => {
+                console.log('Selected file ' + selected_file);
+                if (selected_file) {
+                    editor.local_turtle.export(selected_file);
+                }
+            });
+        } catch (error) {
+            console.log('Error selecting file to save - ' + error);
+        }
     }
 }
 
