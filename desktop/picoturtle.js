@@ -3,6 +3,10 @@ const axios = require('axios');
 const getTurtlePort = require('./utils').getTurtlePort;
 const url = 'http://localhost:' + getTurtlePort();
 
+async function turtle_request(url) {
+
+}
+
 class Turtle {
     constructor(canvas_id = null) {
         this.canvas_id = canvas_id;
