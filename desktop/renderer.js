@@ -339,6 +339,7 @@ class TurtleEditor {
             }
 
             try {
+                $('#turtle_console').html('');
                 // console.log(command_args)
                 let python_exec = 'python3';
                 let isWin = process.platform === "win32";
@@ -352,15 +353,18 @@ class TurtleEditor {
 
                 py_proc.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
+                    $('#turtle_console').append(`<pre>${data}</pre>`);
                 });
 
                 py_proc.stderr.on('data', (data) => {
                     console.log(`stderr: ${data}`);
+                    $('#turtle_console').append(`<p>${data}</p>`);
                     t.stop();
                 });
 
                 py_proc.on('close', (code) => {
                     console.log(`child process exited with code ${code}`);
+                    $('#turtle_console').append(`<p>child process exited with code ${code}</p>`);
                     t.stop();
                 });
             } catch (error) {

@@ -57,3 +57,7 @@ html {
   margin: 2px;
   padding: 1px;
 }
+
+#turtle_console {
+  background: white;
+}
