@@ -10,21 +10,24 @@ branches:
   only:
   - master
   - /^v\d+\.\d+\.\d+/
-before_build:
-  - cd ./desktop
-  - cd
 
 install:
+- ps: cd desktop
+- echo %CD%
 - ps: Install-Product node $env:nodejs_version $env:platform
 - set PATH=%APPDATA%\npm;%PATH%
 - npm install
 - npm update
 
 test_script:
+- ps: cd desktop
+- echo %CD%
 - node --version
 - npm --version
 - npm run lint
 - if %APPVEYOR_REPO_TAG% EQU false npm run make
 
 build_script:
+- ps: cd desktop
+- echo %CD%
 - IF %APPVEYOR_REPO_TAG% EQU true npm run publish
