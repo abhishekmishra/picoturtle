@@ -55,12 +55,10 @@ const runPicoTurtleServer = () => {
 
   picoTurtleServerProc.stderr.on('data', (data) => {
     console.log(`stderr: ${data}`);
-    t.stop();
   });
 
   picoTurtleServerProc.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
-    t.stop();
   });
 
 }
@@ -179,7 +177,7 @@ const template = [
     submenu: [
       {
         label: 'Run',
-        accelerator: 'CommandOrControl+/',
+        accelerator: 'CommandOrControl+,',
         click: (menuItem, browserWindow, event) => {
           browserWindow.webContents.send('turtle.run', '')
         }
