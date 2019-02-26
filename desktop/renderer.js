@@ -12,10 +12,13 @@ const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
+const getTurtlePort = require('./utils').getTurtlePort;
 
 console.log(appenv.env);
 process.env.NODE_ENV = appenv.env;
 console.log(process.execPath);
+
+let port = getTurtlePort();
 
 function getEnv() {
     return process.env.NODE_ENV;
@@ -262,7 +265,7 @@ class TurtleEditor {
         let editor = event.data.editor;
         let text = editor.editor.getValue();
 
-        var t = new TurtleProxy();
+        var t = new TurtleProxy(port = port);
         let state = await t.init();
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
@@ -279,9 +282,9 @@ class TurtleEditor {
             };
             // console.log(options);
             // console.log( process.env.PATH );
-            let command_args = [editor.file, state.name];
+            let command_args = [editor.file, state.name, port];
             if (editor.file == 'Untitled' || editor.isDirty()) {
-                command_args = ['-c', text, state.name]
+                command_args = ['-c', text, state.name, port];
             }
 
             try {
@@ -292,20 +295,20 @@ class TurtleEditor {
                     python_exec = 'python';
                 }
                 //console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
-                const ls = spawn(python_exec,
+                const py_proc = spawn(python_exec,
                     command_args,
                     options);
 
-                ls.stdout.on('data', (data) => {
+                py_proc.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
                 });
 
-                ls.stderr.on('data', (data) => {
+                py_proc.stderr.on('data', (data) => {
                     console.log(`stderr: ${data}`);
                     t.stop();
                 });
 
-                ls.on('close', (code) => {
+                py_proc.on('close', (code) => {
                     console.log(`child process exited with code ${code}`);
                     t.stop();
                 });

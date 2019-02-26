@@ -5,7 +5,8 @@ var Lock = require('lock').Lock;
 
 var lock = Lock();
 
-const TURTLE_SERVER_URL = 'http://localhost:3000';
+const port = require('./utils').getTurtlePort();
+const TURTLE_SERVER_URL = 'http://localhost:' + port;
 
 async function list_turtles() {
     let req = await axios.get(TURTLE_SERVER_URL + '/turtle/list');
@@ -88,7 +89,7 @@ async function fetch_commands(local_turtle, cmd_id) {
         if (cmd.args != null) {
             Array.prototype.push.apply(args, cmd.args);
         }
-        console.log(args);
+        // console.log(args);
         local_turtle.reset();
         local_turtle.batchStart();
         local_turtle.exec.apply(local_turtle, args);
@@ -104,7 +105,7 @@ async function fetch_commands(local_turtle, cmd_id) {
         cmd_id += 1;
     }
     if (cmd.hasmore) {
-        console.log('there are more commands pending, after ' + cmd_id - 1);
+        // console.log('there are more commands pending, after ' + cmd_id - 1);
         // let y = x++;
         // console.log('A: started ' + y);
         fetch_commands(local_turtle, cmd_id);

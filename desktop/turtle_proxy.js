@@ -1,6 +1,7 @@
 // const fetch = require('node-fetch');
 const axios = require('axios');
-const url = 'http://localhost:3000';
+const getTurtlePort = require('./utils').getTurtlePort;
+const url = 'http://localhost:' + getTurtlePort();
 
 class TurtleProxy {
     constructor(canvas_id = null) {

@@ -23,8 +23,8 @@ class Turtle:
     proxy to turtle remote api
     """
 
-    def __init__(self, name=None, turtle_url="http://127.0.0.1:3000"):
-        self.turtle_url = turtle_url
+    def __init__(self, name=None, host="127.0.0.1", port="3000"):
+        self.turtle_url = "http://" + host + ":" + port
         self.name = name
         if self.name == None:
             self.turtle_init()
@@ -82,11 +82,18 @@ class Turtle:
 
 def create_turtle():
     name = None
+    port = None
     if len(sys.argv) > 1:
         name = sys.argv[1]
+    if len(sys.argv) > 2:
+        port = sys.argv[2]
 
-    t = Turtle(name)
-    builtins.t = t
+    if port is not None:
+        t = Turtle(name, port=port)
+        builtins.t = t
+    else:
+        t = Turtle(name)
+        builtins.t = t
 
 
 def penup():

@@ -2,10 +2,12 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const appenv = require('./env');
 const path = require('path');
+const url = require('url');
+const getPort = require('get-port');
 
-console.log(appenv.env);
+console.log('ENV is ' + appenv.env);
 process.env.NODE_ENV = appenv.env;
-console.log(process.execPath);
+// console.log(process.execPath);
 
 function getEnv() {
   return process.env.NODE_ENV;
@@ -29,14 +31,38 @@ function getPicoTurtleServer() {
   }
 }
 
+let port = null;
 let picoTurtleServerProc = null;
 const runPicoTurtleServer = () => {
-  picoTurtleServerProc = require('child_process').spawn(getPicoTurtleServer(), []);
+
+  let penv = JSON.parse(JSON.stringify(process.env));
+  penv['PORT'] = port;
+  let options = {
+    cwd: path.join(__dirname, '..'),
+    env: penv
+  };
+
+  picoTurtleServerProc = require('child_process').spawn(getPicoTurtleServer(), [], options);
 
   if (picoTurtleServerProc != null) {
     //console.log(picoTurtleServerProc)
-    console.log('child process success on port 3000');
+    console.log('child process success on port ' + port);
   }
+
+  picoTurtleServerProc.stdout.on('data', (data) => {
+    //console.log(`stdout: ${data}`);
+  });
+
+  picoTurtleServerProc.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+    t.stop();
+  });
+
+  picoTurtleServerProc.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+    t.stop();
+  });
+
 }
 
 const exitPicoTurtleServer = () => {
@@ -44,9 +70,6 @@ const exitPicoTurtleServer = () => {
   picoTurtleServerProc = null
   pyPort = null
 }
-
-app.on('ready', runPicoTurtleServer)
-app.on('will-quit', exitPicoTurtleServer)
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -63,10 +86,15 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  console.log('Loading ' + 'index.html?port=' + port)
+  mainWindow.loadFile('index.html',{
+    query: {
+      'port': port
+    }
+  });
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -77,27 +105,36 @@ function createWindow() {
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+(async () => {
+  port = await getPort();
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+  app.on('ready', runPicoTurtleServer);
+  app.on('will-quit', exitPicoTurtleServer);
 
-app.on('activate', function () {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  app.on('ready', createWindow);
+
+  // Quit when all windows are closed.
+  app.on('window-all-closed', function () {
+    // On macOS it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  });
+
+  app.on('activate', function () {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) {
+      createWindow()
+    }
+  });
+})();
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
