@@ -135,7 +135,7 @@ class Point {
     }
 }
 
-class Turtle {
+class TurtleCanvas {
 
     constructor(canvas_id, t = null) {
         this.canvas_id = canvas_id;
@@ -380,5 +380,5 @@ class Turtle {
 module.exports.list_turtles = list_turtles;
 module.exports.track_turtle = track_turtle;
 module.exports.Point = Point;
-module.exports.Turtle = Turtle;
+module.exports.TurtleCanvas = TurtleCanvas;
 // export { list_turtles, track_turtle, Point, Turtle };

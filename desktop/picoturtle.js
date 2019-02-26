@@ -3,7 +3,7 @@ const axios = require('axios');
 const getTurtlePort = require('./utils').getTurtlePort;
 const url = 'http://localhost:' + getTurtlePort();
 
-class TurtleProxy {
+class Turtle {
     constructor(canvas_id = null) {
         this.canvas_id = canvas_id;
         if (this.canvas_id != null) {
@@ -78,4 +78,4 @@ class TurtleProxy {
     }
 }
 
-module.exports.TurtleProxy = TurtleProxy;
+module.exports.Turtle = Turtle;

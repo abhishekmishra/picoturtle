@@ -4,8 +4,8 @@
 
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('./turtle_canvas').track_turtle;
-const Turtle = require('./turtle_canvas').Turtle;
-const TurtleProxy = require('./turtle_proxy').TurtleProxy;
+const TurtleCanvas = require('./turtle_canvas').TurtleCanvas;
+const Turtle = require('./picoturtle').Turtle;
 const { spawn } = require('child_process');
 const fs = require('fs');
 const { dialog, app } = require('electron').remote;
@@ -205,7 +205,7 @@ class TurtleEditor {
             //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
             this.editor.layout();
         });
-        this.local_turtle = new Turtle("turtle_canvas");
+        this.local_turtle = new TurtleCanvas("turtle_canvas");
         this.local_turtle.drawTurtle();
     }
 
@@ -311,7 +311,7 @@ class TurtleEditor {
         let editor = event.data.editor;
         let text = editor.editor.getValue();
 
-        var t = new TurtleProxy(port = port);
+        var t = new Turtle(port = port);
         let state = await t.init();
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
