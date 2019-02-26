@@ -1,7 +1,7 @@
 {
   "name": "PicoTurtle",
   "productName": "PicoTurtle",
-  "version": "0.0.1a",
+  "version": "0.0.1",
   "description": "PicoTurtle is a tiny turtle",
   "main": "main.js",
   "scripts": {
