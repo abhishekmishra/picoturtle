@@ -8,116 +8,70 @@
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
 
-<body class="container-fluid h-100 m-0 p-0">
-  <div class="d-flex flex-column container-fluid h-100">
-    <div class="row m-0 p-0">
-      <div class="toolbar m-0 p-2 col-12 mb-2">
-        <div class="row m-0 p-0">
-          <div class="col-5">
-            <button id="new_button" class="btn btn-secondary btn-sm">New</button>
-            <button id="open_button" class="btn btn-secondary btn-sm">Open</button>
-            <button id="save_button" class="btn btn-secondary btn-sm">Save</button>
-            <button id="save_as_button" class="btn btn-secondary btn-sm">Save As</button>
-            <button id="run_button" class="btn btn-secondary btn-sm">Run</button>
-            <button id="export_button" class="btn btn-secondary btn-sm">Export</button>
-          </div>
-          <div class="col-2">
-            <div class="input-group input-group-smmb-3 input-group-sm">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Language</label>
-              </div>
-              <select id="editor_language_select" class="form-control">
-                <option value="python">Python</option>
-                <option value="javascript">JavaScript</option>
-              </select>
+<body class="container-fluid h-100 m-0 p-0 d-flex flex-column">
+  <div class="row m-0 p-0">
+    <div class="toolbar m-0 p-2 col-12 mb-2">
+      <div class="row m-0 p-0">
+        <div class="col-5">
+          <button id="new_button" class="btn btn-secondary btn-sm">New</button>
+          <button id="open_button" class="btn btn-secondary btn-sm">Open</button>
+          <button id="save_button" class="btn btn-secondary btn-sm">Save</button>
+          <button id="save_as_button" class="btn btn-secondary btn-sm">Save As</button>
+          <button id="run_button" class="btn btn-secondary btn-sm">Run</button>
+          <button id="export_button" class="btn btn-secondary btn-sm">Export</button>
+        </div>
+        <div class="col-2">
+          <div class="input-group input-group-smmb-3 input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Language</label>
             </div>
-          </div>
-          <div class="col-5 text-right">
-            <button id="help_button" class="btn btn-secondary btn-sm">?</button>
+            <select id="editor_language_select" class="form-control">
+              <option value="python">Python</option>
+              <option value="javascript">JavaScript</option>
+            </select>
           </div>
         </div>
-        <!-- Language: <span id="editor_language"></span> -->
+        <div class="col-5 text-right">
+          <button id="help_button" class="btn btn-secondary btn-sm">?</button>
+        </div>
+      </div>
+      <!-- Language: <span id="editor_language"></span> -->
+    </div>
+  </div>
+  <div class="row flex-grow-1 h-100 m-0 p-0">
+    <div id="turtle_code_container" class="col-6">
+      <div id="turtle_code">
       </div>
     </div>
-    <div class="row flex-grow-1 h-100 m-0 p-0">
-      <div id="turtle_code_container" class="col-6">
-        <!-- <p class="header"> File: <span id="editor_file"></span>
-      </p> -->
-        <div id="turtle_code">
+    <div class="d-flex flex-column col-6 h-100 m-0 p-0">
+      <div id="turtle_canvas_container" class="row m-0 p-0">
+        <div class="col-12 p-1">
+          <canvas id="turtle_canvas" width="500" height="500" class="border border-secondary"></canvas>
         </div>
       </div>
-      <div id="turtle_canvas_container" class="col-6 h-100 d-flex flex-column m-0 p-0">
-        <!-- <p class="header"> Turtle: <span id="turtle_name"></span></p> -->
-        <div class="row m-0 p-0">
-          <div class="col-12 d-flex justify-content-center align-items-center p-1">
-            <canvas id="turtle_canvas" width="500" height="500" class="border border-secondary"></canvas>
-          </div>
-        </div>
-        <div class="row flex-grow-1 m-0 p-1">
-          <div class="col-6 m-0 p-1">
-            <div class="w-100 h-100 card">
-              <div class="card-header">
-                Program Output
-              </div>
-              <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div id="turtle_console" class=""></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 m-0 p-1">
-            <div class="w-100 h-100 card">
-              <div class="card-header">
-                Turtle State
-              </div>
-              <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div id="turtle_state" class="">
-                  <table id="turtle_state_table" class="table table-dark">
-
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row m-0 p-0">
-      <div class="toolbar m-0 p-0 pl-1 pr-1 col-12">
-        <div class="row">
-          <div class="col-6">
-            <span class="text text-dark" id="editor_file"></span>,
-            Turtle: <span class="" id="turtle_name">...</span>
-          </div>
-          <div class="col-3">
-
-          </div>
-          <div class="col-3 text-right">
-            <a href="https://github.com/abhishekmishra/picoturtle" target="_blank">
-              PicoTurtle v0.0.1 © 2019 Abhishek Mishra
-            </a>
-          </div>
+      <div id="turtle_console_container" class="row m-0 p-1 border border-secondary">
+        <div class="col-12 m-0 p-1" style="min-height: 0">
+          <ul id="turtle_console"></ul>
         </div>
       </div>
     </div>
   </div>
-  <div id="turtle_list_container" class="">
-    <p class="header">Turtles</p>
-    <ul id="turtle_list">
-    </ul>
-  </div>
-  <div id="turtle_details_container" class="col-2">
-    <div id="turtle_details_container_child">
-      <div id="object_code_container">
-        <!-- <h5 class="header">Object Code</h5> -->
-        <pre id="object_code">
+  <div class="row m-0 p-0">
+    <div class="toolbar m-0 p-0 pl-1 pr-1 col-12">
+      <div class="row">
+        <div class="col-6">
+          <span class="text text-dark" id="editor_file"></span>,
+          Turtle: <span class="" id="turtle_name">...</span>
+        </div>
+        <div class="col-3">
 
-          </pre>
+        </div>
+        <div class="col-3 text-right">
+          <a href="https://github.com/abhishekmishra/picoturtle" target="_blank">
+            PicoTurtle v0.0.1 © 2019 Abhishek Mishra
+          </a>
+        </div>
       </div>
-      <!-- <div id="turtle_info_container">
-                  <h5 class="header">Info</h5>
-                </div> -->
     </div>
   </div>
   <!-- See https://stackoverflow.com/questions/50283710/is-not-defined-using-jquery-with-electron-js -->

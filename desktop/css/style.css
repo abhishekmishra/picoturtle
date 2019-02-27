@@ -58,6 +58,24 @@ html {
   padding: 1px;
 }
 
+#turtle_canvas_container {
+  flex: 80%;
+  max-height: 80%;
+}
+
+#turtle_console_container {
+  flex: 20%;
+  max-height: 20%;
+  overflow: auto;
+  background: lightgray;
+  color: green;
+}
+
+html, body, div {
+  box-sizing: border-box;
+}
+
 #turtle_console {
-  background: white;
+
+  max-height: inherit;
 }

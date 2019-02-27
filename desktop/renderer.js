@@ -72,17 +72,17 @@ ipcRenderer.on('help.about', (event, message) => {
 
 list_turtles();
 
-let show_list = 0;
-let show_obj_code = 0;
-if (show_list != null && show_list == 0) {
-    let list_container = document.getElementById('turtle_list_container');
-    list_container.hidden = true;
-}
+// let show_list = 0;
+// let show_obj_code = 0;
+// if (show_list != null && show_list == 0) {
+//     let list_container = document.getElementById('turtle_list_container');
+//     list_container.hidden = true;
+// }
 
-if (show_obj_code != null && show_obj_code == 0) {
-    let obj_code_container = document.getElementById('turtle_details_container');
-    obj_code_container.hidden = true;
-}
+// if (show_obj_code != null && show_obj_code == 0) {
+//     let obj_code_container = document.getElementById('turtle_details_container');
+//     obj_code_container.hidden = true;
+// }
 
 let START_TEMPLATES = {};
 
@@ -117,6 +117,8 @@ create_turtle()
 ### Your code goes here ###
 
 def square(side):
+    for i in range(100):
+        print('hello' + str(i))
     for i in range(4):
         forward(side)
         right(90)
@@ -354,7 +356,13 @@ class TurtleEditor {
 
                 py_proc.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
-                    $('#turtle_console').append(`<pre>${data}</pre>`);
+                    if (data != null) {
+                        let lines = `${data}`.match(/[^\r\n]+/g);
+                        console.log(lines);
+                        lines.forEach(element => {
+                            $('#turtle_console').append(`<p class="m-0 p-0">${element}</p>`);
+                        });
+                    }
                 });
 
                 py_proc.stderr.on('data', (data) => {
