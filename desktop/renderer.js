@@ -70,7 +70,7 @@ ipcRenderer.on('help.about', (event, message) => {
     }, (response, checkboxChecked) => { });
 });
 
-list_turtles();
+// list_turtles();
 
 // let show_list = 0;
 // let show_obj_code = 0;

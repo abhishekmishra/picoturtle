@@ -22,9 +22,22 @@ function isDev() {
 }
 
 function getPicoTurtleServer() {
-  let execName = process.platform === "win32" ? "picoturtle-server.exe" : "picoturtle-server";
+  var isWin = process.platform === "win32";
+  var isLinux = process.platform === "linux";
+  var isMacos = process.platform === "darwin";
+
+  let execName = '';
+  if (isWin) {
+    execName = "picoturtle-server-win.exe";
+  }
+  if (isLinux) {
+    execName = "picoturtle-server-linux";
+  }
+  if (isMacos) {
+    execName = "picoturtle-server-macos";
+  }
   if (isDev()) {
-    return path.join(__dirname, '..', 'server', 'dist', execName);
+    return path.join(__dirname, 'dist', execName);
   }
   if (isProd()) {
     return path.join(__dirname, '..', execName);
@@ -42,6 +55,7 @@ const runPicoTurtleServer = () => {
     env: penv
   };
 
+  console.log(getPicoTurtleServer());
   picoTurtleServerProc = require('child_process').spawn(getPicoTurtleServer(), [], options);
 
   if (picoTurtleServerProc != null) {
