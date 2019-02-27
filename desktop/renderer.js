@@ -116,17 +116,30 @@ create_turtle()
 
 ### Your code goes here ###
 
-def square(side):
+def spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc):
+    r = 0
+    g = 0
+    b = 255
+    pencolour(r, g, b)
+    x = distance
+    a = angle
+    pw = pwidth
     for i in range(100):
-        print('hello' + str(i))
-    for i in range(4):
-        forward(side)
-        right(90)
+        r += 2
+        g += 0
+        b -= 2
+        pencolour(r, g, b)
+        penwidth(pw)
+        forward(x)
+        right(a)
+        x += distance_inc
+        a += angle_inc
+        pw += pwidth_inc
 
 pendown()
-penwidth(4)
-square(50)
+spiral(1, 25, 1, 1, 0, 0.2)
 
+print('Spiral done.')
 ### Your code ends here ###
 
 # Always stop the turtle
@@ -321,6 +334,7 @@ class TurtleEditor {
 
         var t = new Turtle(port = port);
         let state = await t.init();
+        $('#turtle_name').html(state.name);
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
             const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
@@ -373,7 +387,11 @@ class TurtleEditor {
 
                 py_proc.on('close', (code) => {
                     console.log(`child process exited with code ${code}`);
-                    $('#turtle_console').append(`<p>child process exited with code ${code}</p>`);
+                    if (parseInt(code) == 0) {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                    } else {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                    }
                     t.stop();
                 });
             } catch (error) {
