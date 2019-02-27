@@ -4,6 +4,9 @@ html {
   min-height: 700px;
 }
 
+body {
+  overflow: hidden;
+}
 /* a {
   color: #00B7FF;
 } */
@@ -67,15 +70,8 @@ html {
   flex: 20%;
   max-height: 20%;
   overflow: auto;
-  background: lightgray;
-  color: green;
 }
 
 html, body, div {
   box-sizing: border-box;
-}
-
-#turtle_console {
-
-  max-height: inherit;
 }

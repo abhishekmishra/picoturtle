@@ -360,14 +360,14 @@ class TurtleEditor {
                         let lines = `${data}`.match(/[^\r\n]+/g);
                         console.log(lines);
                         lines.forEach(element => {
-                            $('#turtle_console').append(`<p class="m-0 p-0">${element}</p>`);
+                            $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
                         });
                     }
                 });
 
                 py_proc.stderr.on('data', (data) => {
                     console.log(`stderr: ${data}`);
-                    $('#turtle_console').append(`<p>${data}</p>`);
+                    $('#turtle_console').append(`<p class="stderrln">${data}</p>`);
                     t.stop();
                 });
 
