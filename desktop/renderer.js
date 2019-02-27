@@ -3,8 +3,8 @@
 // All of the Node.js APIs are available in this process.
 
 const list_turtles = require('./turtle_canvas').list_turtles;
-const track_turtle = require('./turtle_canvas').track_turtle;
-const TurtleCanvas = require('./turtle_canvas').TurtleCanvas;
+const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
+const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
 const Turtle = require('./picoturtle').Turtle;
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -20,6 +20,7 @@ process.env.NODE_ENV = appenv.env;
 console.log(process.execPath);
 
 let port = getTurtlePort();
+const TURTLE_SERVER_URL = 'http://localhost:' + port;
 
 function getEnv() {
     return process.env.NODE_ENV;
@@ -371,7 +372,7 @@ class TurtleEditor {
                 console.log(error);
             }
         }
-        track_turtle(editor.local_turtle, state.name);
+        track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
     }
 
     export(event) {
