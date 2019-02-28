@@ -59,7 +59,7 @@ class PythonBinding {
         if (!args.port) args.port = '3000';
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
-            penv['PYTHONPATH'] = path.join(__dirname, '..', 'client', 'python');
+            penv['PYTHONPATH'] = path.join(__dirname, '..', '..', 'client', 'python');
             let options = {
                 cwd: path.join(__dirname, '..'),
                 env: penv

@@ -234,12 +234,12 @@ class TurtleEditor {
 
             monaco.editor.setModelLanguage(this.editor.getModel(), name);
             $('#editor_language_select').val(this.language);
-            if (this.file != 'Untitled') {
-                $('#editor_language_select').prop('disabled', 'disabled');
-            } else {
-                $('#editor_language_select').prop('disabled', false);
-                //this.editor.setValue(START_TEMPLATES[this.language]);
-            }
+            // if (this.file != 'Untitled') {
+            //     $('#editor_language_select').prop('disabled', 'disabled');
+            // } else {
+            //     $('#editor_language_select').prop('disabled', false);
+            //     //this.editor.setValue(START_TEMPLATES[this.language]);
+            // }
 
             $('#editor_sample_select').find('option')
                 .remove()
@@ -363,9 +363,11 @@ class TurtleEditor {
 
         let binding = editor.getCurrentBinding();
         let exec = binding.execFile;
+        let fvalue = editor.file;
         if (editor.file == 'Untitled' || editor.isDirty()) {
             if (binding.canExecText()) {
-                exec = binding.execText();
+                exec = binding.execText;
+                fvalue = text;
             }
             else {
                 dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
@@ -374,7 +376,7 @@ class TurtleEditor {
         }
 
         exec(
-            editor.file,
+            fvalue,
             (data) => {
                 console.log(`stdout: ${data}`);
                 turtle_console_out(data);
