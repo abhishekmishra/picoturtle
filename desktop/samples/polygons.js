@@ -1,29 +1,33 @@
-const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
+const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client/picoturtle-async');
 
-create_turtle();
+let main = async () => {
+    await create_turtle();
 
-/* a simple turtle program to print a polygon */
-function poly(num, side, angle) {
-    for(var i = 0; i < num; i++) {
-        forward(side);
-        right(angle);
+    /* a simple turtle program to print a polygon */
+    async function poly(num, side, angle) {
+        for (var i = 0; i < num; i++) {
+            await forward(side);
+            await right(angle);
+        }
     }
-}
 
-//draw a hexagon in red
-penwidth(2);
-pendown();
-pencolour(255, 0, 0);
-poly(6, 50, 60);
+    //draw a hexagon in red
+    await penwidth(2);
+    await pendown();
+    await pencolour(255, 0, 0);
+    await poly(6, 50, 60);
 
-//move up 100
-penup();
-forward(-100);
-right(90);
+    //move up 100
+    await penup();
+    await forward(-100);
+    await right(90);
 
-//draw a pentagon in blue
-pendown();
-pencolour(0, 0, 255);
-poly(5, 50, 72);
+    //draw a pentagon in blue
+    await pendown();
+    await pencolour(0, 0, 255);
+    await poly(5, 50, 72);
 
-stop();
+    await stop();
+};
+
+main();
