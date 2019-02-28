@@ -1,4 +1,5 @@
-const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('./picoturtle-sync');
+const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('../picoturtle');
+
 create_turtle();
 
 /* Your code goes here */
@@ -26,6 +27,7 @@ function spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc) {
 }
 
 pendown();
+
 spiral(1, 25, 1, 1, 0, 0.2);
 
 print('Spiral done.');

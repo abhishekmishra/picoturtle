@@ -5,7 +5,7 @@
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
-const { Turtle, create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left } = require('./picoturtle');
+const { Turtle, create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left } = require('./picoturtle-async');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const { dialog, app } = require('electron').remote;
@@ -13,8 +13,9 @@ const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
 const getTurtlePort = require('./utils').getTurtlePort;
-const { BrowserWindow } = require('electron').remote
-const { fork } = require('child_process');
+const { BrowserWindow } = require('electron').remote;
+const { NodeJSBinding } = require('./lang/node-binding');
+const { PythonBinding } = require('./lang/python-binding');
 
 console.log(appenv.env);
 process.env.NODE_ENV = appenv.env;
@@ -44,12 +45,6 @@ function getPicoTurtleServer() {
         return path.join(__dirname, '..', execName);
     }
 }
-
-// fs.readdirSync(path.join(__dirname, '..')).forEach(file => {
-//   console.log(file);
-// });
-
-//in windows server is at ../picoturtle-server.exe
 
 // Non-Editor Messages are handled here
 // All Editor Message Callbacks are registered in the TurtleEditor Class
@@ -86,103 +81,7 @@ ipcRenderer.on('help.about', (event, message) => {
 // }
 
 let START_TEMPLATES = {};
-
-let old_js = `async function square(t, side) {
-    for (var i = 0; i < 4; i++) {
-        await t.forward(side);
-        await t.right(90);
-    }
-}
-
-async function my_turtle(t) {
-    await t.penup();
-    await t.pencolour(255, 0, 0);
-    await t.penwidth(3);
-    await t.pendown();
-    for(var i = 0; i < 2; i++) {
-        await t.penup();
-        await t.forward(60);
-        await t.pendown();
-        await square(t, 50);
-    }
-    await t.stop();
-    return t.name;
-}
-
-return await my_turtle(t);
-`
-
-START_TEMPLATES['javascript'] = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('./picoturtle');
-await create_turtle();
-
-/* Your code goes here */
-
-async function spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc) {
-    let r = 0;
-    let g = 0;
-    let b = 255;
-    await pencolour(r, g, b);
-    let x = distance;
-    let a = angle;
-    let pw = pwidth;
-    for(var i = 0; i < 100; i++) {
-        r += 2;
-        g += 0;
-        b -= 2;
-        await pencolour(r, g, b);
-        await penwidth(pw);
-        await forward(x);
-        await right(a);
-        x += distance_inc;
-        a += angle_inc;
-        pw += pwidth_inc;
-    }
-}
-
-await pendown();
-await spiral(1, 25, 1, 1, 0, 0.2);
-
-print('Spiral done.');
-
-/* Your code ends here */
-
-// Always stop the turtle
-await stop();
-`;
-
-START_TEMPLATES['python'] = `from picoturtle import *
-create_turtle()
-
-### Your code goes here ###
-
-def spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc):
-    r = 0
-    g = 0
-    b = 255
-    pencolour(r, g, b)
-    x = distance
-    a = angle
-    pw = pwidth
-    for i in range(100):
-        r += 2
-        g += 0
-        b -= 2
-        pencolour(r, g, b)
-        penwidth(pw)
-        forward(x)
-        right(a)
-        x += distance_inc
-        a += angle_inc
-        pw += pwidth_inc
-
-pendown()
-spiral(1, 25, 1, 1, 0, 0.2)
-
-print('Spiral done.')
-### Your code ends here ###
-
-# Always stop the turtle
-stop()`;
+START_TEMPLATES['python'] = ``;
 
 function turtle_console_out(data) {
     if (data != null) {
@@ -202,6 +101,14 @@ class TurtleEditor {
                 ''
             ].join('\n')
         });
+
+        this.bindings = {
+            'javascript': new NodeJSBinding(),
+            'python': new PythonBinding()
+        };
+
+        this.sampleSelected = false;
+
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
             if (this.isDirty()) {
@@ -214,12 +121,19 @@ class TurtleEditor {
         this.setLanguage('javascript');
         $('#open_button').on('click', { editor: this }, this.openFile);
         $('#run_button').on('click', { editor: this }, this.run_turtle);
-        $('#save_button').on('click', { editor: this }, this.saveFile);
-        $('#save_as_button').on('click', { editor: this }, this.saveAsFile);
+        $('#save_button').on('click', { editor: this }, function (event) {
+            event.data.editor.saveFile();
+        });
+        $('#save_as_button').on('click', { editor: this }, function (event) {
+            event.data.editor.saveAsFile();
+        });
         $('#new_button').on('click', { editor: this }, this.newFile);
         $('#export_button').on('click', { editor: this }, this.export);
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
+        });
+        $('#editor_sample_select').on('change', { editor: this }, function (event) {
+            event.data.editor.setSample(this.value);
         });
         $('#help_button').on('click', { editor: this }, this.help);
 
@@ -241,14 +155,14 @@ class TurtleEditor {
             event.data = {
                 editor: this
             };
-            this.saveFile(event);
+            this.saveFile();
         });
 
         ipcRenderer.on('file.save_as', (event, message) => {
             event.data = {
                 editor: this
             };
-            this.saveAsFile(event);
+            this.saveAsFile();
         });
 
         ipcRenderer.on('turtle.run', (event, message) => {
@@ -273,7 +187,6 @@ class TurtleEditor {
         });
 
         $(window).resize(() => {
-            //$( "#log" ).append( "<div>Handler for .resize() called.</div>" );
             this.editor.layout();
         });
         this.local_turtle = new TurtleCanvas("turtle_canvas");
@@ -290,24 +203,49 @@ class TurtleEditor {
     }
 
     setLanguage(name) {
-        this.language = name;
-        monaco.editor.setModelLanguage(this.editor.getModel(), name);
-        $('#editor_language_select').val(this.language);
-        if (this.file != 'Untitled') {
-            $('#editor_language_select').prop('disabled', 'disabled');
-        } else {
-            $('#editor_language_select').prop('disabled', false);
-            this.editor.setValue(START_TEMPLATES[this.language]);
+        if (this.language !== name) {
+            this.language = name;
+
+            monaco.editor.setModelLanguage(this.editor.getModel(), name);
+            $('#editor_language_select').val(this.language);
+            if (this.file != 'Untitled') {
+                $('#editor_language_select').prop('disabled', 'disabled');
+            } else {
+                $('#editor_language_select').prop('disabled', false);
+                //this.editor.setValue(START_TEMPLATES[this.language]);
+            }
+
+            $('#editor_sample_select').find('option')
+                .remove()
+                .end();
+
+            this.bindings[this.language].getSamples().forEach(element => {
+                $('#editor_sample_select').append('<option value="' + element.file + '">' + element.name + '</option>').val('');
+            });
         }
     }
 
+    setSample(name) {
+        $('#editor_sample_select').val(name);
+        this.setSelectedFile(name);
+        this.sampleSelected = true;
+    }
+
     setSelectedFile(selected_file = null) {
-        if (selected_file == null) {
+        this.sampleSelected = false;
+        if (selected_file === null) {
             this.file = 'Untitled';
             $('#save_button').prop('disabled', 'disabled');
-        } else {
+        }
+        else if (!fs.existsSync(selected_file)) {
+            this.file = selected_file;
+        }
+        else {
             this.file = selected_file;
             $('#save_button').prop('disabled', false);
+            let text = fs.readFileSync(this.file, { encoding: 'utf-8' });
+            this.editor.setValue(text);
+            this.markVersion();
         }
         $('#editor_file').html(this.file);
 
@@ -328,18 +266,19 @@ class TurtleEditor {
                     let editor = event.data.editor;
                     let selected_file = files[0];
                     editor.setSelectedFile(selected_file);
-                    let text = fs.readFileSync(selected_file, { encoding: 'utf-8' });
-                    console.log(editor.language);
-                    editor.editor.setValue(text);
-                    editor.markVersion();
                 }
             }
         });
     }
 
     writeContents() {
+        if (this.sampleSelected) {
+            dialog.showErrorBox('Cannot save sample', 'Saving the sample file is not allowed!');
+            return;
+        }
+
         let text = this.editor.getValue();
-        fs.writeFile(this.file, text, (err) => {
+        fs.writeFileSync(this.file, text, (err) => {
             if (err) {
                 return console.log(err);
             }
@@ -348,27 +287,28 @@ class TurtleEditor {
         });
     }
 
-    saveFile(event) {
-        let editor = event.data.editor;
-        if (this.file != 'Untitled') {
-            editor.writeContents();
+    saveFile() {
+        if (this.file != 'Untitled' && !this.sampleSelected) {
+            this.writeContents();
         } else {
-            editor.saveAsFile(event);
+            this.saveAsFile();
         }
     }
 
-    saveAsFile(event) {
-        let editor = event.data.editor;
+    saveAsFile() {
         try {
             dialog.showSaveDialog({
                 // no options
             }, (selected_file) => {
-                editor.setSelectedFile(selected_file);
-                console.log('Selected file ' + selected_file);
-                editor.writeContents();
+                console.log(selected_file);
+                if (selected_file) {
+                    this.setSelectedFile(selected_file);
+                    console.log('Selected file ' + selected_file);
+                    this.writeContents();
+                }
             });
         } catch (error) {
-            console.log('Error selecting file to save - ' + error);
+            console.log('Error saving file - ' + error);
         }
     }
 
@@ -376,6 +316,10 @@ class TurtleEditor {
         let editor = event.data.editor;
         editor.editor.setValue(``);
         editor.setSelectedFile();
+    }
+
+    getCurrentBinding() {
+        return this.bindings[this.language];
     }
 
     async run_turtle(event) {
@@ -391,48 +335,30 @@ class TurtleEditor {
         $('#turtle_name').html(state.name);
         global.t = t;
         track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
-        if (editor.language == 'javascript') {
-            // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
-            // const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
-            // var f = new AsyncFunction('t', text);
-            // await f(t);
 
-            // let command_args = ['./spiral-sync.js', '-n', state.name, '-p', port];
+        let binding = editor.getCurrentBinding();
+        let exec = binding.execFile;
+        if (editor.file == 'Untitled' || editor.isDirty()) {
+            if (binding.canExecText()) {
+                exec = binding.execText();
+            }
+            else {
+                dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
+                return Promise.resolve();
+            }
+        }
 
-            // const js_proc = spawn('node', command_args);
-
-            // js_proc.stdout.on('data', (data) => {
-            //     console.log(`stdout: ${data}`);
-            //     turtle_console_out(data);
-            // });
-
-            // js_proc.stderr.on('data', (data) => {
-            //     console.log(`stderr: ${data}`);
-            //     $('#turtle_console').append(`<p class="stderrln">${data}</p>`);
-            //     // t.stop();
-            // });
-
-            // js_proc.on('close', (code) => {
-            //     console.log(`child process exited with code ${code}`);
-            //     if (parseInt(code) == 0) {
-            //         $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
-            //     } else {
-            //         $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
-            //     }
-            //     t.stop();
-            // });
-
-            let command_args = ['-n', state.name, '-p', port];
-
-            const js_proc = fork('./spiral-sync.js', command_args);
-            console.log(js_proc);
-
-            js_proc.on('message', (data) => {
+        exec(
+            editor.file,
+            (data) => {
                 console.log(`stdout: ${data}`);
                 turtle_console_out(data);
-            });
-
-            js_proc.on('close', (code) => {
+            },
+            (data) => {
+                console.log(`stderr: ${data}`);
+                turtle_console_out(data);
+            },
+            (code) => {
                 console.log(`child process exited with code ${code}`);
                 if (parseInt(code) == 0) {
                     $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
@@ -440,60 +366,18 @@ class TurtleEditor {
                     $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
                 }
                 t.stop();
-            });
-
-        } else if (editor.language == 'python') {
-            //const ls = spawn('ls', ['-lh', '/usr']);
-            let penv = JSON.parse(JSON.stringify(process.env));
-            penv['PYTHONPATH'] = path.join(__dirname, '..', 'client', 'python');
-            let options = {
-                cwd: path.join(__dirname, '..'),
-                env: penv
-            };
-            // console.log(options);
-            // console.log( process.env.PATH );
-            let command_args = [editor.file, state.name, port];
-            if (editor.file == 'Untitled' || editor.isDirty()) {
-                command_args = ['-c', text, state.name, port];
+            },
+            {
+                name: state.name,
+                port: port
             }
-
-            try {
-                // console.log(command_args)
-                let python_exec = 'python3';
-                let isWin = process.platform === "win32";
-                if (isWin) {
-                    python_exec = 'python';
-                }
-                //console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
-                const py_proc = spawn(python_exec,
-                    command_args,
-                    options);
-
-                py_proc.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`);
-                    turtle_console_out(data);
-                });
-
-                py_proc.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                    $('#turtle_console').append(`<p class="stderrln">${data}</p>`);
-                    t.stop();
-                });
-
-                py_proc.on('close', (code) => {
-                    console.log(`child process exited with code ${code}`);
-                    if (parseInt(code) == 0) {
-                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
-                    } else {
-                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
-                    }
-                    t.stop();
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        }
+        ).then(() => {
+            console.log('done');
+        }).catch((err) => {
+            console.log('Error running program -> ' + err);
+        });
     }
+
 
     export(event) {
         let editor = event.data.editor;

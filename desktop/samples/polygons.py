@@ -9,6 +9,7 @@ def poly(num, side, angle):
         right(angle)
 
 #draw a hexagon in red
+penwidth(2)
 pendown()
 pencolour(255, 0, 0)
 poly(6, 50, 60)

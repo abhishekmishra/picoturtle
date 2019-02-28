@@ -1,4 +1,6 @@
 const url = require('url');
+const { env } = require('./env');
+const path = require('path');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -12,6 +14,15 @@ function getTurtlePort() {
     return port;
 }
 
+function getSampleFilePath(sample_file) {
+    if (env === 'dev') {
+        return path.join(__dirname, 'samples', sample_file);
+    }
+    if (env === 'prod') {
+        return path.join(__dirname, '..', 'samples', sample_file);
+    }
+}
+
 module.exports.sleep = sleep;
 module.exports.getTurtlePort = getTurtlePort;
-// export { sleep };
+module.exports.getSampleFilePath = getSampleFilePath;
