@@ -1,4 +1,4 @@
-const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('../picoturtle');
+const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
 
 create_turtle();
 

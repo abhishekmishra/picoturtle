@@ -5,8 +5,7 @@
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
-const { Turtle, create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left } = require('./picoturtle-async');
-const { spawn } = require('child_process');
+const { Turtle } = require('@picoturtle/picoturtle-nodejs-client/picoturtle-async');
 const fs = require('fs');
 const { dialog, app } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
