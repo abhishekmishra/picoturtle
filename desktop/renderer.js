@@ -335,46 +335,58 @@ class TurtleEditor {
         global.t = t;
         track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
 
-        let binding = editor.getCurrentBinding();
-        let exec = binding.execFile;
-        if (editor.file == 'Untitled' || editor.isDirty()) {
-            if (binding.canExecText()) {
-                exec = binding.execText();
-            }
-            else {
-                dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
-                return Promise.resolve();
-            }
-        }
-
-        exec(
-            editor.file,
-            (data) => {
-                console.log(`stdout: ${data}`);
-                turtle_console_out(data);
-            },
-            (data) => {
-                console.log(`stderr: ${data}`);
-                turtle_console_out(data);
-            },
-            (code) => {
-                console.log(`child process exited with code ${code}`);
-                if (parseInt(code) == 0) {
-                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
-                } else {
-                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+        if (editor.language == 'javascript') {
+            ipcRenderer.send('exec-node', [
+                editor.file,
+                null,
+                null,
+                null,
+                {
+                    name: state.name,
+                    port: port
+                }]);
+        } else {
+            let binding = editor.getCurrentBinding();
+            let exec = binding.execFile;
+            if (editor.file == 'Untitled' || editor.isDirty()) {
+                if (binding.canExecText()) {
+                    exec = binding.execText();
                 }
-                t.stop();
-            },
-            {
-                name: state.name,
-                port: port
+                else {
+                    dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
+                    return Promise.resolve();
+                }
             }
-        ).then(() => {
-            console.log('done');
-        }).catch((err) => {
-            console.log('Error running program -> ' + err);
-        });
+
+            exec(
+                editor.file,
+                (data) => {
+                    console.log(`stdout: ${data}`);
+                    turtle_console_out(data);
+                },
+                (data) => {
+                    console.log(`stderr: ${data}`);
+                    turtle_console_out(data);
+                },
+                (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    if (parseInt(code) == 0) {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                    } else {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                    }
+                    t.stop();
+                },
+                {
+                    name: state.name,
+                    port: port
+                }
+            ).then(() => {
+                console.log('done');
+            }).catch((err) => {
+                console.log('Error running program -> ' + err);
+            });
+        }
     }
 
 

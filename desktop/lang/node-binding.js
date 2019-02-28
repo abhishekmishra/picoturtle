@@ -1,4 +1,4 @@
-const { fork } = require('child_process');
+const { spawn } = require('child_process');
 const { getSampleFilePath } = require('../utils');
 
 class NodeJSBinding {
@@ -18,22 +18,40 @@ class NodeJSBinding {
         return false;
     }
 
-    async execFile(file, output_cb, error_cb, complete_cb, args) {
-        if(!args) args = {};
-        if(!args.name) args.name = null;
-        if(!args.port) args.port = '3000';
+    execFile(file, output_cb, error_cb, complete_cb, args) {
+        if (!args) args = {};
+        if (!args.name) args.name = null;
+        if (!args.port) args.port = '3000';
         try {
-            let command_args = ['-n', args.name, '-p', args.port];
+            let command_args = [file, '-n', args.name, '-p', args.port];
 
-            const js_proc = fork(file, command_args);
+            // const js_proc = fork(file, command_args);
 
-            js_proc.on('message', output_cb);
-            js_proc.on('error', error_cb);
-            js_proc.on('close', complete_cb);
-            return Promise.resolve();
+            // js_proc.on('message', output_cb);
+            // js_proc.on('error', error_cb);
+            // js_proc.on('close', complete_cb);
+            console.log(command_args);
+            const js_proc = spawn(process.execPath,
+                command_args,
+                {
+                    detached: true,
+                    env: {
+                        ELECTRON_RUN_AS_NODE: 1
+                    }
+                });
+
+            js_proc.stdout.on('data', (data) => {
+                console.log(data);
+            });
+            js_proc.stderr.on('data', (data) => {
+                console.log(data);
+            });
+            js_proc.on('close', (data) => {
+                console.log(data);
+            });
         } catch (error) {
-            error_cb(error);
-            return Promise.reject(error);
+            //error_cb(error);
+            console.log(error);
         }
     }
 

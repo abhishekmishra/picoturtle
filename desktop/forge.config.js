@@ -71,7 +71,7 @@ let config = {
       let resourcesFolder = path.join(buildPath, '..');
       fs.mkdirSync(path.join(resourcesFolder, 'client'));
       fs.mkdirSync(path.join(resourcesFolder, 'client', 'python'));
-      fs.copyFileSync('../client/python/picoturtle.py', path.join(resourcesFolder, 'client', 'python', 'picoturtle.py'));
+      fs.copyFileSync('./client/python/picoturtle.py', path.join(resourcesFolder, 'client', 'python', 'picoturtle.py'));
     }
   }
 };

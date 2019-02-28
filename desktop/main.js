@@ -1,13 +1,14 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron');
+const { ipcMain } = require('electron');
 const appenv = require('./env');
 const path = require('path');
 const url = require('url');
 const getPort = require('get-port');
+const { NodeJSBinding } = require('./lang/node-binding');
 
 console.log('ENV is ' + appenv.env);
 process.env.NODE_ENV = appenv.env;
-// console.log(process.execPath);
 
 function getEnv() {
   return process.env.NODE_ENV;
@@ -302,5 +303,12 @@ if (process.platform === 'darwin') {
   ]
 }
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
+
+ipcMain.on('exec-node', (event, arg) => {
+  console.log(arg) // prints "ping"
+  let nb = new NodeJSBinding();
+  nb.execFile(arg[0], arg[1], arg[2], arg[3], arg[4]);
+  event.sender.send('exec-node-reply', 'pong')
+})
