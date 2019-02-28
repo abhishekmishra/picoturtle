@@ -1,10 +1,10 @@
-const axios = require('axios');
+const request = require('sync-request');
 var ArgumentParser = require('argparse').ArgumentParser;
 
-async function turtle_request(request_url) {
+function turtle_request_sync(request_url) {
     // console.log('start -> ' + request_url);
-    let res = await axios.get(request_url);
-    let t = await res.data;
+    let res = request('GET', request_url);
+    let t = JSON.parse(res.getBody('utf8'));;
     // console.log('done  -> ' + request_url);
     return t;
 }
@@ -18,13 +18,17 @@ class Turtle {
 
         this.name = options.name;
         this.turtle_url = "http://" + options.host + ":" + options.port;
-        this.turtle_request = turtle_request;
+        this.turtle_request = turtle_request_sync;
+
+        if (this.name == null) {
+            this.init(null);
+        }
     }
 
-    async init(name) {
+    init(name) {
         if (this.name == null) {
             if (name == null) {
-                let t = await this.turtle_request(this.turtle_url + '/turtle/create?x=250&y=250');
+                let t = this.turtle_request(this.turtle_url + '/turtle/create?x=250&y=250');
                 this.name = t.name;
                 // console.log('Created turtle with name ' + t.name);
                 return t;
@@ -34,56 +38,56 @@ class Turtle {
         }
     }
 
-    async penup() {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/penup');
+    penup() {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/penup');
         // console.log('penup for - ' + t.name);
         return t;
     }
 
-    async pendown() {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/pendown');
+    pendown() {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/pendown');
         // console.log('pendown for - ' + t.name);
         return t;
     }
 
-    async penwidth(w) {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/penwidth?w=' + w);
+    penwidth(w) {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/penwidth?w=' + w);
         // console.log('penwidth ' + w + ' for - ' + t.name);
         return t;
     }
 
-    async stop() {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/stop');
+    stop() {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/stop');
         // console.log('stop for - ' + t.name);
         return t;
     }
 
-    async clear() {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/clear');
+    clear() {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/clear');
         // console.log('clear for - ' + t.name);
         return t;
     }
 
-    async forward(d) {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/forward?d=' + d);
+    forward(d) {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/forward?d=' + d);
         // console.log('forward ' + d + ' for - ' + t.name);
         return t;
     }
 
-    async left(a) {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/left?a=' + a);
+    left(a) {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/left?a=' + a);
         // console.log('left ' + a + ' for - ' + t.name);
         return t;
     }
 
-    async right(a) {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/right?a=' + a);
+    right(a) {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/right?a=' + a);
         // console.log('right ' + a + ' for - ' + t.name);
         return t;
     }
 
-    async pencolour(r, g, b) {
-        let t = await this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/pencolour?r=' + r + '&g=' + g + '&b=' + b);
+    pencolour(r, g, b) {
+        let t = this.turtle_request(this.turtle_url + '/turtle/' + this.name + '/pencolour?r=' + r + '&g=' + g + '&b=' + b);
         // console.log('colour [' + r + ', ' + g + ', ' + b + '] for - ' + t.name);
         return t;
     }
@@ -142,7 +146,7 @@ function create_turtle(options) {
         if (!options.name) options.name = getNameFromArgs(args);
     }
 
-    console.log('Create turtle options -> ' + options);
+    console.log('Create turtle options -> ' + JSON.stringify(options));
 
     if (typeof t === 'undefined' || t === null) {
         t = new Turtle(options);
@@ -151,43 +155,43 @@ function create_turtle(options) {
     t.init(options.name);
 }
 
-async function pendown() {
-    await t.pendown();
+function pendown() {
+    t.pendown();
 }
 
-async function penup() {
-    await t.penup();
+function penup() {
+    t.penup();
 }
 
-async function clear() {
-    await t.clear();
+function clear() {
+    t.clear();
 }
 
-async function stop() {
-    await t.stop();
+function stop() {
+    t.stop();
 }
 
-async function penwidth(w) {
-    await t.penwidth(w);
+function penwidth(w) {
+    t.penwidth(w);
 }
 
-async function forward(d) {
-    await t.forward(d);
+function forward(d) {
+    t.forward(d);
 }
 
-async function right(a) {
-    await t.right(a);
+function right(a) {
+    t.right(a);
 }
 
-async function left(a) {
-    await t.left(a);
+function left(a) {
+    t.left(a);
 }
 
-async function pencolour(r, g, b) {
-    await t.pencolour(r, g, b);
+function pencolour(r, g, b) {
+    t.pencolour(r, g, b);
 }
 
-async function print(text) {
+function print(text) {
     console.log(text);
     if (!(typeof turtle_console_out === 'undefined' || turtle_console_out === null)) {
         turtle_console_out(text);

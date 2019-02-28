@@ -5,7 +5,7 @@
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
-const Turtle = require('./picoturtle').Turtle;
+const { Turtle, create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left } = require('./picoturtle');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const { dialog, app } = require('electron').remote;
@@ -14,6 +14,7 @@ const path = require('path');
 const appenv = require('./env');
 const getTurtlePort = require('./utils').getTurtlePort;
 const { BrowserWindow } = require('electron').remote
+const { fork } = require('child_process');
 
 console.log(appenv.env);
 process.env.NODE_ENV = appenv.env;
@@ -86,7 +87,7 @@ ipcRenderer.on('help.about', (event, message) => {
 
 let START_TEMPLATES = {};
 
-START_TEMPLATES['javascript'] = `async function square(t, side) {
+let old_js = `async function square(t, side) {
     for (var i = 0; i < 4; i++) {
         await t.forward(side);
         await t.right(90);
@@ -109,6 +110,44 @@ async function my_turtle(t) {
 }
 
 return await my_turtle(t);
+`
+
+START_TEMPLATES['javascript'] = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('./picoturtle');
+await create_turtle();
+
+/* Your code goes here */
+
+async function spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc) {
+    let r = 0;
+    let g = 0;
+    let b = 255;
+    await pencolour(r, g, b);
+    let x = distance;
+    let a = angle;
+    let pw = pwidth;
+    for(var i = 0; i < 100; i++) {
+        r += 2;
+        g += 0;
+        b -= 2;
+        await pencolour(r, g, b);
+        await penwidth(pw);
+        await forward(x);
+        await right(a);
+        x += distance_inc;
+        a += angle_inc;
+        pw += pwidth_inc;
+    }
+}
+
+await pendown();
+await spiral(1, 25, 1, 1, 0, 0.2);
+
+print('Spiral done.');
+
+/* Your code ends here */
+
+// Always stop the turtle
+await stop();
 `;
 
 START_TEMPLATES['python'] = `from picoturtle import *
@@ -145,6 +184,17 @@ print('Spiral done.')
 # Always stop the turtle
 stop()`;
 
+function turtle_console_out(data) {
+    if (data != null) {
+        let lines = `${data}`.match(/[^\r\n]+/g);
+        lines.forEach(element => {
+            $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
+        });
+    }
+}
+
+global.turtle_console_out = turtle_console_out;
+
 class TurtleEditor {
     constructor() {
         this.editor = monaco.editor.create(document.getElementById('turtle_code'), {
@@ -161,7 +211,7 @@ class TurtleEditor {
             }
         });
         this.setSelectedFile();
-        this.setLanguage('python');
+        this.setLanguage('javascript');
         $('#open_button').on('click', { editor: this }, this.openFile);
         $('#run_button').on('click', { editor: this }, this.run_turtle);
         $('#save_button').on('click', { editor: this }, this.saveFile);
@@ -329,17 +379,69 @@ class TurtleEditor {
     }
 
     async run_turtle(event) {
+        $('#turtle_console').html('');
+
         let editor = event.data.editor;
         let text = editor.editor.getValue();
 
-        var t = new Turtle(port = port);
-        let state = await t.init();
+        var t = new Turtle({
+            port: port
+        });
+        let state = await t.init(null);
         $('#turtle_name').html(state.name);
+        global.t = t;
+        track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
         if (editor.language == 'javascript') {
             // see https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
-            const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
-            var f = new AsyncFunction('t', text);
-            await f(t);
+            // const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
+            // var f = new AsyncFunction('t', text);
+            // await f(t);
+
+            // let command_args = ['./spiral-sync.js', '-n', state.name, '-p', port];
+
+            // const js_proc = spawn('node', command_args);
+
+            // js_proc.stdout.on('data', (data) => {
+            //     console.log(`stdout: ${data}`);
+            //     turtle_console_out(data);
+            // });
+
+            // js_proc.stderr.on('data', (data) => {
+            //     console.log(`stderr: ${data}`);
+            //     $('#turtle_console').append(`<p class="stderrln">${data}</p>`);
+            //     // t.stop();
+            // });
+
+            // js_proc.on('close', (code) => {
+            //     console.log(`child process exited with code ${code}`);
+            //     if (parseInt(code) == 0) {
+            //         $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+            //     } else {
+            //         $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+            //     }
+            //     t.stop();
+            // });
+
+            let command_args = ['-n', state.name, '-p', port];
+
+            const js_proc = fork('./spiral-sync.js', command_args);
+            console.log(js_proc);
+
+            js_proc.on('message', (data) => {
+                console.log(`stdout: ${data}`);
+                turtle_console_out(data);
+            });
+
+            js_proc.on('close', (code) => {
+                console.log(`child process exited with code ${code}`);
+                if (parseInt(code) == 0) {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                } else {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                }
+                t.stop();
+            });
+
         } else if (editor.language == 'python') {
             //const ls = spawn('ls', ['-lh', '/usr']);
             let penv = JSON.parse(JSON.stringify(process.env));
@@ -356,7 +458,6 @@ class TurtleEditor {
             }
 
             try {
-                $('#turtle_console').html('');
                 // console.log(command_args)
                 let python_exec = 'python3';
                 let isWin = process.platform === "win32";
@@ -370,13 +471,7 @@ class TurtleEditor {
 
                 py_proc.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
-                    if (data != null) {
-                        let lines = `${data}`.match(/[^\r\n]+/g);
-                        console.log(lines);
-                        lines.forEach(element => {
-                            $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
-                        });
-                    }
+                    turtle_console_out(data);
                 });
 
                 py_proc.stderr.on('data', (data) => {
@@ -398,7 +493,6 @@ class TurtleEditor {
                 console.log(error);
             }
         }
-        track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
     }
 
     export(event) {
