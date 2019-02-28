@@ -5,9 +5,8 @@ const appenv = require('./env');
 const path = require('path');
 const url = require('url');
 const getPort = require('get-port');
-const { NodeJSBinding } = require('./lang/node-binding');
 
-console.log('ENV is ' + appenv.env);
+//console.log('ENV is ' + appenv.env);
 process.env.NODE_ENV = appenv.env;
 
 function getEnv() {
@@ -56,12 +55,11 @@ const runPicoTurtleServer = () => {
     env: penv
   };
 
-  console.log(getPicoTurtleServer());
   picoTurtleServerProc = require('child_process').spawn(getPicoTurtleServer(), [], options);
 
   if (picoTurtleServerProc != null) {
     //console.log(picoTurtleServerProc)
-    console.log('child process success on port ' + port);
+    //console.log('child process success on port ' + port);
   }
 
   picoTurtleServerProc.stdout.on('data', (data) => {
@@ -73,7 +71,7 @@ const runPicoTurtleServer = () => {
   });
 
   picoTurtleServerProc.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+    //console.log(`child process exited with code ${code}`);
   });
 
 }
@@ -99,7 +97,7 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  console.log('Loading ' + 'index.html?port=' + port)
+  //console.log('Loading ' + 'index.html?port=' + port)
   mainWindow.loadFile('index.html', {
     query: {
       'port': port
@@ -305,10 +303,3 @@ if (process.platform === 'darwin') {
 
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
-
-ipcMain.on('exec-node', (event, arg) => {
-  console.log(arg) // prints "ping"
-  let nb = new NodeJSBinding();
-  nb.execFile(arg[0], arg[1], arg[2], arg[3], arg[4]);
-  event.sender.send('exec-node-reply', 'pong')
-})

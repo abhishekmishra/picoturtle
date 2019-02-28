@@ -5,7 +5,7 @@
 const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
-const { Turtle } = require('@picoturtle/picoturtle-nodejs-client/picoturtle-async');
+const { Turtle } = require('@picoturtle/picoturtle-nodejs-client');
 const fs = require('fs');
 const { dialog, app } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
@@ -80,7 +80,31 @@ ipcRenderer.on('help.about', (event, message) => {
 // }
 
 let START_TEMPLATES = {};
-START_TEMPLATES['python'] = ``;
+
+START_TEMPLATES['python'] = `from picoturtle import *
+create_turtle()
+
+### Your code goes here ###
+
+
+### Your code ends here ###
+
+### Always stop the turtle
+stop()`;
+
+START_TEMPLATES['javascript'] = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
+
+let main = async () => {
+    await create_turtle();
+    /* Your code goes here */
+    
+
+    /* Your code ends here */
+
+    /* Always stop the turtle */
+    await stop();
+};
+main();`;
 
 function turtle_console_out(data) {
     if (data != null) {
@@ -126,7 +150,9 @@ class TurtleEditor {
         $('#save_as_button').on('click', { editor: this }, function (event) {
             event.data.editor.saveAsFile();
         });
-        $('#new_button').on('click', { editor: this }, this.newFile);
+        $('#new_button').on('click', { editor: this }, function (event) {
+            event.data.editor.newFile();
+        });
         $('#export_button').on('click', { editor: this }, this.export);
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
@@ -140,7 +166,7 @@ class TurtleEditor {
             event.data = {
                 editor: this
             };
-            this.newFile(event);
+            this.newFile();
         });
 
         ipcRenderer.on('file.open', (event, message) => {
@@ -190,6 +216,7 @@ class TurtleEditor {
         });
         this.local_turtle = new TurtleCanvas("turtle_canvas");
         this.local_turtle.drawTurtle();
+        this.newFile();
     }
 
     markVersion() {
@@ -311,10 +338,9 @@ class TurtleEditor {
         }
     }
 
-    newFile(event) {
-        let editor = event.data.editor;
-        editor.editor.setValue(``);
-        editor.setSelectedFile();
+    newFile() {
+        this.editor.setValue(START_TEMPLATES[this.language]);
+        this.setSelectedFile();
     }
 
     getCurrentBinding() {
@@ -335,58 +361,46 @@ class TurtleEditor {
         global.t = t;
         track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
 
-        if (editor.language == 'javascript') {
-            ipcRenderer.send('exec-node', [
-                editor.file,
-                null,
-                null,
-                null,
-                {
-                    name: state.name,
-                    port: port
-                }]);
-        } else {
-            let binding = editor.getCurrentBinding();
-            let exec = binding.execFile;
-            if (editor.file == 'Untitled' || editor.isDirty()) {
-                if (binding.canExecText()) {
-                    exec = binding.execText();
-                }
-                else {
-                    dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
-                    return Promise.resolve();
-                }
+        let binding = editor.getCurrentBinding();
+        let exec = binding.execFile;
+        if (editor.file == 'Untitled' || editor.isDirty()) {
+            if (binding.canExecText()) {
+                exec = binding.execText();
             }
-
-            exec(
-                editor.file,
-                (data) => {
-                    console.log(`stdout: ${data}`);
-                    turtle_console_out(data);
-                },
-                (data) => {
-                    console.log(`stderr: ${data}`);
-                    turtle_console_out(data);
-                },
-                (code) => {
-                    console.log(`child process exited with code ${code}`);
-                    if (parseInt(code) == 0) {
-                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
-                    } else {
-                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
-                    }
-                    t.stop();
-                },
-                {
-                    name: state.name,
-                    port: port
-                }
-            ).then(() => {
-                console.log('done');
-            }).catch((err) => {
-                console.log('Error running program -> ' + err);
-            });
+            else {
+                dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
+                return Promise.resolve();
+            }
         }
+
+        exec(
+            editor.file,
+            (data) => {
+                console.log(`stdout: ${data}`);
+                turtle_console_out(data);
+            },
+            (data) => {
+                console.log(`stderr: ${data}`);
+                turtle_console_out(data);
+            },
+            (code) => {
+                console.log(`child process exited with code ${code}`);
+                if (parseInt(code) == 0) {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                } else {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                }
+                t.stop();
+            },
+            {
+                name: state.name,
+                port: port
+            }
+        ).then(() => {
+            console.log('done');
+        }).catch((err) => {
+            console.log('Error running program -> ' + err);
+        });
     }
 
 
