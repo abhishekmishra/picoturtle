@@ -430,12 +430,14 @@ class TurtleEditor {
             parent: require('electron').remote.getCurrentWindow(),
             modal: true
         });
+
         win.on('closed', () => {
             win = null
         });
 
         win.loadURL(`file://${__dirname}/help.html`);
         win.once('ready-to-show', () => {
+            win.setMenuBarVisibility(false);
             win.show()
         });
     }
