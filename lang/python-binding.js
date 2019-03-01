@@ -47,7 +47,7 @@ class PythonBinding {
             let penv = JSON.parse(JSON.stringify(process.env));
             penv['PYTHONPATH'] = getPythonPath();
             let options = {
-                cwd: path.join(__dirname, '..'),
+                cwd: path.join(__dirname, '..', '..'),
                 env: penv
             };
             let command_args = [file, args.name, args.port];
@@ -57,7 +57,7 @@ class PythonBinding {
             if (isWin) {
                 python_exec = 'python';
             }
-            // console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
+            console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
             console.log(penv['PYTHONPATH']);
             const py_proc = spawn(python_exec,
                 command_args,
