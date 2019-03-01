@@ -1,6 +1,20 @@
 const { spawn, fork } = require('child_process');
 const { getSampleFilePath } = require('../utils');
 
+const TEMPLATE = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
+
+let main = async () => {
+    await create_turtle();
+    /* Your code goes here */
+    
+
+    /* Your code ends here */
+
+    /* Always stop the turtle */
+    await stop();
+};
+main();`;
+
 class NodeJSBinding {
     constructor() {
         //do nothing
@@ -75,6 +89,10 @@ class NodeJSBinding {
                 file: getSampleFilePath('polygons.js')
             }
         ];
+    }
+
+    getNewFileTemplate() {
+        return TEMPLATE;
     }
 }
 

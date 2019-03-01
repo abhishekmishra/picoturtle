@@ -54,33 +54,6 @@ ipcRenderer.on('help.about', (event, message) => {
 //     obj_code_container.hidden = true;
 // }
 
-let START_TEMPLATES = {};
-
-START_TEMPLATES['python'] = `from picoturtle import *
-create_turtle()
-
-### Your code goes here ###
-
-
-### Your code ends here ###
-
-### Always stop the turtle
-stop()`;
-
-START_TEMPLATES['javascript'] = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
-
-let main = async () => {
-    await create_turtle();
-    /* Your code goes here */
-    
-
-    /* Your code ends here */
-
-    /* Always stop the turtle */
-    await stop();
-};
-main();`;
-
 function turtle_console_out(data) {
     if (data != null) {
         let lines = `${data}`.match(/[^\r\n]+/g);
@@ -116,11 +89,11 @@ class TurtleEditor {
             }
         });
         this.setSelectedFile();
-        this.setLanguage('javascript');
+        this.changeLanguage('javascript');
         $('#open_button').on('click', { editor: this }, function (event) {
             event.data.editor.openFile();
         });
-        $('#run_button').on('click', { editor: this }, function(event) {
+        $('#run_button').on('click', { editor: this }, function (event) {
             event.data.editor.run_turtle();
         });
         $('#save_button').on('click', { editor: this }, function (event) {
@@ -132,7 +105,7 @@ class TurtleEditor {
         $('#new_button').on('click', { editor: this }, function (event) {
             event.data.editor.newFile();
         });
-        $('#export_button').on('click', { editor: this }, function(event) {
+        $('#export_button').on('click', { editor: this }, function (event) {
             event.data.editor.export();
         });
         $('#editor_language_select').on('change', { editor: this }, function (event) {
@@ -141,7 +114,7 @@ class TurtleEditor {
         $('#editor_sample_select').on('change', { editor: this }, function (event) {
             event.data.editor.setSample(this.value);
         });
-        $('#help_button').on('click', { editor: this }, function(event) {
+        $('#help_button').on('click', { editor: this }, function (event) {
             event.data.editor.help();
         });
 
@@ -177,7 +150,7 @@ class TurtleEditor {
             event.data = {
                 editor: this
             };
-            this.run_turtle(event);
+            this.run_turtle();
         });
 
         ipcRenderer.on('turtle.export', (event, message) => {
@@ -212,6 +185,12 @@ class TurtleEditor {
     }
 
     setLanguage(name) {
+        this.confirmCloseIfEditorDirty(() => {
+            this.changeLanguage(name);
+        });
+    }
+
+    changeLanguage(name) {
         if (this.language !== name) {
             this.language = name;
 
@@ -229,9 +208,11 @@ class TurtleEditor {
     }
 
     setSample(name) {
-        $('#editor_sample_select').val(name);
-        this.setSelectedFile(name);
-        this.sampleSelected = true;
+        this.confirmCloseIfEditorDirty(() => {
+            $('#editor_sample_select').val(name);
+            this.setSelectedFile(name);
+            this.sampleSelected = true;
+        });
     }
 
     setSelectedFile(selected_file = null) {
@@ -253,23 +234,25 @@ class TurtleEditor {
         $('#editor_file').html(this.file);
 
         if (this.file.endsWith('.js')) {
-            this.setLanguage('javascript');
+            this.changeLanguage('javascript');
         }
         if (this.file.endsWith('.py')) {
-            this.setLanguage('python');
+            this.changeLanguage('python');
         }
     }
 
     openFile() {
-        dialog.showOpenDialog({
-            properties: ['openFile']
-        }, (files) => {
-            if (files !== undefined) {
-                if (files.length == 1) {
-                    let selected_file = files[0];
-                    this.setSelectedFile(selected_file);
+        this.confirmCloseIfEditorDirty(() => {
+            dialog.showOpenDialog({
+                properties: ['openFile']
+            }, (files) => {
+                if (files !== undefined) {
+                    if (files.length == 1) {
+                        let selected_file = files[0];
+                        this.setSelectedFile(selected_file);
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -315,8 +298,10 @@ class TurtleEditor {
     }
 
     newFile() {
-        this.editor.setValue(START_TEMPLATES[this.language]);
-        this.setSelectedFile();
+        this.confirmCloseIfEditorDirty(() => {
+            this.editor.setValue(this.getCurrentBinding().getNewFileTemplate());
+            this.setSelectedFile();
+        });
     }
 
     getCurrentBinding() {
@@ -417,6 +402,33 @@ class TurtleEditor {
             win.setMenuBarVisibility(false);
             win.show();
         });
+    }
+
+    confirmCloseIfEditorDirty(callback_on_continue) {
+        if (this.isDirty()) {
+            dialog.showMessageBox(require('electron').remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Yes', 'No', 'Cancel'],
+                defaultId: 2,
+                title: 'Save current file?',
+                message: 'Your changes in the editor are not saved. Would you like to save the file before continuing?' +
+                    '\nIf you choose "No" you will lose all unsaved work!.',
+            }, (choice) => {
+                console.log(choice);
+                if (choice == 2) {
+                    //Cancel and return
+                    return;
+                } else {
+                    if (choice == 0) {
+                        //Save and continue
+                        this.saveFile();
+                    }
+                    callback_on_continue();
+                }
+            });
+        } else {
+            callback_on_continue();
+        }
     }
 }
 

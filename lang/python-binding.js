@@ -3,6 +3,17 @@ const path = require('path');
 const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
 
+const TEMPLATE = `from picoturtle import *
+create_turtle()
+
+### Your code goes here ###
+
+
+### Your code ends here ###
+
+### Always stop the turtle
+stop()`;
+
 function getPythonPath() {
     if (env == 'dev') {
         return path.join(__dirname, '..', 'client', 'python');
@@ -107,6 +118,10 @@ class PythonBinding {
                 file: getSampleFilePath('polygons.py')
             }
         ];
+    }
+
+    getNewFileTemplate() {
+        return TEMPLATE;
     }
 }
 
