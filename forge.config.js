@@ -62,7 +62,7 @@ let config = {
     generateAssets: async () => {
       let filePath = path.join('dist', server_exec);
       if (!fs.existsSync(filePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.1/' + server_exec, 'dist');
+        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.2/' + server_exec, 'dist');
       }
       fs.chmodSync(filePath, '755');
     },
