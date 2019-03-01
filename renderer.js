@@ -409,7 +409,7 @@ class TurtleEditor {
             }, (selected_file) => {
                 console.log('Selected file ' + selected_file);
                 if (selected_file) {
-                    this.editor.local_turtle.export(selected_file);
+                    this.local_turtle.export(selected_file);
                 }
             });
         } catch (error) {
