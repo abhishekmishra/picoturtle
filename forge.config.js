@@ -22,7 +22,8 @@ let extraResource = [path.join('dist', server_exec)];
 let config = {
   "packagerConfig": {
     "extraResource": extraResource,
-    "asar": true
+    "asar": true,
+    "icon": "./icons/pico"
   },
   "makers": [
     {
@@ -72,6 +73,13 @@ let config = {
       fs.mkdirSync(path.join(resourcesFolder, 'client'));
       fs.mkdirSync(path.join(resourcesFolder, 'client', 'python'));
       fs.copyFileSync('./client/python/picoturtle.py', path.join(resourcesFolder, 'client', 'python', 'picoturtle.py'));
+
+      //samples
+      fs.mkdirSync(path.join(resourcesFolder, 'samples'));
+      fs.readdirSync('./samples').forEach(file => {
+          console.log('copying sample file -> ', file);
+          fs.copyFileSync(path.join('./samples', file), path.join(resourcesFolder, 'samples', path.basename(file)));
+      });
     }
   }
 };
