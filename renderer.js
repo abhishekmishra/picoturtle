@@ -2,7 +2,6 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-const list_turtles = require('./turtle_canvas').list_turtles;
 const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_node;
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
 const { Turtle } = require('@picoturtle/picoturtle-nodejs-client');
@@ -16,34 +15,10 @@ const { BrowserWindow } = require('electron').remote;
 const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
 
-console.log(appenv.env);
 process.env.NODE_ENV = appenv.env;
-console.log(process.execPath);
 
 let port = getTurtlePort();
 const TURTLE_SERVER_URL = 'http://localhost:' + port;
-
-function getEnv() {
-    return process.env.NODE_ENV;
-}
-
-function isProd() {
-    return getEnv() == 'prod';
-}
-
-function isDev() {
-    return getEnv() == 'dev';
-}
-
-function getPicoTurtleServer() {
-    let execName = process.platform === "win32" ? "picoturtle-server.exe" : "picoturtle-server";
-    if (isDev()) {
-        return path.join(__dirname, '..', 'server', 'dist', execName);
-    }
-    if (isProd()) {
-        return path.join(__dirname, '..', execName);
-    }
-}
 
 // Non-Editor Messages are handled here
 // All Editor Message Callbacks are registered in the TurtleEditor Class
@@ -142,8 +117,12 @@ class TurtleEditor {
         });
         this.setSelectedFile();
         this.setLanguage('javascript');
-        $('#open_button').on('click', { editor: this }, this.openFile);
-        $('#run_button').on('click', { editor: this }, this.run_turtle);
+        $('#open_button').on('click', { editor: this }, function (event) {
+            event.data.editor.openFile();
+        });
+        $('#run_button').on('click', { editor: this }, function(event) {
+            event.data.editor.run_turtle();
+        });
         $('#save_button').on('click', { editor: this }, function (event) {
             event.data.editor.saveFile();
         });
@@ -153,14 +132,18 @@ class TurtleEditor {
         $('#new_button').on('click', { editor: this }, function (event) {
             event.data.editor.newFile();
         });
-        $('#export_button').on('click', { editor: this }, this.export);
+        $('#export_button').on('click', { editor: this }, function(event) {
+            event.data.editor.export();
+        });
         $('#editor_language_select').on('change', { editor: this }, function (event) {
             event.data.editor.setLanguage(this.value);
         });
         $('#editor_sample_select').on('change', { editor: this }, function (event) {
             event.data.editor.setSample(this.value);
         });
-        $('#help_button').on('click', { editor: this }, this.help);
+        $('#help_button').on('click', { editor: this }, function(event) {
+            event.data.editor.help();
+        });
 
         ipcRenderer.on('file.new', (event, message) => {
             event.data = {
@@ -234,12 +217,6 @@ class TurtleEditor {
 
             monaco.editor.setModelLanguage(this.editor.getModel(), name);
             $('#editor_language_select').val(this.language);
-            // if (this.file != 'Untitled') {
-            //     $('#editor_language_select').prop('disabled', 'disabled');
-            // } else {
-            //     $('#editor_language_select').prop('disabled', false);
-            //     //this.editor.setValue(START_TEMPLATES[this.language]);
-            // }
 
             $('#editor_sample_select').find('option')
                 .remove()
@@ -283,15 +260,14 @@ class TurtleEditor {
         }
     }
 
-    openFile(event) {
+    openFile() {
         dialog.showOpenDialog({
             properties: ['openFile']
         }, (files) => {
             if (files !== undefined) {
                 if (files.length == 1) {
-                    let editor = event.data.editor;
                     let selected_file = files[0];
-                    editor.setSelectedFile(selected_file);
+                    this.setSelectedFile(selected_file);
                 }
             }
         });
@@ -347,11 +323,10 @@ class TurtleEditor {
         return this.bindings[this.language];
     }
 
-    async run_turtle(event) {
+    async run_turtle() {
         $('#turtle_console').html('');
 
-        let editor = event.data.editor;
-        let text = editor.editor.getValue();
+        let text = this.editor.getValue();
 
         var t = new Turtle({
             port: port
@@ -359,12 +334,12 @@ class TurtleEditor {
         let state = await t.init(null);
         $('#turtle_name').html(state.name);
         global.t = t;
-        track_turtle(TURTLE_SERVER_URL, editor.local_turtle, state.name);
+        track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name);
 
-        let binding = editor.getCurrentBinding();
+        let binding = this.getCurrentBinding();
         let exec = binding.execFile;
-        let fvalue = editor.file;
-        if (editor.file == 'Untitled' || editor.isDirty()) {
+        let fvalue = this.file;
+        if (this.file == 'Untitled' || this.isDirty()) {
             if (binding.canExecText()) {
                 exec = binding.execText;
                 fvalue = text;
@@ -405,9 +380,7 @@ class TurtleEditor {
         });
     }
 
-
-    export(event) {
-        let editor = event.data.editor;
+    export() {
         try {
             dialog.showSaveDialog({
                 defaultPath: path.join(app.getPath('pictures'), 'canvas.png'),
@@ -417,7 +390,7 @@ class TurtleEditor {
             }, (selected_file) => {
                 console.log('Selected file ' + selected_file);
                 if (selected_file) {
-                    editor.local_turtle.export(selected_file);
+                    this.editor.local_turtle.export(selected_file);
                 }
             });
         } catch (error) {
@@ -425,8 +398,7 @@ class TurtleEditor {
         }
     }
 
-    help(event) {
-        let editor = event.data.editor;
+    help() {
         let win = new BrowserWindow({
             width: 800,
             height: 600,
@@ -437,13 +409,13 @@ class TurtleEditor {
         });
 
         win.on('closed', () => {
-            win = null
+            win = null;
         });
 
         win.loadURL(`file://${__dirname}/help.html`);
         win.once('ready-to-show', () => {
             win.setMenuBarVisibility(false);
-            win.show()
+            win.show();
         });
     }
 }
