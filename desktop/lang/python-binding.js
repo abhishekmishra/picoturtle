@@ -1,6 +1,15 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const { getSampleFilePath } = require('../utils');
+const { env } = require('../env');
+
+function getPythonPath() {
+    if (env == 'dev') {
+        return path.join(__dirname, '..', 'client', 'python');
+    } else {
+        return path.join(__dirname, '..', '..', 'client', 'python');
+    }
+}
 
 class PythonBinding {
     constructor() {
@@ -25,7 +34,7 @@ class PythonBinding {
         if (!args.port) args.port = '3000';
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
-            penv['PYTHONPATH'] = path.join(__dirname, '..', '..', 'client', 'python');
+            penv['PYTHONPATH'] = getPythonPath();
             let options = {
                 cwd: path.join(__dirname, '..'),
                 env: penv
@@ -59,7 +68,7 @@ class PythonBinding {
         if (!args.port) args.port = '3000';
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
-            penv['PYTHONPATH'] = path.join(__dirname, '..', '..', 'client', 'python');
+            penv['PYTHONPATH'] = getPythonPath();
             let options = {
                 cwd: path.join(__dirname, '..'),
                 env: penv
