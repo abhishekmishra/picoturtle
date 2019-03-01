@@ -184,6 +184,26 @@ class TurtleEditor {
         return (this.lastSavedVersionId !== this.editor.getModel().getAlternativeVersionId());
     }
 
+    getFileExtensions() {
+        return this.getCurrentBinding().getFileExtensions();
+    }
+
+    getLanguageForCurrentFile() {
+        if (this.file != null) {
+            for (var language in this.bindings) {
+                let b = this.bindings[language];
+                let xts = b.getFileExtensions();
+                for (var i = 0; i < xts.length; i++) {
+                    console.log(this.file + ' and extension ' + xts[i]);
+                    if (this.file.endsWith('.' + xts[i])) {
+                        return language;
+                    }
+                };
+            }
+        }
+        return null;
+    }
+
     setLanguage(name) {
         this.confirmCloseIfEditorDirty(() => {
             this.changeLanguage(name);
@@ -192,18 +212,28 @@ class TurtleEditor {
 
     changeLanguage(name) {
         if (this.language !== name) {
-            this.language = name;
+            debugger;
+            let lang_for_current = this.getLanguageForCurrentFile();
+            if (lang_for_current == null || lang_for_current == name) {
+                this.language = name;
 
-            monaco.editor.setModelLanguage(this.editor.getModel(), name);
-            $('#editor_language_select').val(this.language);
+                monaco.editor.setModelLanguage(this.editor.getModel(), name);
+                $('#editor_language_select').val(this.language);
 
-            $('#editor_sample_select').find('option')
-                .remove()
-                .end();
+                $('#editor_sample_select').find('option')
+                    .remove()
+                    .end();
 
-            this.bindings[this.language].getSamples().forEach(element => {
-                $('#editor_sample_select').append('<option value="' + element.file + '">' + element.name + '</option>').val('');
-            });
+                this.bindings[this.language].getSamples().forEach(element => {
+                    $('#editor_sample_select').append('<option value="' + element.file + '">' + element.name + '</option>').val('');
+                });
+            } else {
+                $('#editor_language_select').val(this.language);
+                dialog.showErrorBox(
+                    'Error changing language',
+                    'Cannot change language to ' + name + ' because the file being edited is not a ' + name + ' file.'
+                );
+            }
         }
     }
 
@@ -218,7 +248,7 @@ class TurtleEditor {
     setSelectedFile(selected_file = null) {
         this.sampleSelected = false;
         if (selected_file === null) {
-            this.file = 'Untitled';
+            this.file = null;
             $('#save_button').prop('disabled', 'disabled');
         }
         else if (!fs.existsSync(selected_file)) {
@@ -229,16 +259,20 @@ class TurtleEditor {
             $('#save_button').prop('disabled', false);
             let text = fs.readFileSync(this.file, { encoding: 'utf-8' });
             this.editor.setValue(text);
-            this.markVersion();
         }
-        $('#editor_file').html(this.file);
+        if (this.file == null) {
+            $('#editor_file').html('No Name');
+        } else {
+            $('#editor_file').html(this.file);
 
-        if (this.file.endsWith('.js')) {
-            this.changeLanguage('javascript');
+            if (this.file.endsWith('.js')) {
+                this.changeLanguage('javascript');
+            }
+            if (this.file.endsWith('.py')) {
+                this.changeLanguage('python');
+            }
         }
-        if (this.file.endsWith('.py')) {
-            this.changeLanguage('python');
-        }
+        this.markVersion();
     }
 
     openFile() {

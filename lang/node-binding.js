@@ -94,6 +94,10 @@ class NodeJSBinding {
     getNewFileTemplate() {
         return TEMPLATE;
     }
+
+    getFileExtensions() {
+        return ['js'];
+    }
 }
 
 module.exports.NodeJSBinding = NodeJSBinding;

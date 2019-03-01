@@ -123,6 +123,10 @@ class PythonBinding {
     getNewFileTemplate() {
         return TEMPLATE;
     }
+
+    getFileExtensions() {
+        return ['py'];
+    }
 }
 
 module.exports.PythonBinding = PythonBinding;
