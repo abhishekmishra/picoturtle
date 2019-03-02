@@ -79,6 +79,7 @@ class TurtleEditor {
         };
 
         this.sampleSelected = false;
+        this.canRun = true;
 
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
@@ -343,9 +344,34 @@ class TurtleEditor {
     }
 
     async run_turtle() {
+        if (!this.canRun) {
+            dialog.showErrorBox('Another turtle is running.', 'A turtle program is still running. You can run once it finishes.');
+            return;
+        }
+        this.canRun = false;
+        $('#run_button').prop('disabled', 'disabled');
         $('#turtle_console').html('');
 
         let text = this.editor.getValue();
+
+        // Check if the file is dirty and if the current binding
+        // supports running text snippets.
+        // If not, the user needs to save the file before running.
+        let binding = this.getCurrentBinding();
+        let exec = binding.execFile;
+        let fvalue = this.file;
+        if (this.file == null || this.isDirty()) {
+            if (binding.canExecText()) {
+                exec = binding.execText;
+                fvalue = text;
+            }
+            else {
+                dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
+                this.canRun = true;
+                $('#run_button').prop('disabled', false);
+                return Promise.resolve();
+            }
+        }
 
         var t = new Turtle({
             port: port
@@ -353,21 +379,15 @@ class TurtleEditor {
         let state = await t.init(null);
         $('#turtle_name').html(state.name);
         global.t = t;
-        track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name);
-
-        let binding = this.getCurrentBinding();
-        let exec = binding.execFile;
-        let fvalue = this.file;
-        if (this.file == 'Untitled' || this.isDirty()) {
-            if (binding.canExecText()) {
-                exec = binding.execText;
-                fvalue = text;
+        track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name, {
+            cmd_cb: (cmd) => {
+                // do notthing for the moment
+                if(cmd[0] == 'stop') {
+                    this.canRun = true;
+                    $('#run_button').prop('disabled', false);
+                }
             }
-            else {
-                dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
-                return Promise.resolve();
-            }
-        }
+        });
 
         exec(
             fvalue,
@@ -396,6 +416,9 @@ class TurtleEditor {
             console.log('done');
         }).catch((err) => {
             console.log('Error running program -> ' + err);
+            t.stop();
+            this.canRun = true;
+            $('#run_button').prop('disabled', false);
         });
     }
 
