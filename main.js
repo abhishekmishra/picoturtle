@@ -2,6 +2,10 @@
 // See https://github.com/electron/windows-installer#handling-squirrel-events
 if (require('electron-squirrel-startup')) return;
 
+// Check for updates on windows and macos using update-electron-app
+// see https://github.com/electron/update-electron-app
+require('update-electron-app')()
+
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron');
 const { ipcMain } = require('electron');
