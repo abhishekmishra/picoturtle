@@ -1,3 +1,7 @@
+// Make sure windows installation does not show app multiple times
+// See https://github.com/electron/windows-installer#handling-squirrel-events
+if (require('electron-squirrel-startup')) return;
+
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron');
 const { ipcMain } = require('electron');
