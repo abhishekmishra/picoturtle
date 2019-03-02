@@ -1,5 +1,7 @@
 const { spawn, fork } = require('child_process');
 const { getSampleFilePath } = require('../utils');
+const path = require('path');
+const { env } = require('../env');
 
 const TEMPLATE = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
 
@@ -14,6 +16,14 @@ let main = async () => {
     await stop();
 };
 main();`;
+
+function getNodejsPath() {
+    if (env == 'dev') {
+        return path.join(__dirname, '..', 'client', 'nodejs');
+    } else {
+        return path.join(__dirname, '..', '..', 'client', 'nodejs');
+    }
+}
 
 class NodeJSBinding {
     constructor() {
@@ -37,9 +47,18 @@ class NodeJSBinding {
         if (!args.name) args.name = null;
         if (!args.port) args.port = '3000';
         try {
+            let penv = JSON.parse(JSON.stringify(process.env));
+            // penv['ELECTRON_RUN_AS_NODE'] = 1;
+            let options = {
+                cwd: getNodejsPath(),
+                env: penv
+            };
+
             let command_args = ['-n', args.name, '-p', args.port];
 
-            const js_proc = fork(file, command_args);
+            console.log('will fork ' + file + ' with args ' + command_args + ', and with options ' + JSON.stringify(options));
+
+            const js_proc = fork(file, command_args, options);
 
             js_proc.on('message', output_cb);
             js_proc.on('error', error_cb);
