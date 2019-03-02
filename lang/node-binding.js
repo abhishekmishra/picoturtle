@@ -48,10 +48,10 @@ class NodeJSBinding {
         if (!args.port) args.port = '3000';
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
-            // penv['ELECTRON_RUN_AS_NODE'] = 1;
+            penv['ELECTRON_RUN_AS_NODE'] = 1;
             let options = {
-                cwd: getNodejsPath(),
-                env: penv
+                cwd: getNodejsPath()
+                // env: penv
             };
 
             let command_args = ['-n', args.name, '-p', args.port];
