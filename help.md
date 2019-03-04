@@ -11,13 +11,13 @@ You control the turtle by writing a program which control its movements.
 To start writing a program choose a programming language.
 
 Once you've chosen your programming language, you can use the following turtle commands in your program:
-1. create_turtle -> This creates a new turtle (with a unique name, which is displayed in the statusbar). This command MUST be called before you start using the other commands.
-1. penup -> Raise the pen so that the turtle does not write when it moves.
-1. pendown -> Lower the pen so that the turtle writes when it moves.
-1. forward (distance) -> move the turtle forward by the amount "distance" in pixels, in the direction it is facing.
-1. left (angle) -> turn the turtle left by "angle" degrees.
-1. right (angle) -> turn the turtle right by "angle" degrees.
-1. penwidth (width) -> set the width of the pen to "width" pixels.
-1. pencolour (red, blue, green) -> set the colour of the pen by providing "red", "blue" and "green" values each in the range 0-255.
-1. clear -> clear the canvas.
-1. stop -> stop the turtle. This MUST be called at the end of every program.
+1. **create_turtle** -> This command creates a new turtle (with a unique name, which is displayed in the statusbar). The command MUST be called before you start using the turtle.
+1. **penup** -> Raise the pen so that the turtle does not write when it moves.
+1. **pendown** -> Lower the pen so that the turtle writes when it moves.
+1. **forward (distance)** -> move the turtle forward by the amount "distance" in pixels, in the direction it is facing.
+1. **left (angle)** -> turn the turtle left by "angle" degrees.
+1. **right (angle)** -> turn the turtle right by "angle" degrees.
+1. **penwidth (width)** -> set the width of the pen to "width" pixels.
+1. **pencolour (red, blue, green)** -> set the colour of the pen by providing "red", "blue" and "green" values each in the range 0-255.
+1. **clear** -> clear the canvas.
+1. **stop** -> stop the turtle. This MUST be called at the end of every program.

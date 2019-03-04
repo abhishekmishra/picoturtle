@@ -110,12 +110,16 @@ class PythonBinding {
     getSamples() {
         return [
             {
+                name: "Polygons",
+                file: getSampleFilePath('polygons.py')
+            },
+            {
                 name: "Spiral",
                 file: getSampleFilePath('spiral.py')
             },
             {
-                name: "Polygons",
-                file: getSampleFilePath('polygons.py')
+                name: "Tree",
+                file: getSampleFilePath('tree.py')
             }
         ];
     }

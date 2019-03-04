@@ -68,9 +68,12 @@ class NodeJSBinding {
             let penv = JSON.parse(JSON.stringify(process.env));
             penv['ELECTRON_RUN_AS_NODE'] = 1;
             let options = {
-                cwd: path.join(__dirname, '..', '..')
                 // env: penv
             };
+
+            if (env == 'dev') {
+                options['cwd'] = path.join(__dirname, '..', '..');
+            }
 
             let command_args = ['-n', args.name, '-p', args.port];
 
@@ -109,12 +112,16 @@ class NodeJSBinding {
     getSamples() {
         return [
             {
+                name: "Polygons",
+                file: getSampleFilePath('polygons.js')
+            },
+            {
                 name: "Spiral",
                 file: getSampleFilePath('spiral.js')
             },
             {
-                name: "Polygons",
-                file: getSampleFilePath('polygons.js')
+                name: "Tree",
+                file: getSampleFilePath('tree.js')
             }
         ];
     }

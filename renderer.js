@@ -213,9 +213,8 @@ class TurtleEditor {
 
     changeLanguage(name) {
         if (this.language !== name) {
-            debugger;
             let lang_for_current = this.getLanguageForCurrentFile();
-            if (lang_for_current == null || lang_for_current == name) {
+            if (lang_for_current == null || lang_for_current == name || !this.isDirty()) {
                 this.language = name;
 
                 monaco.editor.setModelLanguage(this.editor.getModel(), name);
@@ -253,6 +252,7 @@ class TurtleEditor {
             $('#save_button').prop('disabled', 'disabled');
         }
         else if (!fs.existsSync(selected_file)) {
+            $('#save_button').prop('disabled', false);
             this.file = selected_file;
         }
         else {
@@ -298,17 +298,19 @@ class TurtleEditor {
         }
 
         let text = this.editor.getValue();
-        fs.writeFileSync(this.file, text, (err) => {
+        try {
+            fs.writeFileSync(this.file, text);
+        } catch (err) {
             if (err) {
-                return console.log(err);
+                return console.log('Error writing file ' + this.file + ', ' + err);
             }
-            console.log("The file was saved!");
-            this.markVersion();
-        });
+        }
+        console.log("The file was saved!");
+        this.markVersion();
     }
 
     saveFile() {
-        if (this.file != 'Untitled' && !this.sampleSelected) {
+        if (this.file !== null && !this.sampleSelected) {
             this.writeContents();
         } else {
             this.saveAsFile();
@@ -382,7 +384,7 @@ class TurtleEditor {
         track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name, {
             cmd_cb: (cmd) => {
                 // do notthing for the moment
-                if(cmd[0] == 'stop') {
+                if (cmd[0] == 'stop') {
                     this.canRun = true;
                     $('#run_button').prop('disabled', false);
                 }
