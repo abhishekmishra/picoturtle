@@ -71,13 +71,9 @@ class NodeJSBinding {
                 // env: penv
             };
 
-            if (env == 'dev') {
-                options['cwd'] = path.join(__dirname, '..', '..');
-            }
+            options['cwd'] = path.join(__dirname, '..', '..');
 
             let command_args = ['-n', args.name, '-p', args.port];
-
-            console.log('will fork ' + file + ' with args ' + command_args + ', and with options ' + JSON.stringify(options));
 
             // const js_proc = fork(file, command_args, options);
 

@@ -90,7 +90,7 @@ let config = {
 
       let nodeJsClientFilePath = path.join('dist', getNodejsClientExecutable());
       if (!fs.existsSync(nodeJsClientFilePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.5/' + getNodejsClientExecutable(), 'dist');
+        await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.6/' + getNodejsClientExecutable(), 'dist');
         fs.chmodSync(nodeJsClientFilePath, '755');
       }
     },
@@ -115,11 +115,17 @@ let config = {
       // });
 
       //samples
-      fs.mkdirSync(path.join(resourcesFolder, 'samples'));
+      let samples_folder = path.join(resourcesFolder, 'samples');
+      fs.mkdirSync(samples_folder);
       fs.readdirSync('./samples').forEach(file => {
         console.log('copying sample file -> ', file);
-        fs.copyFileSync(path.join('./samples', file), path.join(resourcesFolder, 'samples', path.basename(file)));
+        fs.copyFileSync(path.join('./samples', file), path.join(samples_folder, path.basename(file)));
       });
+      console.log('Running npm install in ' + samples_folder);
+      execSync('npm install', {
+        cwd: samples_folder
+      });
+
     }
   }
 };
