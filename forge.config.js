@@ -6,18 +6,38 @@ var isWin = process.platform === "win32";
 var isLinux = process.platform === "linux";
 var isMacos = process.platform === "darwin";
 
-let server_exec = '';
-if (isWin) {
-  server_exec = "picoturtle-server-win.exe";
-}
-if (isLinux) {
-  server_exec = "picoturtle-server-linux";
-}
-if (isMacos) {
-  server_exec = "picoturtle-server-macos";
+function getServerExecutable() {
+  let server_exec = '';
+  if (isWin) {
+    server_exec = "picoturtle-server-win.exe";
+  }
+  if (isLinux) {
+    server_exec = "picoturtle-server-linux";
+  }
+  if (isMacos) {
+    server_exec = "picoturtle-server-macos";
+  }
+  return server_exec;
 }
 
-let extraResource = [path.join('dist', server_exec)];
+function getNodejsClientExecutable() {
+  let nodejs_client_exec = '';
+  if (isWin) {
+    nodejs_client_exec = "picoturtle-nodejs-client-win.exe";
+  }
+  if (isLinux) {
+    nodejs_client_exec = "picoturtle-nodejs-client-linux";
+  }
+  if (isMacos) {
+    nodejs_client_exec = "picoturtle-nodejs-client-macos";
+  }
+  return nodejs_client_exec;
+}
+
+let extraResource = [
+  path.join('dist', getServerExecutable()), 
+  path.join('dist', getNodejsClientExecutable())
+];
 //console.log(extraResource);
 
 let config = {
@@ -62,11 +82,17 @@ let config = {
   ],
   hooks: {
     generateAssets: async () => {
-      let filePath = path.join('dist', server_exec);
-      if (!fs.existsSync(filePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.2/' + server_exec, 'dist');
+      let serverFilePath = path.join('dist', getServerExecutable());
+      if (!fs.existsSync(serverFilePath)) {
+        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.2/' + getServerExecutable(), 'dist');
+        fs.chmodSync(serverFilePath, '755');
       }
-      fs.chmodSync(filePath, '755');
+
+      // let nodeJsClientFilePath = path.join('dist', getNodejsClientExecutable());
+      // if (!fs.existsSync(nodeJsClientFilePath)) {
+      //   await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.1/' + getNodejsClientExecutable(), 'dist');
+      //   fs.chmodSync(nodeJsClientFilePath, '755');
+      // }
     },
     packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
       //copy env file
@@ -91,8 +117,8 @@ let config = {
       //samples
       fs.mkdirSync(path.join(resourcesFolder, 'samples'));
       fs.readdirSync('./samples').forEach(file => {
-          console.log('copying sample file -> ', file);
-          fs.copyFileSync(path.join('./samples', file), path.join(resourcesFolder, 'samples', path.basename(file)));
+        console.log('copying sample file -> ', file);
+        fs.copyFileSync(path.join('./samples', file), path.join(resourcesFolder, 'samples', path.basename(file)));
       });
     }
   }

@@ -3,6 +3,10 @@ const { getSampleFilePath } = require('../utils');
 const path = require('path');
 const { env } = require('../env');
 
+var isWin = process.platform === "win32";
+var isLinux = process.platform === "linux";
+var isMacos = process.platform === "darwin";
+
 const TEMPLATE = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
 
 let main = async () => {
@@ -17,11 +21,25 @@ let main = async () => {
 };
 main();`;
 
+function getNodejsClientExecutable() {
+    let nodejs_client_exec = '';
+    if (isWin) {
+        nodejs_client_exec = "picoturtle-nodejs-client-win.exe";
+    }
+    if (isLinux) {
+        nodejs_client_exec = "picoturtle-nodejs-client-linux";
+    }
+    if (isMacos) {
+        nodejs_client_exec = "picoturtle-nodejs-client-macos";
+    }
+    return nodejs_client_exec;
+}
+
 function getNodejsPath() {
     if (env == 'dev') {
-        return path.join(__dirname, '..', 'client', 'nodejs');
+        return path.join(__dirname, '..', 'dist', getNodejsClientExecutable());
     } else {
-        return path.join(__dirname, '..', '..', 'client', 'nodejs');
+        return path.join(__dirname, '..', '..', getNodejsClientExecutable());
     }
 }
 
@@ -50,7 +68,7 @@ class NodeJSBinding {
             let penv = JSON.parse(JSON.stringify(process.env));
             penv['ELECTRON_RUN_AS_NODE'] = 1;
             let options = {
-                cwd: getNodejsPath()
+                cwd: path.join(__dirname, '..', '..')
                 // env: penv
             };
 
@@ -58,32 +76,23 @@ class NodeJSBinding {
 
             console.log('will fork ' + file + ' with args ' + command_args + ', and with options ' + JSON.stringify(options));
 
-            const js_proc = fork(file, command_args, options);
+            // const js_proc = fork(file, command_args, options);
 
-            js_proc.on('message', output_cb);
-            js_proc.on('error', error_cb);
+            // js_proc.on('message', output_cb);
+            // js_proc.on('error', error_cb);
+            // js_proc.on('close', complete_cb);
+            // return Promise.resolve();
+            command_args.unshift(file);
+            command_args.unshift('-f')
+            console.log('will spawn with args ' + command_args + ', and with options ' + JSON.stringify(options));
+            const js_proc = spawn(getNodejsPath(),
+                command_args,
+                options);
+
+            js_proc.stdout.on('data', output_cb);
+            js_proc.stderr.on('data', error_cb);
             js_proc.on('close', complete_cb);
             return Promise.resolve();
-            // command_args.shift(file);
-            // console.log(command_args);
-            // const js_proc = spawn(process.execPath,
-            //     command_args,
-            //     {
-            //         detached: true,
-            //         env: {
-            //             ELECTRON_RUN_AS_NODE: 1
-            //         }
-            //     });
-
-            // js_proc.stdout.on('data', (data) => {
-            //     console.log(data);
-            // });
-            // js_proc.stderr.on('data', (data) => {
-            //     console.log(data);
-            // });
-            // js_proc.on('close', (data) => {
-            //     console.log(data);
-            // });
         } catch (error) {
             error_cb(error);
             return Promise.reject(error);
