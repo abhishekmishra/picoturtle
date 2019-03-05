@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/abhishekmishra/picoturtle.svg?branch=master)](https://travis-ci.org/abhishekmishra/picoturtle)
 
 # PicoTurtle
-A very tiny turtle. Homepage is <a href="https://picoturtle.github.io">here</a>.
+A very tiny turtle. Homepage is <a href="https://abhishekmishra.github.io/picoturtle/">here</a>.
 
 ### Run from source
 
