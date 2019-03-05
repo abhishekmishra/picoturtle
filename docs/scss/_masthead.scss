@@ -52,15 +52,24 @@ header.masthead {
 
 @media (min-width: 992px) {
   header.masthead {
-    padding-top: calc(10rem + 55px);
-    padding-bottom: 10rem;
+    padding-top: calc(3rem + 55px);
+    padding-bottom: 3rem;
     .masthead-content {
       .masthead-heading {
-        font-size: 6rem;
+        font-size: 4rem;
       }
       .masthead-subheading {
-        font-size: 4rem;
+        font-size: 1.5rem;
       }
     }
   }
+}
+
+
+.logo-img {
+  height: 40px;
+}
+
+#other-download {
+  font-size: 0.75rem;
 }

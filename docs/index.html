@@ -19,7 +19,7 @@
     rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="css/one-page-wonder.css" rel="stylesheet">
+  <link href="css/one-page-wonder.min.css" rel="stylesheet">
 
 </head>
 
@@ -75,7 +75,17 @@
         <div class="row mt-3" id="other-download">
           <div class="col-4"></div>
           <div class="col-4">
-            PicoTurtle 64-bit binaries are available for Windows, MacOS and Linux. On any any
+            PicoTurtle 64-bit binaries are available for <a class="text-dark"
+              href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-0.0.1.Setup.exe">Windows</a>,
+            <a class="text-dark"
+              href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-darwin-x64-0.0.1.zip">MacOS</a>,
+            <a class="text-dark"
+              href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle_0.0.1_amd64.deb">Linux
+              .deb</a>
+            and <a class="text-dark"
+              href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-0.0.1.x86_64.rpm">Linux
+              .rpm</a>.
+            On any any
             other platform try running from
             <a class="text-dark" href="https://github.com/abhishekmishra/picoturtle">source.</a>
           </div>
@@ -96,7 +106,9 @@
       <div class="row align-items-center">
         <div class="col-lg-6 order-lg-2">
           <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/Spiral-js.PNG" alt="">
+            <a href="#" id="img-0-a">
+              <img id="img-0" class="img-fluid" src="img/Spiral-js.PNG" alt="">
+            </a>
           </div>
         </div>
         <div class="col-lg-6 order-lg-1">
@@ -115,7 +127,9 @@
       <div class="row align-items-center">
         <div class="col-lg-6">
           <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/Tree-python.PNG" alt="">
+            <a href="#" id="img-1-a">
+              <img id="img-1" class="img-fluid" src="img/Tree-python.PNG" alt="">
+            </a>
           </div>
         </div>
         <div class="col-lg-6">
@@ -154,10 +168,36 @@
     <!-- /.container -->
   </footer>
 
+  <!-- See https://stackoverflow.com/questions/25023199/in-bootstrap-open-enlarge-image-in-modal -->
+  <!-- Creates the bootstrap modal where the image will appear -->
+  <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+          <!-- <h4 class="modal-title" id="myModalLabel">Image preview</h4> -->
+        </div> -->
+        <div class="modal-body center">
+          <img src="" id="imagepreview" style="width: 800px;">
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
+    function enlarge(source_id) {
+      $('#imagepreview').attr('src', $('#' + source_id).attr('src')); // here asign the image to the modal when the user click the enlarge link
+      $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    }
+
+
     $(document).ready(() => {
       var OSName = "Unknown OS";
       if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
@@ -177,7 +217,15 @@
       if (OSName == "Linux" || OSName == "UNIX") {
         $('#linux-download').show();
       }
+
+      $("#img-0-a").on("click", () => {
+        enlarge('img-0');
+      });
+      $("#img-1-a").on("click", () => {
+        enlarge('img-1');
+      });
     });
+
   </script>
 
 </body>

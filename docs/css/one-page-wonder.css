@@ -129,6 +129,14 @@ header.masthead .bg-circle-4 {
   }
 }
 
+.logo-img {
+  height: 40px;
+}
+
+#other-download {
+  font-size: 0.75rem;
+}
+
 .bg-primary {
   background-color: #ee0979 !important;
 }
@@ -161,8 +169,4 @@ header.masthead .bg-circle-4 {
 .btn-secondary:focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 106, 0, 0.5);
   box-shadow: 0 0 0 0.2rem rgba(255, 106, 0, 0.5);
-}
-
-.logo-img {
-  height: 40px;
 }
