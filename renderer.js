@@ -27,7 +27,7 @@ let about_msg = `PicoTurtle is a tiny turtle graphics program.
 You can write turtle graphics programs in your favourite programming language.
 
 Author: Abhishek Mishra
-Version: 0.0.1a
+Version: 0.0.1
 Homepage: https://github.com/abhishekmishra/picoturtle
 `;
 
