@@ -1,62 +1,185 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>PicoTurtle: A tiny turtle.</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>PicoTurtle</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/one-page-wonder.css" rel="stylesheet">
+
 </head>
 
-<body class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h1>PicoTurtle</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <p>PicoTurtle lets your create turtle graphics in the programming language of your choice.
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <button id="windows-download" class="btn btn-primary btn-large">Download PicoTurtle for Windows
-                64bit</button>
-            <button id="macos-download" class="btn btn-primary btn-large">Download PicoTurtle for MacOS 64bit</button>
-            <button id="linux-download" class="btn btn-primary btn-large">Download PicoTurtle for Linux 64bit</button>
-        </div>
-    </div>
-    <script>
-        $(document).ready(() => {
-            var OSName = "Unknown OS";
-            if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
-            if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
-            if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
-            if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+<body>
 
-            $('#windows-download').hide();
-            $('#macos-download').hide();
-            $('#linux-download').hide();
-            if (OSName == "Windows") {
-                $('#windows-download').show();
-            }
-            if (OSName == "Mac") {
-                $('#macos-download').show();
-            }
-            if (OSName == "Linux" || OSName == "UNIX") {
-                $('#linux-download').show();
-            }
-        });
-    </script>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img class="img-fluid logo-img" src="img/pico.png" alt="">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/abhishekmishra/picoturtle">Project Source</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/abhishekmishra/picoturtle/releases/tag/v0.0.1">All
+              Downloads</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead text-center text-white">
+    <div class="masthead-content">
+      <div class="container">
+        <h1 class="masthead-heading mb-0">PicoTurtle</h1>
+        <h2 class="masthead-subheading mb-0">A Tiny Turtle Graphics Editor for the Destop</h2>
+        <a id="windows-download" class="btn btn-primary btn-xl rounded-pill mt-5"
+          href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-0.0.1.Setup.exe"
+          role="button">Download PicoTurtle for Windows
+          64bit</a>
+        <a id="macos-download" class="btn btn-primary btn-xl rounded-pill mt-5"
+          href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-darwin-x64-0.0.1.zip"
+          role="button">Download PicoTurtle for MacOS
+          64bit</a>
+        <div id="linux-download">
+          <a id="linux-download-deb" class="btn btn-primary btn-xl rounded-pill mt-5"
+            href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle_0.0.1_amd64.deb"
+            role="button">Download PicoTurtle for Linux
+            64bit (.deb)</a>
+          <a id="linux-download-rmp" class="btn btn-primary btn-xl rounded-pill mt-5"
+            href="https://github.com/abhishekmishra/picoturtle/releases/download/v0.0.1/picoturtle-0.0.1.x86_64.rpm"
+            role="button">Download PicoTurtle for Linux
+            64bit (.rpm)</a>
+        </div>
+        <div class="row mt-3" id="other-download">
+          <div class="col-4"></div>
+          <div class="col-4">
+            PicoTurtle 64-bit binaries are available for Windows, MacOS and Linux. On any any
+            other platform try running from
+            <a class="text-dark" href="https://github.com/abhishekmishra/picoturtle">source.</a>
+          </div>
+          <div class="col-4"></div>
+        </div>
+
+        <!-- <a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a> -->
+      </div>
+    </div>
+    <!-- <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div> -->
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 order-lg-2">
+          <div class="p-5">
+            <img class="img-fluid rounded-circle" src="img/Spiral-js.PNG" alt="">
+          </div>
+        </div>
+        <div class="col-lg-6 order-lg-1">
+          <div class="p-5">
+            <h2 class="display-4">Choose your Programming Language</h2>
+            <p>PicoTurtle will support Turtle Graphics in multiple programming languages. If support is missing for any
+              language, you can help add it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="p-5">
+            <img class="img-fluid rounded-circle" src="img/Tree-python.PNG" alt="">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="p-5">
+            <h2 class="display-4">Nodejs and Python supported</h2>
+            <p>More to be added in the coming releases.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- <section>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 order-lg-2">
+          <div class="p-5">
+            <img class="img-fluid rounded-circle" src="img/03.jpg" alt="">
+          </div>
+        </div>
+        <div class="col-lg-6 order-lg-1">
+          <div class="p-5">
+            <h2 class="display-4">Let there be rock!</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-black">
+    <div class="container">
+      <p class="m-0 text-center text-white small">Copyright &copy; Abhishek Mishra 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      var OSName = "Unknown OS";
+      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+      if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+      if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+
+      $('#windows-download').hide();
+      $('#macos-download').hide();
+      $('#linux-download').hide();
+      if (OSName == "Windows") {
+        $('#windows-download').show();
+      }
+      if (OSName == "Mac") {
+        $('#macos-download').show();
+      }
+      if (OSName == "Linux" || OSName == "UNIX") {
+        $('#linux-download').show();
+      }
+    });
+  </script>
+
 </body>
 
 </html>
