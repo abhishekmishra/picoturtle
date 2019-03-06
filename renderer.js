@@ -14,6 +14,8 @@ const getTurtlePort = require('./utils').getTurtlePort;
 const { BrowserWindow } = require('electron').remote;
 const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
+const { shell } = require('electron')
+
 
 process.env.NODE_ENV = appenv.env;
 
@@ -27,7 +29,7 @@ let about_msg = `PicoTurtle is a tiny turtle graphics program.
 You can write turtle graphics programs in your favourite programming language.
 
 Author: Abhishek Mishra
-Version: 0.0.1
+Version: ${app.getVersion()}
 Homepage: https://github.com/abhishekmishra/picoturtle
 `;
 
@@ -39,6 +41,12 @@ ipcRenderer.on('help.about', (event, message) => {
         buttons: ['ok']
     }, (response, checkboxChecked) => { });
 });
+
+$('#homelink').on('click', () => {
+    shell.openExternal('https://abhishekmishra.github.io/picoturtle');
+});
+
+$('#homelink').html('PicoTurtle ' + app.getVersion() + ' © 2019 Abhishek Mishra');
 
 // list_turtles();
 
