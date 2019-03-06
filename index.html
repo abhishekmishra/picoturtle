@@ -10,7 +10,7 @@
 
 <body class="container-fluid h-100 m-0 p-0 d-flex flex-column">
   <div class="row m-0 p-0">
-    <div class="toolbar m-0 p-2 col-12 mb-2">
+    <div class="toolbar m-0 p-2 col-12 mb-2 ml-0 mr-0">
       <div class="row m-0 p-0">
         <div class="col-4">
           <button id="new_button" class="btn btn-secondary btn-sm">New</button>
@@ -41,6 +41,9 @@
           </div>
         </div>
         <div class="col-4 text-right">
+          <span class="badge badge-light m-1" id="homelink">
+
+          </span>
           <button id="help_button" class="btn btn-secondary btn-sm">?</button>
         </div>
       </div>
@@ -70,23 +73,21 @@
       </div>
     </div>
   </div>
-  <div class="row m-0 p-0">
-    <div class="toolbar m-0 p-0 pl-1 pr-1 col-12">
-      <div class="row">
-        <div class="col-6">
-          <span class="text text-dark" id="editor_file"></span>,
-          Turtle: <span class="" id="turtle_name">...</span>
-        </div>
-        <div class="col-3">
+  <div class="row toolbar m-0 p-0">
+    <div class="col-4 p-1 text text-dark statusbar-item" id="editor_file"></div>
+    <div class="col-4 p-1 text text-dark statusbar-item" id="turtle_details">
+      <span class="" id="turtle_name">No Turtle</span>
+    </div>
+    <div class="col-4 p-1 text text-dark statusbar-item" id="canvas_status"></div>
+    <!-- <div class="col-3">
 
-        </div>
-        <div class="col-3 text-right">
+        </div> -->
+    <!-- <div class="col-3 text-right">
           <span class="badge badge-secondary m-1" id="homelink">
             PicoTurtle © 2019 Abhishek Mishra
           </span>
-        </div>
-      </div>
-    </div>
+        </div> -->
+  </div>
   </div>
   <!-- See https://stackoverflow.com/questions/50283710/is-not-defined-using-jquery-with-electron-js -->
   <!-- Insert this line above script imports  -->

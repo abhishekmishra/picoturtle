@@ -46,7 +46,7 @@ $('#homelink').on('click', () => {
     shell.openExternal('https://abhishekmishra.github.io/picoturtle');
 });
 
-$('#homelink').html('PicoTurtle ' + app.getVersion() + ' © 2019 Abhishek Mishra');
+$('#homelink').html('PicoTurtle ' + app.getVersion());// + ' © 2019 Abhishek Mishra');
 
 // list_turtles();
 
