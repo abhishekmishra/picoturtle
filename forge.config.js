@@ -36,7 +36,7 @@ function getNodejsClientExecutable() {
 
 let extraResource = [
   path.join('dist', getServerExecutable()), 
-  path.join('dist', getNodejsClientExecutable())
+  // path.join('dist', getNodejsClientExecutable())
 ];
 //console.log(extraResource);
 
@@ -88,11 +88,11 @@ let config = {
         fs.chmodSync(serverFilePath, '755');
       }
 
-      let nodeJsClientFilePath = path.join('dist', getNodejsClientExecutable());
-      if (!fs.existsSync(nodeJsClientFilePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.6/' + getNodejsClientExecutable(), 'dist');
-        fs.chmodSync(nodeJsClientFilePath, '755');
-      }
+      // let nodeJsClientFilePath = path.join('dist', getNodejsClientExecutable());
+      // if (!fs.existsSync(nodeJsClientFilePath)) {
+      //   await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.6/' + getNodejsClientExecutable(), 'dist');
+      //   fs.chmodSync(nodeJsClientFilePath, '755');
+      // }
     },
     packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
       //copy env file
@@ -121,10 +121,10 @@ let config = {
         console.log('copying sample file -> ', file);
         fs.copyFileSync(path.join('./samples', file), path.join(samples_folder, path.basename(file)));
       });
-      console.log('Running npm install in ' + samples_folder);
-      execSync('npm install', {
-        cwd: samples_folder
-      });
+      // console.log('Running npm install in ' + samples_folder);
+      // execSync('npm install', {
+      //   cwd: samples_folder
+      // });
 
     }
   }

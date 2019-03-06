@@ -43,6 +43,14 @@ function getNodejsPath() {
     }
 }
 
+function getNodeModulesPath() {
+    if (env == 'dev') {
+        return path.join(__dirname, '..', 'node_modules');
+    } else {
+        return path.join(__dirname, '..', 'node_modules');
+    }
+}
+
 class NodeJSBinding {
     constructor() {
         //do nothing
@@ -61,6 +69,42 @@ class NodeJSBinding {
     }
 
     async execFile(file, output_cb, error_cb, complete_cb, args) {
+        await new NodeJSBinding().execFileFork(file, output_cb, error_cb, complete_cb, args);
+    }
+
+    async execFileFork(file, output_cb, error_cb, complete_cb, args) {
+        if (!args) args = {};
+        if (!args.name) args.name = null;
+        if (!args.port) args.port = '3000';
+        try {
+            // let penv = JSON.parse(JSON.stringify(process.env));
+            // penv['ELECTRON_RUN_AS_NODE'] = 1;
+            let options = {
+                env: {
+                    NODE_PATH: getNodeModulesPath()
+                }
+            };
+
+            // options['cwd'] = path.join(__dirname, '..', '..');
+
+            let command_args = ['-n', args.name, '-p', args.port];
+
+            console.log('Executing ' + file + ' with args -> ' + command_args + ' and options -> ' + options);
+
+            const js_proc = fork(file, command_args, options);
+
+            js_proc.on('message', output_cb);
+            js_proc.on('error', error_cb);
+            js_proc.on('close', complete_cb);
+            return Promise.resolve();
+        } catch (error) {
+            error_cb(error);
+            return Promise.reject(error);
+        }
+    }
+
+
+    async execFileSpawn(file, output_cb, error_cb, complete_cb, args) {
         if (!args) args = {};
         if (!args.name) args.name = null;
         if (!args.port) args.port = '3000';
