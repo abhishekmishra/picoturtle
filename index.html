@@ -56,29 +56,52 @@
       </div>
     </div>
     <div class="d-flex flex-column col-6 h-100 m-0 p-0">
+      <div id="turtle_toolbar_container" class="row d-flex flex-row m-0 p-0 justify-content-center">
+        <div class="form-check ml-1 mr-1">
+          <input class="form-check-input" type="checkbox" value="" id="animate" required>
+          <label class="form-check-label" for="animate">
+            Animate
+          </label>
+        </div>
+        <div class="form-check ml-1 mr-1">
+          <input class="form-check-input" type="checkbox" value="" id="draw_on_stop" required>
+          <label class="form-check-label" for="draw_on_stop">
+            Draw On Stop
+          </label>
+        </div>
+        <div class="form-check ml-1 mr-1">
+          <input class="form-check-input" type="checkbox" value="" id="draw_turtle" required>
+          <label class="form-check-label" for="draw_turtle">
+            Show Turtle
+          </label>
+        </div>
+      </div>
       <div id="turtle_canvas_container" class="row m-0 p-0 d-flex flex-row align-self-center align-items-center">
         <div class="col-12 p-1">
           <canvas id="turtle_canvas" width="500" height="500" class="border border-secondary rounded"></canvas>
         </div>
       </div>
-      <div class="row p-0 m-1 mr-2">
-        <div class="col-12">
-          <div class="text-center">Program output</div>
-        </div>
-      </div>
-      <div id="turtle_console_container" class="row m-1 mr-2 p-2 border border-secondary rounded">
-        <div class="col-12 m-0 p-0">
-          <ul id="turtle_console" class="m-0 p-0"></ul>
+      <div id="turtle_console_container" class="row p-0 m-0 border border-secondary rounded">
+        <div class="col-12 p-0 m-0">
+          <div class="row p-0 m-0">
+            <div class="col-12 p-0 m-0">
+              <div class="text-center p-0 m-0"><span class="badge badge-secondary m-1">Program output</span></div>
+            </div>
+          </div>
+          <div class="row p-0 m-0">
+            <div class="col-12 m-0 p-1">
+              <ul id="turtle_console" class="m-0 p-0"></ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="row toolbar m-0 p-0">
-    <div class="col-4 p-1 text text-dark statusbar-item" id="editor_file"></div>
-    <div class="col-4 p-1 text text-dark statusbar-item" id="turtle_details">
+    <div class="col-6 p-1 text text-dark statusbar-item" id="editor_file"></div>
+    <div class="col-6 p-1 text text-dark statusbar-item" id="turtle_details">
       <span class="" id="turtle_name">No Turtle</span>
     </div>
-    <div class="col-4 p-1 text text-dark statusbar-item" id="canvas_status"></div>
     <!-- <div class="col-3">
 
         </div> -->

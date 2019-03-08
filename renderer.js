@@ -16,7 +16,6 @@ const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
 const { shell } = require('electron')
 
-
 process.env.NODE_ENV = appenv.env;
 
 let port = getTurtlePort();
@@ -127,6 +126,34 @@ class TurtleEditor {
             event.data.editor.help();
         });
 
+        this.turtle_options = {
+            draw_turtle: true,
+            animate: false,
+            draw_on_stop: true,
+            cmd_cb: (cmd) => {
+                // do notthing for the moment
+                if (cmd[0] == 'stop') {
+                    this.canRun = true;
+                    $('#run_button').prop('disabled', false);
+                }
+            }
+        };
+
+        $("#animate").prop("checked", this.turtle_options.animate);
+        $("#draw_on_stop").prop("checked", this.turtle_options.draw_on_stop);
+        $("#draw_turtle").prop("checked", this.turtle_options.draw_turtle);
+
+        //Turtle toolbar items
+        $('#animate').on('click', { editor: this }, function (event) {
+            event.data.editor.turtle_options['animate'] = $(this).prop("checked");
+        });
+        $('#draw_turtle').on('click', { editor: this }, function (event) {
+            event.data.editor.turtle_options['draw_turtle'] = $(this).prop("checked");
+        });
+        $('#draw_on_stop').on('click', { editor: this }, function (event) {
+            event.data.editor.turtle_options['draw_on_stop'] = $(this).prop("checked");
+        });
+
         ipcRenderer.on('file.new', (event, message) => {
             event.data = {
                 editor: this
@@ -180,6 +207,7 @@ class TurtleEditor {
             this.editor.layout();
         });
         this.local_turtle = new TurtleCanvas("turtle_canvas");
+        this.local_turtle.resetOptions();
         this.local_turtle.drawTurtle();
         this.newFile();
     }
@@ -389,15 +417,9 @@ class TurtleEditor {
         let state = await t.init(null);
         $('#turtle_name').html(state.name);
         global.t = t;
-        track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name, {
-            cmd_cb: (cmd) => {
-                // do notthing for the moment
-                if (cmd[0] == 'stop') {
-                    this.canRun = true;
-                    $('#run_button').prop('disabled', false);
-                }
-            }
-        });
+        console.log('Turtle options');
+        console.log(this.turtle_options);
+        track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name, this.turtle_options);
 
         exec(
             fvalue,

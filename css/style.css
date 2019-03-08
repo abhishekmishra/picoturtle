@@ -61,15 +61,19 @@ body {
   padding: 1px;
 }
 
+#turtle_toolbar_container {
+  flex: 2%;
+}
+
 #turtle_canvas_container {
-  flex: 80%;
-  max-height: 80%;
+  flex: 70%;
+  max-height: 87%;
 }
 
 #turtle_console_container {
   flex: 20%;
   max-height: 20%;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 html, body, div {
@@ -91,4 +95,12 @@ html, body, div {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.form-check {
+  font-size: 0.75rem;
+}
+
+#turtle_console {
+  list-style: none;
 }
