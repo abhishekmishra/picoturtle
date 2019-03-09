@@ -84,7 +84,7 @@ let config = {
     generateAssets: async () => {
       let serverFilePath = path.join('dist', getServerExecutable());
       if (!fs.existsSync(serverFilePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.2/' + getServerExecutable(), 'dist');
+        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.3/' + getServerExecutable(), 'dist');
         fs.chmodSync(serverFilePath, '755');
       }
 
