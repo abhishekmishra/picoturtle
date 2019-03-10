@@ -6,16 +6,15 @@ import builtins
 import sys
 import datetime
 
-
-def turtle_request(url):
-    #TODO: Added debug/verbose param to enable request times.
-    #start = datetime.datetime.now().timestamp()
-    res = urllib.request.urlopen(url)
-    t = json.loads(res.read().decode('utf-8'))
-    #end = datetime.datetime.now().timestamp()
-    #delta = end - start
-    #print(url + ' Took ' + str(delta))
-    return t
+# def turtle_request(url):
+#     #TODO: Added debug/verbose param to enable request times.
+#     #start = datetime.datetime.now().timestamp()
+#     res = urllib.request.urlopen(url)
+#     t = json.loads(res.read().decode('utf-8'))
+#     #end = datetime.datetime.now().timestamp()
+#     #delta = end - start
+#     #print(url + ' Took ' + str(delta))
+#     return t
 
 
 class Turtle:
@@ -23,60 +22,144 @@ class Turtle:
     proxy to turtle remote api
     """
 
-    def __init__(self, name=None, host="127.0.0.1", port="3000"):
+    def __init__(self,
+                 name=None,
+                 host="127.0.0.1",
+                 port="3000",
+                 bulk=True,
+                 bulk_limit=100):
         self.turtle_url = "http://" + host + ":" + port
+        self.bulk = bulk
+        self.bulk_limit = bulk_limit
         self.name = name
+        self.commands = []
         if self.name == None:
             self.turtle_init()
 
+    def turtle_request(self, cmd, args=None, is_obj=False):
+        if self.bulk == True and (cmd != 'create'):
+            cargs = []
+            if args != None:
+                if is_obj:
+                    arg_obj = {}
+                    for i in range(len(args)):
+                        arg_obj[args[i]['k']] = args[i]['v']
+                    cargs.append(arg_obj)
+                else:
+                    for i in range(len(args)):
+                        cargs.append(args[i]['v'])
+            command = {'cmd': cmd, 'args': cargs}
+            self.commands.append(command)
+            if (len(self.commands) >= self.bulk_limit) or (cmd == 'stop'):
+                #print(self.commands)
+                # drain the commands
+                req = urllib.request.Request(self.turtle_url + '/turtle/' +
+                                             self.name + '/commands')
+                req.add_header('Content-Type',
+                               'application/json; charset=utf-8')
+                jsondata = json.dumps(self.commands)
+                jsondataasbytes = jsondata.encode('utf-8')  # needs to be bytes
+                req.add_header('Content-Length', len(jsondataasbytes))
+                res = urllib.request.urlopen(req, jsondataasbytes)
+                # print('Draining ' + str(len(self.commands)) + ' commands for ' +
+                #       self.name)
+                self.commands = []
+                t = json.loads(res.read().decode('utf-8'))
+                return t
+        else:
+            #print('start -> ' + request_url)
+            request_url = '/turtle/'
+            if self.name != None:
+                request_url += self.name
+                request_url += '/'
+            request_url += cmd
+            if args != None:
+                request_url += '?'
+                for i in range(len(args)):
+                    if (i > 0):
+                        request_url += '&'
+                    request_url += args[i]['k']
+                    request_url += '='
+                    request_url += str(args[i]['v'])
+            res = urllib.request.urlopen(self.turtle_url + request_url)
+            t = json.loads(res.read().decode('utf-8'))
+            print('done  -> ' + request_url)
+            return t
+
     def turtle_init(self):
-        t = turtle_request(self.turtle_url + '/turtle/create?x=250&y=250')
+        self.commands = []
+        t = self.turtle_request(
+            'create', args=[{
+                'k': 'x',
+                'v': 250
+            }, {
+                'k': 'y',
+                'v': 250
+            }])
         self.name = t['name']
         webbrowser.open(self.turtle_url +
                         '/index.html?details=0&list=0&name=' + self.name)
         return t
 
     def penup(self):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name + '/penup')
+        t = self.turtle_request('penup')
         return t
 
     def pendown(self):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name +
-                           '/pendown')
+        t = self.turtle_request('pendown')
         return t
 
     def penwidth(self, w):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name +
-                           '/penwidth?w=' + str(w))
+        t = self.turtle_request('penwidth', args=[{'k': 'w', 'v': w}])
         return t
 
     def stop(self):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name + '/stop')
+        t = self.turtle_request('stop')
         return t
 
     def clear(self):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name + '/clear')
+        t = self.turtle_request('clear')
         return t
 
     def forward(self, d):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name +
-                           '/forward?d=' + str(d))
+        t = self.turtle_request('forward', args=[{'k': 'd', 'v': d}])
+        return t
+
+    def back(self, d):
+        t = self.turtle_request('back', args=[{'k': 'd', 'v': d}])
         return t
 
     def left(self, a):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name +
-                           '/left?a=' + str(a))
+        t = self.turtle_request('left', args=[{'k': 'a', 'v': a}])
         return t
 
     def right(self, a):
-        t = turtle_request(self.turtle_url + '/turtle/' + self.name +
-                           '/right?a=' + str(a))
+        t = self.turtle_request('right', args=[{'k': 'a', 'v': a}])
+        return t
+
+    def font(self, f):
+        t = self.turtle_request('font', args=[{'k': 'f', 'v': f}])
+        return t
+
+    def filltext(self, text):
+        t = self.turtle_request('filltext', args=[{'k': 'text', 'v': text}])
+        return t
+
+    def stroketext(self, text):
+        t = self.turtle_request('stroketext', args=[{'k': 'text', 'v': text}])
         return t
 
     def pencolour(self, r, g, b):
-        url = self.turtle_url + '/turtle/' + self.name + '/pencolour?r=' + str(
-            r) + '&g=' + str(g) + '&b=' + str(b)
-        t = turtle_request(url)
+        t = self.turtle_request('pencolour', [{
+            'k': 'r',
+            'v': r
+        }, {
+            'k': 'g',
+            'v': g
+        }, {
+            'k': 'b',
+            'v': b
+        }], True)
         return t
 
 
@@ -97,35 +180,51 @@ def create_turtle():
 
 
 def penup():
-    t.penup()
+    return t.penup()
 
 
 def pendown():
-    t.pendown()
+    return t.pendown()
 
 
 def penwidth(w):
-    t.penwidth(w)
+    return t.penwidth(w)
 
 
 def stop():
-    t.stop()
+    return t.stop()
 
 
 def clear():
-    t.clear()
+    return t.clear()
 
 
 def forward(d):
-    t.forward(d)
+    return t.forward(d)
+
+
+def back(d):
+    return t.back(d)
 
 
 def left(a):
-    t.left(a)
+    return t.left(a)
 
 
 def right(a):
-    t.right(a)
+    return t.right(a)
+
+
+def font(f):
+    return t.font(f)
+
+
+def filltext(text):
+    return t.filltext(text)
+
+
+def stroketext(text):
+    return t.stroketext(text)
 
 
 def pencolour(r, g, b):
