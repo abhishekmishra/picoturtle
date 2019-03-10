@@ -6,6 +6,8 @@
   <title>PicoTurtle</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/fontawesome-free-5.7.2-web/css/all.css">
+
 </head>
 
 <body class="container-fluid h-100 m-0 p-0 d-flex flex-column">
@@ -13,12 +15,12 @@
     <div class="toolbar m-0 p-2 col-12 mb-2 ml-0 mr-0">
       <div class="row m-0 p-0">
         <div class="col-4">
-          <button id="new_button" class="btn btn-secondary btn-sm">New</button>
-          <button id="open_button" class="btn btn-secondary btn-sm">Open</button>
-          <button id="save_button" class="btn btn-secondary btn-sm">Save</button>
-          <button id="save_as_button" class="btn btn-secondary btn-sm">Save As</button>
-          <button id="run_button" class="btn btn-secondary btn-sm">Run</button>
-          <button id="export_button" class="btn btn-secondary btn-sm">Export</button>
+          <button id="new_button" class="btn btn-secondary btn-sm"><i class="fas fa-file"></i> New</button>
+          <button id="open_button" class="btn btn-secondary btn-sm"><i class="fas fa-folder-open"></i> Open</button>
+          <button id="save_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save</button>
+          <button id="save_as_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save As</button>
+          <button id="run_button" class="btn btn-secondary btn-sm"><i class="fas fa-play"></i> Run</button>
+          <button id="export_button" class="btn btn-secondary btn-sm"><i class="fas fa-file-export"></i> Export</button>
         </div>
         <div class="col-2">
           <div class="input-group input-group-smmb-3 input-group-sm">
@@ -44,7 +46,7 @@
           <span class="badge badge-light m-1" id="homelink">
 
           </span>
-          <button id="help_button" class="btn btn-secondary btn-sm">?</button>
+          <button id="help_button" class="btn btn-secondary btn-sm"><i class="fas fa-question"></i></button>
         </div>
       </div>
       <!-- Language: <span id="editor_language"></span> -->
@@ -85,7 +87,7 @@
         <div class="col-12 p-0 m-0">
           <div class="row p-0 m-0">
             <div class="col-12 p-0 m-0">
-              <div class="text-center p-0 m-0"><span class="badge badge-secondary m-1">Program output</span></div>
+              <div class="text-left p-0 m-0"><div class="alert alert-dark m-0 p-0 text-center" role="alert">Program output</div></div>
             </div>
           </div>
           <div class="row p-0 m-0">
@@ -100,7 +102,17 @@
   <div class="row toolbar m-0 p-0">
     <div class="col-6 p-1 text text-dark statusbar-item" id="editor_file"></div>
     <div class="col-6 p-1 text text-dark statusbar-item" id="turtle_details">
-      <span class="" id="turtle_name">No Turtle</span>
+      <div class="row m-0 p-0">
+        <div class="col-11 m-0 p-0">
+          <span class="" id="turtle_name">No Turtle</span>
+        </div>
+        <div class="col-1 m-0 p-0 text-right">
+            <i id="status_starting" class="fas fa-dot-circle fa-lg text-danger" style="display: none"></i>
+            <i id="status_running" class="fas fa-cog fa-spin fa-lg text-info" style="display: none"></i>
+            <i id="status_fail" class="fas fa-times fa-lg text-danger" style="display: none"></i>
+            <i id="status_success" class="fas fa-check fa-lg text-success" style="display: none"></i>
+        </div>
+      </div>
     </div>
     <!-- <div class="col-3">
 
@@ -126,9 +138,8 @@
     // You can also require other files to run in this process
     require('./renderer.js')
   </script>
-  <!-- <script>
-      
-  </script> -->
-</body>
+  <script src="./assets/fontawesome-free-5.7.2-web/js/all.js" />
+
+  </body>
 
 </html>

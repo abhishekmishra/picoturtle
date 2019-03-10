@@ -87,6 +87,7 @@ class TurtleEditor {
 
         this.sampleSelected = false;
         this.canRun = true;
+        this.status_icons = ['starting', 'running', 'fail', 'success'];
 
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
@@ -135,6 +136,8 @@ class TurtleEditor {
                 if (cmd[0] == 'stop') {
                     this.canRun = true;
                     $('#run_button').prop('disabled', false);
+                    this.setStatusBarStatus('success');
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Drawing complete.</li>`);
                 }
             }
         };
@@ -210,6 +213,16 @@ class TurtleEditor {
         this.local_turtle.resetOptions();
         this.local_turtle.drawTurtle();
         this.newFile();
+        this.setStatusBarStatus(null);
+    }
+
+    setStatusBarStatus(status) {
+        this.status_icons.forEach((val) => {
+            $('#status_' + val).hide();
+        });
+        if (status !== null & this.status_icons.includes(status)) {
+            $('#status_' + status).show();
+        }
     }
 
     markVersion() {
@@ -382,6 +395,7 @@ class TurtleEditor {
     }
 
     async run_turtle() {
+        this.setStatusBarStatus('starting');
         if (!this.canRun) {
             dialog.showErrorBox('Another turtle is running.', 'A turtle program is still running. You can run once it finishes.');
             return;
@@ -421,6 +435,10 @@ class TurtleEditor {
         console.log(this.turtle_options);
         track_turtle(TURTLE_SERVER_URL, this.local_turtle, state.name, this.turtle_options);
 
+        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program started...</li>`);
+        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Drawing started...</li>`);
+        this.setStatusBarStatus('running');
+
         exec(
             fvalue,
             (data) => {
@@ -436,9 +454,10 @@ class TurtleEditor {
                 if (parseInt(code) == 0) {
                     $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
                 } else {
+                    this.setStatusBarStatus('fail');
                     $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                    t.stop();
                 }
-                t.stop();
             },
             {
                 name: state.name,
@@ -451,6 +470,7 @@ class TurtleEditor {
             t.stop();
             this.canRun = true;
             $('#run_button').prop('disabled', false);
+            this.setStatusBarStatus('fail');
         });
     }
 
