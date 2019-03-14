@@ -198,6 +198,16 @@ class TurtleEditor {
             this.help(event);
         });
 
+        ipcRenderer.on('view.theme', (event, message) => {
+            $('#theme_css').attr('href', 'css/' + message + '.css');
+            if(message == 'dark') {
+                monaco.editor.setTheme('vs-dark');
+            }
+            if(message == 'light') {
+                monaco.editor.setTheme('vs-light');
+            }
+        });
+
         $(window).resize(() => {
             this.editor.layout();
         });

@@ -252,6 +252,24 @@ const template = [
   {
     label: 'View',
     submenu: [
+      {
+        label: 'Theme',
+        submenu: [
+          {
+            label: 'dark', type: 'radio',
+            click: (menuItem, browserWindow, event) => {
+              browserWindow.webContents.send('view.theme', 'dark')
+            }
+          },
+          {
+            label: 'light', type: 'radio',
+            checked: true,
+            click: (menuItem, browserWindow, event) => {
+              browserWindow.webContents.send('view.theme', 'light')
+            }
+          }
+        ]
+      },
       { role: 'reload' },
       { role: 'forcereload' },
       { role: 'toggledevtools' },
