@@ -169,51 +169,30 @@ class TurtleEditor {
         });
 
         ipcRenderer.on('file.new', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.newFile();
         });
 
         ipcRenderer.on('file.open', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.openFile(event);
         });
 
         ipcRenderer.on('file.save', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.saveFile();
         });
 
         ipcRenderer.on('file.save_as', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.saveAsFile();
         });
 
         ipcRenderer.on('turtle.run', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.run_turtle();
         });
 
         ipcRenderer.on('turtle.export', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.export(event);
         });
 
         ipcRenderer.on('help.docs', (event, message) => {
-            event.data = {
-                editor: this
-            };
             this.help(event);
         });
 
