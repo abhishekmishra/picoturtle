@@ -102,8 +102,10 @@ class TurtleEditor {
         this.markVersion();
         this.editor.getModel().onDidChangeContent((event) => {
             if (this.isDirty()) {
+                ipcRenderer.send('dirty', true);
                 document.title = '* PicoTurtle';
             } else {
+                ipcRenderer.send('dirty', false);
                 document.title = 'PicoTurtle';
             }
         });
@@ -199,6 +201,7 @@ class TurtleEditor {
         $(window).resize(() => {
             this.editor.layout();
         });
+
         this.local_turtle = new TurtleCanvas("turtle_canvas");
         this.local_turtle.resetOptions();
         this.local_turtle.drawTurtle();
@@ -218,6 +221,7 @@ class TurtleEditor {
     markVersion() {
         this.lastSavedVersionId = this.editor.getModel().getAlternativeVersionId();
         document.title = 'PicoTurtle';
+        ipcRenderer.send('dirty', false);
     }
 
     isDirty() {

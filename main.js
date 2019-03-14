@@ -7,12 +7,14 @@ if (require('electron-squirrel-startup')) return;
 // require('update-electron-app')()
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, dialog } = require('electron');
 const { ipcMain } = require('electron');
 const appenv = require('./env');
 const path = require('path');
 const url = require('url');
 const getPort = require('get-port');
+
+let isDirty = false;
 
 //console.log('ENV is ' + appenv.env);
 process.env.NODE_ENV = appenv.env;
@@ -124,6 +126,22 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null
   });
+
+  mainWindow.on('close', (e) => {
+    if (isDirty) {
+      let choice = dialog.showMessageBox(mainWindow, {
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        defaultId: 1,
+        title: 'Save current file?',
+        message: 'Your changes in the editor are not saved. Quit?' +
+          '\nIf you choose "Yes" you will lose all unsaved work!.',
+      });
+      if (choice == 1) {
+        e.preventDefault();
+      }
+    }
+  });
 }
 
 (async () => {
@@ -156,6 +174,9 @@ function createWindow() {
   });
 })();
 
+ipcMain.on('dirty', (e, dirty_flag) => {
+  isDirty = dirty_flag;
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
