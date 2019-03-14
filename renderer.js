@@ -141,6 +141,7 @@ class TurtleEditor {
             draw_turtle: true,
             animate: true,
             draw_on_stop: false,
+            limit: 1000,
             cmd_cb: (cmd) => {
                 // do notthing for the moment
                 if (cmd[0] == 'stop') {
