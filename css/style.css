@@ -104,3 +104,7 @@ html, body, div {
 #turtle_console {
   list-style: none;
 }
+
+.stderrln {
+  background: #F0A0A0;
+}

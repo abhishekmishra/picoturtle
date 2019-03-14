@@ -7,10 +7,16 @@ var isWin = process.platform === "win32";
 var isLinux = process.platform === "linux";
 var isMacos = process.platform === "darwin";
 
-const TEMPLATE = `const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
+const TEMPLATE = `const { create_turtle, home, clear, stop, print, state } = require('@picoturtle/picoturtle-nodejs-client');
+const { font, filltext, stroketext } = require('@picoturtle/picoturtle-nodejs-client');
+const { penup, pendown, penwidth, pencolour } = require('@picoturtle/picoturtle-nodejs-client');
+const { left, right, forward, back } = require('@picoturtle/picoturtle-nodejs-client');
+const { setpos, setx, sety, heading } = require('@picoturtle/picoturtle-nodejs-client');
 
 let main = async () => {
+    /* Create the turtle before using */
     await create_turtle();
+
     /* Your code goes here */
     
 
@@ -19,7 +25,12 @@ let main = async () => {
     /* Always stop the turtle */
     await stop();
 };
-main();`;
+
+main()
+.catch((err) => {
+    console.error(err);
+    process.exit(1);
+});`;
 
 function getNodejsClientExecutable() {
     let nodejs_client_exec = '';
@@ -82,7 +93,10 @@ class NodeJSBinding {
             let options = {
                 env: {
                     NODE_PATH: getNodeModulesPath()
-                }
+                },
+                silent: false,
+                detached: false,
+                stdio: ['pipe', 'pipe', 'pipe', 'ipc']
             };
 
             // options['cwd'] = path.join(__dirname, '..', '..');
@@ -93,6 +107,8 @@ class NodeJSBinding {
 
             const js_proc = fork(file, command_args, options);
 
+            js_proc.stdout.on('data', output_cb);
+            js_proc.stderr.on('data', error_cb);
             js_proc.on('message', output_cb);
             js_proc.on('error', error_cb);
             js_proc.on('close', complete_cb);

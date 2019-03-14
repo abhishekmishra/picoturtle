@@ -4,15 +4,20 @@ const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
 
 const TEMPLATE = `from picoturtle import *
-create_turtle()
-
-### Your code goes here ###
 
 
-### Your code ends here ###
+if __name__ == "__main__":
+    # Create the turtle before using
+    create_turtle()
 
-### Always stop the turtle
-stop()`;
+    # Your code goes here #
+
+
+    # Your code ends here #
+
+    # Always stop the turtle
+    stop()
+`;
 
 function getPythonPath() {
     if (env == 'dev') {
@@ -47,7 +52,7 @@ class PythonBinding {
             let penv = JSON.parse(JSON.stringify(process.env));
             penv['PYTHONPATH'] = getPythonPath();
             let options = {
-                cwd: path.join(__dirname, '..', '..'),
+                cwd: path.dirname(file),
                 env: penv
             };
             let command_args = [file, args.name, args.port];

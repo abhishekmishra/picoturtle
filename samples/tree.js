@@ -1,7 +1,13 @@
-const { create_turtle, penup, pendown, penwidth, clear, stop, pencolour, forward, right, left, print } = require('@picoturtle/picoturtle-nodejs-client');
+const { create_turtle, home, clear, stop, print, state } = require('@picoturtle/picoturtle-nodejs-client');
+const { font, filltext, stroketext } = require('@picoturtle/picoturtle-nodejs-client');
+const { penup, pendown, penwidth, pencolour } = require('@picoturtle/picoturtle-nodejs-client');
+const { left, right, forward, back } = require('@picoturtle/picoturtle-nodejs-client');
+const { setpos, setx, sety, heading } = require('@picoturtle/picoturtle-nodejs-client');
 
 let main = async () => {
+    /* Create the turtle before using */
     await create_turtle();
+
     /* Your code goes here */
 
     async function tree(size) {
@@ -47,4 +53,9 @@ let main = async () => {
     /* Always stop the turtle */
     await stop();
 };
-main();
+
+main()
+.catch((err) => {
+    console.error(err);
+    process.exit(1);
+});

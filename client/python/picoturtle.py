@@ -50,7 +50,7 @@ class Turtle:
                         cargs.append(args[i]['v'])
             command = {'cmd': cmd, 'args': cargs}
             self.commands.append(command)
-            if (len(self.commands) >= self.bulk_limit) or (cmd == 'stop'):
+            if (len(self.commands) >= self.bulk_limit) or (cmd == 'stop') or (cmd == 'state'):
                 #print(self.commands)
                 # drain the commands
                 req = urllib.request.Request(self.turtle_url + '/turtle/' +
@@ -117,6 +117,14 @@ class Turtle:
         t = self.turtle_request('stop')
         return t
 
+    def state(self):
+        t = self.turtle_request('state')
+        return t
+
+    def home(self):
+        t = self.turtle_request('home')
+        return t
+
     def clear(self):
         t = self.turtle_request('clear')
         return t
@@ -129,12 +137,28 @@ class Turtle:
         t = self.turtle_request('back', args=[{'k': 'd', 'v': d}])
         return t
 
+    def goto(self, x, y):
+        t = self.turtle_request('goto', args=[{'k': 'x', 'v': x}, {'k': 'y', 'v': y}])
+        return t
+
+    def setx(self, x):
+        t = self.turtle_request('setx', args=[{'k': 'x', 'v': x}])
+        return t
+
+    def sety(self, y):
+        t = self.turtle_request('sety', args=[{'k': 'y', 'v': y}])
+        return t
+
     def left(self, a):
         t = self.turtle_request('left', args=[{'k': 'a', 'v': a}])
         return t
 
     def right(self, a):
         t = self.turtle_request('right', args=[{'k': 'a', 'v': a}])
+        return t
+
+    def heading(self, a):
+        t = self.turtle_request('heading', args=[{'k': 'a', 'v': a}])
         return t
 
     def font(self, f):
@@ -195,6 +219,14 @@ def stop():
     return t.stop()
 
 
+def state():
+    return t.state()
+
+
+def home():
+    return t.home()
+
+
 def clear():
     return t.clear()
 
@@ -207,12 +239,28 @@ def back(d):
     return t.back(d)
 
 
+def goto(x, y):
+    return t.goto(x, y)
+
+
+def setx(x):
+    return t.setx(x)
+
+
+def sety(y):
+    return t.sety(y)
+
+
 def left(a):
     return t.left(a)
 
 
 def right(a):
     return t.right(a)
+
+
+def heading(a):
+    return t.heading(a)
 
 
 def font(f):

@@ -70,6 +70,16 @@ function turtle_console_out(data) {
     }
 }
 
+function turtle_console_error(data) {
+    if (data != null) {
+        let lines = `${data}`.match(/[^\r\n]+/g);
+        lines.forEach(element => {
+            $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">${element}</li>`);
+        });
+    }
+}
+
+
 global.turtle_console_out = turtle_console_out;
 
 class TurtleEditor {
@@ -129,8 +139,8 @@ class TurtleEditor {
 
         this.turtle_options = {
             draw_turtle: true,
-            animate: false,
-            draw_on_stop: true,
+            animate: true,
+            draw_on_stop: false,
             cmd_cb: (cmd) => {
                 // do notthing for the moment
                 if (cmd[0] == 'stop') {
@@ -447,7 +457,7 @@ class TurtleEditor {
             },
             (data) => {
                 console.log(`stderr: ${data}`);
-                turtle_console_out(data);
+                turtle_console_error(data);
             },
             (code) => {
                 console.log(`child process exited with code ${code}`);
@@ -455,7 +465,7 @@ class TurtleEditor {
                     $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
                 } else {
                     this.setStatusBarStatus('fail');
-                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                    $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
                     t.stop();
                 }
             },
