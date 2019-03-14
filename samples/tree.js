@@ -44,9 +44,11 @@ let main = async () => {
         await forward(-size);
     }
 
+    await penup();
+    await back(100);
     await pendown();
     await pencolour(165, 42, 42);
-    await tree(64);
+    await tree(128);
 
     /* Your code ends here */
 

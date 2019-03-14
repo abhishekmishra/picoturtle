@@ -35,9 +35,11 @@ def tree(size):
 
     forward(-size)
 
+penup()
+back(100)
 pendown()
 pencolour(165, 42, 42)
-tree(64)
+tree(128)
 
 ### Your code ends here ###
 
