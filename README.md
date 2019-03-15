@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/abhishekmishra/picoturtle.svg?branch=master)](https://travis-ci.org/abhishekmishra/picoturtle)
+[![Build status](https://ci.appveyor.com/api/projects/status/xs7v06g3xt5f341d?svg=true)](https://ci.appveyor.com/project/abhishekmishra/picoturtle)
 
 # <img src="https://raw.githubusercontent.com/abhishekmishra/picoturtle/master/icons/pico.png" alt="logo" height="32px"/> PicoTurtle
 
