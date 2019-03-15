@@ -6,7 +6,7 @@ const track_turtle = require('@picoturtle/picoturtle-web-canvas').track_turtle_n
 const TurtleCanvas = require('@picoturtle/picoturtle-web-canvas').Turtle;
 const { Turtle } = require('@picoturtle/picoturtle-nodejs-client');
 const fs = require('fs');
-const { dialog, app } = require('electron').remote;
+const { Menu, dialog, app } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
@@ -14,7 +14,8 @@ const getTurtlePort = require('./utils').getTurtlePort;
 const { BrowserWindow } = require('electron').remote;
 const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
-const { shell } = require('electron')
+const { shell } = require('electron');
+const Store = require('electron-store');
 
 process.env.NODE_ENV = appenv.env;
 
@@ -47,19 +48,47 @@ $('#homelink').on('click', () => {
 
 $('#homelink').html('PicoTurtle ' + app.getVersion());// + ' © 2019 Abhishek Mishra');
 
-// list_turtles();
+// Application Config
+const store = new Store({
+    defaults: {
+        appearance: {
+            theme: 'dark'
+        }
+    }
+});
 
-// let show_list = 0;
-// let show_obj_code = 0;
-// if (show_list != null && show_list == 0) {
-//     let list_container = document.getElementById('turtle_list_container');
-//     list_container.hidden = true;
-// }
+// set theme
+setTheme(store.get('appearance.theme'));
 
-// if (show_obj_code != null && show_obj_code == 0) {
-//     let obj_code_container = document.getElementById('turtle_details_container');
-//     obj_code_container.hidden = true;
-// }
+let menuItems = Menu.getApplicationMenu().items;
+menuItems.forEach((mi, i) => {
+    if (mi.label == 'View') {
+        console.log(mi);
+        mi.submenu.items.forEach((smi) => {
+            if (smi.label == 'Theme') {
+                smi.submenu.items.forEach((ssmi) => {
+                    if (ssmi.label == store.get('appearance.theme')) {
+                        ssmi.checked = true;
+                    }
+                })
+            }
+        })
+    }
+});
+
+function setTheme(theme) {
+    $('#theme_css').attr('href', 'css/' + theme + '.css');
+    if (typeof monaco !== 'undefined') {
+        if (theme == 'dark') {
+            monaco.editor.setTheme('vs-dark');
+        }
+        if (theme == 'light') {
+            monaco.editor.setTheme('vs-light');
+        }
+    }
+}
+
+console.log(store.path);
 
 function turtle_console_out(data) {
     if (data != null) {
@@ -140,6 +169,7 @@ class TurtleEditor {
         });
 
         this.turtle_options = {
+            turtle_colour: 'MediumOrchid',
             draw_turtle: true,
             animate: true,
             draw_on_stop: false,
@@ -199,13 +229,8 @@ class TurtleEditor {
         });
 
         ipcRenderer.on('view.theme', (event, message) => {
-            $('#theme_css').attr('href', 'css/' + message + '.css');
-            if(message == 'dark') {
-                monaco.editor.setTheme('vs-dark');
-            }
-            if(message == 'light') {
-                monaco.editor.setTheme('vs-light');
-            }
+            store.set('appearance.theme', message);
+            setTheme(message);
         });
 
         $(window).resize(() => {
@@ -213,8 +238,9 @@ class TurtleEditor {
         });
 
         this.local_turtle = new TurtleCanvas("turtle_canvas");
-        this.local_turtle.resetOptions();
+        this.local_turtle.initOptions(this.turtle_options);
         this.local_turtle.drawTurtle();
+        this.local_turtle.resetOptions();
         this.newFile();
         this.setStatusBarStatus(null);
     }
@@ -563,6 +589,6 @@ amdRequire.config({
 // workaround monaco-css not understanding the environment
 self.module = undefined;
 amdRequire(['vs/editor/editor.main'], async function () {
-    //monaco.editor.setTheme('vs-dark');
+    monaco.editor.setTheme('vs-' + store.get('appearance.theme'));
     let t = new TurtleEditor();
 });

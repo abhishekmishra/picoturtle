@@ -14,11 +14,11 @@ body {
 } */
 
 .toolbar {
-  background: gainsboro;
+  background: #444444;
 }
 
 .statusbar {
-  background: gainsboro;
+  background: #444444;
 }
 
 /* #turtle_canvas {
@@ -109,4 +109,19 @@ html, body, div {
 
 .stderrln {
   background: #F0A0A0;
+}
+
+.text.text-dark {
+  color: whitesmoke!important;
+}
+
+option {
+  background: black;
+  color: whitesmoke!important;
+}
+
+.input-group-text {
+  background: #6c757d!important;
+  border: 0px!important;
+  color: whitesmoke!important;
 }
