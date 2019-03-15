@@ -59,8 +59,8 @@ header.masthead {
   overflow: hidden;
   padding-top: calc(7rem + 72px);
   padding-bottom: 7rem;
-  background: -webkit-gradient(linear, left bottom, left top, from(#ff6a00), to(#ee0979));
-  background: linear-gradient(0deg, #ff6a00 0%, #ee0979 100%);
+  background: -webkit-gradient(linear, left bottom, left top, from(silver), to(black));
+  background: linear-gradient(0deg, silver 0%, black 100%);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: scroll;
@@ -84,8 +84,8 @@ header.masthead .bg-circle {
   z-index: 0;
   position: absolute;
   border-radius: 100%;
-  background: -webkit-gradient(linear, left bottom, left top, from(#ee0979), to(#ff6a00));
-  background: linear-gradient(0deg, #ee0979 0%, #ff6a00 100%);
+  background: -webkit-gradient(linear, left bottom, left top, from(black), to(silver));
+  background: linear-gradient(0deg, black 0%, silver 100%);
 }
 
 header.masthead .bg-circle-1 {
@@ -138,35 +138,35 @@ header.masthead .bg-circle-4 {
 }
 
 .bg-primary {
-  background-color: #ee0979 !important;
+  background-color: black !important;
 }
 
 .btn-primary {
-  background-color: #ee0979;
-  border-color: #ee0979;
+  background-color: black;
+  border-color: black;
 }
 
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
-  background-color: #bd0760 !important;
-  border-color: #bd0760 !important;
+  background-color: black !important;
+  border-color: black !important;
 }
 
 .btn-primary:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(238, 9, 121, 0.5);
-  box-shadow: 0 0 0 0.2rem rgba(238, 9, 121, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
 }
 
 .btn-secondary {
-  background-color: #ff6a00;
-  border-color: #ff6a00;
+  background-color: silver;
+  border-color: silver;
 }
 
 .btn-secondary:active, .btn-secondary:focus, .btn-secondary:hover {
-  background-color: #cc5500 !important;
-  border-color: #cc5500 !important;
+  background-color: #a7a7a7 !important;
+  border-color: #a7a7a7 !important;
 }
 
 .btn-secondary:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 106, 0, 0.5);
-  box-shadow: 0 0 0 0.2rem rgba(255, 106, 0, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(192, 192, 192, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(192, 192, 192, 0.5);
 }
