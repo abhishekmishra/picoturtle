@@ -256,13 +256,13 @@ const template = [
         label: 'Theme',
         submenu: [
           {
-            label: 'dark', type: 'radio',
+            label: 'Dark', type: 'radio',
             click: (menuItem, browserWindow, event) => {
               browserWindow.webContents.send('view.theme', 'dark')
             }
           },
           {
-            label: 'light', type: 'radio',
+            label: 'Light', type: 'radio',
             checked: true,
             click: (menuItem, browserWindow, event) => {
               browserWindow.webContents.send('view.theme', 'light')

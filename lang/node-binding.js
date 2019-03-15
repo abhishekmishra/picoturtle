@@ -178,6 +178,18 @@ class NodeJSBinding {
             {
                 name: "Tree",
                 file: getSampleFilePath('tree.js')
+            },
+            {
+                name: "Text",
+                file: getSampleFilePath('text-demo.js')
+            },
+            {
+                name: "Fern",
+                file: getSampleFilePath('fern.js')
+            },
+            {
+                name: "Sierpinski",
+                file: getSampleFilePath('sierpinski.js')
             }
         ];
     }

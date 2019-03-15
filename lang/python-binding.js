@@ -125,6 +125,18 @@ class PythonBinding {
             {
                 name: "Tree",
                 file: getSampleFilePath('tree.py')
+            },
+            {
+                name: "Text",
+                file: getSampleFilePath('text-demo.py')
+            },
+            {
+                name: "Fern",
+                file: getSampleFilePath('fern.py')
+            },
+            {
+                name: "Sierpinski",
+                file: getSampleFilePath('sierpinski.py')
             }
         ];
     }
