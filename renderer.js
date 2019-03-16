@@ -67,7 +67,7 @@ menuItems.forEach((mi, i) => {
         mi.submenu.items.forEach((smi) => {
             if (smi.label == 'Theme') {
                 smi.submenu.items.forEach((ssmi) => {
-                    if (ssmi.label == store.get('appearance.theme')) {
+                    if (ssmi.label.toLowerCase() == store.get('appearance.theme')) {
                         ssmi.checked = true;
                     }
                 })
