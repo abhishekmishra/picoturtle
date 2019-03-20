@@ -1,0 +1,49 @@
+using System;
+using picoturtle;
+
+namespace cspico
+{
+    class MainClass
+    {
+        /* a simple turtle program to print a polygon */
+        public static poly(Turle t, int num, int side, double angle)
+        {
+            for (var i = 0; i < num; i++)
+            {
+                t.forward(side);
+                t.right(angle);
+            }
+        }
+
+
+        public static void Main(string[] args)
+        {
+            // Create the turtle before using
+            Turtle t = new picoturtle.Turtle(args[0]);
+            System.Console.WriteLine(args[0]);
+
+            // Your code goes here
+
+            //draw a hexagon in red
+            t.penwidth(2);
+            t.pendown();
+            t.pencolour(255, 0, 0);
+            t.poly(6, 50, 60);
+
+            //move up 100
+            t.penup();
+            t.forward(-100);
+            t.right(90);
+
+            //draw a pentagon in blue
+            t.pendown();
+            t.pencolour(0, 0, 255);
+            t.poly(5, 50, 72);
+
+            // Your code ends here
+
+            // Always stop the turtle
+            t.stop();
+        }
+    }
+}

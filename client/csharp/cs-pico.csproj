@@ -31,14 +31,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\picoturtle-dotnet\picoturtle-dotnet\picoturtle\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>PICOTURTLE_DOTNET_BIN\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="picoturtle">
-      <HintPath>..\picoturtle-dotnet\picoturtle-dotnet\picoturtle\bin\Debug\picoturtle.dll</HintPath>
+      <HintPath>PICOTURTLE_DOTNET_BIN\picoturtle.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="PROGRAM_FILE" />
     <!--Compile Include="Properties\AssemblyInfo.cs" /-->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
