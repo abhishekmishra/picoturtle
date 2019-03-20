@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { spawn, execFileSync, spawnSync } = require('child_process');
 const path = require('path');
 const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
@@ -15,8 +15,7 @@ namespace cspico
         public static void Main(string[] args)
         {
             // Create the turtle before using
-            Turtle t = new picoturtle.Turtle();
-            t.Init(250, 250);
+            Turtle t = new picoturtle.Turtle(name: args[0], port: Int32.Parse(args[1]));
 
             // Your code goes here
 
@@ -40,7 +39,7 @@ function getCSharpPath() {
 
 function getDotNetBinPath() {
     if (env == 'dev') {
-        return path.join(__dirname, '..', '..', 'picoturtle-dotnet', 'picoturtle-dotnet', 'picoturtle', 'bin', 'Debug');
+        return path.join(__dirname, '..', '..', 'picoturtle-dotnet', 'picoturtle-dotnet', 'picoturtle', 'bin', 'Debug').replace(/\//g, '\\');
     } else {
         return null;
     }
@@ -82,20 +81,42 @@ class CSharpBinding {
 
         // change paths in project file
         let inputFile = path.join(tmpobj.name, 'cs-pico.csproj');
-        fs.readFile(inputFile, 'utf8', function (err, data) {
-            if (err) {
-                return console.log(err);
-            }
-            var result = data.replace(/PICOTURTLE_DOTNET_BIN/g, getDotNetBinPath());
-            result = result.replace(/PROGRAM_FILE/g, path.basename(file));
-            // console.log(result);
-            fs.writeFileSync(inputFile, result);
-        });
+        var data = fs.readFileSync(inputFile, 'utf8');
+        var result = data.replace(/PICOTURTLE_DOTNET_BIN/g, getDotNetBinPath());
+        result = result.replace(/PROGRAM_FILE/g, path.basename(file));
+        // console.log(result);
+        fs.writeFileSync(inputFile, result);
 
         // copy program file
         fs.copyFileSync(file, path.join(tmpobj.name, path.basename(file)));
 
         console.log(tmpobj.name);
+
+        // build project in temp folder
+
+        try {
+            let penv = JSON.parse(JSON.stringify(process.env));
+            let options = {
+                cwd: tmpobj.name,
+                env: penv
+            };
+            let command_args = ['cs-pico.csproj'];
+
+            let msbuild_exec = 'msbuild';
+            console.log('will exec ' + msbuild_exec + ' with options ' + JSON.stringify(options));
+            const msbuild_proc = spawnSync(msbuild_exec,
+                command_args,
+                options);
+
+            console.log(`${msbuild_proc.stdout}`);
+            console.log(`${msbuild_proc.stderr}`);
+            // msbuild_proc.stdout.on('data', output_cb);
+            // msbuild_proc.stderr.on('data', error_cb);
+            // msbuild_proc.on('close', complete_cb);
+        } catch (error) {
+            error_cb(error);
+        }
+
 
         // execute
         try {
@@ -104,15 +125,11 @@ class CSharpBinding {
                 cwd: path.dirname(file),
                 env: penv
             };
-            let command_args = [file, args.name, args.port];
+            let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), args.name, args.port];
 
-            let python_exec = 'python3';
-            let isWin = process.platform === "win32";
-            if (isWin) {
-                python_exec = 'python';
-            }
-            console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
-            console.log(penv['PYTHONPATH']);
+            let python_exec = 'mono';
+
+            console.log('will spawn ' + python_exec );
             const py_proc = spawn(python_exec,
                 command_args,
                 options);
@@ -121,7 +138,7 @@ class CSharpBinding {
             py_proc.stderr.on('data', error_cb);
             py_proc.on('close', complete_cb);
 
-            // cleanup temp directory
+            //cleanup temp directory
             //tmpobj.removeCallback();
 
             return Promise.resolve();
