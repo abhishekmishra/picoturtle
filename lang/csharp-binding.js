@@ -95,6 +95,7 @@ class CSharpBinding {
 
         // build project in temp folder
 
+        let build_good = true;
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
             let options = {
@@ -110,7 +111,20 @@ class CSharpBinding {
                 options);
 
             console.log(`${msbuild_proc.stdout}`);
-            console.log(`${msbuild_proc.stderr}`);
+            if (msbuild_proc.stderr != null) {
+                console.log(`${msbuild_proc.stderr}`);
+            }
+            if (msbuild_proc.status != 0) {
+                build_good = false;
+                error_cb('Build failed for ' + file);
+                error_cb(`${msbuild_proc.stdout}`);
+                //cleanup temp directory
+                console.log('Deleting ' + tmpobj.name);
+                rimraf(tmpobj.name, () => { console.log('Deleted') });
+                return Promise.reject('Build failed for ' + file);
+            } else {
+                output_cb('Build successful.');
+            }
             // msbuild_proc.stdout.on('data', output_cb);
             // msbuild_proc.stderr.on('data', error_cb);
             // msbuild_proc.on('close', complete_cb);
@@ -120,34 +134,36 @@ class CSharpBinding {
 
 
         // execute
-        try {
-            let penv = JSON.parse(JSON.stringify(process.env));
-            let options = {
-                cwd: path.dirname(file),
-                env: penv
-            };
-            let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), args.name, args.port];
+        if (build_good) {
+            try {
+                let penv = JSON.parse(JSON.stringify(process.env));
+                let options = {
+                    cwd: path.dirname(file),
+                    env: penv
+                };
+                let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), args.name, args.port];
 
-            let dotnet_exec = 'mono';
+                let dotnet_exec = 'mono';
 
-            console.log('will spawn ' + dotnet_exec);
-            const cs_proc = spawn(dotnet_exec,
-                command_args,
-                options);
+                console.log('will spawn ' + dotnet_exec);
+                const cs_proc = spawn(dotnet_exec,
+                    command_args,
+                    options);
 
-            cs_proc.stdout.on('data', output_cb);
-            cs_proc.stderr.on('data', error_cb);
-            cs_proc.on('close', complete_cb);
-            cs_proc.on('close', (coee) => {
-                //cleanup temp directory
-                console.log('Deleting ' + tmpobj.name);
-                rimraf(tmpobj.name, () => { console.log('Deleted') });
-            });
+                cs_proc.stdout.on('data', output_cb);
+                cs_proc.stderr.on('data', error_cb);
+                cs_proc.on('close', complete_cb);
+                cs_proc.on('close', (coee) => {
+                    //cleanup temp directory
+                    console.log('Deleting ' + tmpobj.name);
+                    rimraf(tmpobj.name, () => { console.log('Deleted') });
+                });
 
-            return Promise.resolve();
-        } catch (error) {
-            error_cb(error);
-            return Promise.reject(error);
+                return Promise.resolve();
+            } catch (error) {
+                error_cb(error);
+                return Promise.reject(error);
+            }
         }
     }
 
