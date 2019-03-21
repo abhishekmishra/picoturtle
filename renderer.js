@@ -94,9 +94,11 @@ console.log(store.path);
 function turtle_console_out(data) {
     if (data != null) {
         let lines = `${data}`.match(/[^\r\n]+/g);
-        lines.forEach(element => {
-            $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
-        });
+        if (lines != null) {
+            lines.forEach(element => {
+                $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
+            });
+        }
     }
 }
 
@@ -347,12 +349,17 @@ class TurtleEditor {
         } else {
             $('#editor_file').html(this.file);
 
-            if (this.file.endsWith('.js')) {
-                this.changeLanguage('javascript');
+            for (var lang in this.bindings) {
+                if (this.file.endsWith(this.bindings[lang].getFileExtensions()[0])) {
+                    this.changeLanguage(lang);
+                }
             }
-            if (this.file.endsWith('.py')) {
-                this.changeLanguage('python');
-            }
+            // if (this.file.endsWith('.js')) {
+            //     this.changeLanguage('javascript');
+            // }
+            // if (this.file.endsWith('.py')) {
+            //     this.changeLanguage('python');
+            // }
         }
         this.markVersion();
     }

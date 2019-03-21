@@ -4,6 +4,7 @@ const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
 const tmp = require('tmp');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const TEMPLATE = `using System;
 using picoturtle;
@@ -127,19 +128,21 @@ class CSharpBinding {
             };
             let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), args.name, args.port];
 
-            let python_exec = 'mono';
+            let dotnet_exec = 'mono';
 
-            console.log('will spawn ' + python_exec );
-            const py_proc = spawn(python_exec,
+            console.log('will spawn ' + dotnet_exec);
+            const cs_proc = spawn(dotnet_exec,
                 command_args,
                 options);
 
-            py_proc.stdout.on('data', output_cb);
-            py_proc.stderr.on('data', error_cb);
-            py_proc.on('close', complete_cb);
-
-            //cleanup temp directory
-            //tmpobj.removeCallback();
+            cs_proc.stdout.on('data', output_cb);
+            cs_proc.stderr.on('data', error_cb);
+            cs_proc.on('close', complete_cb);
+            cs_proc.on('close', (coee) => {
+                //cleanup temp directory
+                console.log('Deleting ' + tmpobj.name);
+                rimraf(tmpobj.name, () => { console.log('Deleted') });
+            });
 
             return Promise.resolve();
         } catch (error) {
