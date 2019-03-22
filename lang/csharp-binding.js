@@ -6,6 +6,8 @@ const tmp = require('tmp');
 const fs = require('fs');
 const rimraf = require('rimraf');
 
+var isWin = process.platform === "win32";
+
 const TEMPLATE = `using System;
 using picoturtle;
 
@@ -141,9 +143,14 @@ class CSharpBinding {
                     cwd: path.dirname(file),
                     env: penv
                 };
-                let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), args.name, args.port];
-
+                let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), '-n', args.name, '-p', args.port];
                 let dotnet_exec = 'mono';
+
+                // we don't need mono to run if we are on windows.
+                if(isWin) {
+                    command_args = ['-n', args.name, '-p', args.port];
+                    dotnet_exec = path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe');
+                }
 
                 console.log('will spawn ' + dotnet_exec);
                 const cs_proc = spawn(dotnet_exec,
@@ -152,8 +159,14 @@ class CSharpBinding {
 
                 cs_proc.stdout.on('data', output_cb);
                 cs_proc.stderr.on('data', error_cb);
+                cs_proc.on('error', (code) => {
+                    //cleanup temp directory
+                    error_cb(code);
+                    console.log('Deleting ' + tmpobj.name);
+                    rimraf(tmpobj.name, () => { console.log('Deleted') });
+                });
                 cs_proc.on('close', complete_cb);
-                cs_proc.on('close', (coee) => {
+                cs_proc.on('close', (code) => {
                     //cleanup temp directory
                     console.log('Deleting ' + tmpobj.name);
                     rimraf(tmpobj.name, () => { console.log('Deleted') });
@@ -162,6 +175,9 @@ class CSharpBinding {
                 return Promise.resolve();
             } catch (error) {
                 error_cb(error);
+                //cleanup temp directory
+                console.log('Deleting ' + tmpobj.name);
+                rimraf(tmpobj.name, () => { console.log('Deleted') });
                 return Promise.reject(error);
             }
         }

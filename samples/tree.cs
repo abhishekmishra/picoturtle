@@ -42,20 +42,26 @@ namespace cspico
         public static void Main(string[] args)
         {
             // Create the turtle before using
-            Turtle t = new picoturtle.Turtle(name: args[0], port: Int32.Parse(args[1]));
+            Turtle t = picoturtle.Turtle.CreateTurtle(args);
+            
+            if (t != null) {
+                // Your code goes here
 
-            // Your code goes here
+                t.penup();
+                t.back(100);
+                t.pendown();
+                t.pencolour(165, 42, 42);
+                tree(t, 128);
 
-            t.penup();
-            t.back(100);
-            t.pendown();
-            t.pencolour(165, 42, 42);
-            tree(t, 128);
+                // Your code ends here
 
-            // Your code ends here
-
-            // Always stop the turtle
-            t.stop();
+                // Always stop the turtle
+                t.stop();
+            }
+            else {
+                Console.Error.WriteLine("Error: Unable to create a turtle.");
+                Environment.Exit(-1);
+            }
         }
     }
 }
