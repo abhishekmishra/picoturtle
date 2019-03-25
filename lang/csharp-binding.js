@@ -3,7 +3,7 @@ const path = require('path');
 const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
 const tmp = require('tmp');
-const fs = require('fs');
+const fs = require('fs-extra');
 const rimraf = require('rimraf');
 
 var isWin = process.platform === "win32";
@@ -47,13 +47,13 @@ function getCSharpPath() {
     }
 }
 
-function getDotNetBinPath() {
-    if (env == 'dev') {
-        return path.join(__dirname, '..', '..', 'picoturtle-dotnet', 'picoturtle-dotnet', 'picoturtle', 'bin', 'Debug').replace(/\//g, '\\');
-    } else {
-        return null;
-    }
-}
+// function getDotNetBinPath() {
+//     if (env == 'dev') {
+//         return path.join(__dirname, '..', '..', 'picoturtle-dotnet', 'picoturtle-dotnet', 'picoturtle', 'bin', 'Debug').replace(/\//g, '\\');
+//     } else {
+//         return null;
+//     }
+// }
 
 class CSharpBinding {
     constructor() {
@@ -82,18 +82,19 @@ class CSharpBinding {
         console.log('Dir: ', tmpobj.name);
 
         // transfer project files
-        fs.readdirSync(getCSharpPath()).forEach(file => {
-            console.log('copying sample file -> ', file);
-            if (file.endsWith('sln') || file.endsWith('csproj')) {
-                fs.copyFileSync(path.join(getCSharpPath(), file), path.join(tmpobj.name, path.basename(file)));
-            }
-        });
+        // fs.readdirSync(getCSharpPath()).forEach(file => {
+        //     console.log('copying sample file -> ', file);
+        //     if (file.endsWith('sln') || file.endsWith('csproj')) {
+        //         fs.copyFileSync(path.join(getCSharpPath(), file), path.join(tmpobj.name, path.basename(file)));
+        //     }
+        // });
+
+        fs.copySync(getCSharpPath(), tmpobj.name);
 
         // change paths in project file
         let inputFile = path.join(tmpobj.name, 'cs-pico.csproj');
         var data = fs.readFileSync(inputFile, 'utf8');
-        var result = data.replace(/PICOTURTLE_DOTNET_BIN/g, getDotNetBinPath());
-        result = result.replace(/PROGRAM_FILE/g, path.basename(file));
+        var result = data.replace(/PROGRAM_FILE/g, path.basename(file));
         // console.log(result);
         fs.writeFileSync(inputFile, result);
 

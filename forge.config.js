@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const download = require('download');
 const { execSync, execFileSync } = require('child_process');
@@ -104,6 +104,11 @@ let config = {
       fs.mkdirSync(path.join(resourcesFolder, 'client'));
       fs.mkdirSync(path.join(resourcesFolder, 'client', 'python'));
       fs.copyFileSync('./client/python/picoturtle.py', path.join(resourcesFolder, 'client', 'python', 'picoturtle.py'));
+
+      //copy csharp client files
+      let csharpFolder = path.join(resourcesFolder, 'client', 'csharp');
+      fs.mkdirSync(csharpFolder);
+      fs.copySync('./client/csharp', csharpFolder);
 
       //create js client folder outside asar
       // let target_nodejs_client = path.join(resourcesFolder, 'client', 'nodejs')
