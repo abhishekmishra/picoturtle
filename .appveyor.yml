@@ -19,6 +19,7 @@ install:
 - npm update
 - ps: cd client\csharp
 - ps: nuget restore
+- ps: dir packages
 
 test_script:
 - node --version
