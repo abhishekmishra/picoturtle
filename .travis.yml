@@ -18,6 +18,12 @@ addons:
     packages:
     - fakeroot
     - rpm
+    - mono-complete
+    - nuget
+  homebrew:
+    packages:
+    - mono
+    - nuget
 
 branches:
   only:
@@ -27,6 +33,7 @@ branches:
 install:
 - npm install
 - npm update
+- ./client/csharpPackageRestore.sh
 
 script:
 - if test -z "$TRAVIS_TAG"; then npm run make; fi
