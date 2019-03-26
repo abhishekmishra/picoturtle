@@ -33,7 +33,7 @@ before_install:
 - sudo apt install apt-transport-https ca-certificates -y
 - echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 - sudo apt update -qq
-- sudo apt install mono-devel -y
+- sudo apt install mono-devel nuget -y
 
 install:
 - npm install
