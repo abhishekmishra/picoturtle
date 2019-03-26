@@ -4,7 +4,7 @@ node_js:
 os:
   - linux
   - osx
-dist: trusty
+dist: xenial
 osx_image: xcode8.3
 sudo: false
 
