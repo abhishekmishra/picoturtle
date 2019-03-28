@@ -2,6 +2,15 @@ const url = require('url');
 const { env } = require('./env');
 const path = require('path');
 
+const preferenceLabels = {
+    "appearance": "Appearance",
+    "python": "Python",
+    "csharp": "C#",
+    "theme": "Theme",
+    "pathToMsBuild": "MSBuild Path",
+    "pathToPython3": "Python3 Path"
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -23,6 +32,20 @@ function getSampleFilePath(sample_file) {
     }
 }
 
+function setTheme(theme) {
+    $('#theme_css').attr('href', 'css/' + theme + '.css');
+    if (typeof monaco !== 'undefined') {
+        if (theme == 'dark') {
+            monaco.editor.setTheme('vs-dark');
+        }
+        if (theme == 'light') {
+            monaco.editor.setTheme('vs-light');
+        }
+    }
+}
+
 module.exports.sleep = sleep;
 module.exports.getTurtlePort = getTurtlePort;
 module.exports.getSampleFilePath = getSampleFilePath;
+module.exports.setTheme = setTheme;
+module.exports.preferenceLabels = preferenceLabels;

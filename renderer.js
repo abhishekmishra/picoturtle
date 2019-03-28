@@ -11,6 +11,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const appenv = require('./env');
 const getTurtlePort = require('./utils').getTurtlePort;
+const setTheme = require('./utils').setTheme;
 const { BrowserWindow } = require('electron').remote;
 const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
@@ -54,6 +55,12 @@ const store = new Store({
     defaults: {
         appearance: {
             theme: 'dark'
+        },
+        python: {
+            pathToPython3: ''
+        },
+        csharp: {
+            pathToMsBuild: ''
         }
     }
 });
@@ -76,18 +83,6 @@ menuItems.forEach((mi, i) => {
         })
     }
 });
-
-function setTheme(theme) {
-    $('#theme_css').attr('href', 'css/' + theme + '.css');
-    if (typeof monaco !== 'undefined') {
-        if (theme == 'dark') {
-            monaco.editor.setTheme('vs-dark');
-        }
-        if (theme == 'light') {
-            monaco.editor.setTheme('vs-light');
-        }
-    }
-}
 
 console.log(store.path);
 
