@@ -171,6 +171,9 @@ class TurtleEditor {
         $('#help_button').on('click', { editor: this }, function (event) {
             event.data.editor.help();
         });
+        $('#pref_button').on('click', { editor: this }, function (event) {
+            event.data.editor.preferences();
+        });
 
         this.turtle_options = {
             turtle_colour: 'MediumOrchid',
@@ -230,6 +233,10 @@ class TurtleEditor {
 
         ipcRenderer.on('help.docs', (event, message) => {
             this.help(event);
+        });
+
+        ipcRenderer.on('file.preferences', (event, message) => {
+            this.preferences(event);
         });
 
         ipcRenderer.on('view.theme', (event, message) => {
@@ -546,6 +553,27 @@ class TurtleEditor {
         });
 
         win.loadURL(`file://${__dirname}/help.html`);
+        win.once('ready-to-show', () => {
+            win.setMenuBarVisibility(false);
+            win.show();
+        });
+    }
+
+    preferences() {
+        let win = new BrowserWindow({
+            width: 800,
+            height: 600,
+            show: false,
+            backgroundColor: 'whitesmoke',
+            parent: require('electron').remote.getCurrentWindow(),
+            modal: true
+        });
+
+        win.on('closed', () => {
+            win = null;
+        });
+
+        win.loadURL(`file://${__dirname}/preferences.html`);
         win.once('ready-to-show', () => {
             win.setMenuBarVisibility(false);
             win.show();

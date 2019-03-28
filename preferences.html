@@ -1,0 +1,48 @@
+<html>
+<meta charset="UTF-8">
+<!-- <title>PicoTurtle</title> -->
+<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+<style>
+    html {
+        font-size: 13px;
+        height: 100%;
+    }
+
+    body {
+        overflow: auto;
+    }
+
+    footer {
+        background: whitesmoke;
+    }
+</style>
+
+<body class="container">
+    <div class="row pb-5">
+        <div class="col-12">
+            PicoTurtle Preferences
+            <div id="doc"></div>
+        </div>
+    </div>
+    <footer class="fixed-bottom w-100">
+        <div class="w-100 text-right p-1 m-1">
+            <button id="close_button" class="btn btn-secondary btn-sm mr-2">Close</button>
+        </div>
+    </footer>
+</body>
+<!-- See https://stackoverflow.com/questions/50283710/is-not-defined-using-jquery-with-electron-js -->
+<!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+
+<!-- normal script imports etc  -->
+<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+<!-- <script src="scripts/vendor.js"></script> -->
+
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
+
+<script>
+    require('./preferences.js');
+</script>
+
+</html>

@@ -213,6 +213,14 @@ const template = [
         }
       },
       { type: 'separator' },
+      {
+        label: 'Preferences',
+        accelerator: 'F12',
+        click: (menuItem, browserWindow, event) => {
+          browserWindow.webContents.send('file.preferences', '');
+        }
+      },
+      { type: 'separator' },
       { role: 'close' }
     ]
   },
