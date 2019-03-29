@@ -28,8 +28,8 @@ function getPythonPath() {
 }
 
 class PythonBinding {
-    constructor() {
-        //do nothing
+    constructor(preferences) {
+        this.preferences = preferences;
     }
 
     async available() {
