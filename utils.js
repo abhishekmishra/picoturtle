@@ -2,13 +2,35 @@ const url = require('url');
 const { env } = require('./env');
 const path = require('path');
 
-const preferenceLabels = {
-    "appearance": "Appearance",
-    "python": "Python",
-    "csharp": "C#",
-    "theme": "Theme",
-    "pathToMsBuild": "MSBuild Path",
-    "pathToPython3": "Python3 Path"
+const preferenceConfig = {
+    "appearance": {
+        label: "Appearance",
+        type: "group"
+    },
+    "python": {
+        label: "Python",
+        type: "group"
+    },
+    "csharp": {
+        label: "C#",
+        type: "group"
+    },
+    "theme": {
+        label: "Theme",
+        type: "select",
+        options: [
+            {key: "Dark", value: "dark" },
+            {key: "Light", value: "light" }
+        ]
+    },
+    "pathToMsBuild": {
+        label: "MSBuild Path",
+        type: "path"
+    },
+    "pathToPython3": {
+        label: "Python3 Path",
+        type: "path"
+    }
 }
 
 function sleep(ms) {
@@ -48,4 +70,4 @@ module.exports.sleep = sleep;
 module.exports.getTurtlePort = getTurtlePort;
 module.exports.getSampleFilePath = getSampleFilePath;
 module.exports.setTheme = setTheme;
-module.exports.preferenceLabels = preferenceLabels;
+module.exports.preferenceConfig = preferenceConfig;

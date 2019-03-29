@@ -1,6 +1,6 @@
 const Store = require('electron-store');
 const setTheme = require('./utils').setTheme;
-const preferenceLabels = require('./utils').preferenceLabels;
+const preferenceConfig = require('./utils').preferenceConfig;
 
 // Application Config
 const store = new Store({
@@ -18,8 +18,8 @@ console.log(store.path);
 
 for (var item in store.store) {
     let label = item;
-    if (item in preferenceLabels) {
-        label = preferenceLabels[item];
+    if (item in preferenceConfig) {
+        label = preferenceConfig[item].label;
     }
     $('#prefmenu').append(
         '<a id="pref_' + item + '" href="#" class="list-group-item list-group-item-action list-group-item-secondary"'
@@ -45,8 +45,8 @@ function showPage(item) {
     $('#prefitems').html('');
     for (var x in store.get(item)) {
         let label = x;
-        if (x in preferenceLabels) {
-            label = preferenceLabels[x];
+        if (x in preferenceConfig) {
+            label = preferenceConfig[x].label;
         }
         $('#prefitems').append(
             '<a href="#" class="list-group-item list-group-item-dark">'
