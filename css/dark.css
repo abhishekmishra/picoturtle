@@ -87,9 +87,9 @@ html, body, div {
 }
 
 .statusbar-item {
-  border-style: inset;
-  border-color: silver;
-  border-width: 2px;
+  border-style: solid;
+  border-color: gray;
+  border-width: 1px;
   margin-top: 1px;
   margin-bottom: 1px;
   margin-left: 0px;
