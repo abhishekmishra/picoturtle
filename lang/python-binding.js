@@ -64,10 +64,16 @@ class PythonBinding {
                 options);
             console.log(output);
             this.pythonVersionStr = output.stdout + output.stderr;
-            if (this.pythonVersionStr.startsWith('Python 3')) {
-                is_available = true;
+            let reason = 'PicoTurtle python support requires Python version 3. ';
+            if (output.error) {
+                reason += output.error;
+            } else {
+                reason += 'Current version is ' + this.pythonVersionStr;
+                if (this.pythonVersionStr.startsWith('Python 3')) {
+                    is_available = true;
+                }
             }
-            let reason = 'PicoTurtle python support requires Python version 3. Current version is ' + this.pythonVersionStr;
+
             return [is_available, reason];
         } catch (error) {
             return [false, 'PicoTurtle Python support requires Python version 3. ' + error];
