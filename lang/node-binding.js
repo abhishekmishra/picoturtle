@@ -67,8 +67,8 @@ class NodeJSBinding {
         //do nothing
     }
 
-    async available() {
-        return Promise.resolve(true);
+    available() {
+        return [true, ''];
     }
 
     canExecFile() {
@@ -200,6 +200,10 @@ class NodeJSBinding {
 
     getFileExtensions() {
         return ['js'];
+    }
+
+    getSetupInstructions() {
+        return 'No Setup Required';
     }
 }
 

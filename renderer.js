@@ -118,9 +118,9 @@ class TurtleEditor {
         });
 
         this.bindings = {
-            'javascript': new NodeJSBinding(),
-            'python': new PythonBinding(),
-            'csharp': new CSharpBinding(),
+            'javascript': new NodeJSBinding(store),
+            'python': new PythonBinding(store),
+            'csharp': new CSharpBinding(store),
         };
 
         this.sampleSelected = false;
@@ -158,7 +158,10 @@ class TurtleEditor {
             event.data.editor.export();
         });
         $('#editor_language_select').on('change', { editor: this }, function (event) {
-            event.data.editor.setLanguage(this.value);
+            let canChange = event.data.editor.setLanguage(this.value);
+            if (!canChange) {
+                $(this).val(event.data.editor.language);
+            }
         });
         $('#editor_sample_select').on('change', { editor: this }, function (event) {
             event.data.editor.setSample(this.value);
@@ -291,35 +294,54 @@ class TurtleEditor {
     }
 
     setLanguage(name) {
-        this.confirmCloseIfEditorDirty(() => {
-            this.changeLanguage(name);
-        });
+        let ok = this.confirmCloseIfEditorDirtySync();
+        if (ok) {
+            return this.changeLanguage(name);
+        }
+        return false;
     }
 
     changeLanguage(name) {
         if (this.language !== name) {
-            let lang_for_current = this.getLanguageForCurrentFile();
-            if (lang_for_current == null || lang_for_current == name || !this.isDirty()) {
-                this.language = name;
+            let available = this.bindings[name].available();
+            if (available[0] == true) {
+                console.log('Python version is ' + available[1]);
+                let lang_for_current = this.getLanguageForCurrentFile();
+                if (lang_for_current == null || lang_for_current == name || !this.isDirty()) {
+                    this.language = name;
 
-                monaco.editor.setModelLanguage(this.editor.getModel(), name);
-                $('#editor_language_select').val(this.language);
+                    monaco.editor.setModelLanguage(this.editor.getModel(), name);
+                    $('#editor_language_select').val(this.language);
 
-                $('#editor_sample_select').find('option')
-                    .remove()
-                    .end();
+                    $('#editor_sample_select').find('option')
+                        .remove()
+                        .end();
 
-                this.bindings[this.language].getSamples().forEach(element => {
-                    $('#editor_sample_select').append('<option value="' + element.file + '">' + element.name + '</option>').val('');
-                });
-            } else {
-                $('#editor_language_select').val(this.language);
+                    this.bindings[this.language].getSamples().forEach(element => {
+                        $('#editor_sample_select').append('<option value="' + element.file + '">' + element.name + '</option>').val('');
+                    });
+                    return true;
+                } else {
+                    // $('#editor_language_select').val(this.language);
+                    dialog.showErrorBox(
+                        'Error changing language',
+                        'Cannot change language to ' + name + ' because the file being edited is not a ' + name + ' file.'
+                    );
+                    return false;
+                }
+            }
+            else {
+                console.error(available[1]);
                 dialog.showErrorBox(
-                    'Error changing language',
-                    'Cannot change language to ' + name + ' because the file being edited is not a ' + name + ' file.'
+                    'Language ' + name + ' is not available.',
+                    'Cannot change language to ' + name + ' because ' + name + ' is not available.'
+                    + '\n\nDetails: ' + available[1]
+                    + '\n\nSetup Instructions: ' + this.bindings[name].getSetupInstructions()
                 );
+                return false;
             }
         }
+        return true;
     }
 
     setSample(name) {
@@ -450,13 +472,17 @@ class TurtleEditor {
         // Check if the file is dirty and if the current binding
         // supports running text snippets.
         // If not, the user needs to save the file before running.
+        let execFile = true;
+        let execText = false;
         let binding = this.getCurrentBinding();
         let exec = binding.execFile;
         let fvalue = this.file;
         if (this.file == null || this.isDirty()) {
+            execFile = false;
             if (binding.canExecText()) {
                 exec = binding.execText;
                 fvalue = text;
+                execText = true;
             }
             else {
                 dialog.showErrorBox('File not saved', 'You need to save the file to run it!');
@@ -480,39 +506,77 @@ class TurtleEditor {
         $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Drawing started...</li>`);
         this.setStatusBarStatus('running');
 
-        exec(
-            fvalue,
-            (data) => {
-                console.log(`stdout: ${data}`);
-                turtle_console_out(data);
-            },
-            (data) => {
-                console.log(`stderr: ${data}`);
-                turtle_console_error(data);
-            },
-            (code) => {
-                console.log(`child process exited with code ${code}`);
-                if (parseInt(code) == 0) {
-                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
-                } else {
-                    this.setStatusBarStatus('fail');
-                    $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
-                    t.stop();
+        //TODO: remove duplication in the following run calls
+        if (execFile) {
+            binding.execFile(
+                fvalue,
+                (data) => {
+                    console.log(`stdout: ${data}`);
+                    turtle_console_out(data);
+                },
+                (data) => {
+                    console.log(`stderr: ${data}`);
+                    turtle_console_error(data);
+                },
+                (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    if (parseInt(code) == 0) {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                    } else {
+                        this.setStatusBarStatus('fail');
+                        $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                        t.stop();
+                    }
+                },
+                {
+                    name: state.name,
+                    port: port
                 }
-            },
-            {
-                name: state.name,
-                port: port
-            }
-        ).then(() => {
-            console.log('done');
-        }).catch((err) => {
-            console.log('Error running program -> ' + err);
-            t.stop();
-            this.canRun = true;
-            $('#run_button').prop('disabled', false);
-            this.setStatusBarStatus('fail');
-        });
+            ).then(() => {
+                console.log('done');
+            }).catch((err) => {
+                console.log('Error running program -> ' + err);
+                t.stop();
+                this.canRun = true;
+                $('#run_button').prop('disabled', false);
+                this.setStatusBarStatus('fail');
+            });
+        }
+        if (execText) {
+            binding.execText(
+                fvalue,
+                (data) => {
+                    console.log(`stdout: ${data}`);
+                    turtle_console_out(data);
+                },
+                (data) => {
+                    console.log(`stderr: ${data}`);
+                    turtle_console_error(data);
+                },
+                (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    if (parseInt(code) == 0) {
+                        $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Program completed successfully.</li>`);
+                    } else {
+                        this.setStatusBarStatus('fail');
+                        $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">Program encountered an error [${code}].</li>`);
+                        t.stop();
+                    }
+                },
+                {
+                    name: state.name,
+                    port: port
+                }
+            ).then(() => {
+                console.log('done');
+            }).catch((err) => {
+                console.log('Error running program -> ' + err);
+                t.stop();
+                this.canRun = true;
+                $('#run_button').prop('disabled', false);
+                this.setStatusBarStatus('fail');
+            });
+        }
     }
 
     export() {
@@ -599,6 +663,32 @@ class TurtleEditor {
             });
         } else {
             callback_on_continue();
+        }
+    }
+
+    confirmCloseIfEditorDirtySync() {
+        if (this.isDirty()) {
+            let choice = dialog.showMessageBox(require('electron').remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Yes', 'No', 'Cancel'],
+                defaultId: 2,
+                title: 'Save current file?',
+                message: 'Your changes in the editor are not saved. Would you like to save the file before continuing?' +
+                    '\nIf you choose "No" you will lose all unsaved work!.',
+            });
+            console.log(choice);
+            if (choice == 2) {
+                //Cancel and return
+                return false;
+            } else {
+                if (choice == 0) {
+                    //Save and continue
+                    this.saveFile();
+                }
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 }

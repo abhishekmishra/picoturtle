@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 const { getSampleFilePath } = require('../utils');
 const { env } = require('../env');
@@ -28,12 +28,50 @@ function getPythonPath() {
 }
 
 class PythonBinding {
-    constructor(preferences) {
-        this.preferences = preferences;
+    constructor(store) {
+        this.store = store;
+        this.initPythonPath();
     }
 
-    async available() {
-        return Promise.resolve(true);
+    initPythonPath() {
+        this.pathToPython3 = this.store.get('python.pathToPython3');
+        if (this.pathToPython3 === undefined) {
+            let isWin = process.platform === "win32";
+            if (isWin) {
+                this.pathToPython3 = 'python';
+            } else {
+                this.pathToPython3 = 'python3';
+            }
+        }
+        this.pythonVersionStr = '';
+    }
+
+    available() {
+        this.initPythonPath();
+        let is_available = false;
+        try {
+            let penv = JSON.parse(JSON.stringify(process.env));
+            let options = {
+                env: penv,
+                encoding: 'utf-8'
+            };
+            let command_args = ['-V'];
+
+            let python_exec = this.pathToPython3;
+            console.log('will spawn ' + python_exec + ' with args ' + command_args);
+            const output = spawnSync(python_exec,
+                command_args,
+                options);
+            console.log(output);
+            this.pythonVersionStr = output.stdout + output.stderr;
+            if (this.pythonVersionStr.startsWith('Python 3')) {
+                is_available = true;
+            }
+            let reason = 'PicoTurtle python support requires Python version 3. Current version is ' + this.pythonVersionStr;
+            return [is_available, reason];
+        } catch (error) {
+            return [false, 'PicoTurtle Python support requires Python version 3. ' + error];
+        }
     }
 
     canExecFile() {
@@ -45,6 +83,7 @@ class PythonBinding {
     }
 
     async execFile(file, output_cb, error_cb, complete_cb, args) {
+        this.initPythonPath();
         if (!args) args = {};
         if (!args.name) args.name = null;
         if (!args.port) args.port = '3000';
@@ -57,13 +96,9 @@ class PythonBinding {
             };
             let command_args = [file, args.name, args.port];
 
-            let python_exec = 'python3';
-            let isWin = process.platform === "win32";
-            if (isWin) {
-                python_exec = 'python';
-            }
-            console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
-            console.log(penv['PYTHONPATH']);
+            let python_exec = this.pathToPython3;
+            // console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
+            // console.log(penv['PYTHONPATH']);
             const py_proc = spawn(python_exec,
                 command_args,
                 options);
@@ -79,6 +114,7 @@ class PythonBinding {
     }
 
     async execText(text, output_cb, error_cb, complete_cb, args) {
+        this.initPythonPath();
         if (!args) args = {};
         if (!args.name) args.name = null;
         if (!args.port) args.port = '3000';
@@ -92,11 +128,7 @@ class PythonBinding {
 
             let command_args = ['-c', text, args.name, args.port];
 
-            let python_exec = 'python3';
-            let isWin = process.platform === "win32";
-            if (isWin) {
-                python_exec = 'python';
-            }
+            let python_exec = this.pathToPython3;
             //console.log('will spawn ' + python_exec + ' with options ' + JSON.stringify(options));
             const py_proc = spawn(python_exec,
                 command_args,
@@ -147,6 +179,12 @@ class PythonBinding {
 
     getFileExtensions() {
         return ['py'];
+    }
+
+    getSetupInstructions() {
+        return 'PicoTurtle Python support requires Python3 installed.' +
+            '\nInstallation instructions vary for operating systems. Please consult someone who has worked with python to help you set it up.' +
+            '\nOnce you have python3 setup. You can either add it to the system path OR you can edit the "Python->Python 3 Path" setting in the preferences dialog.';
     }
 }
 

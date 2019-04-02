@@ -60,8 +60,8 @@ class CSharpBinding {
         //do nothing
     }
 
-    async available() {
-        return Promise.resolve(true);
+    available() {
+        return [true, ''];
     }
 
     canExecFile() {
@@ -230,6 +230,10 @@ class CSharpBinding {
 
     getFileExtensions() {
         return ['cs'];
+    }
+
+    getSetupInstructions() {
+        return 'TBD';
     }
 }
 
