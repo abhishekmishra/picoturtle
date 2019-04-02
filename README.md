@@ -3,7 +3,7 @@
 
 # <img src="https://raw.githubusercontent.com/abhishekmishra/picoturtle/master/icons/pico.png" alt="logo" height="32px"/> PicoTurtle
 
-A very tiny turtle. Homepage is <a href="https://abhishekmishra.github.io/picoturtle/">here</a>.
+A very tiny turtle. Homepage is <a href="https://abhishekmishra.github.io/picoturtle/">here</a>, where you will find links to the latest release binaries.
 
 ### Run from source
 
