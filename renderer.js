@@ -18,6 +18,7 @@ const { PythonBinding } = require('./lang/python-binding');
 const { CSharpBinding } = require('./lang/csharp-binding');
 const { shell } = require('electron');
 const Store = require('electron-store');
+const store = require('./utils').store;
 
 process.env.NODE_ENV = appenv.env;
 
@@ -50,23 +51,12 @@ $('#homelink').on('click', () => {
 
 $('#homelink').html('PicoTurtle ' + app.getVersion());// + ' © 2019 Abhishek Mishra');
 
-// Application Config
-const store = new Store({
-    defaults: {
-        appearance: {
-            theme: 'dark'
-        },
-        python: {
-            pathToPython3: ''
-        },
-        csharp: {
-            pathToMsBuild: ''
-        }
-    }
-});
-
 // set theme
 setTheme(store.get('appearance.theme'));
+
+store.onDidChange('appearance.theme', (newval, oldval) => {
+    setTheme(newval);
+});
 
 let menuItems = Menu.getApplicationMenu().items;
 menuItems.forEach((mi, i) => {
@@ -305,7 +295,7 @@ class TurtleEditor {
         if (this.language !== name) {
             let available = this.bindings[name].available();
             if (available[0] == true) {
-                console.log('Python version is ' + available[1]);
+                console.log(available[1]);
                 let lang_for_current = this.getLanguageForCurrentFile();
                 if (lang_for_current == null || lang_for_current == name || !this.isDirty()) {
                     this.language = name;

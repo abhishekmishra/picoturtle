@@ -56,12 +56,79 @@ function getCSharpPath() {
 // }
 
 class CSharpBinding {
-    constructor() {
-        //do nothing
+    constructor(store) {
+        this.store = store;
+        this.initPaths();
+    }
+
+    initPaths() {
+        this.pathToMsBuild = this.store.get('csharp.pathToMsBuild');
+        if (this.pathToMsBuild === undefined || this.pathToMsBuild === '') {
+            this.pathToMsBuild = 'msbuild';
+        }
+        this.pathToMono = this.store.get('csharp.pathToMono');
+        if (this.pathToMono === undefined || this.pathToMono === '') {
+            this.pathToMono = 'mono';
+        }
+        this.msBuildVersionStr = '';
     }
 
     available() {
-        return [true, ''];
+        this.initPaths();
+        let is_available = false;
+        try {
+            let penv = JSON.parse(JSON.stringify(process.env));
+            let options = {
+                env: penv,
+                encoding: 'utf-8'
+            };
+            let command_args = ['/ver', '/nologo'];
+
+            let msbuild_exec = this.pathToMsBuild;
+            console.log('will spawn ' + msbuild_exec + ' with args ' + command_args);
+            const output = spawnSync(msbuild_exec,
+                command_args,
+                options);
+            console.log(output);
+            this.msBuildVersionStr = output.stdout + output.stderr;
+            let reason = 'PicoTurtle C# support requires msbuild. Current msbuild version is ' + this.msBuildVersionStr;
+            if (output.error != null) {
+                is_available = false;
+                reason = 'PicoTurtle C# support requires msbuild. ' + output.error;
+            } else {
+                is_available = true;
+            }
+            if (is_available && !isWin) {
+                try {
+                    penv = JSON.parse(JSON.stringify(process.env));
+                    options = {
+                        env: penv,
+                        encoding: 'utf-8'
+                    };
+                    command_args = ['-V'];
+
+                    let mono_exec = this.pathToMono;
+                    console.log('will spawn ' + mono_exec + ' with args ' + command_args);
+                    const output = spawnSync(mono_exec,
+                        command_args,
+                        options);
+                    console.log(output);
+                    let mono_version = output.stdout + output.stderr;
+                    reason += '\n\nPicoTurtle C# support on MacOs/Linux requires mono. Current mono version is ' + mono_version;
+                    if (output.error != null) {
+                        is_available = false;
+                        reason = 'PicoTurtle C# support requires mono. ' + output.error;
+                    } else {
+                        is_available = true;
+                    }
+                } catch (error) {
+                    return [false, 'PicoTurtle C# on MacOs/Linux requires mono. ' + error];
+                }
+            }
+            return [is_available, reason];
+        } catch (error) {
+            return [false, 'PicoTurtle C# support requires msbuild. ' + error];
+        }
     }
 
     canExecFile() {
@@ -73,6 +140,7 @@ class CSharpBinding {
     }
 
     async execFile(file, output_cb, error_cb, complete_cb, args) {
+        this.initPaths();
         if (!args) args = {};
         if (!args.name) args.name = null;
         if (!args.port) args.port = '3000';
@@ -80,14 +148,6 @@ class CSharpBinding {
         // create temp directory
         var tmpobj = tmp.dirSync();
         console.log('Dir: ', tmpobj.name);
-
-        // transfer project files
-        // fs.readdirSync(getCSharpPath()).forEach(file => {
-        //     console.log('copying sample file -> ', file);
-        //     if (file.endsWith('sln') || file.endsWith('csproj')) {
-        //         fs.copyFileSync(path.join(getCSharpPath(), file), path.join(tmpobj.name, path.basename(file)));
-        //     }
-        // });
 
         fs.copySync(getCSharpPath(), tmpobj.name);
 
@@ -114,7 +174,7 @@ class CSharpBinding {
             };
             let command_args = ['cs-pico.csproj'];
 
-            let msbuild_exec = 'msbuild';
+            let msbuild_exec = this.pathToMsBuild;
             console.log('will exec ' + msbuild_exec + ' with options ' + JSON.stringify(options));
             const msbuild_proc = spawnSync(msbuild_exec,
                 command_args,
@@ -152,10 +212,10 @@ class CSharpBinding {
                     env: penv
                 };
                 let command_args = [path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe'), '-n', args.name, '-p', args.port];
-                let dotnet_exec = 'mono';
+                let dotnet_exec = this.pathToMono;
 
                 // we don't need mono to run if we are on windows.
-                if(isWin) {
+                if (isWin) {
                     command_args = ['-n', args.name, '-p', args.port];
                     dotnet_exec = path.join(tmpobj.name, 'bin', 'Debug', 'cs-pico.exe');
                 }
@@ -233,7 +293,11 @@ class CSharpBinding {
     }
 
     getSetupInstructions() {
-        return 'TBD';
+        return 'PicoTurtle C# support requires MsBuild, and on MacOs/Linux additionally requires Mono.'
+            + '\nOn Windows/Macos you need to install Visual Studio. (https://visualstudio.microsoft.com/)'
+            + '\nOn Linux you need to install Mono. (https://www.mono-project.com/)'
+            + '\nOnce installed, you can either add MsBuild (and Mono) to PATH or set the path in the preferences dialog.'
+            + '\n\nNOTE: MacOS does not allow setting paths for apps, therefore the paths have to be setup in the preferences dialog.';
     }
 }
 

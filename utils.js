@@ -1,6 +1,32 @@
 const url = require('url');
 const { env } = require('./env');
 const path = require('path');
+const Store = require('electron-store');
+
+var isWin = process.platform === "win32";
+var isLinux = process.platform === "linux";
+var isMacos = process.platform === "darwin";
+
+const storeOptions = {
+    defaults: {}
+};
+
+function storeSetDefault(key, defaultValue) {
+    if (!store.has(key)) {
+        store.set(key, defaultValue);
+    }
+}
+
+// Application Config
+const store = new Store(storeOptions);
+storeSetDefault('appearance.theme', 'dark');
+if (isWin) {
+    storeSetDefault('python.pathToPython3', 'python');
+} else {
+    storeSetDefault('python.pathToPython3', 'python3');
+}
+storeSetDefault('csharp.pathToMsBuild', 'msbuild');
+storeSetDefault('csharp.pathToMono', 'mono');
 
 const preferenceConfig = {
     "appearance": {
@@ -19,12 +45,16 @@ const preferenceConfig = {
         label: "Theme",
         type: "select",
         options: [
-            {key: "Dark", value: "dark" },
-            {key: "Light", value: "light" }
+            { key: "Dark", value: "dark" },
+            { key: "Light", value: "light" }
         ]
     },
     "pathToMsBuild": {
         label: "MSBuild Path",
+        type: "path"
+    },
+    "pathToMono": {
+        label: "Mono Path <br/><em>(Not used on Windows)</em>",
         type: "path"
     },
     "pathToPython3": {
@@ -71,3 +101,4 @@ module.exports.getTurtlePort = getTurtlePort;
 module.exports.getSampleFilePath = getSampleFilePath;
 module.exports.setTheme = setTheme;
 module.exports.preferenceConfig = preferenceConfig;
+module.exports.store = store;

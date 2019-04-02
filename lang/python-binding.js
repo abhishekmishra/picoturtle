@@ -183,8 +183,9 @@ class PythonBinding {
 
     getSetupInstructions() {
         return 'PicoTurtle Python support requires Python3 installed.' +
-            '\nInstallation instructions vary for operating systems. Please consult someone who has worked with python to help you set it up.' +
-            '\nOnce you have python3 setup. You can either add it to the system path OR you can edit the "Python->Python 3 Path" setting in the preferences dialog.';
+            '\nInstallation instructions vary for operating systems. Please consult someone who has worked with python to help you set it up.'
+            + '\nOnce you have python3 setup. You can either add it to the system path OR you can edit the "Python->Python 3 Path" setting in the preferences dialog.'
+            + '\n\nNOTE: MacOS does not allow setting paths for apps, therefore the paths have to be setup in the preferences dialog.';
     }
 }
 

@@ -1,19 +1,13 @@
 const { dialog } = require('electron').remote;
-const Store = require('electron-store');
 const setTheme = require('./utils').setTheme;
 const preferenceConfig = require('./utils').preferenceConfig;
-
-// Application Config
-const store = new Store({
-    defaults: {
-        appearance: {
-            theme: 'dark'
-        }
-    }
-});
+const store = require('./utils').store;
 
 // set theme
 setTheme(store.get('appearance.theme'));
+store.onDidChange('appearance.theme', (newval, oldval) => {
+    setTheme(newval);
+});
 
 console.log(store.path);
 
@@ -44,7 +38,9 @@ $('#pref_appearance').click();
  */
 function showPage(item) {
     $('#prefitems').html('');
+    console.log(store.get(item));
     for (var x in store.get(item)) {
+        console.log(x);
         let store_name = item + '.' + x;
         let id = 'pref_' + item + '_' + x;
         let label = x;
