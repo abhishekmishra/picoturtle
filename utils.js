@@ -27,6 +27,7 @@ if (isWin) {
 }
 storeSetDefault('csharp.pathToMsBuild', 'msbuild');
 storeSetDefault('csharp.pathToMono', 'mono');
+storeSetDefault('java.pathToJDK', '');
 
 const preferenceConfig = {
     "appearance": {
@@ -39,6 +40,10 @@ const preferenceConfig = {
     },
     "csharp": {
         label: "C#",
+        type: "group"
+    },
+    "java": {
+        label: "Java",
         type: "group"
     },
     "theme": {
@@ -59,6 +64,10 @@ const preferenceConfig = {
     },
     "pathToPython3": {
         label: "Python3 Path",
+        type: "path"
+    },
+    "pathToJDK": {
+        label: "JDK Bin Path <br/><em>(Folder which contains javac and java)</em>",
         type: "path"
     }
 }

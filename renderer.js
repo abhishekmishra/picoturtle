@@ -16,6 +16,7 @@ const { BrowserWindow } = require('electron').remote;
 const { NodeJSBinding } = require('./lang/node-binding');
 const { PythonBinding } = require('./lang/python-binding');
 const { CSharpBinding } = require('./lang/csharp-binding');
+const { JavaBinding } = require('./lang/java-binding');
 const { shell } = require('electron');
 const Store = require('electron-store');
 const store = require('./utils').store;
@@ -111,6 +112,7 @@ class TurtleEditor {
             'javascript': new NodeJSBinding(store),
             'python': new PythonBinding(store),
             'csharp': new CSharpBinding(store),
+            'java': new JavaBinding(store),
         };
 
         this.sampleSelected = false;
