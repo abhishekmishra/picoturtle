@@ -78,9 +78,10 @@ menuItems.forEach((mi, i) => {
 console.log(store.path);
 
 function turtle_console_out(data) {
-    if (data != null) {
+    if (data !== null) {
         let lines = `${data}`.match(/[^\r\n]+/g);
-        if (lines != null) {
+        // console.log('Lines -> ' + lines);
+        if (lines !== null) {
             lines.forEach(element => {
                 $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">${element}</li>`);
             });
@@ -91,9 +92,12 @@ function turtle_console_out(data) {
 function turtle_console_error(data) {
     if (data != null) {
         let lines = `${data}`.match(/[^\r\n]+/g);
-        lines.forEach(element => {
-            $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">${element}</li>`);
-        });
+        // console.log('Lines -> ' + lines);
+        if (lines !== null) {
+            lines.forEach(element => {
+                $('#turtle_console').append(`<li class="stderrln m-0 p-0 pl-1">${element}</li>`);
+            });
+        }
     }
 }
 
@@ -503,12 +507,16 @@ class TurtleEditor {
             binding.execFile(
                 fvalue,
                 (data) => {
-                    console.log(`stdout: ${data}`);
-                    turtle_console_out(data);
+                    if (data !== null) {
+                        console.log(`stdout: ${data}`);
+                        turtle_console_out(data);
+                    }
                 },
                 (data) => {
-                    console.log(`stderr: ${data}`);
-                    turtle_console_error(data);
+                    if (data !== null) {
+                        console.log(`stderr: ${data}`);
+                        turtle_console_error(data);
+                    }
                 },
                 (code) => {
                     console.log(`child process exited with code ${code}`);

@@ -8,10 +8,15 @@ const rimraf = require('rimraf');
 
 var isWin = process.platform === "win32";
 
+var pathSep = ':';
+if(isWin) {
+    pathSep = ';';
+}
+
 const TEMPLATE = `import in.abhishekmishra.picoturtle.Turtle;
 import in.abhishekmishra.picoturtle.TurtleState;
 
-public class Main
+public class <<ClassName>> //change this to match the file name
 {
     public static void main(String[] args)
     {
@@ -149,31 +154,20 @@ class JavaBinding {
         var tmpobj = tmp.dirSync();
         console.log('Dir: ', tmpobj.name);
 
-        // fs.copySync(getCSharpPath(), tmpobj.name);
-
-        // // change paths in project file
-        // let inputFile = path.join(tmpobj.name, 'cs-pico.javaproj');
-        // var data = fs.readFileSync(inputFile, 'utf8');
-        // var result = data.replace(/PROGRAM_FILE/g, path.basename(file));
-        // // console.log(result);
-        // fs.writeFileSync(inputFile, result);
-
         // copy program file
         fs.copyFileSync(file, path.join(tmpobj.name, path.basename(file)));
 
         console.log(tmpobj.name);
 
         // build project in temp folder
-
         let build_good = true;
         try {
             let penv = JSON.parse(JSON.stringify(process.env));
-            
             let options = {
                 cwd: tmpobj.name,
                 env: penv
             };
-            let command_args = ['-classpath', '.:' + getPicoturtleJavaLibPath(), path.basename(file)];
+            let command_args = ['-encoding', 'UTF-8', '-classpath', '.' + pathSep + getPicoturtleJavaLibPath(), path.basename(file)];
 
             let javac_exec = this.pathToJavac;
             console.log('will exec ' + javac_exec + ' with args ' + command_args + ' and options ' + JSON.stringify(options));
@@ -181,14 +175,17 @@ class JavaBinding {
                 command_args,
                 options);
 
-            console.log(`${javac_proc.stdout}`);
-            if (javac_proc.stderr != null) {
+            if (javac_proc.stdout !== null) {
+                console.log(`${javac_proc.stdout}`);
+            }
+            if (javac_proc.stderr !== null) {
                 console.log(`${javac_proc.stderr}`);
             }
             if (javac_proc.status != 0) {
                 build_good = false;
                 error_cb('Build failed for ' + file);
-                error_cb(`${javac_proc.stdout}`);
+                error_cb(javac_proc.stderr);
+                error_cb(javac_proc.stdout);
                 //cleanup temp directory
                 console.log('Deleting ' + tmpobj.name);
                 rimraf(tmpobj.name, () => { console.log('Deleted') });
@@ -200,8 +197,12 @@ class JavaBinding {
             // msbuild_proc.stderr.on('data', error_cb);
             // msbuild_proc.on('close', complete_cb);
         } catch (error) {
+            build_good = false;
             error_cb(error);
-        }
+            console.log('Deleting ' + tmpobj.name);
+            rimraf(tmpobj.name, () => { console.log('Deleted') });
+            return Promise.reject('Build failed for ' + file);
+    }
 
 
         // execute
@@ -212,7 +213,7 @@ class JavaBinding {
                     cwd: tmpobj.name,
                     env: penv
                 };
-                let command_args = ['-cp', '.:' + getPicoturtleJavaLibPath(), path.basename(file).replace('.java', ''), '-n', args.name, '-p', args.port];
+                let command_args = ['-Dfile.encoding=UTF-8', '-cp', '.' + pathSep + getPicoturtleJavaLibPath(), path.basename(file).replace('.java', ''), '-n', args.name, '-p', args.port];
                 let java_exec = this.pathToJava;
 
                 console.log('will spawn ' + java_exec + ' with args ' + command_args + ' and options ' + JSON.stringify(options));
@@ -266,7 +267,7 @@ class JavaBinding {
             },
             {
                 name: "Text",
-                file: getSampleFilePath('text-demo.java')
+                file: getSampleFilePath('textdemo.java')
             },
             {
                 name: "Fern",
@@ -289,7 +290,7 @@ class JavaBinding {
 
     getSetupInstructions() {
         return 'PicoTurtle Java support requires javac (the compiler) and java (the runtime).'
-            + '\nYou can install Oracle JDK for your platform ().'
+            + '\nYou can install Oracle JDK for your platform (https://www.oracle.com/technetwork/java/javase/downloads/index.html).'
             + '\nOnce installed, you can either add the JDK bin folder to PATH or set the path in the preferences dialog.'
             + '\n\nNOTE: MacOS does not allow setting paths for apps, therefore the paths have to be setup in the preferences dialog.';
     }
