@@ -5,6 +5,7 @@ const { env } = require('../env');
 const tmp = require('tmp');
 const fs = require('fs-extra');
 const rimraf = require('rimraf');
+const PICOTURTLE_JAVA_RELEASE_VERSION = require('../utils').PICOTURTLE_JAVA_RELEASE_VERSION;
 
 var isWin = process.platform === "win32";
 
@@ -42,10 +43,11 @@ public class <<ClassName>> //change this to match the file name
 `;
 
 function getPicoturtleJavaLibPath() {
+    var lib_name = 'picoturtle-java-' + PICOTURTLE_JAVA_RELEASE_VERSION + '-jar-with-dependencies.jar';
     if (env == 'dev') {
-        return path.join(__dirname, '..', '..', 'picoturtle-java', 'target', 'picoturtle-java-0.0.1-SNAPSHOT-jar-with-dependencies.jar');
+        return path.join(__dirname, '..', 'client', 'java', lib_name);
     } else {
-        return path.join(__dirname, '..', '..', 'client', 'csharp');
+        return path.join(__dirname, '..', '..', 'client', 'java', lib_name);
     }
 }
 

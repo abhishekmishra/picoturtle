@@ -2,6 +2,9 @@ const fs = require('fs-extra');
 const path = require('path');
 const download = require('download');
 const { execSync, execFileSync } = require('child_process');
+
+const PICOTURTLE_JAVA_RELEASE_VERSION='0.0.1';
+
 var isWin = process.platform === "win32";
 var isLinux = process.platform === "linux";
 var isMacos = process.platform === "darwin";
@@ -34,8 +37,12 @@ function getNodejsClientExecutable() {
   return nodejs_client_exec;
 }
 
+function getPicoTurtleJavaLibName() {
+  return 'picoturtle-java-' + PICOTURTLE_JAVA_RELEASE_VERSION + '-jar-with-dependencies.jar';
+}
+
 let extraResource = [
-  path.join('dist', getServerExecutable()), 
+  path.join('dist', getServerExecutable()),
   // path.join('dist', getNodejsClientExecutable())
 ];
 //console.log(extraResource);
@@ -88,6 +95,18 @@ let config = {
         fs.chmodSync(serverFilePath, '755');
       }
 
+      let javaFolder = path.join('client', 'java');
+      if (!fs.existsSync(javaFolder)) {
+        fs.mkdirSync(javaFolder);
+      }
+      if (!fs.existsSync(path.join(javaFolder, getPicoTurtleJavaLibName()))) {
+        await download('https://github.com/abhishekmishra/picoturtle-java/releases/download/v'
+          + PICOTURTLE_JAVA_RELEASE_VERSION
+          + '/'
+          + getPicoTurtleJavaLibName(),
+          javaFolder);
+      }
+
       // let nodeJsClientFilePath = path.join('dist', getNodejsClientExecutable());
       // if (!fs.existsSync(nodeJsClientFilePath)) {
       //   await download('https://github.com/abhishekmishra/picoturtle-nodejs-client/releases/download/v0.0.6/' + getNodejsClientExecutable(), 'dist');
@@ -109,6 +128,11 @@ let config = {
       let csharpFolder = path.join(resourcesFolder, 'client', 'csharp');
       fs.mkdirSync(csharpFolder);
       fs.copySync('./client/csharp', csharpFolder);
+
+      //copy java files
+      let javaFolder = path.join(resourcesFolder, 'client', 'java');
+      fs.mkdirSync(javaFolder);
+      fs.copySync('./client/java', javaFolder);
 
       //create js client folder outside asar
       // let target_nodejs_client = path.join(resourcesFolder, 'client', 'nodejs')
