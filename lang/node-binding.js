@@ -12,6 +12,7 @@ const { font, filltext, stroketext } = require('@picoturtle/picoturtle-nodejs-cl
 const { penup, pendown, penwidth, pencolour } = require('@picoturtle/picoturtle-nodejs-client');
 const { left, right, forward, back } = require('@picoturtle/picoturtle-nodejs-client');
 const { setpos, setx, sety, heading } = require('@picoturtle/picoturtle-nodejs-client');
+const { canvas_size, export_img } = require('@picoturtle/picoturtle-nodejs-client');
 
 let main = async () => {
     /* Create the turtle before using */

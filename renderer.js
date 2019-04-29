@@ -177,6 +177,12 @@ class TurtleEditor {
             limit: 1000,
             cmd_cb: (cmd) => {
                 // do notthing for the moment
+                if (cmd[0] == 'canvas_size') {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Canvas resized.</li>`);
+                }
+                if (cmd[0] == 'export_img') {
+                    $('#turtle_console').append(`<li class="stdoutln m-0 p-0 pl-1">Canvas exported at ` + cmd[1] + `</li>`);
+                }
                 if (cmd[0] == 'stop') {
                     this.canRun = true;
                     $('#run_button').prop('disabled', false);
