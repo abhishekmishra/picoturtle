@@ -41,3 +41,7 @@ Once you've chosen your programming language, you can use the following turtle c
 1. **setx (x)** -> Move the turtle along the x axis, keeping y to it's current value.
 1. **sety (y)** -> Move the turtle along the y axis, keeping x to it's current value.
 1. **heading (angle)** -> Change the heading of the turtle to "angle" degrees.
+
+## Turtle Canvas Commands
+1. **canvas_size (width, height)** -> Change the canvas size to [width X height] pixels.
+1. **export_img (filename)** -> Export the current canvas as a PNG file to the given path.
