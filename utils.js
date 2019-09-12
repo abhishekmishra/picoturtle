@@ -3,7 +3,7 @@ const { env } = require('./env');
 const path = require('path');
 const Store = require('electron-store');
 
-const PICOTURTLE_JAVA_RELEASE_VERSION='0.0.1';
+const PICOTURTLE_JAVA_RELEASE_VERSION='0.0.2';
 
 var isWin = process.platform === "win32";
 var isLinux = process.platform === "linux";

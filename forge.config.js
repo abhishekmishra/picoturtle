@@ -3,7 +3,7 @@ const path = require('path');
 const download = require('download');
 const { execSync, execFileSync } = require('child_process');
 
-const PICOTURTLE_JAVA_RELEASE_VERSION='0.0.1';
+const PICOTURTLE_JAVA_RELEASE_VERSION='0.0.2';
 
 var isWin = process.platform === "win32";
 var isLinux = process.platform === "linux";
@@ -91,7 +91,7 @@ let config = {
     generateAssets: async () => {
       let serverFilePath = path.join('dist', getServerExecutable());
       if (!fs.existsSync(serverFilePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.12/' + getServerExecutable(), 'dist');
+        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.13/' + getServerExecutable(), 'dist');
         fs.chmodSync(serverFilePath, '755');
       }
 
