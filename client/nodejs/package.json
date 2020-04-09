@@ -9,6 +9,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@picoturtle/picoturtle-nodejs-client": "0.0.2"
+    "@picoturtle/picoturtle-nodejs-client": "0.0.14"
   }
 }
