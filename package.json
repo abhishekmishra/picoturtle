@@ -38,7 +38,7 @@
     "electron-store": "^2.0.0",
     "fs-extra": "^7.0.1",
     "get-port": "^4.2.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lock": "^1.1.0",
     "monaco-editor": "^0.15.6",
     "rimraf": "^2.6.3",
