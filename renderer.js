@@ -610,7 +610,11 @@ class TurtleEditor {
             show: false,
             backgroundColor: 'whitesmoke',
             parent: require('electron').remote.getCurrentWindow(),
-            modal: true
+            modal: true,
+            webPreferences: {
+                nodeIntegration: true,
+                enableRemoteModule: true,
+            }          
         });
 
         win.on('closed', () => {
@@ -631,7 +635,11 @@ class TurtleEditor {
             show: false,
             backgroundColor: 'whitesmoke',
             parent: require('electron').remote.getCurrentWindow(),
-            modal: true
+            modal: true,
+            webPreferences: {
+                nodeIntegration: true,
+                enableRemoteModule: true,
+            }          
         });
 
         win.on('closed', () => {
