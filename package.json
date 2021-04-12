@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@picoturtle/picoturtle-nodejs-client": "0.0.15",
-    "@picoturtle/picoturtle-web-canvas": "0.0.11",
+    "@picoturtle/picoturtle-web-canvas": "0.0.12",
     "argparse": "^1.0.10",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
