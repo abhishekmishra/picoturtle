@@ -245,6 +245,9 @@ class TurtleEditor {
         });
 
         $(window).resize(() => {
+            const code_div = $('#turtle_code');
+            // resize code div to the size of container
+            code_div.height(code_div.parent().height());
             this.editor.layout();
         });
 

@@ -13,7 +13,8 @@
       margin: 0px;
       padding: 0px;
       display: grid;
-      grid-template-rows: 24px 10fr 24px;
+      grid-template-rows: 24px calc(100vh - 48px) 24px;
+      overflow: hidden;
     }
 
     .toolbar_container {
@@ -60,16 +61,26 @@
       margin: 0px;
       padding: 2px;
       display: grid;
-      grid-template-columns: 6fr 6fr;
+      grid-template-columns: 1fr 1fr;
       width: 100%;
+      resize: both;
     }
 
     .statusbar_container {
       margin: 0px;
       padding: 2px;
       display: grid;
-      grid-template-columns: 6fr 6fr;
+      grid-template-columns: 1fr 1fr;
       width: 100%;
+    }
+
+    .turtle_code_container {
+      height: 100%;
+    }
+
+    #turtle_code {
+      height: 100%;
+      resize: both;
     }
   </style>
 </head>
@@ -113,11 +124,11 @@
     <!-- Language: <span id="editor_language"></span> -->
   </div>
   <div class="main_container">
-    <div id="turtle_code_container" class="col-6">
+    <!-- <div class="turtle_code_container"> -->
       <div id="turtle_code">
       </div>
-    </div>
-    <div class="d-flex flex-column col-6 h-100 m-0 p-0">
+    <!-- </div> -->
+    <div class="">
       <div id="turtle_toolbar_container" class="row d-flex flex-row m-0 p-0 justify-content-center">
         <div class="form-check ml-1 mr-1">
           <input class="form-check-input" type="checkbox" value="" id="animate" required>
