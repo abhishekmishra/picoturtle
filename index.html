@@ -4,57 +4,115 @@
 <head>
   <meta charset="UTF-8">
   <title>PicoTurtle</title>
-  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="./assets/fontawesome-free-5.7.2-web/css/all.css">
   <link id="theme_css" rel="stylesheet" href="css/light.css">
+  <style>
+    .main_window {
+      height: 100vh;
+      margin: 0px;
+      padding: 0px;
+      display: grid;
+      grid-template-rows: 24px 10fr 24px;
+    }
+
+    .toolbar_container {
+      margin: 0px;
+      padding: 2px;
+      display: grid;
+      grid-template-columns: 4fr 2fr 2fr 4fr;
+      width: 100%;
+    }
+
+    .main_tools {
+      margin: 0px;
+      padding: 0px;
+      height: 24px;
+    }
+
+    .lang_select_tools {
+      margin: 0px;
+      padding: 0px;
+      height: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .example_select_tools {
+      margin: 0px;
+      padding: 0px;
+      height: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    #editor_language_select {
+      margin: 0px;
+      padding: 0px;
+      height: 24px;
+    }
+
+    .util_tools {
+      text-align: right;
+    }
+
+    .main_container {
+      margin: 0px;
+      padding: 2px;
+      display: grid;
+      grid-template-columns: 6fr 6fr;
+      width: 100%;
+    }
+
+    .statusbar_container {
+      margin: 0px;
+      padding: 2px;
+      display: grid;
+      grid-template-columns: 6fr 6fr;
+      width: 100%;
+    }
+  </style>
 </head>
 
-<body class="container-fluid h-100 m-0 p-0 d-flex flex-column">
-  <div class="row m-0 p-0">
-    <div class="toolbar col-12 p-2 m-0">
-      <div class="row m-0 p-0">
-        <div class="col-4 m-0 p-0">
-          <button id="new_button" class="btn btn-secondary btn-sm"><i class="fas fa-file"></i> New</button>
-          <button id="open_button" class="btn btn-secondary btn-sm"><i class="fas fa-folder-open"></i> Open</button>
-          <button id="save_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save</button>
-          <button id="save_as_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save As</button>
-          <button id="run_button" class="btn btn-secondary btn-sm"><i class="fas fa-play"></i> Run</button>
-          <button id="export_button" class="btn btn-secondary btn-sm"><i class="fas fa-file-export"></i> Export</button>
-        </div>
-        <div class="col-2 m-0 p-0">
-          <div class="input-group input-group-smmb-3 input-group-sm">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Language</label>
-            </div>
-            <select id="editor_language_select" class="form-control">
-              <option value="javascript">JavaScript</option>
-              <option value="python">Python</option>
-              <option value="csharp">C#</option>
-              <option value="java">Java</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-2 m-0 p-0">
-          <div class="input-group input-group-smmb-3 input-group-sm">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Sample</label>
-            </div>
-            <select id="editor_sample_select" class="form-control">
-            </select>
-          </div>
-        </div>
-        <div class="col-4 text-right m-0 p-0">
-          <span class="badge badge-light m-1" id="homelink">
-
-          </span>
-          <button id="pref_button" class="btn btn-secondary btn-sm"><i class="fas fa-cog"></i></button>
-          <button id="help_button" class="btn btn-secondary btn-sm"><i class="fas fa-question"></i></button>
-        </div>
-      </div>
-      <!-- Language: <span id="editor_language"></span> -->
+<body class="main_window">
+  <div class="toolbar_container m-0 p-0">
+    <div class="main_tools">
+      <button id="new_button" class="btn btn-secondary btn-sm"><i class="fas fa-file"></i> New</button>
+      <button id="open_button" class="btn btn-secondary btn-sm"><i class="fas fa-folder-open"></i> Open</button>
+      <button id="save_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save</button>
+      <button id="save_as_button" class="btn btn-secondary btn-sm"><i class="fas fa-save"></i> Save As</button>
+      <button id="run_button" class="btn btn-secondary btn-sm"><i class="fas fa-play"></i> Run</button>
+      <button id="export_button" class="btn btn-secondary btn-sm"><i class="fas fa-file-export"></i> Export</button>
     </div>
+    <div class="lang_select_tools">
+      <div class="input-group-prepend" style="text-align: right;">
+        <label class="input-group-text" for="inputGroupSelect01">Language</label>
+      </div>
+      <div>
+        <select id="editor_language_select" class="form-control">
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="csharp">C#</option>
+          <option value="java">Java</option>
+        </select>
+      </div>
+    </div>
+    <div class="example_select_tools">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Sample</label>
+      </div>
+      <select id="editor_sample_select" class="form-control">
+      </select>
+    </div>
+    <div class="util_tools">
+      <span class="badge badge-light m-1" id="homelink">
+      </span>
+      <button id="pref_button" class="btn btn-secondary btn-sm"><i class="fas fa-cog"></i></button>
+      <button id="help_button" class="btn btn-secondary btn-sm"><i class="fas fa-question"></i></button>
+    </div>
+    <!-- Language: <span id="editor_language"></span> -->
   </div>
-  <div class="row flex-grow-1 h-100 m-0 p-0">
+  <div class="main_container">
     <div id="turtle_code_container" class="col-6">
       <div id="turtle_code">
       </div>
@@ -89,7 +147,9 @@
         <div class="col-12 p-0 m-0">
           <div class="row p-0 m-0">
             <div class="col-12 p-0 m-0">
-              <div class="text-left p-0 m-0"><div class="alert alert-dark m-0 p-0 text-center" role="alert">Program output</div></div>
+              <div class="text-left p-0 m-0">
+                <div class="alert alert-dark m-0 p-0 text-center" role="alert">Program output</div>
+              </div>
             </div>
           </div>
           <div class="row p-0 m-0">
@@ -101,7 +161,7 @@
       </div>
     </div>
   </div>
-  <div class="row toolbar m-0 p-0">
+  <div class="statusbar_container toolbar m-0 p-0">
     <div class="col-6 p-1 text text-dark statusbar-item" id="editor_file"></div>
     <div class="col-6 p-1 text text-dark statusbar-item" id="turtle_details">
       <div class="row m-0 p-0">
@@ -109,10 +169,10 @@
           <span class="" id="turtle_name">No Turtle</span>
         </div>
         <div class="col-1 m-0 p-0 text-right">
-            <i id="status_starting" class="fas fa-dot-circle fa-lg text-danger" style="display: none"></i>
-            <i id="status_running" class="fas fa-cog fa-spin fa-lg text-info" style="display: none"></i>
-            <i id="status_fail" class="fas fa-times fa-lg text-danger" style="display: none"></i>
-            <i id="status_success" class="fas fa-check fa-lg text-success" style="display: none"></i>
+          <i id="status_starting" class="fas fa-dot-circle fa-lg text-danger" style="display: none"></i>
+          <i id="status_running" class="fas fa-cog fa-spin fa-lg text-info" style="display: none"></i>
+          <i id="status_fail" class="fas fa-times fa-lg text-danger" style="display: none"></i>
+          <i id="status_success" class="fas fa-check fa-lg text-success" style="display: none"></i>
         </div>
       </div>
     </div>
@@ -142,6 +202,6 @@
   </script>
   <script src="./assets/fontawesome-free-5.7.2-web/js/all.js" />
 
-  </body>
+</body>
 
 </html>
