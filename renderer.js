@@ -248,6 +248,7 @@ class TurtleEditor {
             const code_div = $('#turtle_code');
             // resize code div to the size of container
             code_div.height(code_div.parent().height());
+            code_div.width(code_div.parent().width()/2);
             this.editor.layout();
         });
 
