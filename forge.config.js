@@ -89,12 +89,18 @@ let config = {
   ],
   hooks: {
     generateAssets: async () => {
+      // Generate sass assets
+      const sassOutput = execSync("npm run sass");
+      console.log(sassOutput.toString('utf-8'));
+
+      // Download the server executable
       let serverFilePath = path.join('dist', getServerExecutable());
       if (!fs.existsSync(serverFilePath)) {
-        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.13/' + getServerExecutable(), 'dist');
+        await download('https://github.com/abhishekmishra/picoturtle-server/releases/download/v0.0.14/' + getServerExecutable(), 'dist');
         fs.chmodSync(serverFilePath, '755');
       }
 
+      // Download the java client
       let javaFolder = path.join('client', 'java');
       if (!fs.existsSync(javaFolder)) {
         fs.mkdirSync(javaFolder);
