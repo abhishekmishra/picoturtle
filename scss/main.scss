@@ -11,7 +11,7 @@
     margin               : 0px;
     padding              : 2px;
     display              : grid;
-    grid-template-columns: 4fr 2fr 2fr 4fr;
+    grid-template-columns: 4fr 2fr 2fr 2fr;
     width                : 100%;
 }
 
@@ -60,7 +60,7 @@
     margin               : 0px;
     padding              : 2px;
     display              : grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 4fr 1fr;
     width                : 100%;
 }
 
@@ -74,9 +74,9 @@
 }
 
 #turtle_toolbar_container {
-    display              : grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width                : 100%;
+    display          : grid;
+    grid-template-columns: repeat(3, 100px);
+    width            : 100%;
 }
 
 // from dark.css
