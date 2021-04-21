@@ -210,3 +210,16 @@ option {
     border    : 0px !important;
     color     : whitesmoke !important;
 }
+
+.help_container {
+    margin: 0px;
+    padding: 0px;
+    display: grid;
+    grid-template-rows: calc(100vh - 40px) 40px;
+    height: 100vh;
+    width: 100vw;
+}
+
+.help_doc {
+    overflow: auto;
+}

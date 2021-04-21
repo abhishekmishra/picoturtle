@@ -4,17 +4,11 @@
 <!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
 <link id="main_css" rel="stylesheet" href="out/css/main.css">
 
-<body class="container">
-    <div class="row pb-5">
-        <div class="col-12">
-            <div id="doc"></div>
-        </div>
+<body class="help_container">
+    <div id="doc" class="help_doc"></div>
+    <div class="w-100 text-right p-1 m-1">
+        <button id="close_button" class="btn btn-secondary btn-sm mr-2">Close Help</button>
     </div>
-    <footer class="fixed-bottom w-100">
-        <div class="w-100 text-right p-1 m-1">
-            <button id="close_button" class="btn btn-secondary btn-sm mr-2">Close Help</button>
-        </div>
-    </footer>
 </body>
 <!-- See https://stackoverflow.com/questions/50283710/is-not-defined-using-jquery-with-electron-js -->
 <!-- Insert this line above script imports  -->
