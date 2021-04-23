@@ -232,3 +232,17 @@ option {
     width: 100%;
     vertical-align: middle;
 }
+
+.pref_container {
+    margin: 0px;
+    padding: 0px;
+    display: grid;
+    grid-template-rows: 40px calc(100vh - 80px) 40px;
+    height: 100vh;
+    width: 100vw;
+}
+
+.prefmain {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
