@@ -246,3 +246,12 @@ option {
     display: grid;
     grid-template-columns: 1fr 4fr;
 }
+
+#prefmenu {
+    margin: 2px;
+    padding: 0px;
+    text-align: center;
+    display: grid;
+    grid-template-rows: repeat(auto-fit, 20px);
+    color: whitesmoke;
+}
