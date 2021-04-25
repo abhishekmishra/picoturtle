@@ -253,5 +253,9 @@ option {
     text-align: center;
     display: grid;
     grid-template-rows: repeat(auto-fit, 20px);
+}
+
+#prefmenu a:link {
     color: whitesmoke;
+    text-decoration: none;
 }
