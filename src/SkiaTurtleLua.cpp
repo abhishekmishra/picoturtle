@@ -420,7 +420,23 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     push_skia_turtle_metatable(L);
     lua_setglobal(L, LUA_SKIA_TURTLE_OBJECT);
 
-    runLuaFile(L, "lua/TurtleInit.lua");
+    char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
+    if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0) {
+        printf("Fatal: %s is not set or empty!\n", TURTLE_LUA_DIR_ENV_VAR);
+        return -1;
+    }
+
+    char* setPathCodeStr = (char*) calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
+    if(setPathCodeStr == NULL) {
+        printf("Fatal: Unable to alloc string to set load path in lua!\n");
+    }
+
+    sprintf(setPathCodeStr, "package.path = '%s/?.lua;' .. package.path", turtleLuaDir);
+    printf("Setting path via code -> |%s|\n", setPathCodeStr);
+
+    //runLuaFile(L, "lua/TurtleInit.lua");
+    runLuaScript(L, setPathCodeStr);
+    runLuaScript(L, "require 'TurtleInit'");
 
     const char* fname = NULL;
 
@@ -469,7 +485,8 @@ int runLuaScript(lua_State *luaState, const char *script)
     {
         if (handleLuaError(luaState, luaL_dostring(luaState, script)))
         {
-            printf("Script execution complete.\n");
+            // uncomment for debug only.
+            // printf("Script execution complete.\n");
         }
         return 0;
     }

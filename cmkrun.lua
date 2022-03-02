@@ -25,9 +25,20 @@ Command {
 }
 
 Command {
-    name = 'mazes',
+    name = 'mazes_w_env',
     description = 'generate mazes using lua program at lua/mazes/genmazes.lua',
     fn = function(...)
         runCommand('run', 'picoturtle', 'lua/mazes/genmazes.lua', ...)
+    end
+}
+
+Command {
+    name = 'mazes',
+    description = 'generate mazes using lua program at lua/mazes/genmazes.lua',
+    fn = function(...)
+        if isWindows then
+            -- os.execute('powershell -Command $env:TURTLE_LUA_DIR={lua/}; $env:TURTLE_LUA_DIR; cmkrun mazes_w_env')
+            os.execute('powershell -Command $env:TURTLE_LUA_DIR={lua/}; cmkrun mazes_w_env')
+        end
     end
 }

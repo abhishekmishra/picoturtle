@@ -1,6 +1,4 @@
-package.path = './lua/mazes/?.lua;' .. package.path
-
-local maze = require 'maze'
+local maze = require 'mazes/maze'
 
 local numMazes = 1
 if #arg > 0 then

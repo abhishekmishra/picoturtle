@@ -1,0 +1,1 @@
+- Add license for skia, aseprite(FindSkia), Lua, graphicsmagick (if used)
