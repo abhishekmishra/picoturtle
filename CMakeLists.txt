@@ -79,7 +79,9 @@ add_executable(picoturtle ${PICOTURTLE_SOURCES})
 set_property(TARGET picoturtle PROPERTY CXX_STANDARD 17)
 
 if(WIN32)
-  find_package(skia CONFIG REQUIRED)
+  if (NOT TARGET skia)
+    find_package(skia CONFIG REQUIRED)
+  endif()
   target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-windows/include/skia")
 	target_link_libraries(picoturtle PRIVATE skia skia::skia)
 endif(WIN32)
@@ -91,11 +93,13 @@ if(UNIX)
   link_directories(/usr/lib/x86_64-linux-gnu/)
 
   target_link_libraries(picoturtle PUBLIC OpenGL::OpenGL OpenGL::GLX GLX OpenGL)
-	include(FindSkia)
-  target_include_directories(skia INTERFACE
-    ${SKIA_DIR}/include
-  )
-	target_link_libraries(picoturtle PUBLIC skia)
+  if (NOT TARGET skia)
+  	include(FindSkia)
+    target_include_directories(skia INTERFACE
+      ${SKIA_DIR}/include
+    )
+    target_link_libraries(picoturtle PUBLIC skia)
+  endif()
 endif(UNIX)
 
 find_package(Lua REQUIRED)
