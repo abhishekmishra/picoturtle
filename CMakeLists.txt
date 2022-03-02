@@ -6,10 +6,6 @@ project ( picoturtle LANGUAGES CXX )
 # see https://stackoverflow.com/questions/37128555/getting-cmake-to-build-shared-library-for-msvc
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
 
-# Set the project source dir (just convention)
-set( IMGIDX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
-set( IMGIDX_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} )
-
 # set( CMAKE_CXX_FLAGS " -pthread " )
 
 # Search in the "cmake" directory for the additional CMake modules.
@@ -17,9 +13,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # It's useful to setup the current version of our code in the build system
 # using a `semver` style
-set ( IMGIDX_VERSION_MAJOR 0 )
-set ( IMGIDX_VERSION_MINOR 1 )
-set ( IMGIDX_VERSION_PATCH 0 )
+set ( PICOTURTLE_VERSION_MAJOR 0 )
+set ( PICOTURTLE_VERSION_MINOR 1 )
+set ( PICOTURTLE_VERSION_PATCH 0 )
 
 # https://stackoverflow.com/a/63037953
 include(CheckLibraryExists)
