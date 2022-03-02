@@ -23,3 +23,11 @@ Command {
         end
     end
 }
+
+Command {
+    name = 'mazes',
+    description = 'generate mazes using lua program at lua/mazes/genmazes.lua',
+    fn = function(...)
+        runCommand('run', 'picoturtle', 'lua/mazes/genmazes.lua', ...)
+    end
+}
