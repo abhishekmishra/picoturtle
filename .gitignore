@@ -30,3 +30,44 @@
 *.exe
 *.out
 *.app
+
+
+*~
+~*
+*.swp
+
+docs/
+bin/
+obj/
+.vs/
+x64/
+Debug/
+Release/
+
+# Eclipse files ignored
+.project
+.cproject
+.settings
+
+# CMake gitignore
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+build
+
+*.db
+*.db-journal
+
+.vscode/
+
+# output folder for tests
+out/

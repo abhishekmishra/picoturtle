@@ -1,0 +1,1 @@
+-- simple turtle program to draw a square-- press F5 to runreset()fd(100)rt(90)fd(100)rt(90)fd(100)rt(90)fd(100)rt(180)font("Consolas", 20)filltext("PicoTurtle")print('done.')export_img('test.png')
