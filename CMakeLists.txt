@@ -6,7 +6,7 @@ project ( picoturtle LANGUAGES CXX )
 # see https://stackoverflow.com/questions/37128555/getting-cmake-to-build-shared-library-for-msvc
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
 
-# set( CMAKE_CXX_FLAGS " -pthread " )
+set( CMAKE_CXX_FLAGS " -pthread " )
 
 # Search in the "cmake" directory for the additional CMake modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -99,3 +99,6 @@ endif(UNIX)
 find_package(Lua REQUIRED)
 target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
+
+find_package(unofficial-graphicsmagick CONFIG REQUIRED)
+target_link_libraries(picoturtle PRIVATE unofficial::graphicsmagick::graphicsmagick)
