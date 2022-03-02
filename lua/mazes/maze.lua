@@ -7,7 +7,7 @@ date: 26/02/2022
 author: Abhishek Mishra
 
 © 2022 Abhishek Mishra <abhishekmishra.in>
---]]--
+--]] --
 local WALL = '█'
 local NOWALL = ' '
 local EMPTYCELL = '-'
@@ -31,6 +31,8 @@ function createField(width, height)
     end
     field.width = width
     field.height = height
+    field.mazewidth = (2 * field.width) + 1
+    field.mazeheight = (2 * field.height) + 1
     field.pos = locn(2, 2)
     return field
 end
@@ -40,9 +42,7 @@ function printField(field)
         error('field is nil')
     end
 
-    print(
-        string.format(
-            '==== MAZE [%02d, %02d] =====', field.width, field.height))
+    print(string.format('==== MAZE [%02d, %02d] =====', field.width, field.height))
 
     for i = 1, (2 * field.height) + 1, 1 do
         io.write(' ')
@@ -107,12 +107,8 @@ function validDirection(field, direction)
     end
 
     if valid then
-        -- printLoc(pos, 'dir move ' .. direction .. ' is valid')
         local locInDir = locInDirection(field, direction)
         marker = hasMarker(field, locInDir)
-        -- printLoc(
-        --     locInDir, 'locInDir is valid ' .. tostring(valid) .. ' marker = ' ..
-        --         tostring(marker))
     end
 
     return valid, marker
@@ -162,8 +158,7 @@ function hasMarker(field, loc)
 end
 
 function oob(field, loc)
-    if loc.x < 2 or loc.x > (2 * field.width) or loc.y < 2 or loc.y >
-        (2 * field.height) then
+    if loc.x < 2 or loc.x > (2 * field.width) or loc.y < 2 or loc.y > (2 * field.height) then
         return true
     end
     return false
@@ -197,14 +192,12 @@ end
 
 function moveRemoveWall(field, direction)
     local wallToB = getWallInDirection(field, direction)
-    -- printLoc(wallToB, 'wallToB')
     setVal(field, wallToB, NOWALL)
     if getVal(field, field.pos) ~= BEGIN then
         setVal(field, field.pos, MARKEDCELL)
     end
     move(field, direction)
     setVal(field, field.pos, CURRENTCELL)
-    -- printLoc(field.pos, 'fd.pos')
 end
 
 function printPeekDirs(pd)
@@ -225,25 +218,22 @@ function backupPos(fd)
     for _, dir in ipairs({'N', 'E', 'W', 'S'}) do
         local p = locInDirection(fd, dir)
         local w = getVal(fd, getWallInDirection(fd, dir))
-        -- printLoc(p, 'loc in dir '.. dir .. ' and wall ' .. w .. ' and oob ' .. tostring(oob(fd, p)))
         if (not oob(fd, p)) and (getVal(fd, p) == MARKEDCELL) and (w == NOWALL) then
-            -- printLoc(p, 'found backup pos')
             return p
-        else
-            -- printLoc(p, 'is not backup pos')
         end
     end
     return nil
 end
 
-function createMaze(width, height, seed)
+function createMaze(width, height, seed, debug)
     local fd = createField(width, height)
+    local debug = debug or false
+
     fd.seed = seed or os.time()
     math.randomseed(fd.seed)
 
     -- set starting position as BEGIN
     setVal(fd, fd.pos, BEGIN)
-    -- printField(fd)
 
     -- set previous position to nil
     local prevPos = nil
@@ -261,11 +251,7 @@ function createMaze(width, height, seed)
     local valid, tried = validDirection(fd, direction)
     peekDirs[direction] = true
 
-    -- repeat
     while true do
-        -- printPeekDirs(peekDirs)
-        -- printLoc(fd.pos, 'current')
-        -- print(string.format('direction = %s is valid = %s', direction, valid))
         step = nil
         -- check if direction is valid
         if valid and (not tried) then
@@ -281,10 +267,6 @@ function createMaze(width, height, seed)
 
             -- check if this is a tried direction
             valid, tried = validDirection(fd, direction)
-            -- if valid then
-            --     printLoc(locInDirection(fd, direction), 'peek ' .. direction)
-            --     tried = hasMarker(fd, locInDirection(fd, direction))
-            -- end
 
             local allTried = allPeekDirs(peekDirs)
 
@@ -294,7 +276,6 @@ function createMaze(width, height, seed)
                 else
                     -- if home point then end
                     -- else erase marker and back up
-                    -- printLoc(locInDirection(fd, direction), 'tried')
                     local marker = getVal(fd, fd.pos)
                     setVal(fd, fd.pos, VISITEDCELL)
                     if (marker == BEGIN) then
@@ -306,11 +287,9 @@ function createMaze(width, height, seed)
                             fd.pos = bpos
                             setVal(fd, fd.pos, CURRENTCELL)
                             backedUp = true
-                            -- print('backing up')
                             step = 'backedup'
                             peekDirs = {}
                         else
-                            -- print('backupPos is nil, nowhere to go, we\'re done.')
                             done = true
                             step = 'done'
                         end
@@ -327,9 +306,8 @@ function createMaze(width, height, seed)
             end
         end
 
-        -- print('step = ' .. step)
         if step == 'rotate' or step == 'move' then
-            -- print(step .. ' -- move or rotate on to next cell')
+            -- do nothing
         elseif step == 'done' then
             break
         elseif step == 'moved' or step == 'backedup' then
@@ -341,101 +319,98 @@ function createMaze(width, height, seed)
             error('unknown step')
         end
 
-        -- printField(fd)
-        -- io.read()
+        if debug then
+            printField(fd)
+            io.read()
+        end
     end
     return fd
 end
 
-local fd, mazeseed = createMaze(20, 20)
-printField(fd)
-
-function turtlePrintField(field)
-    if field == nil then
-        error('field is nil')
-    end
-
-    local default_pencolour = function()
-        pencolour(0, 0, 0)
-    end
-
-    local startcell_pencolour = function()
-        pencolour(255, 0, 0)
-    end
-
-    local endcell_pencolour = function()
-        pencolour(0, 255, 0)
-    end
-
-    local cellwidth = 50
-    local cellheight = 50
-
-    local mazewidth = (2 * field.width) + 1
-    local mazeheight = (2 * field.height) + 1
-
-    -- size has margin rows and columns
-    canvas_size(cellwidth * (mazewidth + 2), cellheight * (mazeheight + 4))
-
-    penup()
-
-    default_pencolour()
-
-    penwidth(cellheight)
-    heading(0.0)
-
-    font('Calibri', cellheight)
-    setpos(cellwidth, getheight() - (cellheight * 1.5))
-    pendown()
-    filltext(
-        string.format(
-            'MAZE [%02d, %02d] - #%d', mazewidth, mazeheight, field.seed))
-
-    penup()
-    setpos(cellwidth, getheight() - (cellheight * 2.5))
-    pendown()
-
-    penwidth(cellheight)
-    heading(0.0)
-
-    for i = 1, mazeheight, 1 do
-        for j = 1, mazewidth, 1 do
-            -- io.write(field[i][j] .. ' ')
-            local cell = field[i][j]
-            if i == 2 and j == 2 then
-                startcell_pencolour()
-                forward(cellwidth)
-                default_pencolour()
-            elseif i == (mazeheight - 1) and j == (mazewidth - 1) then
-                endcell_pencolour()
-                forward(cellwidth)
-                default_pencolour()
-            elseif cell == WALL then
-                forward(cellwidth)
-            else
-                penup()
-                forward(cellwidth)
-                pendown()
-            end
-            -- penup()
-            -- forward(cellwidth)
-            -- pendown()
+function turtlePrintField(field, imgfile)
+    if _turtle then
+        if field == nil then
+            error('field is nil')
         end
+
+        local default_pencolour = function()
+            pencolour(0, 0, 0)
+        end
+
+        local startcell_pencolour = function()
+            pencolour(255, 0, 0)
+        end
+
+        local endcell_pencolour = function()
+            pencolour(0, 255, 0)
+        end
+
+        local cellwidth = 50
+        local cellheight = 50
+
+        -- size has margin rows and columns
+        canvas_size(cellwidth * (field.mazewidth + 2), cellheight * (field.mazeheight + 4))
+
         penup()
-        setpos(cellwidth, getheight() - (cellheight * (i + 2.5)))
+
+        default_pencolour()
+
+        penwidth(cellheight)
+        heading(0.0)
+
+        font('Courier', cellheight)
+        setpos(cellwidth, getheight() - (cellheight * 1.5))
         pendown()
+        filltext(string.format('MAZE [%02d, %02d] - #%d', field.mazewidth, field.mazeheight, field.seed))
+
+        penup()
+        setpos(cellwidth, getheight() - (cellheight * 2.5))
+        pendown()
+
+        penwidth(cellheight)
+        heading(0.0)
+
+        for i = 1, field.mazeheight, 1 do
+            for j = 1, field.mazewidth, 1 do
+                local cell = field[i][j]
+                if i == 2 and j == 2 then
+                    startcell_pencolour()
+                    forward(cellwidth)
+                    default_pencolour()
+                elseif i == (field.mazeheight - 1) and j == (field.mazewidth - 1) then
+                    endcell_pencolour()
+                    forward(cellwidth)
+                    default_pencolour()
+                elseif cell == WALL then
+                    forward(cellwidth)
+                else
+                    penup()
+                    forward(cellwidth)
+                    pendown()
+                end
+            end
+            penup()
+            setpos(cellwidth, getheight() - (cellheight * (i + 2.5)))
+            pendown()
+        end
+
+        penup()
+        setpos(cellwidth, cellheight * 0.8)
+        pendown()
+        font('Courier', cellheight * 0.8)
+        filltext(string.format('generated on %s, © 2022 Abhishek Mishra', os.date('%d/%m/%Y %H:%M:%S')))
+
+        if imgfile ~= nil then
+            export_img(imgfile)
+            print('Wrote maze file - ' .. imgfile)        
+        end
+    else
+        error('turtle api is not available')
     end
-
-    penup()
-    setpos(cellwidth, cellheight * 0.8)
-    pendown()
-    font('Calibri', cellheight * 0.8)
-    filltext(
-        string.format(
-            'generated on %s, © 2022 Abhishek Mishra',
-            os.date('%d/%m/%Y %H:%M:%S')))
 end
 
-if _turtle then
-    turtlePrintField(fd)
-    export_img('out/maze0.png')
-end
+return {
+    createMaze = createMaze,
+    printField = printField,
+    turtlePrintField = turtlePrintField
+}

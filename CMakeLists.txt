@@ -65,6 +65,8 @@ set ( PICOTURTLE_LUA_FILES
   lua/samples/text-demo.lua
   lua/samples/tree.lua
   lua/samples/turtle_basic.lua
+  lua/mazes/maze.lua
+  lua/mazes/genmazes.lua
 )
 
 foreach( LUA_FILE IN LISTS PICOTURTLE_LUA_FILES )

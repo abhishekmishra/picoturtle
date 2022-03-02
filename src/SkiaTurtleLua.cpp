@@ -285,7 +285,7 @@ static int skia_turtle_heading(lua_State *L)
 
 static int skia_turtle_export_img(lua_State *L)
 {
-    const char* s = luaL_checkstring(L, lua_gettop(L));
+    const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     SkiaTurtle *t = skia_turtle_getobj(L);
@@ -299,7 +299,7 @@ static int skia_turtle_font(lua_State *L)
     unsigned int sz = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
     lua_pop(L, 1);
 
-    const char* str = luaL_checkstring(L, lua_gettop(L));
+    const char *str = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     SkiaTurtle *t = skia_turtle_getobj(L);
@@ -310,7 +310,7 @@ static int skia_turtle_font(lua_State *L)
 
 static int skia_turtle_filltext(lua_State *L)
 {
-    const char* s = luaL_checkstring(L, lua_gettop(L));
+    const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     SkiaTurtle *t = skia_turtle_getobj(L);
@@ -321,7 +321,7 @@ static int skia_turtle_filltext(lua_State *L)
 
 static int skia_turtle_stroketext(lua_State *L)
 {
-    const char* s = luaL_checkstring(L, lua_gettop(L));
+    const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     SkiaTurtle *t = skia_turtle_getobj(L);
@@ -343,7 +343,6 @@ static int skia_turtle_canvas_size(lua_State *L)
     t->canvas_size(width, height);
     return 0;
 }
-
 
 // Pushes the metatable for Object and creates if it doesnt exist yet
 int push_skia_turtle_metatable(lua_State *L)
@@ -403,7 +402,7 @@ bool handleLuaError(lua_State *luaState, int luaErrorCode)
     }
 }
 
-int initTurtleLuaBinding(lua_State **luaState)
+int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
 {
     // Create Lua State
     (*luaState) = luaL_newstate();
@@ -420,6 +419,30 @@ int initTurtleLuaBinding(lua_State **luaState)
     // Register Object metatable for lua (Create and push it)
     push_skia_turtle_metatable(L);
     lua_setglobal(L, LUA_SKIA_TURTLE_OBJECT);
+
+    runLuaFile(L, "lua/TurtleInit.lua");
+
+    const char* fname = NULL;
+
+    lua_newtable(L);
+    if (argc > 1)
+    {
+        fname = argv[1];
+        if (argc > 2)
+        {
+            for (int i = 2; i < argc; i++)
+            {
+                lua_pushstring(L, argv[i]);
+                lua_seti(L, -2, i - 1);
+            }
+        }
+        //printf("input lua file - %s\n", fname);
+    }
+    lua_setglobal(L, "arg");
+
+    if (fname != NULL) {
+        runLuaFile(L, fname);
+    }
 
     return 0;
 }

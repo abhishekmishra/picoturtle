@@ -10,7 +10,7 @@ extern "C"
 
 #define LUA_SKIA_TURTLE_OBJECT "SkiaTurtle"
 
-int initTurtleLuaBinding(lua_State **luaState);
+int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
