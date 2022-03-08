@@ -32,7 +32,12 @@ local _turtle_functions_names = {
  	"reset"
 }
 
-_turtle = SkiaTurtle.new()
+print(picoturtle)
+for k, v in pairs(picoturtle) do
+	print(k)
+	print(v)
+end
+_turtle = picoturtle.new()
 
 -- For each turtle function in the function names list
 -- create a corresponding global function which calles the
