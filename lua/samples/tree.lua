@@ -1,1 +1,49 @@
--- tree.lua-- Author: Abhishek Mishra-- Date: 15/01/2022---- a recursive tree--reset()function tree(size)    if size < 4 then        forward(size)        forward(-size)        return    end        forward(size/4)    left(60)    tree(size/2)    right(60)    forward(size/4)    right(35)    tree(size/2)    left(35)    forward(size/4)    left(30)    tree(size/2)    right(30)    forward(size/4)    right(25)    tree(size/2)    left(25)    forward(-size)endpenwidth(1)penup()back(100)pendown()pencolour(165, 42, 42)tree(128)
+-- tree.lua
+-- Author: Abhishek Mishra
+-- Date: 15/01/2022
+--
+-- a recursive tree
+--
+
+t:reset()
+
+function tree(size)
+    if size < 4 then
+        t:forward(size)
+        t:forward(-size)
+        return
+    end
+    
+    t:forward(size/4)
+
+    t:left(60)
+    tree(size/2)
+    t:right(60)
+
+    t:forward(size/4)
+
+    t:right(35)
+    tree(size/2)
+    t:left(35)
+
+    t:forward(size/4)
+
+    t:left(30)
+    tree(size/2)
+    t:right(30)
+
+    t:forward(size/4)
+
+    t:right(25)
+    tree(size/2)
+    t:left(25)
+
+    t:forward(-size)
+end
+
+t:penwidth(1)
+t:penup()
+t:back(100)
+t:pendown()
+t:pencolour(165, 42, 42)
+tree(128)

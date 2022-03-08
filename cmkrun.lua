@@ -42,3 +42,19 @@ Command {
         end
     end
 }
+
+Command {
+    name = 'turtle',
+    description = 'run picoturtle with args',
+    fn = function(...)
+        runCommand('run', 'picoturtle', ...)
+    end
+}
+
+Command {
+    name = 'samples',
+    description = 'run picoturtle samples',
+    fn = function(...)
+        runCommand('turtle', 'lua/runSamples.lua')
+    end
+}

@@ -5,32 +5,32 @@
 -- text demo
 --
 
-reset()
+t:reset()
 
-penup()
-back(250)
-right(90)
-forward(200)
-left(90)
+t:penup()
+t:back(250)
+t:right(90)
+t:forward(200)
+t:left(90)
     
-pendown()
-right(90)
+t:pendown()
+t:right(90)
 
 for i = 1, 40, 1 do
     local fs = i
     if i%2 == 0 then
-        font('Mangal', fs)
-        pencolour(255, 128, 128)
-        filltext('पीको टर्टल')
+        t:font('Mangal', fs)
+        t:pencolour(255, 128, 128)
+        t:filltext('पीको टर्टल')
     else
-        font('Calibri', fs)
-        pencolour(255, 128, 255)
-        filltext('PicoTurtle')
+        t:font('Calibri', fs)
+        t:pencolour(255, 128, 255)
+        t:filltext('PicoTurtle')
     end
-    penup()
-    left(90 + 2)
+    t:penup()
+    t:left(90 + 2)
     local mv = i * 0.5
-    forward(mv)
-    right(90)
-    pendown()
+    t:forward(mv)
+    t:right(90)
+    t:pendown()
 end

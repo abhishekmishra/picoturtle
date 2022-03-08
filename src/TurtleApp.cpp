@@ -65,20 +65,21 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     char *turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
     if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
     {
-        printf("Fatal: %s is not set or empty!\n", TURTLE_LUA_DIR_ENV_VAR);
-        return -1;
+        printf("Warning: %s is not set or empty!\n", TURTLE_LUA_DIR_ENV_VAR);
     }
-
-    char *setPathCodeStr = (char *)calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
-    if (setPathCodeStr == NULL)
+    else
     {
-        printf("Fatal: Unable to alloc string to set load path in lua!\n");
+        char *setPathCodeStr = (char *)calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
+        if (setPathCodeStr == NULL)
+        {
+            printf("Fatal: Unable to alloc string to set load path in lua!\n");
+        }
+
+        sprintf(setPathCodeStr, "package.path = '%s/?.lua;' .. package.path", turtleLuaDir);
+        // printf("Setting path via code -> |%s|\n", setPathCodeStr);
+
+        runLuaScript(L, setPathCodeStr);
     }
-
-    sprintf(setPathCodeStr, "package.path = '%s/?.lua;' .. package.path", turtleLuaDir);
-    // printf("Setting path via code -> |%s|\n", setPathCodeStr);
-
-    runLuaScript(L, setPathCodeStr);
 
     // run the TurtleInit file
     // TODO: removed global function bindings, completely remove later

@@ -9,46 +9,45 @@
 -- calls itself recursively
 -- till the size is less than 1
 -- to draw the fern.
-
-reset()
+t:reset()
 
 function fern(size, sign)
     if (size < 1) then
         return
     end
     
-    forward(size)
+    t:forward(size)
 
-    right(70 * sign)
+    t:right(70 * sign)
     fern(size/2, sign*-1)
-    left(70 * sign)
+    t:left(70 * sign)
 
-    forward(size)
+    t:forward(size)
 
-    left(70 * sign)
+    t:left(70 * sign)
     fern(size/2, sign)
-    right(70 * sign)
+    t:right(70 * sign)
 
-    right(7 * sign)
+    t:right(7 * sign)
     fern(size - 2, sign)
-    left(7 * sign)
+    t:left(7 * sign)
 
-    forward(-size)
-    forward(-size)
+    t:forward(-size)
+    t:forward(-size)
 end
 
-penup()
-back(200)
+t:penup()
+t:back(200)
 
-right(90)
-back(20)
-pencolour(200, 200, 0)
-font('Calibri', 50)
-filltext('Fern')
-forward(20)
-left(90)
-forward(50)
+t:right(90)
+t:back(20)
+t:pencolour(200, 200, 0)
+t:font('Calibri', 50)
+t:filltext('Fern')
+t:forward(20)
+t:left(90)
+t:forward(50)
 
-pencolour(128, 128, 0)
-pendown()
+t:pencolour(128, 128, 0)
+t:pendown()
 fern(25, 1)

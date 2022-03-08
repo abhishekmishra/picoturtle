@@ -5,6 +5,9 @@ runSamples.lua: execute all items in the turtle samples
 date: 25/02/2022
 author: Abhishek Mishra
 --]]
+local picoturtle = require "picoturtle"
+
+t = picoturtle.new()
 
 local samplesDir = "lua/samples/"
 local sampleOutDir = "out/"
@@ -26,12 +29,12 @@ for _, sample in ipairs(samplesList) do
         local sampleOutFile = sampleOutDir .. sample .. '.png'
         print('==== Run '.. sampleFile .. ' and export ' .. sampleOutFile .. " ====")
 
-        clear()
-        reset()
+        t:clear()
+        t:reset()
 
         dofile(sampleFile)
 
-        stop()
-        export_img(sampleOutFile)
+        -- t:stop()
+        t:export_img(sampleOutFile)
     end
 end
