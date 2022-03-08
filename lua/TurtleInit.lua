@@ -32,11 +32,6 @@ local _turtle_functions_names = {
  	"reset"
 }
 
-print(picoturtle)
-for k, v in pairs(picoturtle) do
-	print(k)
-	print(v)
-end
 _turtle = picoturtle.new()
 
 -- For each turtle function in the function names list
