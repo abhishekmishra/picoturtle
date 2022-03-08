@@ -43,10 +43,6 @@ static void stackDump(lua_State *L)
     printf("\n"); /* end the listing */
 }
 
-// see https://stackoverflow.com/a/35609473/9483968
-// declaration so we can use this in object_new function
-// int push_skia_turtle_metatable(lua_State *L);
-
 static int skia_turtle_free(lua_State *L)
 {
     delete *static_cast<PicoTurtle **>(luaL_checkudata(L, 1, LUA_PICOTURTLE_OBJECT));
@@ -345,50 +341,6 @@ static int skia_turtle_canvas_size(lua_State *L)
     t->canvas_size(width, height);
     return 0;
 }
-
-// Pushes the metatable for Object and creates if it doesnt exist yet
-// int push_skia_turtle_metatable(lua_State *L)
-// {
-//     if (luaL_newmetatable(L, LUA_PICOTURTLE_OBJECT))
-//     {
-//         static const luaL_Reg functions[] =
-//             {
-//                 {"new", skia_turtle_new},
-//                 {"__gc", skia_turtle_free},
-//                 {"getwidth", skia_turtle_getwidth},
-//                 {"setwidth", skia_turtle_setwidth},
-//                 {"getheight", skia_turtle_getheight},
-//                 {"setheight", skia_turtle_setheight},
-//                 {"penup", skia_turtle_penup},
-//                 {"pendown", skia_turtle_pendown},
-//                 {"penwidth", skia_turtle_penwidth},
-//                 {"pencolour", skia_turtle_pencolour},
-//                 {"stop", skia_turtle_stop},
-//                 {"home", skia_turtle_home},
-//                 {"clear", skia_turtle_clear},
-//                 {"reset", skia_turtle_reset},
-//                 {"forward", skia_turtle_forward},
-//                 {"back", skia_turtle_back},
-//                 {"setpos", skia_turtle_setpos},
-//                 {"getx", skia_turtle_getx},
-//                 {"gety", skia_turtle_gety},
-//                 {"setx", skia_turtle_setx},
-//                 {"sety", skia_turtle_sety},
-//                 {"right", skia_turtle_right},
-//                 {"left", skia_turtle_left},
-//                 {"heading", skia_turtle_heading},
-//                 {"export_img", skia_turtle_export_img},
-//                 {"font", skia_turtle_font},
-//                 {"filltext", skia_turtle_filltext},
-//                 {"stroketext", skia_turtle_stroketext},
-//                 {"canvas_size", skia_turtle_canvas_size},
-//                 {nullptr, nullptr}};
-//         luaL_setfuncs(L, functions, 0);
-//         lua_pushvalue(L, -1);
-//         lua_setfield(L, -2, "__index");
-//     }
-//     return 1;
-// }
 
 static const luaL_Reg PicoTurtle_funcs[] =
     {
