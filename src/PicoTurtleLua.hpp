@@ -9,8 +9,7 @@ extern "C"
 #include "lualib.h"
 
 #define LUA_PICOTURTLE_OBJECT "PicoTurtle"
-#define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
 
 LUALIB_API int luaopen_picoturtle(lua_State* L);
 
-}
+} //end extern "C"

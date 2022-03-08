@@ -6,6 +6,8 @@
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
+#define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
+
 int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
@@ -52,10 +54,6 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     // Add standard libraries to Lua Virtual Machine
     luaL_openlibs(L);
 
-    // Register Object metatable for lua (Create and push it)
-    // push_skia_turtle_metatable(L);
-    // lua_setglobal(L, LUA_PICOTURTLE_OBJECT);
-
     // picoturtle = require "picoturtle"
     luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
     lua_pop(L, 1); /* remove result from previous call */
@@ -76,7 +74,8 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     sprintf(setPathCodeStr, "package.path = '%s/?.lua;' .. package.path", turtleLuaDir);
     printf("Setting path via code -> |%s|\n", setPathCodeStr);
 
-    // runLuaFile(L, "lua/TurtleInit.lua");
+    // run the TurtleInit file
+    // TODO: shift all code from lua to c calls here
     runLuaScript(L, setPathCodeStr);
     runLuaScript(L, "require 'TurtleInit'");
 
