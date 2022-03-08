@@ -13,121 +13,133 @@
 #define TURTLE_DEFAULT_PENWIDTH 1
 #define TURTLE_DEFAULT_HEADING 90.0f
 
-namespace turtle
+using namespace turtle;
+
+class Turtle;
+
+typedef void (*picoturtle_init_callback)(Turtle *);
+
+class Turtle
 {
-    class Turtle
-    {
-    private:
-        TurtleOptions *Options;
-        std::string Name;
-        std::string Id;
+private:
+    TurtleOptions *Options;
+    std::string Name;
+    std::string Id;
 
-        bool IsPenDown;
-        TurtleColor *PenColor;
-        float PenWidth;
-        // private SolidColorBrush turtleBrush;
+    bool IsPenDown;
+    TurtleColor *PenColor;
+    float PenWidth;
+    // private SolidColorBrush turtleBrush;
 
-        TurtleDimension *Dimension;
-        int Width;
-        int Height;
-        TurtleLocation *Location;
-        TurtleColor *Colour;
-        float Angle;
+    TurtleDimension *Dimension;
+    int Width;
+    int Height;
+    TurtleLocation *Location;
+    TurtleColor *Colour;
+    float Angle;
 
-        // private List<TurtleCommand> commands;
-        // public Canvas Canvas { get; set; }
+    static picoturtle_init_callback init_cb;
 
-        // private readonly SolidColorBrush turtleDrawingBrush;
+    // private List<TurtleCommand> commands;
+    // public Canvas Canvas { get; set; }
 
-        // public FontFamily TurtleFontFamily { get; private set; } = new FontFamily("Arial");
-        // public int TurtleFontSize { get; private set; } = 12;
+    // private readonly SolidColorBrush turtleDrawingBrush;
 
-        // public uint dpi { get; set; }
+    // public FontFamily TurtleFontFamily { get; private set; } = new FontFamily("Arial");
+    // public int TurtleFontSize { get; private set; } = 12;
 
-        // public static Turtle CreateTurtle(string[] args)
-        // {
-        //     return new Turtle(new TurtleOptions(), null);
-        // }
-    public:
-        Turtle();
+    // public uint dpi { get; set; }
 
-        Turtle(TurtleOptions *options); //, Canvas canvas);
+    // public static Turtle CreateTurtle(string[] args)
+    // {
+    //     return new Turtle(new TurtleOptions(), null);
+    // }
+public:
+    Turtle();
 
-        TurtleColor* getPenColor();
+    Turtle(TurtleOptions *options); //, Canvas canvas);
 
-        int getWidth();
-        void setWidth(int w);
-        int getHeight();
-        void setHeight(int h);
+    std::string getName();
+    std::string getId();
 
-        float getCanvasLocationX();
-        float getCanvasLocationY();
-        float getX();
-        float getY();
-        float CanvasAngle(); // return 360.0 - Angle;
-        float getPenWidth();
-        float getHeading();
+    TurtleColor *getPenColor();
 
-        virtual void DrawLine(float x1, float y1, float x2, float y2) = 0;
-        virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
-        virtual void UpdateTurtleBrush() = 0;
-        virtual void UpdateCanvas() = 0;
+    int getWidth();
+    void setWidth(int w);
+    int getHeight();
+    void setHeight(int h);
 
-        TurtleState *CurrentState();
+    float getCanvasLocationX();
+    float getCanvasLocationY();
+    float getX();
+    float getY();
+    float CanvasAngle(); // return 360.0 - Angle;
+    float getPenWidth();
+    float getHeading();
 
-        void DrawTurtle();
+    virtual void DrawLine(float x1, float y1, float x2, float y2) = 0;
+    virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
+    virtual void UpdateTurtleBrush() = 0;
+    virtual void UpdateCanvas() = 0;
 
-        TurtleState TurtleRequest(std::string cmd);
+    TurtleState *CurrentState();
 
-        TurtleState Init();
+    void DrawTurtle();
 
-        void penup();
+    TurtleState TurtleRequest(std::string cmd);
 
-        void pendown();
+    TurtleState Init();
 
-        void penwidth(float w);
+    void penup();
 
-        void stop();
+    void pendown();
 
-        TurtleState state();
+    void penwidth(float w);
 
-        void home();
+    void stop();
 
-        virtual void clear() = 0;
+    TurtleState state();
 
-        void forward(float d);
+    void home();
 
-        void back(float d);
+    virtual void clear() = 0;
 
-        void setpos(float x, float y);
+    void forward(float d);
 
-        float getx();
+    void back(float d);
 
-        float gety();
+    void setpos(float x, float y);
 
-        void setx(float x);
+    float getx();
 
-        void sety(float y);
+    float gety();
 
-        void left(float a);
+    void setx(float x);
 
-        void right(float a);
+    void sety(float y);
 
-        void heading(float a);
+    void left(float a);
 
-        virtual void font(const char* f, unsigned int sz) = 0;
+    void right(float a);
 
-        virtual void filltext(const char* text) = 0;
+    void heading(float a);
 
-        virtual void stroketext(const char* text) = 0;
+    virtual void font(const char *f, unsigned int sz) = 0;
 
-        void pencolour(unsigned int r, unsigned int g, unsigned int b);
+    virtual void filltext(const char *text) = 0;
 
-        //TODO: change width and height to unsigned int
-        void canvas_size(int width, int height);
+    virtual void stroketext(const char *text) = 0;
 
-        virtual void export_img(const char *filename) = 0;
+    void pencolour(unsigned int r, unsigned int g, unsigned int b);
 
-        void reset();
-    };
+    // TODO: change width and height to unsigned int
+    void canvas_size(int width, int height);
+
+    virtual void export_img(const char *filename) = 0;
+
+    void reset();
+
+    static void set_init_callback(picoturtle_init_callback fn);
+
+    static void unset_init_callback();
 };

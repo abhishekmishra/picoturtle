@@ -5,6 +5,8 @@
 
 using namespace turtle;
 
+picoturtle_init_callback Turtle::init_cb = NULL;
+
 Turtle::Turtle() : Turtle(new TurtleOptions())
 {
 }
@@ -21,7 +23,21 @@ Turtle::Turtle(TurtleOptions *options)
     Angle = TURTLE_DEFAULT_HEADING;
     PenColor = new TurtleColor(128, 128, 0, 255);
     PenWidth = TURTLE_DEFAULT_PENWIDTH;
+
+    if (init_cb != NULL)
+    {
+        init_cb(this);
+    }
 };
+
+std::string Turtle::getName() {
+    return Name;
+}
+
+std::string Turtle::getId() {
+    return Id;
+}
+
 
 int Turtle::getWidth()
 {
@@ -85,8 +101,8 @@ void Turtle::DrawTurtle()
     float y3 = d * (sin(theta2)) + getCanvasLocationY();
     float x3 = d * (cos(theta2)) + getCanvasLocationX();
 
-    //store current colour and pen width
-    //to reset later
+    // store current colour and pen width
+    // to reset later
     float ca = PenColor->getA();
     float cr = PenColor->getR();
     float cg = PenColor->getG();
@@ -94,13 +110,13 @@ void Turtle::DrawTurtle()
 
     float cpw = getPenWidth();
 
-    //set turtle colour
+    // set turtle colour
     pencolour(255u, 0u, 0u);
     penwidth(2);
-    
+
     DrawTriangle(getCanvasLocationX(), getCanvasLocationY(), x2, y2, x3, y3);
 
-    //reset turtle colour and pen width
+    // reset turtle colour and pen width
     pencolour(cr, cg, cb);
     penwidth(cpw);
 }
@@ -222,7 +238,7 @@ void Turtle::pencolour(unsigned int r, unsigned int g, unsigned int b)
 
 void Turtle::canvas_size(int width, int height)
 {
-    //printf("Dimensions are now [%d, %d].\n", width, height);
+    // printf("Dimensions are now [%d, %d].\n", width, height);
     setWidth(width);
     setHeight(height);
     UpdateCanvas();
@@ -240,4 +256,14 @@ void Turtle::reset()
 TurtleColor *Turtle::getPenColor()
 {
     return PenColor;
+}
+
+void Turtle::set_init_callback(picoturtle_init_callback fn)
+{
+    init_cb = fn;
+}
+
+void Turtle::unset_init_callback()
+{
+    init_cb = NULL;
 }

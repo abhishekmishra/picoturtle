@@ -12,17 +12,20 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
+void turtleInitCb(Turtle *t);
 
 int main(int argc, char *argv[])
 {
     lua_State *L;
+
+    turtle::PicoTurtle::set_init_callback(&turtleInitCb);
 
     // initialize the turtle lua binding with args
     initTurtleLuaBinding(&L, argc, argv);
 
     // cleanup the turtle lua binding
     cleanupTurtleLuaBinding(L);
-    
+
     return 0;
 }
 
@@ -141,6 +144,11 @@ int runLuaScript(lua_State *luaState, const char *script)
 void cleanupTurtleLuaBinding(lua_State *luaState)
 {
     lua_close(luaState);
+}
+
+void turtleInitCb(Turtle *t)
+{
+    printf("PicoTurtle created - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
 }
 
 // void turtle_example()
