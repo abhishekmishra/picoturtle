@@ -7,7 +7,9 @@ local _turtle_functions_names = {
 	"getheight",
 	"setheight",
 	"penup",
+	"pu",
 	"pendown",
+	"pd",
 	"penwidth",
 	"pencolour",
 	"stop",
@@ -15,14 +17,18 @@ local _turtle_functions_names = {
 	"home",
 	"clear",
 	"forward",
+	"fd",
 	"back",
+	"bk",
 	"setpos",
 	"getx",
 	"gety",
 	"setx",
 	"sety",
 	"left",
+	"lt",
 	"right",
+	"rt",
 	"heading",
 	"font",
 	"filltext",
@@ -43,13 +49,4 @@ for k, v in ipairs(_turtle_functions_names) do
 	end
 end
 
--- Registered turtle functions in global
-fd = forward
-bk = back
-rt = right
-lt = left
-pu = penup
-pd = pendown
-
--- Two-letter aliases created for oft-used functions.
 -- ------Turtle Lua Init Complete------
