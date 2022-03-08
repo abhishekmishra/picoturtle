@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
@@ -12,7 +13,8 @@
 
 #define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
 
-int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
+int initTurtleLuaBinding(lua_State **luaState);
+int handleTurtleLuaArgs(lua_State *L, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
     struct argparse_option options[] = {
         OPT_HELP(),
         OPT_GROUP("PicoTurtle Options"),
-        OPT_BOOLEAN('g', "gui", &gui, "force to do", NULL, 0, 0),
+        OPT_BOOLEAN('g', "gui", &gui, "run in gui mode.", NULL, 0, 0),
         OPT_END(),
     };
 
@@ -48,7 +50,8 @@ int main(int argc, char *argv[])
     turtle::PicoTurtle::set_init_callback(&turtleInitCb);
 
     // initialize the turtle lua binding with args
-    initTurtleLuaBinding(&L, argc, argv);
+    initTurtleLuaBinding(&L);
+    handleTurtleLuaArgs(L, argc, argv);
 
     if (gui != 0)
     {
@@ -75,7 +78,7 @@ bool handleLuaError(lua_State *luaState, int luaErrorCode)
     }
 }
 
-int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
+int initTurtleLuaBinding(lua_State **luaState)
 {
     // Create Lua State
     (*luaState) = luaL_newstate();
@@ -112,11 +115,11 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
 
         runLuaScript(L, setPathCodeStr);
     }
+    return 0;
+}
 
-    // run the TurtleInit file
-    // TODO: removed global function bindings, completely remove later
-    // runLuaScript(L, "require 'TurtleInit'");
-
+int handleTurtleLuaArgs(lua_State *L, int argc, char *argv[])
+{
     const char *fname = NULL;
 
     lua_newtable(L);
@@ -214,9 +217,50 @@ int gui_window()
         return -1;
     }
 
-    SDL_UpdateWindowSurface(window);
+    // Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if (!(IMG_Init(imgFlags) & imgFlags))
+    {
+        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+        return 1;
+    }
+    else
+    {
+        std::string path = "out/fern.png";
 
-    SDL_Delay(5000);
+        // if (!image)
+        // {
+        //     std::cout << "Failed to load image\n";
+        //     std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
+        //     return -1;
+        // }
+
+        SDL_Surface *loadedSurface = IMG_Load(path.c_str());
+        if (loadedSurface == NULL)
+        {
+            printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+                    return 1;
+        }
+
+        bool keep_window_open = true;
+        while (keep_window_open)
+        {
+            SDL_Event e;
+            while (SDL_PollEvent(&e) > 0)
+            {
+                switch (e.type)
+                {
+                case SDL_QUIT:
+                    keep_window_open = false;
+                    break;
+                }
+
+                SDL_BlitSurface(loadedSurface, NULL, window_surface, NULL);
+                SDL_UpdateWindowSurface(window);
+            }
+        }
+    }
+    return 0;
 }
 
 // void turtle_example()
