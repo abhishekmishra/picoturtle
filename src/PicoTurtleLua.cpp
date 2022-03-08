@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "SkiaTurtleLua.hpp"
+#include "PicoTurtleLua.hpp"
 
 //------LUA BINDING--------
 
@@ -49,14 +49,14 @@ static void stackDump(lua_State *L)
 
 static int skia_turtle_free(lua_State *L)
 {
-    delete *static_cast<SkiaTurtle **>(luaL_checkudata(L, 1, LUA_PICOTURTLE_OBJECT));
+    delete *static_cast<PicoTurtle **>(luaL_checkudata(L, 1, LUA_PICOTURTLE_OBJECT));
     return 0;
 }
 
 static int skia_turtle_new(lua_State *L)
 {
-    SkiaTurtle *t = new SkiaTurtle();
-    *static_cast<SkiaTurtle **>(lua_newuserdata(L, sizeof(SkiaTurtle *))) = t;
+    PicoTurtle *t = new PicoTurtle();
+    *static_cast<PicoTurtle **>(lua_newuserdata(L, sizeof(PicoTurtle *))) = t;
 
     // set metatable of picoturtle object
     luaL_getmetatable(L,LUA_PICOTURTLE_OBJECT);
@@ -65,10 +65,10 @@ static int skia_turtle_new(lua_State *L)
     return 1;
 }
 
-static SkiaTurtle *skia_turtle_getobj(lua_State *L)
+static PicoTurtle *skia_turtle_getobj(lua_State *L)
 {
     int top = lua_gettop(L);
-    SkiaTurtle *t = *static_cast<SkiaTurtle **>(luaL_checkudata(L, top, LUA_PICOTURTLE_OBJECT));
+    PicoTurtle *t = *static_cast<PicoTurtle **>(luaL_checkudata(L, top, LUA_PICOTURTLE_OBJECT));
     if (t == NULL)
     {
         luaL_typeerror(L, top, LUA_PICOTURTLE_OBJECT);
@@ -79,7 +79,7 @@ static SkiaTurtle *skia_turtle_getobj(lua_State *L)
 
 static int skia_turtle_getwidth(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     lua_pushinteger(L, t->getWidth());
     return 1;
 }
@@ -89,7 +89,7 @@ static int skia_turtle_setwidth(lua_State *L)
     int width = luaL_checkinteger(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->setWidth(width);
     return 0;
@@ -97,7 +97,7 @@ static int skia_turtle_setwidth(lua_State *L)
 
 static int skia_turtle_getheight(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     lua_pushinteger(L, t->getHeight());
     return 1;
 }
@@ -107,7 +107,7 @@ static int skia_turtle_setheight(lua_State *L)
     int height = luaL_checkinteger(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->setHeight(height);
     return 0;
@@ -115,14 +115,14 @@ static int skia_turtle_setheight(lua_State *L)
 
 static int skia_turtle_penup(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->penup();
     return 0;
 }
 
 static int skia_turtle_pendown(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->pendown();
     return 0;
 }
@@ -132,7 +132,7 @@ static int skia_turtle_penwidth(lua_State *L)
     float width = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->penwidth(width);
     return 0;
@@ -147,7 +147,7 @@ static int skia_turtle_pencolour(lua_State *L)
     unsigned int r = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->pencolour(r, g, b);
     return 0;
@@ -155,28 +155,28 @@ static int skia_turtle_pencolour(lua_State *L)
 
 static int skia_turtle_stop(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->stop();
     return 0;
 }
 
 static int skia_turtle_home(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->home();
     return 0;
 }
 
 static int skia_turtle_clear(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->clear();
     return 0;
 }
 
 static int skia_turtle_reset(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     t->reset();
     return 0;
 }
@@ -186,7 +186,7 @@ static int skia_turtle_forward(lua_State *L)
     float len = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->forward(len);
     return 0;
@@ -197,7 +197,7 @@ static int skia_turtle_back(lua_State *L)
     float len = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->back(len);
     return 0;
@@ -210,7 +210,7 @@ static int skia_turtle_setpos(lua_State *L)
     float x = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->setpos(x, y);
     return 0;
@@ -218,14 +218,14 @@ static int skia_turtle_setpos(lua_State *L)
 
 static int skia_turtle_getx(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     lua_pushnumber(L, t->getx());
     return 1;
 }
 
 static int skia_turtle_gety(lua_State *L)
 {
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     lua_pushnumber(L, t->gety());
     return 1;
 }
@@ -235,7 +235,7 @@ static int skia_turtle_setx(lua_State *L)
     float x = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->setx(x);
     return 0;
@@ -246,7 +246,7 @@ static int skia_turtle_sety(lua_State *L)
     float y = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->sety(y);
     return 0;
@@ -257,7 +257,7 @@ static int skia_turtle_left(lua_State *L)
     float a = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->left(a);
     return 0;
@@ -268,7 +268,7 @@ static int skia_turtle_right(lua_State *L)
     float a = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->right(a);
     return 0;
@@ -279,7 +279,7 @@ static int skia_turtle_heading(lua_State *L)
     float a = luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->heading(a);
     return 0;
@@ -290,7 +290,7 @@ static int skia_turtle_export_img(lua_State *L)
     const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->export_img(s);
     return 0;
@@ -304,7 +304,7 @@ static int skia_turtle_font(lua_State *L)
     const char *str = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->font(str, sz);
     return 0;
@@ -315,7 +315,7 @@ static int skia_turtle_filltext(lua_State *L)
     const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->filltext(s);
     return 0;
@@ -326,7 +326,7 @@ static int skia_turtle_stroketext(lua_State *L)
     const char *s = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->stroketext(s);
     return 0;
@@ -340,7 +340,7 @@ static int skia_turtle_canvas_size(lua_State *L)
     int width = (int)(luaL_checkinteger(L, lua_gettop(L)));
     lua_pop(L, 1);
 
-    SkiaTurtle *t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->canvas_size(width, height);
     return 0;

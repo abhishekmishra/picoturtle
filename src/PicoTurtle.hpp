@@ -11,7 +11,7 @@
 
 namespace turtle
 {
-    class SkiaTurtle : public Turtle
+    class PicoTurtle : public Turtle
     {
     private:
         sk_sp<SkSurface> rasterSurface;
@@ -22,8 +22,8 @@ namespace turtle
         void CreateCanvas();
 
     public:
-        SkiaTurtle();
-        ~SkiaTurtle();
+        PicoTurtle();
+        ~PicoTurtle();
 
         virtual void DrawLine(float x1, float y1, float x2, float y2);
         virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3);

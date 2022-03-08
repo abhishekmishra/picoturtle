@@ -68,10 +68,10 @@ set ( PICOTURTLE_LIB_SOURCES
   src/TurtleOptions.cpp
   src/Turtle.hpp
   src/Turtle.cpp
-  src/SkiaTurtle.hpp
-  src/SkiaTurtle.cpp
-  src/SkiaTurtleLua.hpp
-  src/SkiaTurtleLua.cpp
+  src/PicoTurtle.hpp
+  src/PicoTurtle.cpp
+  src/PicoTurtleLua.hpp
+  src/PicoTurtleLua.cpp
 )
 
 add_library(picoturtle SHARED ${PICOTURTLE_LIB_SOURCES})

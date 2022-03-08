@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "SkiaTurtle.hpp"
-#include "SkiaTurtleLua.hpp"
+#include "PicoTurtle.hpp"
+#include "PicoTurtleLua.hpp"
 
 int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
@@ -146,7 +146,7 @@ void cleanupTurtleLuaBinding(lua_State *luaState)
 
 // void turtle_example()
 // {
-// turtle::SkiaTurtle *skTurtle = new turtle::SkiaTurtle();
+// turtle::PicoTurtle *skTurtle = new turtle::PicoTurtle();
 
 // skTurtle->pendown();
 // skTurtle->forward(100);

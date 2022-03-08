@@ -1,9 +1,9 @@
 #include <iostream>
-#include "SkiaTurtle.hpp"
+#include "PicoTurtle.hpp"
 
 using namespace turtle;
 
-void SkiaTurtle::CreateCanvas()
+void PicoTurtle::CreateCanvas()
 {
     rasterSurface =
         SkSurface::MakeRasterN32Premul(getWidth(), getHeight());
@@ -12,12 +12,12 @@ void SkiaTurtle::CreateCanvas()
     rasterCanvas->drawColor(SK_ColorWHITE);
 }
 
-void SkiaTurtle::UpdateCanvas()
+void PicoTurtle::UpdateCanvas()
 {
     CreateCanvas();
 }
 
-SkiaTurtle::SkiaTurtle() : Turtle()
+PicoTurtle::PicoTurtle() : Turtle()
 {
     CreateCanvas();
     
@@ -29,11 +29,11 @@ SkiaTurtle::SkiaTurtle() : Turtle()
     UpdateTurtleBrush();
 };
 
-SkiaTurtle::~SkiaTurtle()
+PicoTurtle::~PicoTurtle()
 {
 }
 
-void SkiaTurtle::DrawLine(float x1, float y1, float x2, float y2)
+void PicoTurtle::DrawLine(float x1, float y1, float x2, float y2)
 {
     SkPath path;
     path.moveTo(x1, y1);
@@ -41,7 +41,7 @@ void SkiaTurtle::DrawLine(float x1, float y1, float x2, float y2)
     rasterCanvas->drawPath(path, paint);
 }
 
-void SkiaTurtle::DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3)
+void PicoTurtle::DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3)
 {
     SkPath path;
     path.moveTo(x1, y1);
@@ -51,13 +51,13 @@ void SkiaTurtle::DrawTriangle(float x1, float y1, float x2, float y2, float x3, 
     rasterCanvas->drawPath(path, paint);
 }
 
-void SkiaTurtle::font(const char *f, unsigned int sz)
+void PicoTurtle::font(const char *f, unsigned int sz)
 {
     sk_sp<SkTypeface> typeface = SkTypeface::MakeFromName(f, SkFontStyle::Normal());
     skfont = SkFont(typeface, (float)sz, 1.0f, 0.0f);
 }
 
-void SkiaTurtle::filltext(const char *text)
+void PicoTurtle::filltext(const char *text)
 {
     // get the current paint style
     // and then change it to fill style
@@ -78,7 +78,7 @@ void SkiaTurtle::filltext(const char *text)
     paint.setStyle(oldStyle);
 }
 
-void SkiaTurtle::stroketext(const char *text)
+void PicoTurtle::stroketext(const char *text)
 {
     // get the current paint style
     // and then change it to fill style
@@ -99,7 +99,7 @@ void SkiaTurtle::stroketext(const char *text)
     paint.setStyle(oldStyle);
 }
 
-void SkiaTurtle::export_img(const char *filename)
+void PicoTurtle::export_img(const char *filename)
 {
     sk_sp<SkImage> img(rasterSurface->makeImageSnapshot());
     if (!img)
@@ -115,12 +115,12 @@ void SkiaTurtle::export_img(const char *filename)
     (void)out.write(png->data(), png->size());
 }
 
-void SkiaTurtle::clear()
+void PicoTurtle::clear()
 {
     rasterCanvas->drawColor(SK_ColorWHITE);
 }
 
-void SkiaTurtle::UpdateTurtleBrush()
+void PicoTurtle::UpdateTurtleBrush()
 {
     TurtleColor *c = getPenColor();
     U8CPU a = c->getA();
