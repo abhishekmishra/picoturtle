@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <SDL2/SDL.h>
+
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
@@ -15,9 +17,10 @@ int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
 void turtleInitCb(Turtle *t);
+int gui_window();
 
 static const char *const usages[] = {
-    "picoturtle [options] [[--] args]",
+    "picoturtle [options] [[--] <turtle file> <turtle args>]",
     "picoturtle [options]",
     NULL,
 };
@@ -40,10 +43,7 @@ int main(int argc, char *argv[])
     struct argparse argparse;
     argparse_init(&argparse, options, usages, 0);
     argparse_describe(&argparse, "\npicoturtle: A turtle programming environment.", "\nTODO: more info.");
-    argc = argparse_parse(&argparse, argc, (const char**)argv);
-    if (gui != 0){
-        printf("Not implemented, launch GUI... %d\n", gui);
-    }
+    argc = argparse_parse(&argparse, argc, (const char **)argv);
     // if (argc != 0) {
     //     printf("argc: %d\n", argc);
     //     int i;
@@ -56,6 +56,11 @@ int main(int argc, char *argv[])
 
     // initialize the turtle lua binding with args
     initTurtleLuaBinding(&L, argc, argv);
+
+    if (gui != 0)
+    {
+        gui_window();
+    }
 
     // cleanup the turtle lua binding
     cleanupTurtleLuaBinding(L);
@@ -186,6 +191,39 @@ void cleanupTurtleLuaBinding(lua_State *luaState)
 void turtleInitCb(Turtle *t)
 {
     printf("PicoTurtle created - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
+}
+
+int gui_window()
+{
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        std::cout << "Failed to initialize the SDL2 library\n";
+        return -1;
+    }
+
+    SDL_Window *window = SDL_CreateWindow("PicoTurtle",
+                                          SDL_WINDOWPOS_CENTERED,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          680, 480,
+                                          0);
+
+    if (!window)
+    {
+        std::cout << "Failed to create window\n";
+        return -1;
+    }
+
+    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+
+    if (!window_surface)
+    {
+        std::cout << "Failed to get the surface from the window\n";
+        return -1;
+    }
+
+    SDL_UpdateWindowSurface(window);
+
+    SDL_Delay(5000);
 }
 
 // void turtle_example()
