@@ -1,11 +1,3 @@
-#include "core/SkCanvas.h"
-#include "core/SkRect.h"
-#include "core/SkRRect.h"
-#include "core/SkPath.h"
-#include "core/SkData.h"
-#include "core/SkImage.h"
-#include "core/SkStream.h"
-#include "core/SkSurface.h"
 #include "SkiaTurtle.hpp"
 #include "SkiaTurtleLua.hpp"
 

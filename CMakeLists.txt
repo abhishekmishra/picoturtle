@@ -31,28 +31,6 @@ if (HAVE_LIB_M)
   set(EXTRA_LIBS ${EXTRA_LIBS} m)
 endif (HAVE_LIB_M)
 
-#--------------------------PicoTurtle App---------------------------#
-
-set ( PICOTURTLE_SOURCES
-  src/TurtleColor.hpp
-  src/TurtleColor.cpp
-  src/TurtleLocation.hpp
-  src/TurtleLocation.cpp
-  src/TurtleDimension.hpp
-  src/TurtleDimension.cpp
-  src/TurtleState.hpp
-  src/TurtleState.cpp
-  src/TurtleOptions.hpp
-  src/TurtleOptions.cpp
-  src/Turtle.hpp
-  src/Turtle.cpp
-  src/SkiaTurtle.hpp
-  src/SkiaTurtle.cpp
-  src/SkiaTurtleLua.hpp
-  src/SkiaTurtleLua.cpp
-  src/TurtleApp.cpp
-)
-
 set ( PICOTURTLE_LUA_FILES
   lua/TurtleInit.lua
   lua/SampleTurtle.lua
@@ -75,7 +53,28 @@ foreach( LUA_FILE IN LISTS PICOTURTLE_LUA_FILES )
   configure_file( ${LUA_FILE} ${LUA_FILE} COPYONLY )
 endforeach()
 
-add_executable(picoturtle ${PICOTURTLE_SOURCES})
+#--------------------------PicoTurtle Lib---------------------------#
+
+set ( PICOTURTLE_LIB_SOURCES
+  src/TurtleColor.hpp
+  src/TurtleColor.cpp
+  src/TurtleLocation.hpp
+  src/TurtleLocation.cpp
+  src/TurtleDimension.hpp
+  src/TurtleDimension.cpp
+  src/TurtleState.hpp
+  src/TurtleState.cpp
+  src/TurtleOptions.hpp
+  src/TurtleOptions.cpp
+  src/Turtle.hpp
+  src/Turtle.cpp
+  src/SkiaTurtle.hpp
+  src/SkiaTurtle.cpp
+  src/SkiaTurtleLua.hpp
+  src/SkiaTurtleLua.cpp
+)
+
+add_library(picoturtle SHARED ${PICOTURTLE_LIB_SOURCES})
 set_property(TARGET picoturtle PROPERTY CXX_STANDARD 17)
 
 if(WIN32)
@@ -83,7 +82,7 @@ if(WIN32)
     find_package(skia CONFIG REQUIRED)
   endif()
   target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-windows/include/skia")
-	target_link_libraries(picoturtle PRIVATE skia skia::skia)
+	target_link_libraries(picoturtle PUBLIC skia skia::skia)
 endif(WIN32)
 
 if(UNIX)
@@ -106,5 +105,22 @@ find_package(Lua REQUIRED)
 target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
 
+#--------------------------PicoTurtle App---------------------------#
+
+set ( PICOTURTLE_APP_SOURCES
+  src/TurtleApp.cpp
+)
+
+add_executable(picoturtle-app ${PICOTURTLE_APP_SOURCES})
+set_property(TARGET picoturtle-app PROPERTY CXX_STANDARD 17)
+
+target_link_libraries(picoturtle-app PRIVATE picoturtle)
+
 find_package(unofficial-graphicsmagick CONFIG REQUIRED)
-target_link_libraries(picoturtle PRIVATE unofficial::graphicsmagick::graphicsmagick)
+target_link_libraries(picoturtle-app PRIVATE unofficial::graphicsmagick::graphicsmagick)
+
+find_package(SDL2 CONFIG REQUIRED)
+find_package(sdl2-image CONFIG REQUIRED)
+find_package(sdl2-mixer CONFIG REQUIRED)
+find_package(sdl2-ttf CONFIG REQUIRED)
+target_link_libraries(picoturtle-app PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image SDL2::SDL2_mixer SDL2::SDL2_ttf)
