@@ -44,13 +44,6 @@ int main(int argc, char *argv[])
     argparse_init(&argparse, options, usages, 0);
     argparse_describe(&argparse, "\npicoturtle: A turtle programming environment.", "\nTODO: more info.");
     argc = argparse_parse(&argparse, argc, (const char **)argv);
-    // if (argc != 0) {
-    //     printf("argc: %d\n", argc);
-    //     int i;
-    //     for (i = 0; i < argc; i++) {
-    //         printf("argv[%d]: %s\n", i, *(argv + i));
-    //     }
-    // }
 
     turtle::PicoTurtle::set_init_callback(&turtleInitCb);
 
