@@ -28,7 +28,7 @@ Command {
     name = 'mazes_w_env',
     description = 'generate mazes using lua program at lua/mazes/genmazes.lua',
     fn = function(...)
-        runCommand('run', 'picoturtle', 'lua/mazes/genmazes.lua', ...)
+        runCommand('run', 'picoturtle-app', 'lua/mazes/genmazes.lua', ...)
     end
 }
 
