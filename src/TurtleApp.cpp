@@ -16,9 +16,41 @@ int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
 void turtleInitCb(Turtle *t);
 
+static const char *const usages[] = {
+    "picoturtle [options] [[--] args]",
+    "picoturtle [options]",
+    NULL,
+};
+
 int main(int argc, char *argv[])
 {
+    // lua state object (see lua api docs)
     lua_State *L;
+
+    // option to indicate if app is to run in gui mode
+    int gui = 0;
+
+    struct argparse_option options[] = {
+        OPT_HELP(),
+        OPT_GROUP("PicoTurtle Options"),
+        OPT_BOOLEAN('g', "gui", &gui, "force to do", NULL, 0, 0),
+        OPT_END(),
+    };
+
+    struct argparse argparse;
+    argparse_init(&argparse, options, usages, 0);
+    argparse_describe(&argparse, "\npicoturtle: A turtle programming environment.", "\nTODO: more info.");
+    argc = argparse_parse(&argparse, argc, (const char**)argv);
+    if (gui != 0){
+        printf("Not implemented, launch GUI... %d\n", gui);
+    }
+    // if (argc != 0) {
+    //     printf("argc: %d\n", argc);
+    //     int i;
+    //     for (i = 0; i < argc; i++) {
+    //         printf("argv[%d]: %s\n", i, *(argv + i));
+    //     }
+    // }
 
     turtle::PicoTurtle::set_init_callback(&turtleInitCb);
 

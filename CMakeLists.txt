@@ -31,6 +31,9 @@ if (HAVE_LIB_M)
   set(EXTRA_LIBS ${EXTRA_LIBS} m)
 endif (HAVE_LIB_M)
 
+# https://stackoverflow.com/a/47260387/9483968
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 set ( PICOTURTLE_LUA_FILES
   lua/TurtleInit.lua
   lua/SampleTurtle.lua
@@ -130,6 +133,6 @@ find_package(sdl2-mixer CONFIG REQUIRED)
 find_package(sdl2-ttf CONFIG REQUIRED)
 target_link_libraries(picoturtle-app PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image SDL2::SDL2_mixer SDL2::SDL2_ttf)
 
-add_subdirectory(argparse)
+add_subdirectory(argparse build)
 include_directories(argparse)
 target_link_libraries(picoturtle-app PRIVATE argparse)

@@ -25,6 +25,29 @@ Command {
 }
 
 Command {
+	name = 'run',
+	description = 'run the default generated executable (if it exists)',
+	fn = function ( exename, ... )
+		if not exename then error('exectuable to run not specified') end
+
+		local args_str = table.concat(table.pack(...), " ")
+
+		local dir = os.getenv("PWD") or io.popen("cd"):read()
+		if dir then
+			if isWindows then
+				local buildConfig = buildConfig or "Debug"
+				local winExePath = dir .. "/build/bin/" .. buildConfig .. "/" .. exename .. ".exe"
+				os.execute(winExePath .. ' ' .. args_str)
+			else
+				os.execute("./build/" .. exename .. ' ' .. args_str)
+			end
+		else
+			error('cannot find current directory')
+		end
+	end
+}
+
+Command {
     name = 'mazes_w_env',
     description = 'generate mazes using lua program at lua/mazes/genmazes.lua',
     fn = function(...)
