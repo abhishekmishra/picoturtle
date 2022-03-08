@@ -122,18 +122,18 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     const char *fname = NULL;
 
     lua_newtable(L);
-    if (argc > 1)
+    if (argc > 0)
     {
-        fname = argv[1];
-        if (argc > 2)
+        fname = argv[0];
+        if (argc > 1)
         {
-            for (int i = 2; i < argc; i++)
+            for (int i = 1; i < argc; i++)
             {
                 lua_pushstring(L, argv[i]);
                 lua_seti(L, -2, i - 1);
             }
         }
-        // printf("input lua file - %s\n", fname);
+        printf("input lua file - %s\n", fname);
     }
     lua_setglobal(L, "arg");
 
