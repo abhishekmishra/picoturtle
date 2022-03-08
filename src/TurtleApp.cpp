@@ -61,6 +61,7 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
     lua_pop(L, 1); /* remove result from previous call */
 
+    // TODO: Set path using optional args
     char *turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
     if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
     {
@@ -75,12 +76,13 @@ int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[])
     }
 
     sprintf(setPathCodeStr, "package.path = '%s/?.lua;' .. package.path", turtleLuaDir);
-    printf("Setting path via code -> |%s|\n", setPathCodeStr);
+    // printf("Setting path via code -> |%s|\n", setPathCodeStr);
+
+    runLuaScript(L, setPathCodeStr);
 
     // run the TurtleInit file
-    // TODO: shift all code from lua to c calls here
-    runLuaScript(L, setPathCodeStr);
-    runLuaScript(L, "require 'TurtleInit'");
+    // TODO: removed global function bindings, completely remove later
+    // runLuaScript(L, "require 'TurtleInit'");
 
     const char *fname = NULL;
 

@@ -8,6 +8,8 @@ author: Abhishek Mishra
 
 © 2022 Abhishek Mishra <abhishekmishra.in>
 --]] --
+local picoturtle = require "picoturtle"
+
 local WALL = '█'
 local NOWALL = ' '
 local EMPTYCELL = '-'
@@ -328,85 +330,87 @@ function createMaze(width, height, seed, debug)
 end
 
 function turtlePrintField(field, imgfile)
-    if _turtle then
+    local t = picoturtle.new()
+    if t then
         if field == nil then
             error('field is nil')
         end
 
         local default_pencolour = function()
-            pencolour(0, 0, 0)
+            t:pencolour(0, 0, 0)
         end
 
         local startcell_pencolour = function()
-            pencolour(255, 0, 0)
+            t:pencolour(255, 0, 0)
         end
 
         local endcell_pencolour = function()
-            pencolour(0, 255, 0)
+            t:pencolour(0, 255, 0)
         end
 
         local cellwidth = 50
         local cellheight = 50
 
         -- size has margin rows and columns
-        canvas_size(cellwidth * (field.mazewidth + 2), cellheight * (field.mazeheight + 4))
+        t:canvas_size(cellwidth * (field.mazewidth + 2), cellheight * (field.mazeheight + 4))
 
-        penup()
+        t:penup()
 
         default_pencolour()
 
-        penwidth(cellheight)
-        heading(0.0)
+        t:penwidth(cellheight)
+        t:heading(0.0)
 
-        font('Courier', cellheight)
-        setpos(cellwidth, getheight() - (cellheight * 1.5))
-        pendown()
-        filltext(string.format('MAZE [%02d, %02d] - #%d', field.mazewidth, field.mazeheight, field.seed))
+        t:font('Courier', cellheight)
+        t:setpos(cellwidth, t:getheight() - (cellheight * 1.5))
+        t:pendown()
+        t:filltext(string.format('MAZE [%02d, %02d] - #%d', field.mazewidth, field.mazeheight, field.seed))
 
-        penup()
-        setpos(cellwidth, getheight() - (cellheight * 2.5))
-        pendown()
+        t:penup()
+        t:setpos(cellwidth, t:getheight() - (cellheight * 2.5))
+        t:pendown()
 
-        penwidth(cellheight)
-        heading(0.0)
+        t:penwidth(cellheight)
+        t:heading(0.0)
 
         for i = 1, field.mazeheight, 1 do
             for j = 1, field.mazewidth, 1 do
                 local cell = field[i][j]
                 if i == 2 and j == 2 then
                     startcell_pencolour()
-                    forward(cellwidth)
+                    t:forward(cellwidth)
                     default_pencolour()
                 elseif i == (field.mazeheight - 1) and j == (field.mazewidth - 1) then
                     endcell_pencolour()
-                    forward(cellwidth)
+                    t:forward(cellwidth)
                     default_pencolour()
                 elseif cell == WALL then
-                    forward(cellwidth)
+                    t:forward(cellwidth)
                 else
-                    penup()
-                    forward(cellwidth)
-                    pendown()
+                    t:penup()
+                    t:forward(cellwidth)
+                    t:pendown()
                 end
             end
-            penup()
-            setpos(cellwidth, getheight() - (cellheight * (i + 2.5)))
-            pendown()
+            t:penup()
+            t:setpos(cellwidth, t:getheight() - (cellheight * (i + 2.5)))
+            t:pendown()
         end
 
-        penup()
-        setpos(cellwidth, cellheight * 0.8)
-        pendown()
-        font('Courier', cellheight * 0.8)
-        filltext(string.format('generated on %s, © 2022 Abhishek Mishra', os.date('%d/%m/%Y %H:%M:%S')))
+        t:penup()
+        t:setpos(cellwidth, cellheight * 0.8)
+        t:pendown()
+        t:font('Courier', cellheight * 0.8)
+        t:filltext(string.format('generated on %s, © 2022 Abhishek Mishra', os.date('%d/%m/%Y %H:%M:%S')))
 
         if imgfile ~= nil then
-            export_img(imgfile)
+            t:export_img(imgfile)
             print('Wrote maze file - ' .. imgfile)        
         end
     else
         error('turtle api is not available')
     end
+    return t
 end
 
 return {
