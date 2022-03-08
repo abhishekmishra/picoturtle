@@ -112,6 +112,7 @@ set ( PICOTURTLE_APP_SOURCES
 )
 
 add_executable(picoturtle-app ${PICOTURTLE_APP_SOURCES})
+
 set_property(TARGET picoturtle-app PROPERTY CXX_STANDARD 17)
 
 # The output name of target should be "picoturtle"
@@ -128,3 +129,7 @@ find_package(sdl2-image CONFIG REQUIRED)
 find_package(sdl2-mixer CONFIG REQUIRED)
 find_package(sdl2-ttf CONFIG REQUIRED)
 target_link_libraries(picoturtle-app PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image SDL2::SDL2_mixer SDL2::SDL2_ttf)
+
+add_subdirectory(argparse)
+include_directories(argparse)
+target_link_libraries(picoturtle-app PRIVATE argparse)

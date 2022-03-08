@@ -6,6 +6,8 @@
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
+#include "argparse.h"
+
 #define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
 
 int initTurtleLuaBinding(lua_State **luaState, int argc, char *argv[]);
