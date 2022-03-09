@@ -17,7 +17,7 @@ using namespace turtle;
 
 class Turtle;
 
-typedef void (*picoturtle_init_callback)(Turtle *);
+typedef void (*picoturtle_callback)(Turtle *, void *);
 
 class Turtle
 {
@@ -38,7 +38,8 @@ private:
     TurtleColor *Colour;
     float Angle;
 
-    static picoturtle_init_callback init_cb;
+    static picoturtle_callback init_cb;
+    static void* init_cb_args;
 
     // private List<TurtleCommand> commands;
     // public Canvas Canvas { get; set; }
@@ -139,7 +140,7 @@ public:
 
     void reset();
 
-    static void set_init_callback(picoturtle_init_callback fn);
+    static void set_init_callback(picoturtle_callback fn, void* cb_args);
 
     static void unset_init_callback();
 };
