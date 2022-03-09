@@ -36,5 +36,6 @@ namespace turtle
         virtual void export_img(const char *filename);
         virtual void clear();
 
+        sk_sp<SkSurface> getRasterSurface();
     };
 };

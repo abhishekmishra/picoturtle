@@ -130,3 +130,8 @@ void PicoTurtle::UpdateTurtleBrush()
     paint.setColor(SkColorSetARGB(a, r, g, b));
     paint.setStrokeWidth(getPenWidth());
 }
+
+sk_sp<SkSurface> PicoTurtle::getRasterSurface() 
+{
+    return rasterSurface;
+}
