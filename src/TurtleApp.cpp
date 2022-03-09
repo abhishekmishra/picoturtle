@@ -37,53 +37,60 @@ sk_sp<SkImage> img;
 //         addr:    the address to start dumping from.
 //         len:     the number of bytes to dump.
 //         perLine: number of bytes on each output line.
-void hexDump (
-    const char * desc,
-    const void * addr,
+void hexDump(
+    const char *desc,
+    const void *addr,
     const int len,
-    int perLine
-) {
+    int perLine)
+{
     // Silently ignore silly per-line values.
 
-    if (perLine < 4 || perLine > 64) perLine = 16;
+    if (perLine < 4 || perLine > 64)
+        perLine = 16;
 
     int i;
-    unsigned char* buff = (unsigned char*) calloc(perLine+1, sizeof(unsigned char));
-    const unsigned char * pc = (const unsigned char *)addr;
+    unsigned char *buff = (unsigned char *)calloc(perLine + 1, sizeof(unsigned char));
+    const unsigned char *pc = (const unsigned char *)addr;
 
     // Output description if given.
 
-    if (desc != NULL) printf ("%s:\n", desc);
+    if (desc != NULL)
+        printf("%s:\n", desc);
 
     // Length checks.
 
-    if (len == 0) {
+    if (len == 0)
+    {
         printf("  ZERO LENGTH\n");
         return;
     }
-    if (len < 0) {
+    if (len < 0)
+    {
         printf("  NEGATIVE LENGTH: %d\n", len);
         return;
     }
 
     // Process every byte in the data.
 
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < len; i++)
+    {
         // Multiple of perLine means new or first line (with line offset).
 
-        if ((i % perLine) == 0) {
+        if ((i % perLine) == 0)
+        {
             // Only print previous-line ASCII buffer for lines beyond first.
 
-            if (i != 0) printf ("  %s\n", buff);
+            if (i != 0)
+                printf("  %s\n", buff);
 
             // Output the offset of current line.
 
-            printf ("  %04x ", i);
+            printf("  %04x ", i);
         }
 
         // Now the hex code for the specific character.
 
-        printf (" %02x", pc[i]);
+        printf(" %02x", pc[i]);
 
         // And buffer a printable ASCII character for later.
 
@@ -96,16 +103,16 @@ void hexDump (
 
     // Pad out last line if not exactly perLine characters.
 
-    while ((i % perLine) != 0) {
-        printf ("   ");
+    while ((i % perLine) != 0)
+    {
+        printf("   ");
         i++;
     }
 
     // And print the final ASCII buffer.
 
-    printf ("  %s\n", buff);
+    printf("  %s\n", buff);
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -281,114 +288,87 @@ void turtleDestroyCb(turtle::PicoTurtle *t, void *cb_args)
 
 int gui_window()
 {
-    printf("Starting GUI.\n");
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (img)
     {
-        std::cout << "Failed to initialize the SDL2 library\n";
-        return -1;
-    }
-
-    SDL_Window *window = SDL_CreateWindow("PicoTurtle",
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          680, 480,
-                                          0);
-
-    if (!window)
-    {
-        std::cout << "Failed to create window\n";
-        return -1;
-    }
-
-    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
-
-    if (!window_surface)
-    {
-        std::cout << "Failed to get the surface from the window\n";
-        return -1;
-    }
-
-    // Initialize PNG loading
-    int imgFlags = IMG_INIT_PNG;
-    if (!(IMG_Init(imgFlags) & imgFlags))
-    {
-        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-        return 1;
-    }
-    else
-    {
-        std::string path = "out/fern.png";
-
-        // if (!image)
-        // {
-        //     std::cout << "Failed to load image\n";
-        //     std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
-        //     return -1;
-        // }
-
-        // SDL_Surface *loadedSurface = IMG_Load(path.c_str());
-        // if (loadedSurface == NULL)
-        // {
-        //     printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-        //     return 1;
-        // }
-
-        if (img)
+        if (SDL_Init(SDL_INIT_VIDEO) < 0)
         {
-            printf("Image available.\n");
-            SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
-            std::vector<uint32_t> srcPixels;
-            const int rowBytes = img->width() * 4;
-            srcPixels.resize(img->height() * rowBytes);
-            SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
-            img->readPixels(pixmap, 0, 0);
+            std::cout << "Failed to initialize the SDL2 library\n";
+            return -1;
+        }
 
-            // printf("Image data len = %d.\n", srcPixels.size());
+        SDL_Window *window = SDL_CreateWindow("PicoTurtle",
+                                              SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              img->width(), img->height(),
+                                              0);
 
-            // hexDump("image raw data", &srcPixels.front(), img->height() * rowBytes, rowBytes);
+        if (!window)
+        {
+            std::cout << "Failed to create window\n";
+            return -1;
+        }
 
-            Uint32 rmask, gmask, bmask, amask;
+        SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+
+        if (!window_surface)
+        {
+            std::cout << "Failed to get the surface from the window\n";
+            return -1;
+        }
+
+        SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
+        std::vector<uint32_t> srcPixels;
+        const int rowBytes = img->width() * 4;
+        srcPixels.resize(img->height() * rowBytes);
+        SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
+        img->readPixels(pixmap, 0, 0);
+
+        // printf("Image data len = %d.\n", srcPixels.size());
+
+        // hexDump("image raw data", &srcPixels.front(), img->height() * rowBytes, rowBytes);
+
+        Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-            int shift = (req_format == STBI_rgb) ? 8 : 0;
-            rmask = 0xff000000 >> shift;
-            gmask = 0x00ff0000 >> shift;
-            bmask = 0x0000ff00 >> shift;
-            amask = 0x000000ff >> shift;
+        int shift = (req_format == STBI_rgb) ? 8 : 0;
+        rmask = 0xff000000 >> shift;
+        gmask = 0x00ff0000 >> shift;
+        bmask = 0x0000ff00 >> shift;
+        amask = 0x000000ff >> shift;
 #else // little endian, like x86
-            rmask = 0x00ff0000;
-            gmask = 0x0000ff00;
-            bmask = 0x000000ff;
-            amask = 0xff000000;
+        rmask = 0x00ff0000;
+        gmask = 0x0000ff00;
+        bmask = 0x000000ff;
+        amask = 0xff000000;
 #endif
 
-            int depth = 32;
-            int pitch = 4 * img->width();
+        int depth = 32;
+        int pitch = 4 * img->width();
 
-            SDL_Surface *turtleImageSurface = SDL_CreateRGBSurfaceFrom((void *)&srcPixels.front(), img->width(), img->height(), depth, pitch,
-                                                                       rmask, gmask, bmask, amask);
+        SDL_Surface *turtleImageSurface = SDL_CreateRGBSurfaceFrom((void *)&srcPixels.front(), img->width(), img->height(), depth, pitch,
+                                                                   rmask, gmask, bmask, amask);
 
-            printf("Turtle image surface loaded!\n");
+        printf("Turtle image surface loaded!\n");
 
-            bool keep_window_open = true;
-            while (keep_window_open)
+        bool keep_window_open = true;
+        while (keep_window_open)
+        {
+            SDL_Event e;
+            while (SDL_PollEvent(&e) > 0)
             {
-                SDL_Event e;
-                while (SDL_PollEvent(&e) > 0)
+                switch (e.type)
                 {
-                    switch (e.type)
-                    {
-                    case SDL_QUIT:
-                        keep_window_open = false;
-                        break;
-                    }
-
-                    // SDL_BlitSurface(loadedSurface, NULL, window_surface, NULL);
-                    SDL_BlitSurface(turtleImageSurface, NULL, window_surface, NULL);
-                    SDL_UpdateWindowSurface(window);
+                case SDL_QUIT:
+                    keep_window_open = false;
+                    break;
                 }
+
+                // SDL_BlitSurface(loadedSurface, NULL, window_surface, NULL);
+                SDL_BlitSurface(turtleImageSurface, NULL, window_surface, NULL);
+                SDL_UpdateWindowSurface(window);
             }
         }
     }
+
     return 0;
 }
 
