@@ -343,12 +343,9 @@ int gui_window()
             SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
             img->readPixels(pixmap, 0, 0);
 
-            printf("Image data len = %d.\n", srcPixels.size());
+            // printf("Image data len = %d.\n", srcPixels.size());
 
-            // for(size_t i = 0; i < srcPixels.size(); i++) {
-            //     printf("%d ", srcPixels[i]);
-            // }
-            hexDump("image raw data", &srcPixels.front(), img->height() * rowBytes, rowBytes);
+            // hexDump("image raw data", &srcPixels.front(), img->height() * rowBytes, rowBytes);
 
             Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -358,10 +355,6 @@ int gui_window()
             bmask = 0x0000ff00 >> shift;
             amask = 0x000000ff >> shift;
 #else // little endian, like x86
-            // rmask = 0x0000ff00;
-            // gmask = 0x00ff0000;
-            // bmask = 0xff000000;
-            // amask = 0x000000ff;
             rmask = 0x00ff0000;
             gmask = 0x0000ff00;
             bmask = 0x000000ff;
