@@ -1,1 +1,22 @@
--- simple turtle program to draw a square-- press F5 to runreset()fd(100)rt(90)fd(100)rt(90)fd(100)rt(90)fd(100)rt(180)font("Consolas", 20)filltext("PicoTurtle")print('done.')export_img('test.png')
+-- simple turtle program to draw a square
+-- press F5 to run
+local picoturtle = require "picoturtle"
+
+t = picoturtle.new()
+t:canvas_size(100, 100)
+t:pu()
+t:setpos(4, 4)
+t:penwidth(4)
+t:pd()
+t:fd(40)
+t:rt(90)
+t:fd(40)
+t:rt(90)
+t:fd(40)
+t:rt(90)
+t:fd(40)
+t:rt(180)
+t:font("Consolas", 8)
+t:filltext("PicoTurtle")
+print('done.')
+t:export_img('out/test.png')

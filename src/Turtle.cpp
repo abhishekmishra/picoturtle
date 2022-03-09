@@ -19,7 +19,7 @@ Turtle::Turtle(TurtleOptions *options)
     Dimension = new TurtleDimension(Width, Height);
     Location = new TurtleLocation((int)(Width / 2), (int)(Height / 2));
     Angle = TURTLE_DEFAULT_HEADING;
-    PenColor = new TurtleColor(128, 128, 0, 255);
+    PenColor = new TurtleColor(128, 64, 32, 255);
     PenWidth = TURTLE_DEFAULT_PENWIDTH;
 };
 
