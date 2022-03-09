@@ -18,7 +18,7 @@ int handleTurtleLuaArgs(lua_State *L, int argc, char *argv[]);
 int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
-void turtleInitCb(Turtle *t, void* cb_args);
+void turtleInitCb(turtle::PicoTurtle *t, void* cb_args);
 int gui_window();
 
 static const char *const usages[] = {
@@ -184,7 +184,7 @@ void cleanupTurtleLuaBinding(lua_State *luaState)
     lua_close(luaState);
 }
 
-void turtleInitCb(Turtle *t, void* cb_args)
+void turtleInitCb(turtle::PicoTurtle *t, void* cb_args)
 {
     printf("PicoTurtle created - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
 }

@@ -3,6 +3,11 @@
 
 using namespace turtle;
 
+picoturtle_callback PicoTurtle::init_cb = NULL;
+void* PicoTurtle::init_cb_args = NULL;
+picoturtle_callback PicoTurtle::destroy_cb = NULL;
+void* PicoTurtle::destroy_cb_args = NULL;
+
 void PicoTurtle::CreateCanvas()
 {
     rasterSurface =
@@ -27,10 +32,19 @@ PicoTurtle::PicoTurtle() : Turtle()
     font(nullptr, 12);
 
     UpdateTurtleBrush();
+   
+    if (init_cb != NULL)
+    {
+        init_cb(this, init_cb_args);
+    }
 };
 
 PicoTurtle::~PicoTurtle()
 {
+    if (destroy_cb != NULL)
+    {
+        destroy_cb(this, destroy_cb_args);
+    }
 }
 
 void PicoTurtle::DrawLine(float x1, float y1, float x2, float y2)
@@ -134,4 +148,28 @@ void PicoTurtle::UpdateTurtleBrush()
 sk_sp<SkSurface> PicoTurtle::getRasterSurface() 
 {
     return rasterSurface;
+}
+
+void PicoTurtle::set_init_callback(picoturtle_callback fn, void* cb_args)
+{
+    init_cb = fn;
+    init_cb_args = cb_args;
+}
+
+void PicoTurtle::set_destroy_callback(picoturtle_callback fn, void* cb_args)
+{
+    destroy_cb = fn;
+    destroy_cb_args = cb_args;
+}
+
+void PicoTurtle::unset_init_callback()
+{
+    init_cb = NULL;
+    init_cb_args = NULL;
+}
+
+void PicoTurtle::unset_destroy_callback()
+{
+    destroy_cb = NULL;
+    destroy_cb_args = NULL;
 }

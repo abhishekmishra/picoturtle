@@ -5,9 +5,6 @@
 
 using namespace turtle;
 
-picoturtle_callback Turtle::init_cb = NULL;
-void* Turtle::init_cb_args = NULL;
-
 Turtle::Turtle() : Turtle(new TurtleOptions())
 {
 }
@@ -24,11 +21,6 @@ Turtle::Turtle(TurtleOptions *options)
     Angle = TURTLE_DEFAULT_HEADING;
     PenColor = new TurtleColor(128, 128, 0, 255);
     PenWidth = TURTLE_DEFAULT_PENWIDTH;
-
-    if (init_cb != NULL)
-    {
-        init_cb(this, init_cb_args);
-    }
 };
 
 std::string Turtle::getName() {
@@ -257,16 +249,4 @@ void Turtle::reset()
 TurtleColor *Turtle::getPenColor()
 {
     return PenColor;
-}
-
-void Turtle::set_init_callback(picoturtle_callback fn, void* cb_args)
-{
-    init_cb = fn;
-    init_cb_args = cb_args;
-}
-
-void Turtle::unset_init_callback()
-{
-    init_cb = NULL;
-    init_cb_args = NULL;
 }

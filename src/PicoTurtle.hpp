@@ -11,6 +11,10 @@
 
 namespace turtle
 {
+    class PicoTurtle;
+
+    typedef void (*picoturtle_callback)(PicoTurtle *, void *);
+
     class PicoTurtle : public Turtle
     {
     private:
@@ -21,6 +25,12 @@ namespace turtle
 
         void CreateCanvas();
 
+        static picoturtle_callback init_cb;
+        static void *init_cb_args;
+
+        static picoturtle_callback destroy_cb;
+        static void *destroy_cb_args;
+
     public:
         PicoTurtle();
         ~PicoTurtle();
@@ -30,12 +40,18 @@ namespace turtle
         virtual void UpdateTurtleBrush();
         virtual void UpdateCanvas();
 
-        virtual void font(const char* f, unsigned int sz);
-        virtual void filltext(const char* text);
-        virtual void stroketext(const char* text);
+        virtual void font(const char *f, unsigned int sz);
+        virtual void filltext(const char *text);
+        virtual void stroketext(const char *text);
         virtual void export_img(const char *filename);
         virtual void clear();
 
         sk_sp<SkSurface> getRasterSurface();
+
+        static void set_init_callback(picoturtle_callback fn, void *cb_args);
+        static void set_destroy_callback(picoturtle_callback fn, void *cb_args);
+
+        static void unset_init_callback();
+        static void unset_destroy_callback();
     };
 };
