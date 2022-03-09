@@ -19,6 +19,7 @@ int runLuaFile(lua_State *luaState, const char *filename);
 int runLuaScript(lua_State *luaState, const char *script);
 void cleanupTurtleLuaBinding(lua_State *luaState);
 void turtleInitCb(turtle::PicoTurtle *t, void* cb_args);
+void turtleDestroyCb(turtle::PicoTurtle *t, void* cb_args);
 int gui_window();
 
 static const char *const usages[] = {
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
     argc = argparse_parse(&argparse, argc, (const char **)argv);
 
     turtle::PicoTurtle::set_init_callback(&turtleInitCb, NULL);
+    turtle::PicoTurtle::set_destroy_callback(&turtleDestroyCb, NULL);
 
     // initialize the turtle lua binding with args
     initTurtleLuaBinding(&L);
@@ -187,6 +189,11 @@ void cleanupTurtleLuaBinding(lua_State *luaState)
 void turtleInitCb(turtle::PicoTurtle *t, void* cb_args)
 {
     printf("PicoTurtle created - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
+}
+
+void turtleDestroyCb(turtle::PicoTurtle *t, void* cb_args)
+{
+    printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
 }
 
 int gui_window()
