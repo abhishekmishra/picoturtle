@@ -39,7 +39,7 @@ Command {
 				local winExePath = dir .. "/build/bin/" .. buildConfig .. "/" .. exename .. ".exe"
 				os.execute(winExePath .. ' ' .. args_str)
 			else
-				os.execute("./build/" .. exename .. ' ' .. args_str)
+				os.execute("./build/bin/" .. exename .. ' ' .. args_str)
 			end
 		else
 			error('cannot find current directory')
