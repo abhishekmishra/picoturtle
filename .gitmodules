@@ -1,3 +1,6 @@
 [submodule "argparse"]
 	path = argparse
 	url = git@github.com:cofyc/argparse.git
+[submodule "c-color-names"]
+	path = c-color-names
+	url = https://github.com/abhishekmishra/c-color-names.git
