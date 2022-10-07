@@ -81,3 +81,11 @@ Command {
         runCommand('turtle', 'lua/runSamples.lua')
     end
 }
+
+Command {
+    name = 'dbuild',
+    description = 'docker build',
+    fn = function(tagname, ...)
+        os.execute('docker build -t ' .. tagname .. ' .')
+    end
+}
