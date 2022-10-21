@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
@@ -74,7 +71,8 @@ int main(int argc, char *argv[])
 
     if (gui != 0)
     {
-        gui_window();
+        //do nothing for now
+        //TODO: gui window
     }
 
     return 0;
@@ -211,92 +209,6 @@ void turtleDestroyCb(turtle::PicoTurtle *t, void *cb_args)
     {
         printf("Image [%d x %d].\n", img->width(), img->height());
     }
-}
-
-int gui_window()
-{
-    if (img)
-    {
-        if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        {
-            std::cout << "Failed to initialize the SDL2 library\n";
-            return -1;
-        }
-
-        SDL_Window *window = SDL_CreateWindow("PicoTurtle",
-                                              SDL_WINDOWPOS_CENTERED,
-                                              SDL_WINDOWPOS_CENTERED,
-                                              img->width(), img->height(),
-                                              0);
-
-        if (!window)
-        {
-            std::cout << "Failed to create window\n";
-            return -1;
-        }
-
-        SDL_Surface *window_surface = SDL_GetWindowSurface(window);
-
-        if (!window_surface)
-        {
-            std::cout << "Failed to get the surface from the window\n";
-            return -1;
-        }
-
-        SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
-        std::vector<uint32_t> srcPixels;
-        const int rowBytes = img->width() * 4;
-        srcPixels.resize(img->height() * rowBytes);
-        SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
-        img->readPixels(pixmap, 0, 0);
-
-        // printf("Image data len = %d.\n", srcPixels.size());
-
-        // hexDump("image raw data", &srcPixels.front(), img->height() * rowBytes, rowBytes);
-
-        Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-        int shift = (req_format == STBI_rgb) ? 8 : 0;
-        rmask = 0xff000000 >> shift;
-        gmask = 0x00ff0000 >> shift;
-        bmask = 0x0000ff00 >> shift;
-        amask = 0x000000ff >> shift;
-#else // little endian, like x86
-        rmask = 0x00ff0000;
-        gmask = 0x0000ff00;
-        bmask = 0x000000ff;
-        amask = 0xff000000;
-#endif
-
-        int depth = 32;
-        int pitch = 4 * img->width();
-
-        SDL_Surface *turtleImageSurface = SDL_CreateRGBSurfaceFrom((void *)&srcPixels.front(), img->width(), img->height(), depth, pitch,
-                                                                   rmask, gmask, bmask, amask);
-
-        printf("Turtle image surface loaded!\n");
-
-        bool keep_window_open = true;
-        while (keep_window_open)
-        {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) > 0)
-            {
-                switch (e.type)
-                {
-                case SDL_QUIT:
-                    keep_window_open = false;
-                    break;
-                }
-
-                // SDL_BlitSurface(loadedSurface, NULL, window_surface, NULL);
-                SDL_BlitSurface(turtleImageSurface, NULL, window_surface, NULL);
-                SDL_UpdateWindowSurface(window);
-            }
-        }
-    }
-
-    return 0;
 }
 
 void hexDump(
