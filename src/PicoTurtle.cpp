@@ -1,4 +1,5 @@
 #include <iostream>
+#include <core/SkStream.h>
 #include "PicoTurtle.hpp"
 
 using namespace turtle;
@@ -25,14 +26,14 @@ void PicoTurtle::UpdateCanvas()
 PicoTurtle::PicoTurtle() : Turtle()
 {
     CreateCanvas();
-    
+
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setStrokeWidth(1);
     font(nullptr, 12);
 
     UpdateTurtleBrush();
-   
+
     if (init_cb != NULL)
     {
         init_cb(this, init_cb_args);
