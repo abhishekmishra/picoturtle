@@ -84,7 +84,17 @@ if(WIN32)
   if (NOT TARGET skia)
     find_package(skia CONFIG REQUIRED)
   endif()
-  target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-windows/include/skia")
+
+    # see https://github.com/microsoft/vcpkg/issues/25774#issue-1304459755
+    # UNCOMMENT TO FIX LINK ERRORS
+    get_target_property(skia_interface_defs skia
+    INTERFACE_COMPILE_DEFINITIONS)
+    string(REPLACE "SKIA_IMPLEMENTATION=1" "SKIA_IMPLMENTATION=0"
+    skia_interface_defs_fixed "${skia_interface_defs}")
+    set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
+    "${skia_interface_defs_fixed}")
+
+    target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-windows/include/skia")
 	target_link_libraries(picoturtle PUBLIC skia skia::skia)
 endif(WIN32)
 
