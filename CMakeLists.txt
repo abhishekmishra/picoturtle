@@ -2,6 +2,8 @@ cmake_minimum_required ( VERSION 3.9 )
 
 project ( picoturtle LANGUAGES CXX )
 
+set (VERBOSE)
+
 # Export all symbols for shared linking to work on windows
 # see https://stackoverflow.com/questions/37128555/getting-cmake-to-build-shared-library-for-msvc
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
@@ -98,7 +100,34 @@ if(WIN32)
 	target_link_libraries(picoturtle PUBLIC skia skia::skia)
 endif(WIN32)
 
-if(UNIX)
+if(APPLE)
+  find_package(skia CONFIG REQUIRED)
+
+    # see https://github.com/microsoft/vcpkg/issues/25774#issue-1304459755
+    # UNCOMMENT TO FIX LINK ERRORS
+    get_target_property(skia_interface_defs skia
+    INTERFACE_COMPILE_DEFINITIONS)
+    string(REPLACE "SKIA_IMPLEMENTATION=1" "SKIA_IMPLMENTATION=0"
+    skia_interface_defs_fixed "${skia_interface_defs}")
+    set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
+    "${skia_interface_defs_fixed}")
+
+  target_include_directories(skia INTERFACE "/Users/abhishekmishra/vcpkg/installed/x64-osx/include/skia/")
+  target_link_libraries(picoturtle PUBLIC skia skia::skia)
+  # skiaConfig.cmake generated in vcpkg only looks for dll file.
+  # therefore adding the dynamic library file manually
+  target_link_libraries(picoturtle PUBLIC "/Users/abhishekmishra/vcpkg/installed/x64-osx/lib/libskia.dylib")
+
+
+  message(CHECK_START "Finding skia")
+  if (skia_FOUND)
+    message(CHECK_PASS "skia found")
+  else()
+    message(CHECK_FAIL "skia NOT found")
+  endif()
+endif(APPLE)
+
+if(CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(OpenGL_GL_PREFERENCE GLVND)
   find_package(OpenGL)
 
@@ -112,7 +141,7 @@ if(UNIX)
     )
     target_link_libraries(picoturtle PUBLIC skia)
   endif()
-endif(UNIX)
+endif()
 
 find_package(Lua REQUIRED)
 target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
