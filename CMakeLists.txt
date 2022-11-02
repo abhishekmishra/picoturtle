@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.9 )
 
-project ( picoturtle LANGUAGES CXX )
+project ( picoturtle VERSION 0.1.0 LANGUAGES CXX )
 
 set (VERBOSE)
 
@@ -195,14 +195,37 @@ target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
 
 #--------------------------PicoTurtle App---------------------------#
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set ( PICOTURTLE_APP_SOURCES
   src/TurtleApp.cpp
 )
 
-add_executable(picoturtle-app ${PICOTURTLE_APP_SOURCES})
+qt_add_executable(picoturtle-app MANUAL_FINALIZATION ${PICOTURTLE_APP_SOURCES})
+
+target_link_libraries(picoturtle-app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+set_target_properties(picoturtle-app PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER abhishekmishra.in
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
 
 set_property(TARGET picoturtle-app PROPERTY CXX_STANDARD 17)
+
+add_subdirectory(argparse build)
+include_directories(argparse)
+target_link_libraries(picoturtle-app PRIVATE argparse)
 
 # The output name of target should be "picoturtle"
 # which generates picoturtle.exe on windows
@@ -210,9 +233,8 @@ set_target_properties(picoturtle-app PROPERTIES OUTPUT_NAME "picoturtle")
 
 target_link_libraries(picoturtle-app PRIVATE picoturtle)
 
+qt_finalize_executable(picoturtle-app)
+
 # find_package(unofficial-graphicsmagick CONFIG REQUIRED)
 # target_link_libraries(picoturtle-app PRIVATE unofficial::graphicsmagick::graphicsmagick)
 
-add_subdirectory(argparse build)
-include_directories(argparse)
-target_link_libraries(picoturtle-app PRIVATE argparse)

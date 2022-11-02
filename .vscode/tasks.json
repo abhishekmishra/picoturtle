@@ -101,7 +101,11 @@
         {
             "label": "Run Project",
             "type": "shell",
-            "command": "make run",
+            "command": "build/bin/picoturtle",
+            "windows": {
+                "command": "build/bin/Debug/picoturtle.exe",
+                "args": ["lua/runSamples.lua"]
+            },
             "presentation": {
                 "echo": true,
                 "reveal": "always",

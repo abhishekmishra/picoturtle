@@ -1,3 +1,5 @@
+#include <QApplication>
+#include <QDebug>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,6 +44,10 @@ sk_sp<SkImage> img;
 
 int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+    
+    qInfo() << "Hello World!";
+    return a.exec();
     // lua state object (see lua api docs)
     lua_State *L;
 
@@ -115,7 +121,7 @@ int initTurtleLuaBinding(lua_State **luaState)
     if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
     {
         printf("Warning: %s is not set or empty!\n", TURTLE_LUA_DIR_ENV_VAR);
-        turtleLuaDir = "lua";
+        turtleLuaDir = (char *)"lua";
     }
     char *setPathCodeStr = (char *)calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
     if (setPathCodeStr == NULL)
