@@ -134,12 +134,59 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
   link_directories(/usr/lib/x86_64-linux-gnu/)
 
   target_link_libraries(picoturtle PUBLIC OpenGL::OpenGL OpenGL::GLX GLX OpenGL)
-  if (NOT TARGET skia)
-  	include(FindSkia)
-    target_include_directories(skia INTERFACE
-      ${SKIA_DIR}/include
-    )
-    target_link_libraries(picoturtle PUBLIC skia)
+
+#  if (NOT TARGET skia)
+#  	include(FindSkia)
+#    target_include_directories(skia INTERFACE
+#      ${SKIA_DIR}/include
+#    )
+#    target_link_libraries(picoturtle PUBLIC skia)
+#  endif()
+  find_package(skia CONFIG REQUIRED)
+
+    # see https://github.com/microsoft/vcpkg/issues/25774#issue-1304459755
+    # UNCOMMENT TO FIX LINK ERRORS
+    get_target_property(skia_interface_defs skia
+    INTERFACE_COMPILE_DEFINITIONS)
+    string(REPLACE "SKIA_IMPLEMENTATION=1" "SKIA_IMPLMENTATION=0"
+    skia_interface_defs_fixed "${skia_interface_defs}")
+    set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
+    "${skia_interface_defs_fixed}")
+
+  target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-linux/include/skia/")
+  target_link_libraries(picoturtle PUBLIC skia skia::skia)
+  # skiaConfig.cmake generated in vcpkg only looks for dll file.
+  # therefore adding the dynamic library file manually
+  target_link_libraries(picoturtle PUBLIC "$ENV{VCPKG_ROOT}/installed/x64-linux/lib/libskia.a")
+  target_link_libraries(picoturtle PUBLIC "$ENV{VCPKG_ROOT}/installed/x64-linux/lib/libfontconfig.a")
+
+    find_package(PNG REQUIRED)
+    target_link_libraries(picoturtle PRIVATE PNG::PNG)
+
+    find_package(WebP CONFIG REQUIRED)
+    target_link_libraries(picoturtle PRIVATE WebP::webp WebP::webpdemux WebP::libwebpmux WebP::webpdecoder)
+
+    find_package(LibXml2 REQUIRED)
+    target_link_libraries(picoturtle PRIVATE LibXml2::LibXml2)
+
+    find_package(JPEG REQUIRED)
+    target_link_libraries(picoturtle PRIVATE ${JPEG_LIBRARIES})
+    target_include_directories(picoturtle PRIVATE ${JPEG_INCLUDE_DIR})
+
+    find_package(BZip2 REQUIRED)
+    target_link_libraries(picoturtle PRIVATE BZip2::BZip2)
+
+    find_package(expat CONFIG REQUIRED)
+    target_link_libraries(picoturtle PRIVATE expat::expat)
+
+    find_package(freetype CONFIG REQUIRED)
+    target_link_libraries(picoturtle PRIVATE freetype)
+
+message(CHECK_START "Finding skia")
+  if (skia_FOUND)
+    message(CHECK_PASS "skia found")
+  else()
+    message(CHECK_FAIL "skia NOT found")
   endif()
 endif()
 
