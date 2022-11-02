@@ -45,9 +45,6 @@ sk_sp<SkImage> img;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    
-    qInfo() << "Hello World!";
-    return a.exec();
     // lua state object (see lua api docs)
     lua_State *L;
 
@@ -81,6 +78,8 @@ int main(int argc, char *argv[])
         //TODO: gui window
     }
 
+    qInfo() << "Hello World!";
+    return a.exec();
     return 0;
 }
 
