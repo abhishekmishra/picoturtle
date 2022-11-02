@@ -67,8 +67,6 @@ build
 *.db
 *.db-journal
 
-.vscode/
-
 # output folder for tests
 out/
 *.swp
