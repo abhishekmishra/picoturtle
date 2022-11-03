@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets/QTextEdit>
 
 class MainWindow : public QMainWindow
 {
@@ -16,6 +17,7 @@ signals:
 private:
     QSize sizeHint() const;
 
+    QTextEdit *text_edit;
     QAction *quitAction;
 };
 
