@@ -1,28 +1,6 @@
 {
     "configurations": [
         {
-            "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "${vcpkgRoot}/x64-osx/include",
-                "/usr/local/include/SDL2",
-                "${vcpkgRoot}/x64-osx/include/skia/",
-                "${vcpkgRoot}/x64-osx/include/Qt6/QtCore",
-                "${vcpkgRoot}/x64-osx/include/Qt6/QtWidgets",
-                "${vcpkgRoot}/x64-osx/include/Qt6",
-                "${vcpkgRoot}/x64-osx/include/Qt6/QtGui"
-            ],
-            "defines": [],
-            "macFrameworkPath": [
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64",
-            "configurationProvider": "ms-vscode.makefile-tools"
-        },
-        {
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
@@ -57,6 +35,27 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-clang-x64"
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${vcpkgRoot}/x64-osx/include",
+                "/usr/local/include/SDL2",
+                "${vcpkgRoot}/x64-osx/include/skia/",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtCore",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtWidgets",
+                "${vcpkgRoot}/x64-osx/include/Qt6",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtGui"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
         }
     ],
     "version": 4
