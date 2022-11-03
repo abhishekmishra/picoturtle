@@ -9,13 +9,15 @@
             "command": "pemk",
             "args": [
                 "genbuild",
-                "-DCMAKE_TOOLCHAIN_FILE=${VCPKG_HOME}/scripts/buildsystems/vcpkg.cmake"
+                "-DCMAKE_TOOLCHAIN_FILE=${VCPKG_HOME}/scripts/buildsystems/vcpkg.cmake",
+                "-DCMAKE_INSTALL_PREFIX=${workspaceFolder}/install"
             ],
             "windows": {
                 "command": "pemk",
                 "args": [
                     "genbuild",
-                    "-DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+                    "-DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+                    "-DCMAKE_INSTALL_PREFIX=${workspaceFolder}/install"
                 ]
             },
             "group": "build",

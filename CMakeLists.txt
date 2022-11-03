@@ -1,4 +1,4 @@
-cmake_minimum_required ( VERSION 3.9 )
+cmake_minimum_required ( VERSION 3.20 )
 
 project ( picoturtle VERSION 0.1.0 LANGUAGES CXX )
 
@@ -235,7 +235,36 @@ set_target_properties(picoturtle-app PROPERTIES OUTPUT_NAME "picoturtle")
 
 target_link_libraries(picoturtle-app PRIVATE picoturtle)
 
+install(TARGETS picoturtle-app
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# see instructions at https://www.qt.io/blog/cmake-deployment-api
+qt_generate_deploy_app_script(
+    TARGET picoturtle-app
+    FILENAME_VARIABLE deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+)
+
 qt_finalize_executable(picoturtle-app)
+
+# Run the qt deploy script for windows only
+# TODO: need to check for release or Debug build to run different programs
+if (WIN32)
+  add_custom_command(
+    TARGET picoturtle-app
+    POST_BUILD
+    COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/build/bin/Debug/picoturtle.exe
+  )
+endif(WIN32)
+
+# Run the qt deploy script for windows only
+# TODO: need to check for release or Debug build to run different programs
+if (WIN32)
+  install(CODE "execute_process(COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/install/bin/picoturtle.exe)")
+else()
+  install(SCRIPT ${deploy_script})
+endif(WIN32)
 
 # find_package(unofficial-graphicsmagick CONFIG REQUIRED)
 # target_link_libraries(picoturtle-app PRIVATE unofficial::graphicsmagick::graphicsmagick)
