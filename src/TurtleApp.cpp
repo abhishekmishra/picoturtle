@@ -8,6 +8,8 @@
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
+#include "MainWindow.hpp"
+
 #include "argparse.h"
 
 #define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
@@ -78,6 +80,8 @@ int main(int argc, char *argv[])
         //TODO: gui window
     }
 
+    MainWindow mainWindow;
+    mainWindow.show();
     qInfo() << "Hello World!";
     return a.exec();
     return 0;
