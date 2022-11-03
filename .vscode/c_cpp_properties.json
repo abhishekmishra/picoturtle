@@ -6,7 +6,11 @@
                 "${workspaceFolder}/**",
                 "${vcpkgRoot}/x64-osx/include",
                 "/usr/local/include/SDL2",
-                "/Users/abhishekmishra/vcpkg/installed/x64-osx/include/skia/"
+                "${vcpkgRoot}/x64-osx/include/skia/",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtCore",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtWidgets",
+                "${vcpkgRoot}/x64-osx/include/Qt6",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtGui"
             ],
             "defines": [],
             "macFrameworkPath": [
