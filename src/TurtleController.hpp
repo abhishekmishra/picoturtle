@@ -1,10 +1,12 @@
 #pragma once
+#include <QString>
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
 #define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
 
 namespace turtle {
+	//typedef void (*turtle_app_print_t)(QString);
 
 	class TurtleController {
 	private:
@@ -16,8 +18,11 @@ namespace turtle {
 		static void turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args);
 
 	public:
+		static std::function<void(QString)> custom_lua_print_fn;
+
 		static int init_turtle_lua_binding();
 		static void cleanup_turtle_lua_binding();
+		static void set_custom_lua_print_fn(std::function<void(QString)> printfn);
 		static int handle_turtle_lua_args(int argc, char* argv[]);
 		static int run_lua_file(const char* filename);
 		static int run_lua_script(const char* script);

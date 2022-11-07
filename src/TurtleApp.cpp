@@ -78,8 +78,28 @@ int gui_window(int argc, char* argv[])
 	turtle::TurtleController::init_turtle_lua_binding();
 	turtle::TurtleController::handle_turtle_lua_args(argc, argv);
 
-	turtle::TurtleAppWindow mainWindow;
-	mainWindow.show();
+	turtle::TurtleAppWindow *mainWindow = new turtle::TurtleAppWindow();
+
+	// TODO: replace the print function to redirect output to console
+	std::function<void(QString)> printfn = [=](QString input) {
+		mainWindow->write_to_console(input);
+	};
+
+	turtle::TurtleController::set_custom_lua_print_fn(printfn);
+
+	mainWindow->show();
+
+	turtle::TurtleController::run_lua_script(
+		"turtle_print('yo')\n"
+		"turtle_print(1)\n"
+		"local oldprint = print\n"
+		"print = function(...)\n"
+		"  -- do something with the args here.\n"
+		"  turtle_print(...)\n"
+		"end\n"
+		"print ('hello from new print')\n"
+	);
+
 	return a.exec();
 }
 

@@ -4,6 +4,7 @@
 
 namespace turtle {
 	lua_State* TurtleController::L = NULL;
+	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
 
 	bool TurtleController::handleLuaError(int luaErrorCode)
 	{
@@ -21,7 +22,6 @@ namespace turtle {
 
 	int print(lua_State* LUASTATE)
 	{
-		//MessageBoxA(NULL, "Custom print called.", "FUNCTION!", NULL);
 		int nargs = lua_gettop(LUASTATE);
 		QString input = "";
 		qDebug() << "Custom print function called.";
@@ -41,6 +41,12 @@ namespace turtle {
 				break;
 			}
 		}
+
+		if (TurtleController::custom_lua_print_fn != NULL)
+		{
+			TurtleController::custom_lua_print_fn(input);
+		}
+
 		qInfo() << input;
 		return 0;
 	}
@@ -177,4 +183,8 @@ namespace turtle {
 		}
 	}
 
+	void TurtleController::set_custom_lua_print_fn(std::function<void(QString)> printfn)
+	{
+		TurtleController::custom_lua_print_fn = printfn;
+	}
 }

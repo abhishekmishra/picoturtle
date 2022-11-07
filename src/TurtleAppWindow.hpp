@@ -5,7 +5,7 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include <QAction>
-#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
 #include "TurtleCodeEditorWidget.hpp"
@@ -19,7 +19,6 @@ namespace turtle {
 		explicit TurtleAppWindow(QWidget* parent = nullptr);
 		~TurtleAppWindow();
 	signals:
-
 
 	private:
 		QSize sizeHint() const;
@@ -40,7 +39,7 @@ namespace turtle {
 		TurtleCodeEditorWidget* turtle_code_editor;
 		QDockWidget* turtle_code_edit_dock;
 		QDockWidget* turtle_console_dock;
-		QTextEdit* turtle_console;
+		QPlainTextEdit* turtle_console;
 
 		// Menu actions and toolbar
 		QAction* quit_action;
@@ -63,6 +62,7 @@ namespace turtle {
 
 	public slots:
 		void show_status_message(const QString& message);
+		void write_to_console(const QString& input) const;
 	};
 }
 

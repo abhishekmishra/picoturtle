@@ -6,7 +6,7 @@
 namespace turtle {
 	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
 		: turtle_code_editor(new TurtleCodeEditorWidget(this)),
-		turtle_console{ new QTextEdit(this) },
+		turtle_console{ new QPlainTextEdit(this) },
 		QMainWindow{ parent }
 	{
 		setWindowTitle("PicoTurtle");
@@ -30,18 +30,6 @@ namespace turtle {
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, [=]() {
 			show_status_message("Turtle run complete!");
 			});
-
-		// TODO: replace the print function to redirect output to console
-		TurtleController::run_lua_script(
-			"turtle_print('yo')\n"
-			"turtle_print(1)\n"
-			"local oldprint = print\n"
-			"print = function(...)\n"
-			"  -- do something with the args here.\n"
-			"  turtle_print(...)\n"
-			"end\n"
-			"print ('hello from new print')\n"
-		);
 	}
 
 	TurtleAppWindow::~TurtleAppWindow()
@@ -145,6 +133,11 @@ namespace turtle {
 	void TurtleAppWindow::show_status_message(const QString& message)
 	{
 		statusBar()->showMessage(message);
+	}
+
+	void TurtleAppWindow::write_to_console(const QString& input) const
+	{
+		turtle_console->appendPlainText(input);
 	}
 
 	QSize TurtleAppWindow::sizeHint() const
