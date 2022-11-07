@@ -21,10 +21,14 @@ $(info OSFLAG is $(OSFLAG))
 all: clean build run
 
 genbuild:
+ifeq ($(OSFLAG),WIN32)
 	pemk genbuild
+else
+	pemk genbuild -DCMAKE_TOOLCHAIN_FILE=${VCPKG_HOME}/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=./install
+endif
 
 delbuild:
-	pemk delbuild
+	pemk delbuild 
 
 build:
 	pemk build
