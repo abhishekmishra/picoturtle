@@ -9,13 +9,14 @@
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
 #include "TurtleCodeEditorWidget.hpp"
+#include "TurtleController.hpp"
 
 namespace turtle {
 	class TurtleAppWindow : public QMainWindow
 	{
 		Q_OBJECT
 	public:
-		explicit TurtleAppWindow(QWidget* parent = nullptr);
+		explicit TurtleAppWindow(TurtleController* t_controller, QWidget* parent = nullptr);
 
 	signals:
 
@@ -30,6 +31,9 @@ namespace turtle {
 		void create_canvas_widget();
 		void create_turtle_code_edit_widget();
 		void create_turtle_console_widget();
+
+		// Turtle Controller Instance
+		TurtleController* turtle_controller;
 
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;

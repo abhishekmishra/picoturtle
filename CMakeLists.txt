@@ -206,6 +206,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set ( PICOTURTLE_APP_SOURCES
+    src/TurtleController.hpp
+    src/TurtleController.cpp
     src/TurtleCodeEditorWidget.hpp
     src/TurtleCodeEditorWidget.cpp
     src/TurtleCanvasWidget.hpp
