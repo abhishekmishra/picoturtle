@@ -15,7 +15,8 @@ namespace turtle {
 		else
 		{
 			const char* err_msg = lua_tostring(L, -1);
-			std::cout << err_msg << std::endl;
+			qDebug() << err_msg;
+			TurtleController::custom_lua_print_fn(err_msg);
 			return false;
 		}
 	}
@@ -152,8 +153,12 @@ namespace turtle {
 			{
 				// uncomment for debug only.
 				// printf("Script execution complete.\n");
+				return 0;
 			}
-			return 0;
+			else
+			{
+				return 1;
+			}
 		}
 		else
 		{

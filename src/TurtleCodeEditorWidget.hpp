@@ -15,7 +15,7 @@ public:
 
 signals:
     void new_file_created(const QString& file_name);
-    void turtle_run_complete();
+    void turtle_run_complete(const int error_code);
 
 public slots:
     void new_file();

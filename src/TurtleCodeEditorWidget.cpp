@@ -22,8 +22,8 @@ TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 
 void TurtleCodeEditorWidget::run_file()
 {
-	turtle::TurtleController::run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
-	emit turtle_run_complete();
+	int res = turtle::TurtleController::run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
+	emit turtle_run_complete(res);
 }
 
 void TurtleCodeEditorWidget::new_file()

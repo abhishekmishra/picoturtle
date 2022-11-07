@@ -27,9 +27,16 @@ namespace turtle {
 			show_status_message("New file created: " + file_name);
 			});
 
-		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, [=]() {
-			show_status_message("Turtle run complete!");
-			});
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, [=](const int error_code) {
+			if (error_code == 0)
+			{
+				show_status_message("Turtle run complete!");
+			}
+			else
+			{
+				show_status_message("Err: Turtle run completed with errors!");
+			}
+		});
 	}
 
 	TurtleAppWindow::~TurtleAppWindow()
