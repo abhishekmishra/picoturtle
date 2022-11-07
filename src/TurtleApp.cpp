@@ -13,7 +13,7 @@
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
-#include "MainWindow.hpp"
+#include "TurtleAppWindow.hpp"
 
 #include "argparse.h"
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     if (gui != 0)
     {
         QApplication a(argc, argv);
-        MainWindow mainWindow;
+        TurtleAppWindow mainWindow;
         mainWindow.show();
         return a.exec();
     }
