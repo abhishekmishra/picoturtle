@@ -28,11 +28,14 @@ namespace turtle {
 		void create_menubar();
 		void create_canvas_widget();
 		void create_turtle_code_edit_widget();
+		void create_turtle_console_widget();
 
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;
 		QDockWidget* turtle_code_edit_dock;
+		QDockWidget* turtle_console_dock;
 		QTextEdit* turtle_code_edit;
+		QTextEdit* turtle_console;
 
 		// Menu actions and toolbar
 		QAction* quit_action;
@@ -40,6 +43,15 @@ namespace turtle {
 		QAction* open_action;
 		QAction* save_action;
 		QAction* save_as_action;
+
+		QAction* cut_action;
+		QAction* copy_action;
+		QAction* paste_action;
+		QAction* undo_action;
+		QAction* redo_action;
+
+		QAction* about_action;
+
 		QToolBar* file_toolbar;
 	};
 }

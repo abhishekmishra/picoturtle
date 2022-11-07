@@ -16,6 +16,7 @@ namespace turtle {
 		// Add widgets
 		create_canvas_widget();
 		create_turtle_code_edit_widget();
+		create_turtle_console_widget();
 
 		// Set statusbar items
 		statusBar()->showMessage("Uploading file ...", 3000);
@@ -23,8 +24,20 @@ namespace turtle {
 
 	void TurtleAppWindow::create_actions()
 	{
-		// Define the quit action
-		quit_action = new QAction("Quit");
+		// Define the actions
+		new_action = new QAction(tr("New"));
+		open_action = new QAction(tr("Open"));
+		save_action = new QAction(tr("Save"));
+		save_as_action = new QAction(tr("Save As")); 
+		quit_action = new QAction(tr("Quit"));		
+
+		cut_action = new QAction(tr("Cut"));
+		copy_action = new QAction(tr("Copy"));
+		paste_action = new QAction(tr("Paste"));		
+		undo_action = new QAction(tr("Undo"));		
+		redo_action = new QAction(tr("Redo"));
+
+		about_action = new QAction(tr("About"));
 
 		connect(quit_action, &QAction::triggered, [=]() {
 			QApplication::quit();
@@ -44,12 +57,25 @@ namespace turtle {
 		menuBar()->setNativeMenuBar(false);
 
 		// Add menus
-		QMenu* fileMenu = menuBar()->addMenu(tr("File"));
-		fileMenu->addAction(quit_action);
-		menuBar()->addMenu("Edit");
-		menuBar()->addMenu("Window");
-		menuBar()->addMenu("Settings");
-		menuBar()->addMenu("Help");
+		QMenu* file_menu = menuBar()->addMenu(tr("File"));
+		file_menu->addAction(new_action);
+		file_menu->addAction(open_action);
+		file_menu->addAction(save_action);
+		file_menu->addAction(save_as_action);
+		file_menu->addAction(quit_action);
+		
+		QMenu* edit_menu = menuBar()->addMenu(tr("Edit"));
+		edit_menu->addAction(cut_action);
+		edit_menu->addAction(copy_action);
+		edit_menu->addAction(paste_action);
+		edit_menu->addAction(undo_action);
+		edit_menu->addAction(redo_action);
+
+		QMenu* turtle_menu = menuBar()->addMenu(tr("Turtle"));
+		QMenu* settings_menu = menuBar()->addMenu(tr("Settings"));
+		
+		QMenu* help_menu = menuBar()->addMenu(tr("Help"));
+		help_menu->addAction(about_action);
 	}
 
 	void TurtleAppWindow::create_canvas_widget()
@@ -67,6 +93,14 @@ namespace turtle {
 		addDockWidget(Qt::LeftDockWidgetArea, turtle_code_edit_dock);
 	}
 
+	void TurtleAppWindow::create_turtle_console_widget()
+	{
+		turtle_console_dock = new QDockWidget(tr("Turtle Console"), this);
+		turtle_console_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+		turtle_console_dock->setWidget(turtle_code_edit);
+
+		addDockWidget(Qt::BottomDockWidgetArea, turtle_console_dock);
+	}
 
 	QSize TurtleAppWindow::sizeHint() const
 	{
