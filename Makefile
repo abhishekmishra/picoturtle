@@ -32,11 +32,11 @@ build:
 run:
 # conditionals should be written without indentation
 ifeq ($(OSFLAG),WIN32)
-	./build/bin/Debug/picoturtle
+	./build/bin/Debug/picoturtle -g
 else ifeq ($(OSFLAG),OSX)
-	open -n ./build/bin/picoturtle.app
+	open -n ./build/bin/picoturtle.app --args -g
 else
-	./build/bin/picoturtle
+	./build/bin/picoturtle -g
 endif
 
 clean:
