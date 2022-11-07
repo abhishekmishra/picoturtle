@@ -274,7 +274,6 @@ find_package(SDL2_mixer CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 target_link_libraries(picoturtle-app 
   PRIVATE         
-  $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
   $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 target_link_libraries(picoturtle-app PRIVATE SDL2::SDL2_image)

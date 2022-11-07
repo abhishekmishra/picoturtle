@@ -1,3 +1,8 @@
+// see https://stackoverflow.com/a/38803842/9483968
+// this is to stop sdl2 from trying to define its own main
+#define SDL_MAIN_HANDLED
+#include "SDL2/SDL.h"
+
 #include <QApplication>
 #include <QDebug>
 #include <iostream>
