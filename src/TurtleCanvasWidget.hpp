@@ -1,5 +1,5 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef TURTLE_CANVAS_WIDGET_H
+#define TURTLE_CANVAS_WIDGET_H
 
 #include <QWidget>
 
@@ -10,5 +10,6 @@ class TurtleCanvasWidget : public QWidget
 public:
     TurtleCanvasWidget(QWidget *parent = nullptr);
     ~TurtleCanvasWidget();
+
 };
-#endif // WIDGET_H
+#endif // TURTLE_CANVAS_WIDGET_H

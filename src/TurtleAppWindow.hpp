@@ -8,6 +8,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
+#include "TurtleCodeEditorWidget.hpp"
 
 namespace turtle {
 	class TurtleAppWindow : public QMainWindow
@@ -32,9 +33,9 @@ namespace turtle {
 
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;
+		TurtleCodeEditorWidget* turtle_code_editor;
 		QDockWidget* turtle_code_edit_dock;
 		QDockWidget* turtle_console_dock;
-		QTextEdit* turtle_code_edit;
 		QTextEdit* turtle_console;
 
 		// Menu actions and toolbar
@@ -50,9 +51,14 @@ namespace turtle {
 		QAction* undo_action;
 		QAction* redo_action;
 
+		QAction* run_action;
+
 		QAction* about_action;
 
 		QToolBar* file_toolbar;
+
+	public slots:
+		void show_status_message(const QString& message);
 	};
 }
 
