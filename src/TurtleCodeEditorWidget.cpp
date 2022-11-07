@@ -1,4 +1,5 @@
 #include "TurtleCodeEditorWidget.hpp"
+#include "TurtleController.hpp"
 #include <QVBoxLayout>
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget* parent)
@@ -21,6 +22,7 @@ TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 
 void TurtleCodeEditorWidget::run_file()
 {
+	turtle::TurtleController::run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
 	emit turtle_run_complete();
 }
 
