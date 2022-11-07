@@ -268,6 +268,19 @@ else()
   install(SCRIPT ${deploy_script})
 endif(WIN32)
 
+find_package(SDL2 CONFIG REQUIRED)
+find_package(sdl2-image CONFIG REQUIRED)
+find_package(SDL2_mixer CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
+target_link_libraries(picoturtle-app 
+  PRIVATE         
+  $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+  $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)
+target_link_libraries(picoturtle-app PRIVATE SDL2::SDL2_image)
+target_link_libraries(picoturtle-app PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+target_link_libraries(picoturtle-app PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+
 # find_package(unofficial-graphicsmagick CONFIG REQUIRED)
 # target_link_libraries(picoturtle-app PRIVATE unofficial::graphicsmagick::graphicsmagick)
 
