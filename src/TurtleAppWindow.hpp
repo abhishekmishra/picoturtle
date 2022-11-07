@@ -16,8 +16,8 @@ namespace turtle {
 	{
 		Q_OBJECT
 	public:
-		explicit TurtleAppWindow(TurtleController* t_controller, QWidget* parent = nullptr);
-
+		explicit TurtleAppWindow(QWidget* parent = nullptr);
+		~TurtleAppWindow();
 	signals:
 
 

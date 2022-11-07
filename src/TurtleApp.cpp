@@ -74,9 +74,11 @@ int main(int argc, char* argv[])
 int gui_window(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
-	turtle::TurtleController *turtleController = new turtle::TurtleController();
-	turtle::TurtleAppWindow mainWindow(turtleController);
-	turtleController->handle_turtle_lua_args(argc, argv);
+	// initialize the turtle lua binding with args
+	turtle::TurtleController::init_turtle_lua_binding();
+	turtle::TurtleController::handle_turtle_lua_args(argc, argv);
+
+	turtle::TurtleAppWindow mainWindow;
 	mainWindow.show();
 	return a.exec();
 }

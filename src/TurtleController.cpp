@@ -1,21 +1,9 @@
 #include <iostream>
+#include <QDebug>
 #include "TurtleController.hpp"
 
 namespace turtle {
-	TurtleController::TurtleController()
-	{
-		turtle::PicoTurtle::set_init_callback(&TurtleController::turtle_init_cb, NULL);
-		turtle::PicoTurtle::set_destroy_callback(&TurtleController::turtle_destroy_cb, NULL);
-
-		// initialize the turtle lua binding with args
-		init_turtle_lua_binding();
-	}
-
-	TurtleController::~TurtleController()
-	{
-		// cleanup the turtle lua binding
-		cleanup_turtle_lua_binding();
-	}
+	lua_State* TurtleController::L = NULL;
 
 	bool TurtleController::handleLuaError(int luaErrorCode)
 	{
@@ -31,8 +19,37 @@ namespace turtle {
 		}
 	}
 
+	int print(lua_State* LUASTATE)
+	{
+		//MessageBoxA(NULL, "Custom print called.", "FUNCTION!", NULL);
+		int nargs = lua_gettop(LUASTATE);
+		QString input = "";
+		qDebug() << "Custom print function called.";
+		for (int i = 1; i <= nargs; i++)
+		{
+			if (i > 1) input += " ";
+			switch (lua_type(LUASTATE, i))
+			{
+			case LUA_TSTRING:
+				input += lua_tostring(LUASTATE, i);
+				break;
+			case LUA_TNUMBER:
+				input += QString::number((int)lua_tonumber(LUASTATE, i));
+				break;
+			case LUA_TBOOLEAN:
+				input += QString::number(lua_toboolean(LUASTATE, i));
+				break;
+			}
+		}
+		qInfo() << input;
+		return 0;
+	}
+
 	int TurtleController::init_turtle_lua_binding()
 	{
+		turtle::PicoTurtle::set_init_callback(&TurtleController::turtle_init_cb, NULL);
+		turtle::PicoTurtle::set_destroy_callback(&TurtleController::turtle_destroy_cb, NULL);
+
 		// Create Lua State
 		L = luaL_newstate();
 
@@ -59,12 +76,20 @@ namespace turtle {
 		if (setPathCodeStr == NULL)
 		{
 			printf("Fatal: Unable to alloc string to set load path in lua!\n");
+			return -2;
 		}
 
 		sprintf(setPathCodeStr, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
-		// printf("Setting path via code -> |%s|\n", setPathCodeStr);
+		qDebug("Setting path via code -> |%s|", setPathCodeStr);
 
 		run_lua_script(setPathCodeStr);
+
+		lua_pushcfunction(L, print);
+		lua_setglobal(L, "turtle_print");
+		qDebug("global function turtle_print is set");
+		
+		run_lua_script("turtle_print ('hello')");
+
 		return 0;
 	}
 
@@ -114,6 +139,7 @@ namespace turtle {
 
 	int TurtleController::run_lua_script(const char* script)
 	{
+		qDebug() << "run lua script -> " << script;
 		if (script != NULL && strlen(script) > 0)
 		{
 			if (handleLuaError(luaL_dostring(L, script)))

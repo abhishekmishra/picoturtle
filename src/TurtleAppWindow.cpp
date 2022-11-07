@@ -4,9 +4,8 @@
 #include <QStatusBar>
 
 namespace turtle {
-	TurtleAppWindow::TurtleAppWindow(TurtleController* t_controller, QWidget* parent)
-		: turtle_controller { t_controller },
-		turtle_code_editor(new TurtleCodeEditorWidget(this)),
+	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
+		: turtle_code_editor(new TurtleCodeEditorWidget(this)),
 		turtle_console{ new QTextEdit(this) },
 		QMainWindow{ parent }
 	{
@@ -33,12 +32,22 @@ namespace turtle {
 			});
 
 		// TODO: replace the print function to redirect output to console
-		turtle_controller->run_lua_script(
-			"local oldprint = print"
-			"print = function(...)"
-			"  -- do something with the args here."
-			"end"
+		TurtleController::run_lua_script(
+			"turtle_print('yo')\n"
+			"turtle_print(1)\n"
+			"local oldprint = print\n"
+			"print = function(...)\n"
+			"  -- do something with the args here.\n"
+			"  turtle_print(...)\n"
+			"end\n"
+			"print ('hello from new print')\n"
 		);
+	}
+
+	TurtleAppWindow::~TurtleAppWindow()
+	{
+		// cleanup the turtle lua binding
+		TurtleController::cleanup_turtle_lua_binding();
 	}
 
 	void TurtleAppWindow::create_actions()
