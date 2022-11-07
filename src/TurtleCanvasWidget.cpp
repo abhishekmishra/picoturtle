@@ -1,15 +1,14 @@
 #include "TurtleCanvasWidget.hpp"
 #include <QPushButton>
 #include <QDebug>
-#include <QtWidgets/QScrollArea>
+#include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 
 TurtleCanvasWidget::TurtleCanvasWidget(QWidget *parent)
-    : QScrollArea(parent)
+    : QWidget(parent)
 {
-    setBackgroundRole(QPalette::Dark);
-    QLabel* imgLabel = new QLabel("Yo", this);
-    setWidget(imgLabel);
+    QLabel* imgLabel = new QLabel("This is a long label", this);
+    imgLabel->move(20, 20);
 }
 
 TurtleCanvasWidget::~TurtleCanvasWidget()

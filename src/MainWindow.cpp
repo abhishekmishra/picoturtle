@@ -15,16 +15,15 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	setWindowTitle("PicoTurtle");
 
-	// Add a central widget
-	setCentralWidget(text_edit);
-
 	TurtleCanvasWidget* turtle_canvas = new TurtleCanvasWidget(this);
+	// Add a central widget
+	setCentralWidget(turtle_canvas);
 
-	QDockWidget* dock = new QDockWidget(tr("TurtleCanvas"), this);
+	QDockWidget* dock = new QDockWidget(tr("TurtleEdit"), this);
 	dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	dock->setWidget(turtle_canvas);
+	dock->setWidget(text_edit);
 
-	addDockWidget(Qt::RightDockWidgetArea, dock);
+	addDockWidget(Qt::LeftDockWidgetArea, dock);
 
 	// Define the quit action
 	quitAction = new QAction("Quit");

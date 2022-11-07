@@ -51,6 +51,7 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "qdockwidget": "cpp",
-        "qtextedit": "cpp"
+        "qtextedit": "cpp",
+        "qwidget": "cpp"
     }
 }

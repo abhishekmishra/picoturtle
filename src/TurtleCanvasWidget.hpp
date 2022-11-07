@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QtWidgets/QScrollArea>
 
-class TurtleCanvasWidget : public QScrollArea
+class TurtleCanvasWidget : public QWidget
 {
     Q_OBJECT
 
