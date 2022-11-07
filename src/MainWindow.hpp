@@ -16,9 +16,13 @@ signals:
     // QWidget interface
 private:
     QSize sizeHint() const;
+    void createActions();
+    void createToolBar();
+    void createMenuBar();
 
     QTextEdit *text_edit;
     QAction *quitAction;
+    QToolBar* FileBar;
 };
 
 #endif // MAINWINDOW_H
