@@ -208,8 +208,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 set ( PICOTURTLE_APP_SOURCES
   src/TurtleCanvasWidget.hpp
   src/TurtleCanvasWidget.cpp
-  src/MainWindow.hpp
-  src/MainWindow.cpp
+  src/TurtleAppWindow.hpp
+  src/TurtleAppWindow.cpp
   src/TurtleApp.cpp
 )
 
