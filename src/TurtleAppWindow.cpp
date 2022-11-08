@@ -8,8 +8,8 @@
 namespace turtle
 {
 	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
-		: turtle_code_editor(new TurtleCodeEditorWidget(this)),
-		turtle_console{ new QPlainTextEdit(this) },
+		: turtle_code_editor{ new TurtleCodeEditorWidget(this) },
+		turtle_console{ new TurtleConsoleWidget(this) },
 		QMainWindow{ parent }
 	{
 		setWindowTitle("PicoTurtle");
@@ -157,7 +157,7 @@ namespace turtle
 
 	void TurtleAppWindow::write_to_console(const QString& input) const
 	{
-		turtle_console->appendPlainText(input);
+		turtle_console->info(input);
 	}
 
 	QSize TurtleAppWindow::sizeHint() const

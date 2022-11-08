@@ -9,9 +9,16 @@
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
 #include "TurtleCodeEditorWidget.hpp"
+#include "TurtleConsoleWidget.hpp"
 #include "TurtleController.hpp"
 
 namespace turtle {
+
+	/**
+	* This class is the main window of the Turtle Application.
+	* It has menubar, toolbars, statusbar, a central canvas widget,
+	* and editor and console widgets docked
+	*/
 	class TurtleAppWindow : public QMainWindow
 	{
 		Q_OBJECT
@@ -37,9 +44,9 @@ namespace turtle {
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;
 		TurtleCodeEditorWidget* turtle_code_editor;
+		TurtleConsoleWidget* turtle_console;
 		QDockWidget* turtle_code_edit_dock;
 		QDockWidget* turtle_console_dock;
-		QPlainTextEdit* turtle_console;
 
 		// Menu actions and toolbar
 		QAction* quit_action;

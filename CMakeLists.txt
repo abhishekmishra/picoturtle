@@ -210,6 +210,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleController.cpp
     src/TurtleCodeEditorWidget.hpp
     src/TurtleCodeEditorWidget.cpp
+    src/TurtleConsoleWidget.hpp
+    src/TurtleConsoleWidget.cpp
     src/TurtleCanvasWidget.hpp
     src/TurtleCanvasWidget.cpp
     src/TurtleAppWindow.hpp
