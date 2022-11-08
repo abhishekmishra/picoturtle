@@ -20,6 +20,7 @@ namespace turtle {
 	public:
 		static std::function<void(QString)> custom_lua_print_fn;
 
+		static void turtle_message(const QString& src, const QString& msg);
 		static int init_turtle_lua_binding();
 		static void cleanup_turtle_lua_binding();
 		static void set_custom_lua_print_fn(std::function<void(QString)> printfn);

@@ -6,6 +6,15 @@ namespace turtle {
 	lua_State* TurtleController::L = NULL;
 	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
 
+	void TurtleController::turtle_message(const QString& src, const QString& msg)
+	{
+		qDebug() << src + ":" << msg;
+		if (TurtleController::custom_lua_print_fn != NULL)
+		{
+			TurtleController::custom_lua_print_fn(src + ": " + msg);
+		}
+	}
+
 	bool TurtleController::handleLuaError(int luaErrorCode)
 	{
 		if (luaErrorCode == LUA_OK)
@@ -25,7 +34,6 @@ namespace turtle {
 	{
 		int nargs = lua_gettop(LUASTATE);
 		QString input = "";
-		qDebug() << "Custom print function called.";
 		for (int i = 1; i <= nargs; i++)
 		{
 			if (i > 1) input += " ";
@@ -43,12 +51,7 @@ namespace turtle {
 			}
 		}
 
-		if (TurtleController::custom_lua_print_fn != NULL)
-		{
-			TurtleController::custom_lua_print_fn(input);
-		}
-
-		qInfo() << input;
+		TurtleController::turtle_message("program", input);
 		return 0;
 	}
 
@@ -76,24 +79,24 @@ namespace turtle {
 		char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
 		if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
 		{
-			printf("Warning: %s is not set or empty!\n", TURTLE_LUA_DIR_ENV_VAR);
+			TurtleController::turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
 			turtleLuaDir = (char*)"lua";
 		}
 		char* setPathCodeStr = (char*)calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
 		if (setPathCodeStr == NULL)
 		{
-			printf("Fatal: Unable to alloc string to set load path in lua!\n");
+			TurtleController::turtle_message("app", "Fatal: Unable to alloc string to set load path in lua!\n");
 			return -2;
 		}
 
 		sprintf(setPathCodeStr, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
-		qDebug("Setting path via code -> |%s|", setPathCodeStr);
+		TurtleController::turtle_message("app", QString("Setting path via code -> |")+ setPathCodeStr + "|");
 
 		run_lua_script(setPathCodeStr);
 
 		lua_pushcfunction(L, print);
 		lua_setglobal(L, "turtle_print");
-		qDebug("global function turtle_print is set");
+		TurtleController::turtle_message("app", "global function turtle_print is set");
 		
 		run_lua_script("turtle_print ('hello')");
 
@@ -134,7 +137,7 @@ namespace turtle {
 		{
 			if (handleLuaError(luaL_dofile(L, filename)))
 			{
-				printf("File execution complete -> %s. \n", filename);
+				TurtleController::turtle_message("app", QString("File execution complete -> ") + filename);
 			}
 			return 0;
 		}
@@ -146,7 +149,7 @@ namespace turtle {
 
 	int TurtleController::run_lua_script(const char* script)
 	{
-		qDebug() << "run lua script -> " << script;
+		TurtleController::turtle_message("app", QString("running lua script."));
 		if (script != NULL && strlen(script) > 0)
 		{
 			if (handleLuaError(luaL_dostring(L, script)))
@@ -184,7 +187,7 @@ namespace turtle {
 		img = t->getRasterSurface()->makeImageSnapshot();
 		if (img)
 		{
-			printf("Image [%d x %d].\n", img->width(), img->height());
+			TurtleController::turtle_message("app", QString("Image [%d x %d].\n").arg(img->width(), img->height()));
 		}
 	}
 
