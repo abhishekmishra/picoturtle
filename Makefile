@@ -48,3 +48,10 @@ clean:
 
 install:
 	cmake --build ./build --target install
+
+sln:
+ifeq ($(OSFLAG),WIN32)
+	cmd /C ".\build\picoturtle.sln"
+else
+	echo "No solution file available on this platform"
+endif
