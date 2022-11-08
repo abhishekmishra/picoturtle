@@ -2,6 +2,7 @@
 #define TURTLE_CANVAS_WIDGET_H
 
 #include <QWidget>
+#include "TurtleSDLWidget.hpp"
 
 class TurtleCanvasWidget : public QWidget
 {
@@ -11,5 +12,7 @@ public:
     TurtleCanvasWidget(QWidget *parent = nullptr);
     ~TurtleCanvasWidget();
 
+private:
+    TurtleSDLWidget* sdl_widget;
 };
 #endif // TURTLE_CANVAS_WIDGET_H

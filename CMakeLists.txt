@@ -212,6 +212,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleCodeEditorWidget.cpp
     src/TurtleConsoleWidget.hpp
     src/TurtleConsoleWidget.cpp
+    src/TurtleSDLWidget.hpp
+    src/TurtleSDLWidget.cpp
     src/TurtleCanvasWidget.hpp
     src/TurtleCanvasWidget.cpp
     src/TurtleAppWindow.hpp
