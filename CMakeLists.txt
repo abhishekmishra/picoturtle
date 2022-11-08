@@ -235,9 +235,11 @@ set_target_properties(picoturtle-app PROPERTIES
 
 set_property(TARGET picoturtle-app PROPERTY CXX_STANDARD 17)
 
-add_subdirectory(argparse build)
-include_directories(argparse)
-target_link_libraries(picoturtle-app PRIVATE argparse)
+# TODO: removed argparse for now from gui app
+# TODO: will add argument parsing in turtle console app
+# add_subdirectory(argparse build)
+# include_directories(argparse)
+# target_link_libraries(picoturtle-app PRIVATE argparse)
 
 # The output name of target should be "picoturtle"
 # which generates picoturtle.exe on windows

@@ -13,8 +13,6 @@
 #include "TurtleAppWindow.hpp"
 #include "TurtleController.hpp"
 
-#include "argparse.h"
-
 
 /**
 * Creates the Qt main window and runs the main loop for Qt.
@@ -38,37 +36,9 @@ void hex_dump(
 	const int len,
 	int perLine);
 
-static const char* const usages[] = {
-	"picoturtle [options] [[--] <turtle file> <turtle args>]",
-	"picoturtle [options]",
-	NULL,
-};
-
-
 int main(int argc, char* argv[])
 {
-	// option to indicate if app is to run in gui mode
-	int gui = 0;
-
-	struct argparse_option options[] = {
-		OPT_HELP(),
-		OPT_GROUP("PicoTurtle Options"),
-		OPT_BOOLEAN('g', "gui", &gui, "run in gui mode.", NULL, 0, 0),
-		OPT_END(),
-	};
-
-	struct argparse argparse;
-	argparse_init(&argparse, options, usages, 0);
-	argparse_describe(&argparse, "\npicoturtle: A turtle programming environment.", "\nTODO: more info.");
-	argc = argparse_parse(&argparse, argc, (const char**)argv);
-
-
-	if (gui != 0)
-	{
-		gui_window(argc, argv);
-	}
-
-	return 0;
+	return gui_window(argc, argv);
 }
 
 int gui_window(int argc, char* argv[])
@@ -76,7 +46,13 @@ int gui_window(int argc, char* argv[])
 	QApplication a(argc, argv);
 	// initialize the turtle lua binding with args
 	turtle::TurtleController::init_turtle_lua_binding();
-	turtle::TurtleController::handle_turtle_lua_args(argc, argv);
+
+	// TODO: removed this for now - as this expect all non-lua
+	// args to be removed before hand. Need to sanitize args
+	// before passing on to a lua file with args.
+	// this could be a common solution between a console program
+	// and this one.
+	// turtle::TurtleController::handle_turtle_lua_args(argc, argv);
 
 	turtle::TurtleAppWindow *mainWindow = new turtle::TurtleAppWindow();
 
