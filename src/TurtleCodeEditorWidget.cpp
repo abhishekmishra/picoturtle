@@ -11,7 +11,27 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget* parent)
 	turtle_code_edit = new QTextEdit(this);
 	turtle_code_edit->setMinimumHeight(500);
 	turtle_code_edit->setMinimumWidth(400);
-	turtle_code_edit->setText("blah");
+
+	// Set the default monospace font for now
+	// TODO: perhaps include a decent open source font
+	QFont font("Courier");
+	font.setPointSize(14);
+	QFontInfo info(font);
+	qDebug() << font << info.family() << info.fixedPitch();
+	turtle_code_edit->setFont(font);
+
+	QPalette p = turtle_code_edit->palette();
+	
+	// set background colour
+	p.setColor(QPalette::Active, QPalette::Base, Qt::black);
+	p.setColor(QPalette::Inactive, QPalette::Base, Qt::black);
+
+	// set foreground colour
+	p.setColor(QPalette::Active, QPalette::Text, Qt::green);
+	p.setColor(QPalette::Inactive, QPalette::Text, Qt::green);
+
+	turtle_code_edit->setPalette(p);
+
 	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_code_edit);
 	setLayout(vb_layout);

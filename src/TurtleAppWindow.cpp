@@ -7,10 +7,10 @@
 
 namespace turtle
 {
-	TurtleAppWindow::TurtleAppWindow(QWidget *parent)
+	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
 		: turtle_code_editor(new TurtleCodeEditorWidget(this)),
-		  turtle_console{new QPlainTextEdit(this)},
-		  QMainWindow{parent}
+		turtle_console{ new QPlainTextEdit(this) },
+		QMainWindow{ parent }
 	{
 		setWindowTitle("PicoTurtle");
 
@@ -26,22 +26,23 @@ namespace turtle
 		// Set statusbar items
 		statusBar()->showMessage("Starting PicoTurtle ...", 3000);
 
-		connect(turtle_code_editor, &TurtleCodeEditorWidget::new_file_created, [=](const QString &file_name)
-				{ show_status_message("New file created: " + file_name); });
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::new_file_created, [=](const QString& file_name)
+			{ show_status_message("New file created: " + file_name); });
 
-		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_opened, [=](const QString &file_name)
-				{ show_status_message("File opened: " + file_name); });
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_opened, [=](const QString& file_name)
+			{ show_status_message("File opened: " + file_name); });
 
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, [=](const int error_code)
+			{
+				if (error_code == 0)
 				{
-			if (error_code == 0)
-			{
-				show_status_message("Turtle run complete!");
-			}
-			else
-			{
-				show_status_message("Err: Turtle run completed with errors!");
-			} });
+					show_status_message("Turtle run complete!");
+				}
+				else
+				{
+					show_status_message("Err: Turtle run completed with errors!");
+				}
+			});
 	}
 
 	TurtleAppWindow::~TurtleAppWindow()
@@ -72,19 +73,19 @@ namespace turtle
 		// connect file actions
 		connect(new_action, &QAction::triggered, turtle_code_editor, &TurtleCodeEditorWidget::new_file);
 		connect(open_action, &QAction::triggered, [=]()
-				{ QString fileName = QFileDialog::getOpenFileName(this,
-																  tr("Open Turtle Lua File"), QDir::homePath(), tr("Turtle/Lua Files (*.lua)")); 
-																  qDebug() << fileName;
-																  //TODO: handle return value to show appropriate error.
-																  turtle_code_editor->open_file(fileName); });
+			{ QString fileName = QFileDialog::getOpenFileName(this,
+				tr("Open Turtle Lua File"), QDir::homePath(), tr("Turtle/Lua Files (*.lua)"));
+		qDebug() << fileName;
+		//TODO: handle return value to show appropriate error.
+		turtle_code_editor->open_file(fileName); });
 
 		// connect turtle actions
 		connect(run_action, &QAction::triggered, turtle_code_editor,
-				&TurtleCodeEditorWidget::run_file);
+			&TurtleCodeEditorWidget::run_file);
 
 		// connect quit
 		connect(quit_action, &QAction::triggered, [=]()
-				{ QApplication::quit(); });
+			{ QApplication::quit(); });
 	}
 
 	void TurtleAppWindow::create_toolbar()
@@ -102,26 +103,26 @@ namespace turtle
 		menuBar()->setNativeMenuBar(false);
 
 		// Add menus
-		QMenu *file_menu = menuBar()->addMenu(tr("File"));
+		QMenu* file_menu = menuBar()->addMenu(tr("File"));
 		file_menu->addAction(new_action);
 		file_menu->addAction(open_action);
 		file_menu->addAction(save_action);
 		file_menu->addAction(save_as_action);
 		file_menu->addAction(quit_action);
 
-		QMenu *edit_menu = menuBar()->addMenu(tr("Edit"));
+		QMenu* edit_menu = menuBar()->addMenu(tr("Edit"));
 		edit_menu->addAction(cut_action);
 		edit_menu->addAction(copy_action);
 		edit_menu->addAction(paste_action);
 		edit_menu->addAction(undo_action);
 		edit_menu->addAction(redo_action);
 
-		QMenu *turtle_menu = menuBar()->addMenu(tr("Turtle"));
+		QMenu* turtle_menu = menuBar()->addMenu(tr("Turtle"));
 		turtle_menu->addAction(run_action);
 
-		QMenu *settings_menu = menuBar()->addMenu(tr("Settings"));
+		QMenu* settings_menu = menuBar()->addMenu(tr("Settings"));
 
-		QMenu *help_menu = menuBar()->addMenu(tr("Help"));
+		QMenu* help_menu = menuBar()->addMenu(tr("Help"));
 		help_menu->addAction(about_action);
 	}
 
@@ -149,12 +150,12 @@ namespace turtle
 		addDockWidget(Qt::BottomDockWidgetArea, turtle_console_dock);
 	}
 
-	void TurtleAppWindow::show_status_message(const QString &message)
+	void TurtleAppWindow::show_status_message(const QString& message)
 	{
 		statusBar()->showMessage(message);
 	}
 
-	void TurtleAppWindow::write_to_console(const QString &input) const
+	void TurtleAppWindow::write_to_console(const QString& input) const
 	{
 		turtle_console->appendPlainText(input);
 	}
