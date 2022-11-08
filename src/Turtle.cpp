@@ -12,7 +12,7 @@ Turtle::Turtle() : Turtle(new TurtleOptions())
 Turtle::Turtle(TurtleOptions *options)
 {
     Options = options;
-    Name = "Hello";
+    Name = "PicoTurtle";
     Id = "";
     Width = TURTLE_DEFAULT_CANVAS_WIDTH;
     Height = TURTLE_DEFAULT_CANVAS_HEIGHT;

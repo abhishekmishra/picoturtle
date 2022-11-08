@@ -90,14 +90,14 @@ namespace turtle {
 		}
 
 		sprintf(setPathCodeStr, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
-		TurtleController::turtle_message("app", QString("Setting path via code -> |")+ setPathCodeStr + "|");
+		TurtleController::turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
 
 		run_lua_script(setPathCodeStr);
 
 		lua_pushcfunction(L, print);
 		lua_setglobal(L, "turtle_print");
 		TurtleController::turtle_message("app", "global function turtle_print is set");
-		
+
 		run_lua_script("turtle_print ('hello')");
 
 		return 0;
@@ -176,7 +176,7 @@ namespace turtle {
 
 	void TurtleController::turtle_init_cb(turtle::PicoTurtle* t, void* cb_args)
 	{
-		printf("PicoTurtle created - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
+		TurtleController::turtle_message("app", (QString("PicoTurtle created - Name: %1, Id: %2").arg(t->getName().c_str(), t->getId().c_str())));
 	}
 
 	void TurtleController::turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)

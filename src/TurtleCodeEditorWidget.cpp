@@ -15,7 +15,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget* parent)
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
 	QFont font("Courier");
-	font.setPointSize(14);
+	font.setPointSize(12);
 	QFontInfo info(font);
 	qDebug() << font << info.family() << info.fixedPitch();
 	turtle_code_edit->setFont(font);
@@ -53,7 +53,15 @@ void TurtleCodeEditorWidget::new_file()
 {
 	// TODO: call save if the editor is dirty (not saved)
 	turtle_code_edit->clear();
-	turtle_code_edit->setText("--empty turtle lua program");
+	// TODO: create this text from a resource
+
+	turtle_code_edit->setText(
+		"-- turtle lua program\n"
+		"local picoturtle = require 'picoturtle'\n"
+		"local t = t or picoturtle.new()\n"
+		"t:forward(100)\n"
+		"print('Turtle done.')\n"
+	);
 	filename = "noname" + QString::number(noname_file_count);
 	noname_file_count += 1;
 	emit new_file_created(filename);
