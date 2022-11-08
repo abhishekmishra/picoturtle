@@ -9,6 +9,14 @@
 -- calls itself recursively
 -- till the size is less than 1
 -- to draw the fern.
+
+local picoturtle = require "picoturtle"
+
+-- if called from another script, t will be set to a turtle object
+-- if t is not set to a turtle (i.e. it is nil) then create a new one.
+local t = t or picoturtle.new()
+
+-- reset turtle in case we are reusing a passed turtle object
 t:reset()
 
 function fern(size, sign)
