@@ -51,7 +51,7 @@ install:
 
 sln:
 ifeq ($(OSFLAG),WIN32)
-	cmd /C ".\build\picoturtle.sln"
+	cygstart ".\build\picoturtle.sln"
 else
 	echo "No solution file available on this platform"
 endif
