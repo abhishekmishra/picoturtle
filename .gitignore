@@ -70,3 +70,6 @@ build
 out/
 *.swp
 *~
+
+# macos ds store
+.DS_Store
