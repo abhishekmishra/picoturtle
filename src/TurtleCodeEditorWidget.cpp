@@ -1,6 +1,9 @@
 #include "TurtleCodeEditorWidget.hpp"
 #include "TurtleController.hpp"
 #include <QVBoxLayout>
+#include <QFile>
+#include <QTextStream>
+#include <QIODevice>
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget* parent)
 	: noname_file_count{ 0 }
@@ -35,3 +38,21 @@ void TurtleCodeEditorWidget::new_file()
 	noname_file_count += 1;
 	emit new_file_created(filename);
 }
+
+int TurtleCodeEditorWidget::open_file(const QString& file_path)
+{
+    QFile file(file_path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+        return -1;
+	}
+
+    QTextStream in(&file);
+	QString text = in.readAll();
+	turtle_code_edit->clear();
+	turtle_code_edit->setText(text);
+
+	emit file_opened(file_path);
+	return 0;
+}
+

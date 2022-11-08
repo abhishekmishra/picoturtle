@@ -15,10 +15,12 @@ public:
 
 signals:
     void new_file_created(const QString& file_name);
+    void file_opened(const QString& file_path);
     void turtle_run_complete(const int error_code);
 
 public slots:
     void new_file();
+    int open_file(const QString& file_path);
     void run_file();
 
 private:
