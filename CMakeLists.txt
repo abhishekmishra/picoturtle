@@ -202,12 +202,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets OpenGL)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
 set ( PICOTURTLE_APP_SOURCES
     src/TurtleController.hpp
     src/TurtleController.cpp
+    src/TurtleGLWidget.hpp
+    src/TurtleGLWidget.cpp
     src/TurtleCodeEditorWidget.hpp
     src/TurtleCodeEditorWidget.cpp
     src/TurtleConsoleWidget.hpp
@@ -224,6 +226,16 @@ set ( PICOTURTLE_APP_SOURCES
 qt_add_executable(picoturtle-app MANUAL_FINALIZATION ${PICOTURTLE_APP_SOURCES})
 
 target_link_libraries(picoturtle-app PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+find_package(Qt6OpenGL CONFIG REQUIRED)
+target_link_libraries(picoturtle-app PRIVATE Qt::OpenGL Qt6::OpenGL Qt::OpenGLPrivate Qt6::OpenGLPrivate)
+
+find_package(Qt6Widgets CONFIG REQUIRED)
+# note: 1 additional targets are not displayed.
+target_link_libraries(picoturtle-app PRIVATE Qt::Widgets Qt6::Widgets Qt::WidgetsPrivate Qt6::WidgetsPrivate)
+
+    find_package(Qt6OpenGLWidgets CONFIG REQUIRED)
+    target_link_libraries(picoturtle-app PRIVATE Qt::OpenGLWidgets Qt6::OpenGLWidgets Qt::OpenGLWidgetsPrivate Qt6::OpenGLWidgetsPrivate)
 
 set_target_properties(picoturtle-app PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER abhishekmishra.in

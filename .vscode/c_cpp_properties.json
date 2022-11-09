@@ -47,7 +47,8 @@
                 "${vcpkgRoot}/x64-osx/include/Qt6/QtCore",
                 "${vcpkgRoot}/x64-osx/include/Qt6/QtWidgets",
                 "${vcpkgRoot}/x64-osx/include/Qt6",
-                "${vcpkgRoot}/x64-osx/include/Qt6/QtGui"
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtGui",
+                "${vcpkgRoot}/x64-osx/include/Qt6/QtOpenGLWidgets"
             ],
             "defines": [],
             "macFrameworkPath": [

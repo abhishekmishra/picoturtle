@@ -2,7 +2,8 @@
 #define TURTLE_CANVAS_WIDGET_H
 
 #include <QWidget>
-#include "TurtleSDLWidget.hpp"
+#include "TurtleGLWidget.hpp"
+// #include "TurtleSDLWidget.hpp"
 
 class TurtleCanvasWidget : public QWidget
 {
@@ -13,6 +14,7 @@ public:
     ~TurtleCanvasWidget();
 
 private:
-    TurtleSDLWidget* sdl_widget;
+    TurtleGLWidget* gl_widget;
+    // TurtleSDLWidget* sdl_widget;
 };
 #endif // TURTLE_CANVAS_WIDGET_H

@@ -3,14 +3,14 @@
 #include <QVBoxLayout>
 
 TurtleCanvasWidget::TurtleCanvasWidget(QWidget* parent)
-	: sdl_widget{ new TurtleSDLWidget(this) },
+	: gl_widget{ new TurtleGLWidget(this) },
 	QWidget(parent)
 {
 	//QLabel* imgLabel = new QLabel("This is a long label", this);
 	//imgLabel->move(20, 20);
 
 	QVBoxLayout* vb_layout = new QVBoxLayout(this);
-	vb_layout->addWidget(sdl_widget);
+	vb_layout->addWidget(gl_widget);
 	setLayout(vb_layout);
 }
 
