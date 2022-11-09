@@ -202,7 +202,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets OpenGL)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets OpenGLWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
 set ( PICOTURTLE_APP_SOURCES
@@ -234,8 +234,8 @@ find_package(Qt6Widgets CONFIG REQUIRED)
 # note: 1 additional targets are not displayed.
 target_link_libraries(picoturtle-app PRIVATE Qt::Widgets Qt6::Widgets Qt::WidgetsPrivate Qt6::WidgetsPrivate)
 
-    find_package(Qt6OpenGLWidgets CONFIG REQUIRED)
-    target_link_libraries(picoturtle-app PRIVATE Qt::OpenGLWidgets Qt6::OpenGLWidgets Qt::OpenGLWidgetsPrivate Qt6::OpenGLWidgetsPrivate)
+find_package(Qt6OpenGLWidgets CONFIG REQUIRED)
+target_link_libraries(picoturtle-app PRIVATE Qt::OpenGLWidgets Qt6::OpenGLWidgets Qt::OpenGLWidgetsPrivate Qt6::OpenGLWidgetsPrivate)
 
 set_target_properties(picoturtle-app PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER abhishekmishra.in
