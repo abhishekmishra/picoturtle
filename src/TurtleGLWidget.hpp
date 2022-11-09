@@ -8,12 +8,15 @@
 #include <QFont>
 #include <QPaintEvent>
 
+#include "PicoTurtle.hpp"
+
 class TurtleGLWidget : public QOpenGLWidget
 {
     Q_OBJECT
 
 public:
     TurtleGLWidget(QWidget *parent = nullptr);
+    void set_turtle(turtle::PicoTurtle* t);
 
 public slots:
     void animate();
@@ -28,6 +31,7 @@ private:
     QFont textFont;
     QPen circlePen;
     QPen textPen;
+    turtle::PicoTurtle *turtle;
 };
 
 #endif

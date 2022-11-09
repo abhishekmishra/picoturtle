@@ -61,7 +61,12 @@ int gui_window(int argc, char* argv[])
 		mainWindow->write_to_console(input);
 	};
 
+	std::function<void(turtle::PicoTurtle* t)> notify_turtle_fn = [=](turtle:: PicoTurtle *t) {
+		mainWindow->set_turtle(t);
+	};
+
 	turtle::TurtleController::set_custom_lua_print_fn(printfn);
+	turtle::TurtleController::set_notify_turtle_created_fn(notify_turtle_fn);
 
 	mainWindow->show();
 

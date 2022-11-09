@@ -19,11 +19,13 @@ namespace turtle {
 
 	public:
 		static std::function<void(QString)> custom_lua_print_fn;
+		static std::function<void(turtle::PicoTurtle* t)> notify_turtle_created_fn;
 
 		static void turtle_message(const QString& src, const QString& msg);
 		static int init_turtle_lua_binding();
 		static void cleanup_turtle_lua_binding();
 		static void set_custom_lua_print_fn(std::function<void(QString)> printfn);
+		static void set_notify_turtle_created_fn(std::function<void(turtle::PicoTurtle* t)> notifyfn);
 		static int handle_turtle_lua_args(int argc, char* argv[]);
 		static int run_lua_file(const char* filename);
 		static int run_lua_script(const char* script);

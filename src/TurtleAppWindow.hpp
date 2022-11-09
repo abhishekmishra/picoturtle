@@ -70,6 +70,7 @@ namespace turtle {
 	public slots:
 		void show_status_message(const QString& message);
 		void write_to_console(const QString& input) const;
+	    void set_turtle(turtle::PicoTurtle* t);
 	};
 }
 

@@ -164,4 +164,10 @@ namespace turtle
 	{
 		return QSize(800, 600);
 	}
+
+    void TurtleAppWindow::set_turtle(turtle::PicoTurtle* t)
+	{
+		turtle_canvas->set_turtle(t);
+	}
+
 }

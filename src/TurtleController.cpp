@@ -5,6 +5,7 @@
 namespace turtle {
 	lua_State* TurtleController::L = NULL;
 	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
+	std::function<void(turtle::PicoTurtle* t)> TurtleController::notify_turtle_created_fn = NULL;
 
 	void TurtleController::turtle_message(const QString& src, const QString& msg)
 	{
@@ -176,6 +177,10 @@ namespace turtle {
 
 	void TurtleController::turtle_init_cb(turtle::PicoTurtle* t, void* cb_args)
 	{
+		if(TurtleController::notify_turtle_created_fn != NULL)
+		{
+			TurtleController::notify_turtle_created_fn(t);
+		}
 		TurtleController::turtle_message("app", (QString("PicoTurtle created - Name: %1, Id: %2").arg(t->getName().c_str(), t->getId().c_str())));
 	}
 
@@ -194,5 +199,10 @@ namespace turtle {
 	void TurtleController::set_custom_lua_print_fn(std::function<void(QString)> printfn)
 	{
 		TurtleController::custom_lua_print_fn = printfn;
+	}
+
+	void TurtleController::set_notify_turtle_created_fn(std::function<void(turtle::PicoTurtle* t)> notifyfn)
+	{
+		TurtleController::notify_turtle_created_fn = notifyfn;
 	}
 }
