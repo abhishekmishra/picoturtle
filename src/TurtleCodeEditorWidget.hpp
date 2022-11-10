@@ -30,8 +30,8 @@ public slots:
 
 public:
     bool has_file_path();
-    void isDirty();
-    const QString& get_file_name();
+    bool is_dirty();
+    const QString get_file_name();
     const QString& get_file_path();
 
 private:

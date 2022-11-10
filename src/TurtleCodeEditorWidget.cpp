@@ -10,7 +10,8 @@
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	: noname_file_count{0},
-	  file_path{QString()}
+	  file_path{QString()},
+	  dirty{true}
 {
 	turtle_code_edit = new QTextEdit(this);
 	turtle_code_edit->setMinimumHeight(500);
@@ -115,6 +116,7 @@ int TurtleCodeEditorWidget::save_file()
 
 	dirty = false;
 	emit file_saved();
+	return 0;
 }
 
 bool TurtleCodeEditorWidget::has_file_path()
@@ -142,16 +144,21 @@ void TurtleCodeEditorWidget::set_dirty()
 	emit file_changed();
 }
 
-const QString &TurtleCodeEditorWidget::get_file_name()
+const QString TurtleCodeEditorWidget::get_file_name()
 {
 	if (!has_file_path())
 	{
 		return "noname" + QString::number(noname_file_count);
 	}
-	return QFileInfo(file_path).fileName();
+	return QString(QFileInfo(file_path).fileName());
 }
 
 const QString &TurtleCodeEditorWidget::get_file_path()
 {
 	return file_path;
+}
+
+bool TurtleCodeEditorWidget::is_dirty()
+{
+	return dirty;
 }

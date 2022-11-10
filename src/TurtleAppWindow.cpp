@@ -12,8 +12,6 @@ namespace turtle
 		  turtle_console{new TurtleConsoleWidget(this)},
 		  QMainWindow{parent}
 	{
-		setWindowTitle("PicoTurtle");
-
 		create_actions();
 		create_toolbar();
 		create_menubar();
@@ -25,6 +23,8 @@ namespace turtle
 
 		// Set statusbar items
 		statusBar()->showMessage("Starting PicoTurtle ...", 3000);
+
+		update_title();
 
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::new_file_created, [=]()
 				{ show_status_message("New file created: " + turtle_code_editor->get_file_name()); });
@@ -182,6 +182,28 @@ namespace turtle
 	void TurtleAppWindow::show_status_message(const QString &message)
 	{
 		statusBar()->showMessage(message);
+	}
+
+	void TurtleAppWindow::update_title()
+	{
+		QString title = tr("PicoTurtle");
+		if (turtle_code_editor)
+		{
+			title += " - ";
+			title += turtle_code_editor->get_file_name();
+			qDebug() << turtle_code_editor->get_file_name() << "dirty flag" << turtle_code_editor->is_dirty();
+			if (turtle_code_editor->is_dirty())
+			{
+				setWindowModified(true);
+			}
+			title += "[*]";
+			qDebug() << "Title is" << title;
+		}
+		setWindowTitle(title);
+		if (turtle_code_editor && turtle_code_editor->is_dirty())
+		{
+			setWindowModified(true);
+		}
 	}
 
 	void TurtleAppWindow::write_to_console(const QString &input) const

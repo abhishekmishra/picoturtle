@@ -37,6 +37,7 @@ namespace turtle {
 		void create_canvas_widget();
 		void create_turtle_code_edit_widget();
 		void create_turtle_console_widget();
+		void update_title();
 
 		// Turtle Controller Instance
 		TurtleController* turtle_controller;
