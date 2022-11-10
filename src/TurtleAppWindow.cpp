@@ -68,6 +68,7 @@ namespace turtle
 		redo_action = new QAction(tr("Redo"));
 
 		run_action = new QAction(tr("Run"));
+		run_action->setShortcut(QKeySequence(Qt::Key_F5));
 
 		about_action = new QAction(tr("About"));
 
