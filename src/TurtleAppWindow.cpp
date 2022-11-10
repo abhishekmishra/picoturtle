@@ -80,11 +80,13 @@ namespace turtle
 
 		QString start_path = qApp->applicationDirPath(); // QDir::homePath()
 		connect(open_action, &QAction::triggered, [=]()
-			{ QString fileName = QFileDialog::getOpenFileName(this,
-				tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
-		qDebug() << fileName;
-		//TODO: handle return value to show appropriate error.
-		turtle_code_editor->open_file(fileName); });
+			{
+				QString fileName = QFileDialog::getOpenFileName(this,
+					tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
+				qDebug() << fileName;
+				//TODO: handle return value to show appropriate error.
+				turtle_code_editor->open_file(fileName);
+			});
 
 		// connect turtle actions
 		connect(run_action, &QAction::triggered, turtle_code_editor,
@@ -175,7 +177,7 @@ namespace turtle
 		return QSize(800, 600);
 	}
 
-    void TurtleAppWindow::set_turtle(turtle::PicoTurtle* t)
+	void TurtleAppWindow::set_turtle(turtle::PicoTurtle* t)
 	{
 		turtle_canvas->set_turtle(t);
 	}
