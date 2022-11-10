@@ -74,9 +74,14 @@ namespace turtle
 
 		// connect file actions
 		connect(new_action, &QAction::triggered, turtle_code_editor, &TurtleCodeEditorWidget::new_file);
+
+		// TODO:: open file path (should be user home or application path?)
+		// note - samples are in application_dir/lua
+
+		QString start_path = qApp->applicationDirPath(); // QDir::homePath()
 		connect(open_action, &QAction::triggered, [=]()
 			{ QString fileName = QFileDialog::getOpenFileName(this,
-				tr("Open Turtle Lua File"), QDir::homePath(), tr("Turtle/Lua Files (*.lua)"));
+				tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
 		qDebug() << fileName;
 		//TODO: handle return value to show appropriate error.
 		turtle_code_editor->open_file(fileName); });
