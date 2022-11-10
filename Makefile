@@ -35,7 +35,8 @@ run:
 ifeq ($(OSFLAG),WIN32)
 	./build/bin/Debug/picoturtle 
 else ifeq ($(OSFLAG),OSX)
-	open -n ./build/bin/picoturtle.app --args 
+	#open -n ./build/bin/picoturtle.app --args 
+	./build/bin/picoturtle.app/Contents/MacOS/picoturtle --args 
 else
 	./build/bin/picoturtle 
 endif
