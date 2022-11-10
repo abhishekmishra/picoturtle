@@ -384,7 +384,6 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"canvas_size", skia_turtle_canvas_size},
         {NULL, NULL}};
 
-extern "C"
 int luaopen_picoturtle(lua_State *L)
 {
     // create turtle metatable
