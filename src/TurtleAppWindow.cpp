@@ -186,17 +186,17 @@ namespace turtle
 
 	void TurtleAppWindow::update_title()
 	{
-		QString title = tr("PicoTurtle");
+		QString title = "PicoTurtle";
 		if (turtle_code_editor)
 		{
-			title += " - ";
+			title += " ";
 			title += turtle_code_editor->get_file_name();
+			title += " [*]";
 			qDebug() << turtle_code_editor->get_file_name() << "dirty flag" << turtle_code_editor->is_dirty();
 			if (turtle_code_editor->is_dirty())
 			{
 				setWindowModified(true);
 			}
-			title += "[*]";
 			qDebug() << "Title is" << title;
 		}
 		setWindowTitle(title);
