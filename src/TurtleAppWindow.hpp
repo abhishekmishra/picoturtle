@@ -66,6 +66,7 @@ namespace turtle {
 		QAction* about_action;
 
 		QToolBar* file_toolbar;
+		QToolBar* turtle_toolbar;
 
 	public slots:
 		void show_status_message(const QString& message);

@@ -95,6 +95,9 @@ namespace turtle
 		file_toolbar->addAction(new_action);
 		file_toolbar->addAction(open_action);
 		file_toolbar->addAction(quit_action);
+
+		turtle_toolbar = this->addToolBar(tr("Turtle"));
+		turtle_toolbar->addAction(run_action);
 	}
 
 	void TurtleAppWindow::create_menubar()
