@@ -15,6 +15,9 @@ public:
     ~TurtleCanvasWidget();
     void set_turtle(turtle::PicoTurtle* t);
 
+public slots:
+    void draw_turtle();
+
 private:
     TurtleGLWidget* gl_widget;
     // TurtleSDLWidget* sdl_widget;

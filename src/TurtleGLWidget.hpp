@@ -20,6 +20,7 @@ public:
 
 public slots:
     void animate();
+    void draw_turtle();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

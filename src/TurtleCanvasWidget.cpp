@@ -22,3 +22,8 @@ void TurtleCanvasWidget::set_turtle(turtle::PicoTurtle* t)
 {
 	gl_widget->set_turtle(t);
 }
+
+void TurtleCanvasWidget::draw_turtle()
+{
+	gl_widget->draw_turtle();
+}

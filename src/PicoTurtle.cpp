@@ -1,5 +1,9 @@
 #include <iostream>
 #include <core/SkStream.h>
+#include <core/SkImageInfo.h>
+#include <core/SkColorType.h>
+#include <core/SkAlphaType.h>
+
 #include "PicoTurtle.hpp"
 
 using namespace turtle;
@@ -11,6 +15,9 @@ void* PicoTurtle::destroy_cb_args = NULL;
 
 void PicoTurtle::CreateCanvas()
 {
+    //SkImageInfo image_info = SkImageInfo::Make(getWidth(), getHeight(), 
+    //    SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
+    //rasterSurface = SkSurface::MakeRaster(image_info);
     rasterSurface =
         SkSurface::MakeRasterN32Premul(getWidth(), getHeight());
     rasterCanvas = rasterSurface->getCanvas();

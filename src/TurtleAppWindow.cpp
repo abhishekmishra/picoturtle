@@ -43,6 +43,7 @@ namespace turtle
 					show_status_message("Err: Turtle run completed with errors!");
 				}
 			});
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, turtle_canvas, &TurtleCanvasWidget::draw_turtle);
 	}
 
 	TurtleAppWindow::~TurtleAppWindow()

@@ -71,14 +71,11 @@ int gui_window(int argc, char* argv[])
 	mainWindow->show();
 
 	turtle::TurtleController::run_lua_script(
-		"turtle_print('yo')\n"
-		"turtle_print(1)\n"
 		"local oldprint = print\n"
 		"print = function(...)\n"
-		"  -- do something with the args here.\n"
 		"  turtle_print(...)\n"
 		"end\n"
-		"print ('hello from new print')\n"
+		"-- print ('console print setup.')\n"
 	);
 
 	return a.exec();
