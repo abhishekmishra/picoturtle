@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/outline_exit_to_app_black_24dp.png</file>
+        <file>images/outline_file_open_black_24dp.png</file>
+        <file>images/outline_insert_drive_file_black_24dp.png</file>
+        <file>images/outline_save_as_black_24dp.png</file>
+        <file>images/outline_save_black_24dp.png</file>
+        <file>images/outline_slideshow_black_24dp.png</file>
+        <file>images/outline_content_copy_black_24dp.png</file>
+        <file>images/outline_content_cut_black_24dp.png</file>
+        <file>images/outline_content_paste_black_24dp.png</file>
+        <file>images/outline_redo_black_24dp.png</file>
+        <file>images/outline_undo_black_24dp.png</file>
+    </qresource>
+</RCC>

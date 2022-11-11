@@ -195,6 +195,7 @@ target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
 
 #--------------------------PicoTurtle App---------------------------#
+# see https://doc.qt.io/qt-6/resources.html for resource packaging.
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -206,6 +207,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets OpenGLWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
 set ( PICOTURTLE_APP_SOURCES
+    res/picoturtle.qrc
     src/TurtleController.hpp
     src/TurtleController.cpp
     src/TurtleGLWidget.hpp
