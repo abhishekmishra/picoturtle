@@ -3,7 +3,7 @@
 #define TURTLE_CODE_EDITOR_WIDGET_H
 
 #include <QWidget>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 class TurtleCodeEditorWidget : public QWidget
 {
@@ -19,7 +19,7 @@ signals:
     void file_saved();
     void turtle_run_complete(const int error_code);
     void file_path_changed();
-    void file_changed();
+    void file_modified_changed(bool modified);
 
 public slots:
     void new_file();
@@ -35,12 +35,8 @@ public:
     const QString& get_file_path();
 
 private:
-    void set_dirty();
-
-private:
-    QTextEdit* turtle_code_edit;
+    QPlainTextEdit* turtle_code_edit;
     QString file_path;
     int noname_file_count;
-    bool dirty;
 };
 #endif // TURTLE_CODE_EDITOR_WIDGET_H

@@ -22,18 +22,39 @@ namespace turtle
 		create_turtle_console_widget();
 
 		// Set statusbar items
-		statusBar()->showMessage("Starting PicoTurtle ...", 3000);
+		statusBar()->showMessage("Starting PicoTurtle ...");
 
 		update_title();
 
+		// Connect to file actions.
+
+		// *** file created
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::new_file_created, [=]()
 				{ show_status_message("New file created: " + turtle_code_editor->get_file_name()); });
 
+		// *** file opened
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_opened, [=]()
-				{ show_status_message("File opened: " + turtle_code_editor->get_file_path()); });
+				{ 
+					show_status_message("File opened: " + turtle_code_editor->get_file_path()); 
+					update_title(); });
 
-		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_opened, [=]()
-				{ show_status_message("File opened: " + turtle_code_editor->get_file_path()); });
+		// *** file saved
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_saved, [=]()
+				{ 
+					show_status_message("File saved: " + turtle_code_editor->get_file_path()); 
+					update_title(); });
+
+		// *** file path changed
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_path_changed, [=]()
+				{ 
+					show_status_message("File saved: " + turtle_code_editor->get_file_path()); 
+					update_title(); });
+
+		// *** file modified changed
+		connect(turtle_code_editor, &TurtleCodeEditorWidget::file_modified_changed, [=](bool flag)
+				{ 
+					show_status_message("File dirty flag: " + QString::number(turtle_code_editor->is_dirty())); 
+					update_title(); });
 
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, [=](const int error_code)
 				{

@@ -7,13 +7,13 @@
 #include <QMessageBox>
 #include <QIODevice>
 #include <QFileInfo>
+#include <QDebug>
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	: noname_file_count{0},
-	  file_path{QString()},
-	  dirty{true}
+	  file_path{QString()}
 {
-	turtle_code_edit = new QTextEdit(this);
+	turtle_code_edit = new QPlainTextEdit(this);
 	turtle_code_edit->setMinimumHeight(500);
 	turtle_code_edit->setMinimumWidth(400);
 
@@ -41,6 +41,10 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	vb_layout->addWidget(turtle_code_edit);
 	setLayout(vb_layout);
 
+	connect(turtle_code_edit, &QPlainTextEdit::modificationChanged, [=](bool flag){
+		emit file_modified_changed(flag);
+	});
+
 	new_file();
 }
 
@@ -60,7 +64,7 @@ void TurtleCodeEditorWidget::new_file()
 	turtle_code_edit->clear();
 	// TODO: create this text from a resource
 
-	turtle_code_edit->setText(
+	turtle_code_edit->setPlainText(
 		"-- turtle lua program\n"
 		"local picoturtle = require 'picoturtle'\n"
 		"local t = t or picoturtle.new()\n"
@@ -76,6 +80,8 @@ void TurtleCodeEditorWidget::new_file()
 		"print('Turtle done.')\n");
 
 	noname_file_count += 1;
+
+	turtle_code_edit->document()->setModified(true);
 	emit new_file_created();
 }
 
@@ -87,10 +93,12 @@ int TurtleCodeEditorWidget::open_file(const QString &file_path)
 		return -1;
 	}
 
+	set_file_path(file_path);
+	turtle_code_edit->document()->setModified(false);
 	QTextStream in(&file);
 	QString text = in.readAll();
 	turtle_code_edit->clear();
-	turtle_code_edit->setText(text);
+	turtle_code_edit->setPlainText(text);
 
 	emit file_opened();
 	return 0;
@@ -114,13 +122,14 @@ int TurtleCodeEditorWidget::save_file()
 	out << turtle_code_edit->toPlainText();
 	file.close();
 
-	dirty = false;
+	turtle_code_edit->document()->setModified(false);
 	emit file_saved();
 	return 0;
 }
 
 bool TurtleCodeEditorWidget::has_file_path()
 {
+	qDebug() << file_path << "has file path -> " << !(file_path.isNull());
 	return !(file_path.isNull());
 }
 
@@ -131,17 +140,11 @@ bool TurtleCodeEditorWidget::set_file_path(const QString &file_path, bool overri
 	{
 		this->file_path = file_path;
 
-		set_dirty();
+		turtle_code_edit->document()->setModified(true);
 		emit file_path_changed();
 		return true;
 	}
 	return false;
-}
-
-void TurtleCodeEditorWidget::set_dirty()
-{
-	dirty = true;
-	emit file_changed();
 }
 
 const QString TurtleCodeEditorWidget::get_file_name()
@@ -160,5 +163,5 @@ const QString &TurtleCodeEditorWidget::get_file_path()
 
 bool TurtleCodeEditorWidget::is_dirty()
 {
-	return dirty;
+	return turtle_code_edit->document()->isModified();
 }
