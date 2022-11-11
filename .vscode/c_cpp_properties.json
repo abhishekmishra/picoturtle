@@ -8,6 +8,7 @@
                 "${vcpkgRoot}/x86-windows/include",
                 "${vcpkgRoot}/x64-windows/include/Qt6/QtCore",
                 "${vcpkgRoot}/x64-windows/include/Qt6/QtWidgets",
+                "${vcpkgRoot}/x64-windows/include/Qt6/QtOpenGLWidgets",
                 "${vcpkgRoot}/x64-windows/include/Qt6/QtGui",
                 "${vcpkgRoot}/x64-windows/include/skia",
                 "${vcpkgRoot}/x64-windows/include/Qt6/",
