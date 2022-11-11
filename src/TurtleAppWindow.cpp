@@ -83,33 +83,42 @@ namespace turtle
 		// Define the actions
 		new_action = new QAction(tr("New"));
 		new_action->setIcon(QIcon(":/images/outline_insert_drive_file_black_24dp.png"));
+		new_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
 
 		open_action = new QAction(tr("Open"));
 		open_action->setIcon(QIcon(":/images/outline_file_open_black_24dp.png"));
+		open_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
 
 		save_action = new QAction(tr("Save"));
 		save_action->setIcon(QIcon(":/images/outline_save_black_24dp.png"));
+		save_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
 
 		save_as_action = new QAction(tr("Save As"));
 		save_as_action->setIcon(QIcon(":/images/outline_save_as_black_24dp.png"));
 
 		quit_action = new QAction(tr("Quit"));
 		quit_action->setIcon(QIcon(":/images/outline_exit_to_app_black_24dp.png"));
+		quit_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
 
 		cut_action = new QAction(tr("Cut"));
 		cut_action->setIcon(QIcon(":/images/outline_content_cut_black_24dp.png"));
+		cut_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_X));
 
 		copy_action = new QAction(tr("Copy"));
 		copy_action->setIcon(QIcon(":/images/outline_content_copy_black_24dp.png"));
+		copy_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_C));
 
 		paste_action = new QAction(tr("Paste"));
 		paste_action->setIcon(QIcon(":/images/outline_content_paste_black_24dp.png"));
+		paste_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_V));
 
 		undo_action = new QAction(tr("Undo"));
 		undo_action->setIcon(QIcon(":/images/outline_undo_black_24dp.png"));
+		undo_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z));
 
 		redo_action = new QAction(tr("Redo"));
 		redo_action->setIcon(QIcon(":/images/outline_redo_black_24dp.png"));
+		redo_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
 
 		run_action = new QAction(tr("Run"));
 		run_action->setIcon(QIcon(":/images/outline_slideshow_black_24dp.png"));
