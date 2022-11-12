@@ -269,6 +269,10 @@ namespace turtle
 		{
 			setWindowModified(true);
 		}
+		else
+		{
+			setWindowModified(false);
+		}
 	}
 
 	void TurtleAppWindow::write_to_console(const QString &input) const
