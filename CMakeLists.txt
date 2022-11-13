@@ -274,9 +274,11 @@ qt_finalize_executable(picoturtle-app)
 
 # Generate docs before the build.
 add_custom_command(
-    TARGET picoturtle-app
-    PRE_BUILD
-    COMMAND pandoc -s -o ../res/docs/help.html ../docs/help.md
+    OUTPUT ../res/docs/help.html
+    #TARGET picoturtle-app
+    #PRE_BUILD
+    COMMAND pandoc -s -o res/docs/help.html docs/help.md
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 
 # Run the qt deploy script for windows only
