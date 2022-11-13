@@ -8,8 +8,8 @@ TurtleConsoleWidget::TurtleConsoleWidget(QWidget* parent)
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
-	QFont font("Courier");
-	font.setPointSize(10);
+	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+	font.setPointSize(12);
 	QFontInfo info(font);
 	qDebug() << font << info.family() << info.fixedPitch();
 	turtle_console_edit->setFont(font);
@@ -17,14 +17,16 @@ TurtleConsoleWidget::TurtleConsoleWidget(QWidget* parent)
 	QPalette p = turtle_console_edit->palette();
 
 	// set background colour
-	p.setColor(QPalette::Active, QPalette::Base, Qt::black);
-	p.setColor(QPalette::Inactive, QPalette::Base, Qt::black);
+	p.setColor(QPalette::Active, QPalette::Base, Qt::darkBlue);
+	p.setColor(QPalette::Inactive, QPalette::Base, Qt::darkBlue);
 
 	// set foreground colour
-	p.setColor(QPalette::Active, QPalette::Text, Qt::green);
-	p.setColor(QPalette::Inactive, QPalette::Text, Qt::green);
+	p.setColor(QPalette::Active, QPalette::Text, Qt::white);
+	p.setColor(QPalette::Inactive, QPalette::Text, Qt::white);
 
 	turtle_console_edit->setPalette(p);
+
+	turtle_console_edit->setMinimumHeight(200);
 
 	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_console_edit);

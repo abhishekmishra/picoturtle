@@ -38,6 +38,9 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 
 	turtle_code_edit->setPalette(p);
 
+	// set minimum width of code_edit
+	turtle_code_edit->setMinimumWidth(512);
+
 	// create and set highlighter
 	lua_highlighter = new LuaSyntaxHighlighter(turtle_code_edit->document());
 
