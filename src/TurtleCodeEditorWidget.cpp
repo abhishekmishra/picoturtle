@@ -14,14 +14,14 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	  file_path{QString()}
 {
 	turtle_code_edit = new QPlainTextEdit(this);
-	turtle_code_edit->setMinimumHeight(500);
-	turtle_code_edit->setMinimumWidth(400);
+	turtle_code_edit->setMinimumHeight(400);
+	turtle_code_edit->setMinimumWidth(300);
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
 	// QFont font("monospace");
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-	font.setPointSize(12);
+	font.setPointSize(11);
 	QFontInfo info(font);
 	qDebug() << font << info.family() << info.fixedPitch();
 	turtle_code_edit->setFont(font);

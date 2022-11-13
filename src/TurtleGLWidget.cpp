@@ -13,7 +13,7 @@ TurtleGLWidget::TurtleGLWidget(QWidget* parent)
 	turtle{ NULL }
 {
 	elapsed = 0;
-	setFixedSize(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
+	setFixedSize(GLWIDGET_WIDTH, GLWIDGET_HEIGHT);
 	setAutoFillBackground(false);
 	background = QBrush(Qt::white);
 
@@ -63,7 +63,7 @@ void TurtleGLWidget::paintEvent(QPaintEvent* event)
 #else
 		qDebug() << "Undefined byte order of sk color";
 #endif
-		painter.drawImage(QRect(0, 0, TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT), qImg);
+		painter.drawImage(QRect(0, 0, GLWIDGET_WIDTH, GLWIDGET_HEIGHT), qImg);
 	}
 	painter.end();
 }

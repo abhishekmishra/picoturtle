@@ -9,7 +9,7 @@ TurtleDocsWidget::TurtleDocsWidget(QWidget *parent)
 QWidget(parent)
 {
 	docs_text_display->setMinimumHeight(400);
-	docs_text_display->setMinimumWidth(400);
+	docs_text_display->setMinimumWidth(300);
 
     docs_text_display->setReadOnly(true);
 

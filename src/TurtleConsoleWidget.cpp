@@ -26,7 +26,7 @@ TurtleConsoleWidget::TurtleConsoleWidget(QWidget* parent)
 
 	turtle_console_edit->setPalette(p);
 
-	turtle_console_edit->setMinimumHeight(200);
+	turtle_console_edit->setMinimumHeight(150);
 
 	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_console_edit);

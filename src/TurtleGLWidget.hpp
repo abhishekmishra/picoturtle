@@ -14,6 +14,10 @@ class TurtleGLWidget : public QOpenGLWidget
 {
     Q_OBJECT
 
+private:
+    static const int GLWIDGET_WIDTH = 400;
+    static const int GLWIDGET_HEIGHT = 400;
+
 public:
     TurtleGLWidget(QWidget *parent = nullptr);
     void set_turtle(turtle::PicoTurtle* t);
