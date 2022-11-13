@@ -11,6 +11,7 @@
 #include "TurtleCodeEditorWidget.hpp"
 #include "TurtleConsoleWidget.hpp"
 #include "TurtleController.hpp"
+#include "TurtleDocsWidget.hpp"
 
 namespace turtle {
 
@@ -37,6 +38,7 @@ namespace turtle {
 		void create_canvas_widget();
 		void create_turtle_code_edit_widget();
 		void create_turtle_console_widget();
+		void create_turtle_docs_widget();
 		void update_title();
 
 		// Turtle Controller Instance
@@ -46,8 +48,10 @@ namespace turtle {
 		TurtleCanvasWidget* turtle_canvas;
 		TurtleCodeEditorWidget* turtle_code_editor;
 		TurtleConsoleWidget* turtle_console;
+		TurtleDocsWidget* turtle_docs;
 		QDockWidget* turtle_code_edit_dock;
 		QDockWidget* turtle_console_dock;
+		QDockWidget* turtle_docs_dock;
 
 		// Menu actions and toolbar
 		QAction* quit_action;
@@ -64,6 +68,7 @@ namespace turtle {
 
 		QAction* run_action;
 
+		QAction* turtle_docs_action;
 		QAction* about_action;
 
 		QToolBar* file_toolbar;

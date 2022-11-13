@@ -1,16 +1,18 @@
 # PicoTurtle
 
-PicoTurtle lets your create turtle graphics in the programming language of your choice.
+PicoTurtle lets your create turtle graphics in the [Lua](https://lua.org) programming language.
 
+## Application
 You get an editor window on the left to write your program, and you get a canvas on the right to look at the results.
 You also get a small window on the bottom right to look at any print statements from your program (or any errors).
 
+## What is a Turtle?
 A turtle is a simple painter which lives on a flat 2D world. When it moves it can paint on its world creating beautiful drawings. 
 You control the turtle by writing a program which control its movements. 
 
-To start writing a program choose a programming language.
+# Turtle Commands
 
-Once you've chosen your programming language, you can use the following turtle commands in your program:
+You can use the following turtle commands in your program:
 
 ## Turtle State Commands
 1. **create_turtle** -> This command creates a new turtle (with a unique name, which is displayed in the statusbar). The command MUST be called before you start using the turtle.
