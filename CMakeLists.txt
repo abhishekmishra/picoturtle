@@ -212,6 +212,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleController.cpp
     src/TurtleGLWidget.hpp
     src/TurtleGLWidget.cpp
+    src/LuaSyntaxHighlighter.hpp
+    src/LuaSyntaxHighlighter.cpp
     src/TurtleCodeEditorWidget.hpp
     src/TurtleCodeEditorWidget.cpp
     src/TurtleConsoleWidget.hpp

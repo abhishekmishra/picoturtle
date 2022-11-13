@@ -37,6 +37,9 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 
 	turtle_code_edit->setPalette(p);
 
+	// create and set highlighter
+	lua_highlighter = new LuaSyntaxHighlighter(turtle_code_edit->document());
+
 	QVBoxLayout *vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_code_edit);
 	setLayout(vb_layout);

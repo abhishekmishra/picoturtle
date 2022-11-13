@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QPlainTextEdit>
+#include "LuaSyntaxHighlighter.hpp"
 
 class TurtleCodeEditorWidget : public QWidget
 {
@@ -39,5 +40,6 @@ private:
     QString file_path;
     int noname_file_count;
     QString basic_turtle_text;
+    LuaSyntaxHighlighter *lua_highlighter;
 };
 #endif // TURTLE_CODE_EDITOR_WIDGET_H
