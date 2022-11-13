@@ -58,7 +58,8 @@ void TurtleGLWidget::paintEvent(QPaintEvent* event)
 #if SK_PMCOLOR_BYTE_ORDER(B,G,R,A)
 		QImage qImg = QImage((uchar*)&srcPixels.front(), img->width(), img->height(), QImage::Format_ARGB32);
 #elif SK_PMCOLOR_BYTE_ORDER(R,G,B,A)
-		QImage qImg = QImage((uchar*)&srcPixels.front(), img->width(), img->height(), QImage::Format_RGBA8888_Premultiplied);
+		//TODO: learn which one to use rgba8888 or rgba32premul
+		QImage qImg = QImage((uchar*)&srcPixels.front(), img->width(), img->height(), QImage::Format_RGBA8888);
 #else
 		qDebug() << "Undefined byte order of sk color";
 #endif
