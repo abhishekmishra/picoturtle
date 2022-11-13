@@ -38,5 +38,6 @@ private:
     QPlainTextEdit* turtle_code_edit;
     QString file_path;
     int noname_file_count;
+    QString basic_turtle_text;
 };
 #endif // TURTLE_CODE_EDITOR_WIDGET_H

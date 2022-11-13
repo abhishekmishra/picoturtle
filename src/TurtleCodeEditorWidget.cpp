@@ -45,6 +45,17 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 		emit file_modified_changed(flag);
 	});
 
+	//QFile file(":/lua/turtle/basic_turtle.lua");
+	QFile file(":/lua/learnlua.lua");
+
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		QMessageBox::information(this, tr("Unable to open file"),
+								 file.errorString());
+	} else {
+		basic_turtle_text = file.readAll();
+	}
+
 	new_file();
 }
 
@@ -64,20 +75,7 @@ void TurtleCodeEditorWidget::new_file()
 	turtle_code_edit->clear();
 	// TODO: create this text from a resource
 
-	turtle_code_edit->setPlainText(
-		"-- turtle lua program\n"
-		"local picoturtle = require 'picoturtle'\n"
-		"local t = t or picoturtle.new()\n"
-		"t:penup()\n"
-		"t:back(100)\n"
-		"t:pendown()\n"
-		"t:pencolour(255, 0, 0)\n"
-		"t:forward(100)\n"
-		"t:pencolour(0, 255, 0)\n"
-		"t:forward(100)\n"
-		"t:pencolour(0, 0, 255)\n"
-		"t:forward(100)\n"
-		"print('Turtle done.')\n");
+	turtle_code_edit->setPlainText(basic_turtle_text);
 
 	noname_file_count += 1;
 
