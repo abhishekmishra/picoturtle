@@ -16,8 +16,6 @@ TurtleGLWidget::TurtleGLWidget(QWidget* parent)
 	setFixedSize(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
 	setAutoFillBackground(false);
 	background = QBrush(Qt::white);
-	//textPen = QPen(Qt::white);
-	//textFont.setPixelSize(50);
 
 	//QTimer *timer = new QTimer(this);
 	//connect(timer, &QTimer::timeout, this, &TurtleGLWidget::animate);
