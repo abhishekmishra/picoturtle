@@ -36,7 +36,6 @@
 ~*
 *.swp
 
-docs/
 bin/
 obj/
 .vs/
