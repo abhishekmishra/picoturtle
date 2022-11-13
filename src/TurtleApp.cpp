@@ -4,6 +4,8 @@
 #include "SDL2/SDL.h"
 
 #include <QApplication>
+#include <QStandardPaths>
+#include <QDir>
 #include <QDebug>
 #include <iostream>
 #include <stdio.h>
@@ -13,10 +15,11 @@
 #include "TurtleAppWindow.hpp"
 #include "TurtleController.hpp"
 
+#define PICOTURTLE_CONFIG_FILE "ptconf.lua"
 
 /**
 * Creates the Qt main window and runs the main loop for Qt.
-* 
+*
 * @param argc program args
 * @param argv program args
 * @return return value from qt mainloop
@@ -47,7 +50,14 @@ int gui_window(int argc, char* argv[])
 	// initialize the turtle lua binding with args
 	turtle::TurtleController::init_turtle_lua_binding();
 
-	// TODO: removed this for now - as this expect all non-lua
+    // create the config file path
+    QString config_file_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) +
+        QString("/") + QString(PICOTURTLE_CONFIG_FILE);
+	qDebug() << "config file --->" << config_file_path;
+    turtle::TurtleController::run_lua_file(config_file_path.toStdString().c_str());
+    turtle::TurtleController::run_lua_script("print(ptconf.test)");
+
+    // TODO: removed this for now - as this expect all non-lua
 	// args to be removed before hand. Need to sanitize args
 	// before passing on to a lua file with args.
 	// this could be a common solution between a console program
