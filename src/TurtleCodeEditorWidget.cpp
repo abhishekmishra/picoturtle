@@ -52,8 +52,8 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 		emit file_modified_changed(flag);
 	});
 
-	//QFile file(":/lua/turtle/basic_turtle.lua");
-	QFile file(":/lua/learnlua.lua");
+	QFile file(":/lua/turtle/basic_turtle.lua");
+	// QFile file(":/lua/learnlua.lua");
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
