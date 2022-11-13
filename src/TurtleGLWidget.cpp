@@ -15,7 +15,7 @@ TurtleGLWidget::TurtleGLWidget(QWidget* parent)
 	elapsed = 0;
 	setFixedSize(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
 	setAutoFillBackground(false);
-	background = QBrush(QColor(64, 32, 64));
+	background = QBrush(Qt::white);
 	//textPen = QPen(Qt::white);
 	//textFont.setPixelSize(50);
 
@@ -42,18 +42,7 @@ void TurtleGLWidget::paintEvent(QPaintEvent* event)
 
 	if (turtle == NULL)
 	{
-		painter.setRenderHint(QPainter::Antialiasing);
 		painter.fillRect(event->rect(), background);
-		painter.translate(150, 150);
-
-		// TODO: this causes a crash in qtgl glyph cache (only on windows)
-		// not sure of the reasons - as none of the vals are managed by this class.
-		// commenting out for now since not needed at all.
-		// Most probably a qt bug.
-
-		//painter.setPen(textPen);
-		//painter.setFont(textFont);
-		//painter.drawText(QRect(-50, -50, 100, 100), Qt::AlignCenter, QStringLiteral("Yolo"));
 	}
 	else
 	{
@@ -66,6 +55,8 @@ void TurtleGLWidget::paintEvent(QPaintEvent* event)
 		SkPixmap pixmap(info, (const void*)&srcPixels.front(), rowBytes);
 		img->readPixels(pixmap, 0, 0);
 
+		qDebug() << "Image size is" << img->width() << "x" << img->height();
+
 #if SK_PMCOLOR_BYTE_ORDER(B,G,R,A)
 		QImage qImg = QImage((uchar*)&srcPixels.front(), img->width(), img->height(), QImage::Format_ARGB32);
 #elif SK_PMCOLOR_BYTE_ORDER(R,G,B,A)
@@ -73,7 +64,7 @@ void TurtleGLWidget::paintEvent(QPaintEvent* event)
 #else
 		qDebug() << "Undefined byte order of sk color";
 #endif
-		painter.drawImage(QPointF(0, 0), qImg);
+		painter.drawImage(QRect(0, 0, TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT), qImg);
 	}
 	painter.end();
 }
