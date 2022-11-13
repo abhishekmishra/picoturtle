@@ -14,7 +14,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
-    keywordFormat.setForeground(Qt::darkBlue);
+    keywordFormat.setForeground(Qt::white);
     keywordFormat.setFontWeight(QFont::Bold);
     const QString keywordPatterns[] = {
         QStringLiteral("\\band\\b"), QStringLiteral("\\bbreak\\b"), QStringLiteral("\\bdo\\b"),
@@ -40,22 +40,25 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
 
     // lua strings can use single or double quotes
     // TODO: this matches more than one quotations as one, if they are on a single line
-    quotationFormat.setForeground(Qt::darkGreen);
+    quotationFormat.setFontItalic(true);
+    quotationFormat.setForeground(Qt::yellow);
     rule.pattern = QRegularExpression(QStringLiteral("(\".*\")|('.*')"));
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 
+    multiLineQuotationFormat.setFontItalic(true);
     multiLineQuotationFormat.setForeground(Qt::yellow);
 
-    singleLineCommentFormat.setForeground(Qt::red);
+    singleLineCommentFormat.setForeground(Qt::cyan);
     rule.pattern = QRegularExpression(QStringLiteral("--[^\n]*"));
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
 
-    multiLineCommentFormat.setForeground(Qt::red);
+    multiLineCommentFormat.setForeground(Qt::cyan);
 
-    functionFormat.setFontItalic(true);
-    functionFormat.setForeground(Qt::blue);
+    // functionFormat.setFontItalic(true);
+    functionFormat.setFontWeight(QFont::Bold);
+    functionFormat.setForeground(Qt::yellow);
     rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     rule.format = functionFormat;
     highlightingRules.append(rule);
