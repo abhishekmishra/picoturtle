@@ -2,6 +2,9 @@
 #include <QDebug>
 #include "TurtleController.hpp"
 
+// TODO: remove all dependencies on Qt from this class
+// so that it can be run from a non-Qt cli program
+
 namespace turtle {
 	lua_State* TurtleController::L = NULL;
 	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
@@ -83,23 +86,27 @@ namespace turtle {
 			TurtleController::turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
 			turtleLuaDir = (char*)"lua";
 		}
-		char* setPathCodeStr = (char*)calloc(strlen(turtleLuaDir) + 1024, sizeof(char));
+
+		size_t len_of_path_str = strlen(turtleLuaDir) + 1024;
+		char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
 		if (setPathCodeStr == NULL)
 		{
 			TurtleController::turtle_message("app", "Fatal: Unable to alloc string to set load path in lua!\n");
 			return -2;
 		}
 
-		sprintf(setPathCodeStr, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
+		snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
+		// for debug
 		TurtleController::turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
 
 		run_lua_script(setPathCodeStr);
 
 		lua_pushcfunction(L, print);
 		lua_setglobal(L, "turtle_print");
-		TurtleController::turtle_message("app", "global function turtle_print is set");
 
-		run_lua_script("turtle_print ('hello')");
+		// for debug
+		//TurtleController::turtle_message("app", "global function turtle_print is set");
+		//run_lua_script("turtle_print ('hello')");
 
 		return 0;
 	}
@@ -138,7 +145,7 @@ namespace turtle {
 		{
 			if (handleLuaError(luaL_dofile(L, filename)))
 			{
-				TurtleController::turtle_message("app", QString("File execution complete -> ") + filename);
+				// TurtleController::turtle_message("app", QString("File execution complete -> ") + filename);
 			}
 			return 0;
 		}
@@ -150,7 +157,7 @@ namespace turtle {
 
 	int TurtleController::run_lua_script(const char* script)
 	{
-		TurtleController::turtle_message("app", QString("running lua script."));
+		//TurtleController::turtle_message("app", QString("running lua script."));
 		if (script != NULL && strlen(script) > 0)
 		{
 			if (handleLuaError(luaL_dostring(L, script)))
