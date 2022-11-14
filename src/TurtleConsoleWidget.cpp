@@ -11,7 +11,7 @@ TurtleConsoleWidget::TurtleConsoleWidget(QWidget* parent)
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 	font.setPointSize(12);
 	QFontInfo info(font);
-	qDebug() << font << info.family() << info.fixedPitch();
+	// qDebug() << font << info.family() << info.fixedPitch();
 	turtle_console_edit->setFont(font);
 
 	QPalette p = turtle_console_edit->palette();

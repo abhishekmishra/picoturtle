@@ -291,12 +291,12 @@ namespace turtle
 			title += " ";
 			title += turtle_code_editor->get_file_name();
 			title += " [*]";
-			qDebug() << turtle_code_editor->get_file_name() << "dirty flag" << turtle_code_editor->is_dirty();
+			// qDebug() << turtle_code_editor->get_file_name() << "dirty flag" << turtle_code_editor->is_dirty();
 			if (turtle_code_editor->is_dirty())
 			{
 				setWindowModified(true);
 			}
-			qDebug() << "Title is" << title;
+			// qDebug() << "Title is" << title;
 		}
 		setWindowTitle(title);
 		if (turtle_code_editor && turtle_code_editor->is_dirty())

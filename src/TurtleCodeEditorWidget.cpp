@@ -23,7 +23,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 	font.setPointSize(11);
 	QFontInfo info(font);
-	qDebug() << font << info.family() << info.fixedPitch();
+	// qDebug() << font << info.family() << info.fixedPitch();
 	turtle_code_edit->setFont(font);
 
 	QPalette p = turtle_code_edit->palette();
@@ -134,7 +134,7 @@ int TurtleCodeEditorWidget::save_file()
 
 bool TurtleCodeEditorWidget::has_file_path()
 {
-	qDebug() << file_path << "has file path -> " << !(file_path.isNull());
+	// qDebug() << file_path << "has file path -> " << !(file_path.isNull());
 	return !(file_path.isNull());
 }
 

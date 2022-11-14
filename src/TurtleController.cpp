@@ -83,7 +83,7 @@ namespace turtle {
 		char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
 		if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
 		{
-			TurtleController::turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
+			//TurtleController::turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
 			turtleLuaDir = (char*)"lua";
 		}
 
@@ -97,7 +97,7 @@ namespace turtle {
 
 		snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
 		// for debug
-		TurtleController::turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
+		// TurtleController::turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
 
 		run_lua_script(setPathCodeStr);
 
