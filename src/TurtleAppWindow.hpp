@@ -5,6 +5,8 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include <QAction>
+#include <QIcon>
+#include <QString>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
@@ -26,10 +28,15 @@ namespace turtle {
 	public:
 		explicit TurtleAppWindow(QWidget* parent = nullptr);
 		~TurtleAppWindow();
+
+	public:
+		bool in_dark_theme();
+
 	signals:
 
 	private:
 		QSize sizeHint() const;
+		QIcon get_icon(QString name);
 
 		// helper functions
 		void create_actions();

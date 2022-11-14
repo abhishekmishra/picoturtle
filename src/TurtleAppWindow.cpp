@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QIcon>
 #include <QPixmap>
+#include <QPalette>
 
 namespace turtle
 {
@@ -74,6 +75,8 @@ namespace turtle
 				} });
 
 		connect(turtle_code_editor, &TurtleCodeEditorWidget::turtle_run_complete, turtle_canvas, &TurtleCanvasWidget::draw_turtle);
+
+		qDebug() << "We are in dark theme?" << QString::number(in_dark_theme());
 	}
 
 	TurtleAppWindow::~TurtleAppWindow()
@@ -86,50 +89,50 @@ namespace turtle
 	{
 		// Define the actions
 		new_action = new QAction(tr("New"));
-		new_action->setIcon(QIcon(":/images/outline_insert_drive_file_black_24dp.png"));
+		new_action->setIcon(get_icon("insert_drive_file"));
 		new_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
 
 		open_action = new QAction(tr("Open"));
-		open_action->setIcon(QIcon(":/images/outline_file_open_black_24dp.png"));
+		open_action->setIcon(get_icon("file_open"));
 		open_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
 
 		save_action = new QAction(tr("Save"));
-		save_action->setIcon(QIcon(":/images/outline_save_black_24dp.png"));
+		save_action->setIcon(get_icon("save"));
 		save_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
 
 		save_as_action = new QAction(tr("Save As"));
-		save_as_action->setIcon(QIcon(":/images/outline_save_as_black_24dp.png"));
+		save_as_action->setIcon(get_icon("save_as"));
 
 		quit_action = new QAction(tr("Quit"));
-		quit_action->setIcon(QIcon(":/images/outline_exit_to_app_black_24dp.png"));
+		quit_action->setIcon(get_icon("exit_to_app"));
 		quit_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
 
 		cut_action = new QAction(tr("Cut"));
-		cut_action->setIcon(QIcon(":/images/outline_content_cut_black_24dp.png"));
+		cut_action->setIcon(get_icon("content_cut"));
 		cut_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_X));
 
 		copy_action = new QAction(tr("Copy"));
-		copy_action->setIcon(QIcon(":/images/outline_content_copy_black_24dp.png"));
+		copy_action->setIcon(get_icon("content_copy"));
 		copy_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_C));
 
 		paste_action = new QAction(tr("Paste"));
-		paste_action->setIcon(QIcon(":/images/outline_content_paste_black_24dp.png"));
+		paste_action->setIcon(get_icon("content_paste"));
 		paste_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_V));
 
 		undo_action = new QAction(tr("Undo"));
-		undo_action->setIcon(QIcon(":/images/outline_undo_black_24dp.png"));
+		undo_action->setIcon(get_icon("undo"));
 		undo_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z));
 
 		redo_action = new QAction(tr("Redo"));
-		redo_action->setIcon(QIcon(":/images/outline_redo_black_24dp.png"));
+		redo_action->setIcon(get_icon("redo"));
 		redo_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
 
 		run_action = new QAction(tr("Run"));
-		run_action->setIcon(QIcon(":/images/outline_slideshow_black_24dp.png"));
+		run_action->setIcon(get_icon("slideshow"));
 		run_action->setShortcut(QKeySequence(Qt::Key_F5));
 
 		turtle_docs_action = new QAction(tr("Turtle API Docs"));
-		turtle_docs_action->setIcon(QIcon(":/images/outline_help_outline_black_24dp.png"));
+		turtle_docs_action->setIcon(get_icon("help_outline"));
 		turtle_docs_action->setShortcut(QKeySequence(Qt::Key_F1));
 
 		about_action = new QAction(tr("About"));
@@ -324,4 +327,16 @@ namespace turtle
 		turtle_canvas->set_turtle(t);
 	}
 
+	bool TurtleAppWindow::in_dark_theme()
+	{
+		int text_hsv_val = this->palette().color(QPalette::WindowText).value();
+		int bg_hsv_val = this->palette().color(QPalette::Window).value();
+		return text_hsv_val > bg_hsv_val;
+	}
+
+	QIcon TurtleAppWindow::get_icon(QString name)
+	{
+		QString icon_colour = in_dark_theme() ? "white" : "black";
+		return QIcon(":/images/outline_" + name + "_" + icon_colour + "_24dp.png");
+	}
 }
