@@ -188,7 +188,7 @@ namespace turtle {
 		{
 			TurtleController::notify_turtle_created_fn(t);
 		}
-		TurtleController::turtle_message("app", (QString("PicoTurtle created - Name: %1, Id: %2").arg(t->getName().c_str(), t->getId().c_str())));
+		//TurtleController::turtle_message("app", (QString("PicoTurtle created - Name: %1, Id: %2").arg(t->getName().c_str(), t->getId().c_str())));
 	}
 
 	void TurtleController::turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)
