@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <QFileInfo>
 
 #include "TurtleAppWindow.hpp"
 #include "TurtleController.hpp"
@@ -54,8 +55,16 @@ int gui_window(int argc, char* argv[])
     QString config_file_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) +
         QString("/") + QString(PICOTURTLE_CONFIG_FILE);
 	qDebug() << "config file --->" << config_file_path;
-    turtle::TurtleController::run_lua_file(config_file_path.toStdString().c_str());
-    turtle::TurtleController::run_lua_script("print(ptconf.test)");
+	QFileInfo config_file_info = QFileInfo(config_file_path);
+	if(config_file_info.exists() && config_file_info.isFile())
+	{
+    	turtle::TurtleController::run_lua_file(config_file_path.toStdString().c_str());
+    	turtle::TurtleController::run_lua_script("print(ptconf.test)");
+	}
+	else
+	{
+		qDebug() << config_file_path << "does not exist or is not a file.";
+	}
 
     // TODO: removed this for now - as this expect all non-lua
 	// args to be removed before hand. Need to sanitize args
@@ -168,23 +177,3 @@ void hex_dump(
 
 	printf("  %s\n", buff);
 }
-
-// void turtle_example()
-// {
-// turtle::PicoTurtle *skTurtle = new turtle::PicoTurtle();
-
-// skTurtle->pendown();
-// skTurtle->forward(100);
-// skTurtle->right(90);
-// skTurtle->forward(100);
-// skTurtle->right(90);
-// skTurtle->forward(100);
-// skTurtle->right(90);
-// skTurtle->forward(100);
-// skTurtle->right(90);
-// skTurtle->stop();
-
-// skTurtle->export_img("out/out_raster.png");
-
-// delete skTurtle;
-// }
