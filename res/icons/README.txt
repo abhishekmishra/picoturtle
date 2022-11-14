@@ -1,0 +1,2 @@
+The original icon was generated at this url
+https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.text.text=pico&foreground.text.font=Cambay&foreground.space.trim=1&foreground.space.pad=0.25&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(255%2C%2087%2C%2034)&crop=0&backgroundShape=square&effects=elevate&name=ic_launcher
