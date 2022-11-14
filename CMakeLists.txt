@@ -275,7 +275,7 @@ add_custom_command(
     OUTPUT ../res/docs/help.html
     #TARGET picoturtle-app
     #PRE_BUILD
-    COMMAND pandoc -s -o res/docs/help.html docs/help.md
+    COMMAND pandoc -s --embed-resources --toc -o res/docs/help.html --css=docs/pandoc.css docs/help.md
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 
