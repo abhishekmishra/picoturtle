@@ -1,3 +1,7 @@
+---
+title: PicoTurtle Docs
+---
+
 # PicoTurtle
 
 PicoTurtle lets your create turtle graphics in the [Lua](https://lua.org) programming language.
