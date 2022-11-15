@@ -79,6 +79,7 @@
         "ratio": "cpp",
         "string_view": "cpp",
         "variant": "cpp",
-        "qregularexpression": "cpp"
+        "qregularexpression": "cpp",
+        "format": "cpp"
     }
 }
