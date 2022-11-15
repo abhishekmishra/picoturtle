@@ -104,7 +104,7 @@ int TurtleCodeEditorWidget::open_file(const QString &file_path)
 		return -1;
 	}
 
-	set_file_path(file_path);
+	set_file_path(file_path, true);
 	turtle_code_edit->document()->setModified(false);
 	QTextStream in(&file);
 	QString text = in.readAll();
@@ -151,7 +151,7 @@ bool TurtleCodeEditorWidget::set_file_path(const QString &file_path, bool overri
 	{
 		this->file_path = file_path;
 
-		turtle_code_edit->document()->setModified(true);
+		// turtle_code_edit->document()->setModified(true);
 		emit file_path_changed();
 		return true;
 	}
