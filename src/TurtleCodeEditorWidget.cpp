@@ -8,6 +8,9 @@
 #include <QIODevice>
 #include <QFileInfo>
 #include <QDebug>
+#include <QFont>
+#include <QFontDatabase>
+#include <QFontMetrics>
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	: noname_file_count{0},
@@ -19,12 +22,15 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
-	// QFont font("monospace");
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 	font.setPointSize(11);
 	QFontInfo info(font);
 	// qDebug() << font << info.family() << info.fixedPitch();
 	turtle_code_edit->setFont(font);
+
+	QFontMetrics fontMetrics = QFontMetrics(font);
+	int fontWidth = fontMetrics.averageCharWidth();
+	turtle_code_edit->setTabStopDistance(fontWidth * 4);
 
 	QPalette p = turtle_code_edit->palette();
 
