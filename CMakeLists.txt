@@ -73,6 +73,8 @@ set ( PICOTURTLE_LIB_SOURCES
   src/TurtleOptions.cpp
   src/Turtle.hpp
   src/Turtle.cpp
+  src/TurtleCanvas.hpp
+  src/TurtleCanvas.cpp
   src/PicoTurtle.hpp
   src/PicoTurtle.cpp
   src/PicoTurtleLua.hpp
