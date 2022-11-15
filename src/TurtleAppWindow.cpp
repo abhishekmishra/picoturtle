@@ -201,6 +201,7 @@ namespace turtle
 		file_toolbar = this->addToolBar(tr("File"));
 		file_toolbar->addAction(new_action);
 		file_toolbar->addAction(open_action);
+		file_toolbar->addAction(save_action);
 
 		edit_toolbar = this->addToolBar(tr("Edit"));
 		edit_toolbar->addAction(cut_action);
@@ -214,7 +215,6 @@ namespace turtle
 
 		extras_toolbar = this->addToolBar(tr("Extras"));
 		extras_toolbar->addAction(turtle_docs_action);
-		extras_toolbar->addAction(quit_action);
 	}
 
 	void TurtleAppWindow::create_menubar()
