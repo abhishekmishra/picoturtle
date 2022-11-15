@@ -56,9 +56,9 @@ static int skia_turtle_new(lua_State *L)
     *static_cast<PicoTurtle **>(lua_newuserdata(L, sizeof(PicoTurtle *))) = t;
 
     // set metatable of picoturtle object
-    luaL_getmetatable(L,LUA_PICOTURTLE_OBJECT);
+    luaL_getmetatable(L, LUA_PICOTURTLE_OBJECT);
     lua_setmetatable(L, -2);
-    
+
     return 1;
 }
 
@@ -347,6 +347,7 @@ static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", skia_turtle_new},
         {NULL, NULL}};
+
 static const luaL_Reg PicoTurtle_meths[] =
     {
         {"__gc", skia_turtle_free},
