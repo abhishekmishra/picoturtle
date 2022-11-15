@@ -4,16 +4,23 @@
 
 using namespace turtle;
 
+SkiaCanvas * PicoTurtle::turtleCanvas = NULL;
 picoturtle_callback PicoTurtle::init_cb = NULL;
 void *PicoTurtle::init_cb_args = NULL;
 picoturtle_callback PicoTurtle::destroy_cb = NULL;
 void *PicoTurtle::destroy_cb_args = NULL;
 
-PicoTurtle::PicoTurtle() : Turtle(), turtleCanvas{ new SkiaCanvas() }
+PicoTurtle::PicoTurtle() : Turtle()
 {
     // set the canvas and then call reset
     // so that center is appropriately called based on canvas size.
+    if(turtleCanvas == NULL)
+    {
+        turtleCanvas = new SkiaCanvas();
+    }
+
     this->setCanvas(turtleCanvas);
+
     this->reset();
 
     turtleCanvas->UpdateTurtleBrush(this->getPenColor(), this->getPenWidth());

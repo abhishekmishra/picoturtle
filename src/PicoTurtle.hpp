@@ -14,7 +14,7 @@ namespace turtle
     class PicoTurtle : public Turtle
     {
     private:
-        SkiaCanvas *turtleCanvas;
+        static SkiaCanvas *turtleCanvas;
 
         static picoturtle_callback init_cb;
         static void *init_cb_args;
