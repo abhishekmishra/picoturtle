@@ -11,8 +11,6 @@ Turtle::Turtle() : Turtle(new TurtleOptions())
 
 Turtle::Turtle(TurtleOptions *options)
 {
-    this->canvas = canvas;
-    
     Options = options;
     Name = "PicoTurtle";
     Id = "";
