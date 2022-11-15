@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "PicoTurtleLua.hpp"
+#include "PicoTurtle.hpp"
 
 //------LUA BINDING--------
 
@@ -76,7 +77,7 @@ static PicoTurtle *skia_turtle_getobj(lua_State *L)
 static int skia_turtle_getwidth(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->getWidth());
+    lua_pushinteger(L, t->getCanvas()->getWidth());
     return 1;
 }
 
@@ -87,14 +88,14 @@ static int skia_turtle_setwidth(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->setWidth(width);
+    t->getCanvas()->setWidth(width);
     return 0;
 }
 
 static int skia_turtle_getheight(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->getHeight());
+    lua_pushinteger(L, t->getCanvas()->getHeight());
     return 1;
 }
 
@@ -105,7 +106,7 @@ static int skia_turtle_setheight(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->setHeight(height);
+    t->getCanvas()->setHeight(height);
     return 0;
 }
 
@@ -166,7 +167,7 @@ static int skia_turtle_home(lua_State *L)
 static int skia_turtle_clear(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    t->clear();
+    t->getCanvas()->clear();
     return 0;
 }
 
@@ -288,7 +289,7 @@ static int skia_turtle_export_img(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->export_img(s);
+    t->getCanvas()->export_img(s);
     return 0;
 }
 

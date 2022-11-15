@@ -2,14 +2,13 @@
 
 #include <string>
 
+#include "Canvas.hpp"
 #include "TurtleColor.hpp"
 #include "TurtleDimension.hpp"
 #include "TurtleLocation.hpp"
 #include "TurtleState.hpp"
 #include "TurtleOptions.hpp"
 
-#define TURTLE_DEFAULT_CANVAS_WIDTH 512
-#define TURTLE_DEFAULT_CANVAS_HEIGHT 512
 #define TURTLE_DEFAULT_PENWIDTH 1
 #define TURTLE_DEFAULT_HEADING 90.0f
 
@@ -27,12 +26,11 @@ namespace turtle
         float PenWidth;
         // private SolidColorBrush turtleBrush;
 
-        TurtleDimension *Dimension;
-        int Width;
-        int Height;
         TurtleLocation *Location;
         TurtleColor *Colour;
         float Angle;
+
+        Canvas *canvas;
 
         // private List<TurtleCommand> commands;
         // public Canvas Canvas { get; set; }
@@ -53,15 +51,12 @@ namespace turtle
 
         Turtle(TurtleOptions *options); //, Canvas canvas);
 
+        void setCanvas(Canvas* c);
+        Canvas *getCanvas();
         std::string getName();
         std::string getId();
 
         TurtleColor *getPenColor();
-
-        int getWidth();
-        void setWidth(int w);
-        int getHeight();
-        void setHeight(int h);
 
         float getCanvasLocationX();
         float getCanvasLocationY();
@@ -70,11 +65,6 @@ namespace turtle
         float CanvasAngle(); // return 360.0 - Angle;
         float getPenWidth();
         float getHeading();
-
-        virtual void DrawLine(float x1, float y1, float x2, float y2) = 0;
-        virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
-        virtual void UpdateTurtleBrush() = 0;
-        virtual void UpdateCanvas() = 0;
 
         TurtleState *CurrentState();
 
@@ -96,8 +86,6 @@ namespace turtle
 
         void home();
 
-        virtual void clear() = 0;
-
         void forward(float d);
 
         void back(float d);
@@ -118,19 +106,15 @@ namespace turtle
 
         void heading(float a);
 
-        virtual void font(const char *f, unsigned int sz) = 0;
-
-        virtual void filltext(const char *text) = 0;
-
-        virtual void stroketext(const char *text) = 0;
-
         void pencolour(unsigned int r, unsigned int g, unsigned int b);
 
         // TODO: change width and height to unsigned int
         void canvas_size(int width, int height);
 
-        virtual void export_img(const char *filename) = 0;
-
         void reset();
+
+        void font(const char *f, unsigned int sz);
+        void filltext(const char *text);
+        void stroketext(const char *text);
     };
 };

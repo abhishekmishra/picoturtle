@@ -11,15 +11,19 @@ Turtle::Turtle() : Turtle(new TurtleOptions())
 
 Turtle::Turtle(TurtleOptions *options)
 {
+    this->canvas = canvas;
+    
     Options = options;
     Name = "PicoTurtle";
     Id = "";
-    Width = TURTLE_DEFAULT_CANVAS_WIDTH;
-    Height = TURTLE_DEFAULT_CANVAS_HEIGHT;
-    Dimension = new TurtleDimension(Width, Height);
-    Location = new TurtleLocation((int)(Width / 2), (int)(Height / 2));
+
+    Location = new TurtleLocation(0, 0);
+    //Location = new TurtleLocation((int)(canvas->getWidth() / 2), (int)(canvas->getHeight() / 2));
     Angle = TURTLE_DEFAULT_HEADING;
+
+    // TODO: change turtle default colour
     PenColor = new TurtleColor(128, 64, 32, 255);
+
     PenWidth = TURTLE_DEFAULT_PENWIDTH;
 };
 
@@ -31,24 +35,6 @@ std::string Turtle::getId() {
     return Id;
 }
 
-
-int Turtle::getWidth()
-{
-    return Width;
-}
-void Turtle::setWidth(int w)
-{
-    Width = w;
-}
-int Turtle::getHeight()
-{
-    return Height;
-}
-void Turtle::setHeight(int h)
-{
-    Height = h;
-}
-
 float Turtle::getCanvasLocationX()
 {
     return Location->getX();
@@ -56,7 +42,7 @@ float Turtle::getCanvasLocationX()
 
 float Turtle::getCanvasLocationY()
 {
-    return getHeight() - Location->getY();
+    return this->canvas->getHeight() - Location->getY();
 }
 
 float Turtle::getX()
@@ -107,7 +93,7 @@ void Turtle::DrawTurtle()
     pencolour(255u, 0u, 0u);
     penwidth(2);
 
-    DrawTriangle(getCanvasLocationX(), getCanvasLocationY(), x2, y2, x3, y3);
+    canvas->DrawTriangle(getCanvasLocationX(), getCanvasLocationY(), x2, y2, x3, y3);
 
     // reset turtle colour and pen width
     pencolour(cr, cg, cb);
@@ -134,7 +120,7 @@ void Turtle::pendown()
 void Turtle::penwidth(float w)
 {
     PenWidth = w;
-    UpdateTurtleBrush();
+    canvas->UpdateTurtleBrush(getPenColor(), getPenWidth());
 }
 
 void Turtle::stop()
@@ -145,8 +131,8 @@ void Turtle::stop()
 
 void Turtle::home()
 {
-    Location->setX(Width / 2.0f);
-    Location->setY(Height / 2.0f);
+    Location->setX(this->canvas->getWidth() / 2.0f);
+    Location->setY(this->canvas->getHeight() / 2.0f);
 }
 
 void Turtle::forward(float d)
@@ -163,7 +149,7 @@ void Turtle::forward(float d)
     // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, Location->getX(), Location->getY(), x2, y2);
     if (IsPenDown)
     {
-        DrawLine(getCanvasLocationX(), getCanvasLocationY(), cx2, cy2);
+        canvas->DrawLine(getCanvasLocationX(), getCanvasLocationY(), cx2, cy2);
     }
 
     Location->setX(x2);
@@ -179,7 +165,7 @@ void Turtle::setpos(float x, float y)
 {
     if (IsPenDown)
     {
-        DrawLine(getCanvasLocationX(), getCanvasLocationY(), x, Height - y);
+        canvas->DrawLine(getCanvasLocationX(), getCanvasLocationY(), x, this->canvas->getHeight() - y);
     }
 
     Location->setX(x);
@@ -226,15 +212,15 @@ void Turtle::pencolour(unsigned int r, unsigned int g, unsigned int b)
     PenColor->setR(r);
     PenColor->setG(g);
     PenColor->setB(b);
-    UpdateTurtleBrush();
+    canvas->UpdateTurtleBrush(getPenColor(), getPenWidth());
 }
 
 void Turtle::canvas_size(int width, int height)
 {
     // printf("Dimensions are now [%d, %d].\n", width, height);
-    setWidth(width);
-    setHeight(height);
-    UpdateCanvas();
+    this->canvas->setWidth(width);
+    this->canvas->setHeight(height);
+    canvas->UpdateCanvas();
 }
 
 void Turtle::reset()
@@ -243,10 +229,36 @@ void Turtle::reset()
     pendown();
     penwidth(TURTLE_DEFAULT_PENWIDTH);
     heading(TURTLE_DEFAULT_HEADING);
-    clear();
+    canvas->clear();
 }
 
 TurtleColor *Turtle::getPenColor()
 {
     return PenColor;
+}
+
+Canvas *Turtle::getCanvas()
+{
+    return canvas;
+}
+
+void Turtle::font(const char *f, unsigned int sz)
+{
+    this->canvas->font(f, sz);
+}
+
+
+void Turtle::filltext(const char *text)
+{
+    this->canvas->filltext(getCanvasLocationX(), getCanvasLocationY(), Angle, text);
+}
+
+void Turtle::stroketext(const char *text)
+{
+    this->canvas->stroketext(getCanvasLocationX(), getCanvasLocationY(), Angle, text);
+}
+
+void Turtle::setCanvas(Canvas* c)
+{
+    this->canvas = c;
 }

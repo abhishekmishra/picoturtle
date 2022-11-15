@@ -71,10 +71,12 @@ set ( PICOTURTLE_LIB_SOURCES
   src/TurtleState.cpp
   src/TurtleOptions.hpp
   src/TurtleOptions.cpp
+  src/Canvas.hpp
+  src/Canvas.cpp
+  src/SkiaCanvas.hpp
+  src/SkiaCanvas.cpp
   src/Turtle.hpp
   src/Turtle.cpp
-  src/TurtleCanvas.hpp
-  src/TurtleCanvas.cpp
   src/PicoTurtle.hpp
   src/PicoTurtle.cpp
   src/PicoTurtleLua.hpp
