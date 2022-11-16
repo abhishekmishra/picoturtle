@@ -128,6 +128,7 @@ TurtleCodeEditorWidget* TurtleCodeEditorParentWidget::new_code_editor()
 	tabs->addTab(code_editor, code_editor->get_file_name());
 	editor_widgets.append(code_editor);
 	tabs->setCurrentWidget(code_editor);
+    code_editor->layout()->setContentsMargins(0, 0, 0, 0);
 
 	connect(code_editor, &TurtleCodeEditorWidget::new_file_created, [=]() {
 		emit new_file_created();

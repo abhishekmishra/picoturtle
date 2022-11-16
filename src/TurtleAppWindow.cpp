@@ -7,6 +7,7 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QPalette>
+#include <QLayout>
 
 namespace turtle
 {
@@ -274,7 +275,8 @@ namespace turtle
 		turtle_code_edit_dock = new QDockWidget(tr("TurtleEdit"), this);
 		turtle_code_edit_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		turtle_code_edit_dock->setWidget(code_editor_parent);
-
+		turtle_code_edit_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
+		
 		addDockWidget(Qt::LeftDockWidgetArea, turtle_code_edit_dock);
 	}
 
@@ -283,6 +285,7 @@ namespace turtle
 		turtle_console_dock = new QDockWidget(tr("Turtle Console"), this);
 		turtle_console_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 		turtle_console_dock->setWidget(turtle_console);
+		turtle_console_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
 
 		addDockWidget(Qt::BottomDockWidgetArea, turtle_console_dock);
 	}
@@ -292,6 +295,7 @@ namespace turtle
 		turtle_docs_dock = new QDockWidget(tr("Turtle Docs"), this);
 		turtle_docs_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 		turtle_docs_dock->setWidget(turtle_docs);
+		turtle_docs_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
 
 		addDockWidget(Qt::RightDockWidgetArea, turtle_docs_dock);
 	}
