@@ -12,6 +12,7 @@ TurtleCanvasWidget::TurtleCanvasWidget(QWidget* parent)
 	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(gl_widget);
 	setLayout(vb_layout);
+	vb_layout->setContentsMargins(0, 0, 0, 0);
 }
 
 TurtleCanvasWidget::~TurtleCanvasWidget()

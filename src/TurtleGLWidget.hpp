@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QFont>
 #include <QPaintEvent>
+#include <QResizeEvent>
 
 #include "PicoTurtle.hpp"
 
@@ -37,6 +38,9 @@ private:
     QPen circlePen;
     QPen textPen;
     turtle::PicoTurtle *turtle;
+
+public:
+    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif
