@@ -87,9 +87,19 @@ namespace turtle
 
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::turtle_run_complete, turtle_canvas, &TurtleCanvasWidget::draw_turtle);
 
-		connect(code_editor_parent, &TurtleCodeEditorParentWidget::current_tab_changed, [=]() {
-			update_title();
-			});
+		connect(code_editor_parent, &TurtleCodeEditorParentWidget::current_tab_changed, [=]()
+				{
+				update_title();
+				if(code_editor_parent->is_dirty())
+				{
+					save_action->setDisabled(false);
+					save_as_action->setDisabled(false);
+				}
+				else
+				{
+					save_action->setDisabled(true);
+					save_as_action->setDisabled(true);
+				} });
 
 		qDebug() << "We are in dark theme?" << QString::number(in_dark_theme());
 	}
@@ -276,7 +286,7 @@ namespace turtle
 		turtle_code_edit_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		turtle_code_edit_dock->setWidget(code_editor_parent);
 		turtle_code_edit_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
-		
+
 		addDockWidget(Qt::LeftDockWidgetArea, turtle_code_edit_dock);
 	}
 
@@ -308,7 +318,7 @@ namespace turtle
 	void TurtleAppWindow::update_title()
 	{
 		QString title = "PicoTurtle";
-		TurtleCodeEditorWidget* code_edit = code_editor_parent->get_current_editor_widget();
+		TurtleCodeEditorWidget *code_edit = code_editor_parent->get_current_editor_widget();
 
 		if (code_edit)
 		{
@@ -333,8 +343,8 @@ namespace turtle
 		{
 			setWindowModified(false);
 		}
-		 qDebug() << code_edit->get_file_name() << "dirty flag" << code_edit->is_dirty();
-		 qDebug() << "Title is" << title;
+		qDebug() << code_edit->get_file_name() << "dirty flag" << code_edit->is_dirty();
+		qDebug() << "Title is" << title;
 	}
 
 	void TurtleAppWindow::write_to_console(const QString &input) const
