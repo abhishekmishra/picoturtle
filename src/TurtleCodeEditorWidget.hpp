@@ -38,7 +38,8 @@ public:
 private:
     QPlainTextEdit* turtle_code_edit;
     QString file_path;
-    int noname_file_count;
+    static int noname_file_count;
+    QString noname_fname;
     QString basic_turtle_text;
     LuaSyntaxHighlighter *lua_highlighter;
 };

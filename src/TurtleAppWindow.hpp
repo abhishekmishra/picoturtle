@@ -53,7 +53,7 @@ namespace turtle {
 
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;
-		TurtleCodeEditorParentWidget* turtle_code_editor;
+		TurtleCodeEditorParentWidget* code_editor_parent;
 		TurtleConsoleWidget* turtle_console;
 		TurtleDocsWidget* turtle_docs;
 		QDockWidget* turtle_code_edit_dock;

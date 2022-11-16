@@ -24,6 +24,7 @@ namespace turtle
         void turtle_run_complete(const int error_code);
         void file_path_changed();
         void file_modified_changed(bool modified);
+        void current_tab_changed(int idx);
 
     public slots:
         void new_file();
@@ -37,10 +38,12 @@ namespace turtle
         bool is_dirty();
         const QString get_file_name();
         const QString &get_file_path();
+        TurtleCodeEditorWidget* get_current_editor_widget();
 
     private:
         QTabWidget *tabs;
         QList<TurtleCodeEditorWidget *> editor_widgets;
+        TurtleCodeEditorWidget* new_code_editor();
     };
 }
 

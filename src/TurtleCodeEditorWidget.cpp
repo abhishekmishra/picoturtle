@@ -12,9 +12,10 @@
 #include <QFontDatabase>
 #include <QFontMetrics>
 
+int TurtleCodeEditorWidget::noname_file_count = 0;
+
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
-	: noname_file_count{0},
-	  file_path{QString()}
+	: file_path{QString()}
 {
 	turtle_code_edit = new QPlainTextEdit(this);
 	turtle_code_edit->setMinimumHeight(400);
@@ -69,7 +70,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 		basic_turtle_text = file.readAll();
 	}
 
-	new_file();
+	//new_file();
 }
 
 TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
@@ -89,7 +90,7 @@ void TurtleCodeEditorWidget::new_file()
 	// TODO: create this text from a resource
 
 	turtle_code_edit->setPlainText(basic_turtle_text);
-
+	noname_fname = "noname" + QString::number(noname_file_count);
 	noname_file_count += 1;
 
 	turtle_code_edit->document()->setModified(true);
@@ -162,7 +163,7 @@ const QString TurtleCodeEditorWidget::get_file_name()
 {
 	if (!has_file_path())
 	{
-		return "noname" + QString::number(noname_file_count);
+		return noname_fname;
 	}
 	return QString(QFileInfo(file_path).fileName());
 }
