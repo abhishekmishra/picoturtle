@@ -10,7 +10,7 @@
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QDockWidget>
 #include "TurtleCanvasWidget.hpp"
-#include "TurtleCodeEditorWidget.hpp"
+#include "TurtleCodeEditorParentWidget.hpp"
 #include "TurtleConsoleWidget.hpp"
 #include "TurtleController.hpp"
 #include "TurtleDocsWidget.hpp"
@@ -53,7 +53,7 @@ namespace turtle {
 
 		// Widgets
 		TurtleCanvasWidget* turtle_canvas;
-		TurtleCodeEditorWidget* turtle_code_editor;
+		TurtleCodeEditorParentWidget* turtle_code_editor;
 		TurtleConsoleWidget* turtle_console;
 		TurtleDocsWidget* turtle_docs;
 		QDockWidget* turtle_code_edit_dock;

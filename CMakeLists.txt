@@ -229,6 +229,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/LuaSyntaxHighlighter.cpp
     src/TurtleCodeEditorWidget.hpp
     src/TurtleCodeEditorWidget.cpp
+    src/TurtleCodeEditorParentWidget.hpp
+    src/TurtleCodeEditorParentWidget.cpp
     src/TurtleConsoleWidget.hpp
     src/TurtleConsoleWidget.cpp
     src/TurtleCanvasWidget.hpp
