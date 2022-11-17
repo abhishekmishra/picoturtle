@@ -115,9 +115,7 @@ end
 
 --- Clear the Box (fill with white)
 function BoxTurtle:clear()
-	print('clear this dude')
 	local orig = self.box:canvas_orig()
-	print(orig:x() .. ', ' .. orig:y())
 	local dim = self.box:canvas_dim()
 	local pos = Vec2:new(orig:x() + (dim:w()/2), orig:y())
 	self.turtle:penup()
