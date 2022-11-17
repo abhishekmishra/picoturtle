@@ -40,7 +40,7 @@ namespace turtle {
 		QString input = "";
 		for (int i = 1; i <= nargs; i++)
 		{
-			if (i > 1) 
+			if (i > 1)
 			{
 				input += " ";
 			}
@@ -57,7 +57,7 @@ namespace turtle {
 				input += QString::number(lua_toboolean(LUASTATE, i));
 				break;
 	        default:
-            	input += lua_typename(LUASTATE, i);
+            	input += lua_tostring(LUASTATE, i);
             	break;
 			}
 		}
@@ -200,14 +200,14 @@ namespace turtle {
 
 	void TurtleController::turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)
 	{
-		sk_sp<SkImage> img;
+		//sk_sp<SkImage> img;
 
 		printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
-		img = t->getRasterSurface()->makeImageSnapshot();
-		if (img)
-		{
-			TurtleController::turtle_message("app", QString("Image [%d x %d].\n").arg(img->width(), img->height()));
-		}
+		//img = t->getRasterSurface()->makeImageSnapshot();
+		//if (img)
+		//{
+		//	TurtleController::turtle_message("app", QString("Image [%1 x %2].\n").arg(img->width(), img->height()));
+		//}
 	}
 
 	void TurtleController::set_custom_lua_print_fn(std::function<void(QString)> printfn)

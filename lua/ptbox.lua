@@ -50,6 +50,11 @@ function Vec2:h()
 	return self._y
 end
 
+--- tostring
+function Vec2:__tostring()
+	return "Vec2(" .. self._x .. "," .. self._y .. ")"
+end
+
 --- The Box class defines a rectangular area of the canvas.
 -- It will also provide a way to situate a point in the coordinate system
 -- local to the Box.
@@ -82,6 +87,11 @@ end
 -- @return Vec2 dimensions in canvas coords
 function Box:canvas_dim()
 	return self.c_dim
+end
+
+--- tostring
+function Box:__tostring()
+	return "Box [orig=" .. tostring(self.c_orig) .. ", dim=" .. tostring(self.c_dim) .. "]"
 end
 
 --- Restrict a Turtle to a Box in the canvas.
@@ -118,6 +128,7 @@ function BoxTurtle:clear()
 	local orig = self.box:canvas_orig()
 	local dim = self.box:canvas_dim()
 	local pos = Vec2:new(orig:x() + (dim:w()/2), orig:y())
+	-- print('going to ' .. pos:x() .. ', ' .. pos:y())
 	self.turtle:penup()
 	self.turtle:setpos(pos:x(), pos:y())
 	self.turtle:heading(90)
@@ -271,10 +282,46 @@ function BoxTurtle:export_img(filename)
 	-- TODO: proper implementation of exporting only the box.
 	error('not implemented yet')
 end
- 
+
+--- tostring
+function BoxTurtle:__tostring()
+	return "BoxTurtle -> " .. tostring(self.box)
+end
+
+--- Create a grid of boxes (nrows x ncols) with size such that they fit in the given parent Box
+-- @tparam Box parent
+-- @tparam number nrows
+-- @tparam number ncols
+function create_box_grid(parent, nrows, ncols)
+	if parent == nil then
+		error("parent box is nil!")
+	end
+
+	local nrows = nrows or 1
+	local ncols = ncols or 1
+
+	local dim = parent:canvas_dim()
+	local orig = parent:canvas_orig()
+
+	local cdim = Vec2:new(dim:w()/ncols, dim:h()/nrows)
+	-- print(cdim:w() .. 'x' .. cdim:h())
+
+	local grid = {}
+	for i = 0, ncols-1 do
+		for j = 0, nrows-1 do
+			local orig = Vec2:new(i * (dim:w()/ncols), j * (dim:h()/nrows))
+			local d = Vec2:new(cdim:w(), cdim:h())
+			-- print(i .. ',' .. 'j = ' .. orig:x() .. 'x' .. orig:y())
+			table.insert(grid, Box:new(orig, d))
+		end
+	end
+	return grid
+end
+
 --- @export
 return {
 	Box = Box,
 	BoxTurtle = BoxTurtle,
 	Vec2 = Vec2,
+	create_box_grid = create_box_grid
 }
