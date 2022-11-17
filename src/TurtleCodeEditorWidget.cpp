@@ -55,9 +55,8 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	vb_layout->addWidget(turtle_code_edit);
 	setLayout(vb_layout);
 
-	connect(turtle_code_edit, &QPlainTextEdit::modificationChanged, [=](bool flag){
-		emit file_modified_changed(flag);
-	});
+	connect(turtle_code_edit, &QPlainTextEdit::modificationChanged, [=](bool flag)
+			{ emit file_modified_changed(flag); });
 
 	QFile file(":/lua/turtle/basic_turtle.lua");
 	// QFile file(":/lua/learnlua.lua");
@@ -66,11 +65,13 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	{
 		QMessageBox::information(this, tr("Unable to open file"),
 								 file.errorString());
-	} else {
+	}
+	else
+	{
 		basic_turtle_text = file.readAll();
 	}
 
-	//new_file();
+	// new_file();
 }
 
 TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
@@ -79,7 +80,24 @@ TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 
 void TurtleCodeEditorWidget::run_file()
 {
+	// init a new lua state
+	turtle::TurtleController::init_turtle_lua_binding();
+
+	// apply the custom print function to the lua state
+	// TODO: this should be moved to a utility function in the lua controller
+	turtle::TurtleController::run_lua_script(
+		"local oldprint = print\n"
+		"print = function(...)\n"
+		"  turtle_print(...)\n"
+		"end\n");
+
+	// execute the script and get the result code
 	int res = turtle::TurtleController::run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
+
+	// cleanup the lua state
+	turtle::TurtleController::cleanup_turtle_lua_binding();
+
+	// emit the signal with the res code.
 	emit turtle_run_complete(res);
 }
 

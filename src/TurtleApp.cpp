@@ -87,8 +87,6 @@ int gui_window(int argc, char* argv[])
 	turtle::TurtleController::set_custom_lua_print_fn(printfn);
 	turtle::TurtleController::set_notify_turtle_created_fn(notify_turtle_fn);
 
-	mainWindow->show();
-
 	turtle::TurtleController::run_lua_script(
 		"local oldprint = print\n"
 		"print = function(...)\n"
@@ -96,6 +94,10 @@ int gui_window(int argc, char* argv[])
 		"end\n"
 		"-- print ('console print setup.')\n"
 	);
+
+	turtle::TurtleController::cleanup_turtle_lua_binding();
+
+	mainWindow->show();
 
 	return a.exec();
 }
