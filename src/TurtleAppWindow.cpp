@@ -343,8 +343,8 @@ namespace turtle
 		{
 			setWindowModified(false);
 		}
-		qDebug() << code_edit->get_file_name() << "dirty flag" << code_edit->is_dirty();
-		qDebug() << "Title is" << title;
+		// qDebug() << code_edit->get_file_name() << "dirty flag" << code_edit->is_dirty();
+		// qDebug() << "Title is" << title;
 	}
 
 	void TurtleAppWindow::write_to_console(const QString &input) const
