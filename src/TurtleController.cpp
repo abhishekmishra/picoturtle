@@ -40,7 +40,11 @@ namespace turtle {
 		QString input = "";
 		for (int i = 1; i <= nargs; i++)
 		{
-			if (i > 1) input += " ";
+			if (i > 1) 
+			{
+				input += " ";
+			}
+
 			switch (lua_type(LUASTATE, i))
 			{
 			case LUA_TSTRING:
@@ -52,6 +56,9 @@ namespace turtle {
 			case LUA_TBOOLEAN:
 				input += QString::number(lua_toboolean(LUASTATE, i));
 				break;
+	        default:
+            	input += lua_typename(LUASTATE, i);
+            	break;
 			}
 		}
 
