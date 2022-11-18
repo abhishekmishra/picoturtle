@@ -3,6 +3,8 @@
 -- @modclass
 
 local class = require 'middleclass'
+local Vec2 = require 'pt/Vec2'
+local Vec4 = require 'pt/Vec4'
 
 --- The Box class defines a rectangular area of the canvas.
 -- It will also provide a way to situate a point in the coordinate system
@@ -22,6 +24,9 @@ local Box = class('Box')
 function Box:initialize(orig, dim)
 	self.c_orig = orig or Vec2:new(0, 0)
 	self.c_dim = dim or Vec2:new(100, 100)
+	self.border_width = Vec4:new()
+	self.margin_width = Vec4:new()
+	self.padding_width = Vec4:new()
 end
 
 --- Get the origin (bottom-left) of the box in canvas coords
@@ -36,6 +41,24 @@ end
 -- @return Vec2 dimensions in canvas coords
 function Box:canvas_dim()
 	return self.c_dim
+end
+
+--- Set the border width (n, e, w, s)
+--
+-- @tparam number n north border, (sets all borders if the rest of the params are nil)
+-- @tparam number e east border
+-- @tparam number w west border
+-- @tparam number s south border
+function Box:set_border_width(n, e, w, s)
+	if n ~= nil and e == nil and w == nil and s == nil then
+		self.border_width = Vec4:new(n, n, n, n)
+	else
+		local n = n or 0
+		local e = e or 0
+		local w = w or 0
+		local s = s or 0
+		self.border_width = Vec4:new(n, e, w, s)
+	end
 end
 
 --- tostring

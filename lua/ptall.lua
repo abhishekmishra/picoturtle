@@ -11,6 +11,7 @@ date  : 15/11/2022
 --]]--
 
 local Vec2 = require'pt/Vec2'
+local Vec4 = require'pt/Vec4'
 local Box = require'pt/Box'
 local BoxTurtle = require'pt/BoxTurtle'
 local create_box_grid = require'pt/BoxUtils'.create_box_grid
@@ -20,5 +21,6 @@ return {
 	Box = Box,
 	BoxTurtle = BoxTurtle,
 	Vec2 = Vec2,
+	Vec4 = Vec4,
 	create_box_grid = create_box_grid
 }
