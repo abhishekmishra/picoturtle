@@ -113,7 +113,7 @@ const QString& TurtleCodeEditorParentWidget::get_file_path()
 
 TurtleCodeEditorWidget* TurtleCodeEditorParentWidget::get_current_editor_widget()
 {
-	qDebug() << "current index is ->" << tabs->currentIndex();
+	// qDebug() << "current index is ->" << tabs->currentIndex();
 	return (TurtleCodeEditorWidget*)tabs->currentWidget();
 }
 
