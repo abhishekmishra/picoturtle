@@ -6,20 +6,28 @@
 #include "TurtleGLWidget.hpp"
 // #include "TurtleSDLWidget.hpp"
 
-class TurtleCanvasWidget : public QWidget
+namespace turtle
 {
-    Q_OBJECT
+    class TurtleCanvasWidget : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    TurtleCanvasWidget(QWidget *parent = nullptr);
-    ~TurtleCanvasWidget();
-    void set_turtle(turtle::PicoTurtle* t);
+    public:
+        TurtleCanvasWidget(QWidget *parent = nullptr);
+        ~TurtleCanvasWidget();
+        void set_turtle(turtle::PicoTurtle *t);
+        virtual QSize sizeHint() const override;
 
-public slots:
-    void draw_turtle();
+    public slots:
+        void draw_turtle();
 
-private:
-    TurtleGLWidget* gl_widget;
-    // TurtleSDLWidget* sdl_widget;
+    protected:
+        virtual void resizeEvent(QResizeEvent *event) override;
+
+    private:
+        TurtleGLWidget *gl_widget;
+        // TurtleSDLWidget* sdl_widget;
+        void fixup();
+    };
 };
 #endif // TURTLE_CANVAS_WIDGET_H
