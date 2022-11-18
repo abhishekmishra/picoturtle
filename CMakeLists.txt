@@ -37,7 +37,11 @@ endif (HAVE_LIB_M)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set ( PICOTURTLE_LUA_FILES
-  lua/ptbox.lua
+  lua/pt/Box.lua
+  lua/pt/Vec2.lua
+  lua/pt/BoxTurtle.lua
+  lua/pt/BoxUtils.lua
+  lua/ptall.lua
   lua/middleclass.lua
   lua/TurtleInit.lua
   lua/SampleTurtle.lua
