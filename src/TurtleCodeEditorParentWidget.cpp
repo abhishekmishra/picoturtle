@@ -108,7 +108,8 @@ const QString& TurtleCodeEditorParentWidget::get_file_path()
 	{
 		return code_editor->get_file_path();
 	}
-	return QString();
+	// TODO: is this the correct way to return an empty string in cpp/qt
+	return *(new QString());
 }
 
 TurtleCodeEditorWidget* TurtleCodeEditorParentWidget::get_current_editor_widget()
