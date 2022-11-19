@@ -14,6 +14,14 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
+    // identifiers
+    identifierFormat.setFontWeight(QFont::Bold);
+    identifierFormat.setForeground(Qt::magenta);
+    rule.pattern = QRegularExpression(QStringLiteral("\\b[_A-Za-z][_\\-A-Za-z0-9]*\\b"));
+    rule.format = identifierFormat;
+    highlightingRules.append(rule);
+
+    // keywords
     keywordFormat.setForeground(Qt::white);
     keywordFormat.setFontWeight(QFont::Bold);
     const QString keywordPatterns[] = {
@@ -24,25 +32,27 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
         QStringLiteral("\\blocal\\b"), QStringLiteral("\\bnil\\b"), QStringLiteral("\\bnot\\b"),
         QStringLiteral("\\bor\\b"), QStringLiteral("\\brepeat\\b"), QStringLiteral("\\breturn\\b"),
         QStringLiteral("\\bthen\\b"), QStringLiteral("\\btrue\\b"), QStringLiteral("\\buntil\\b"),
-        QStringLiteral("\\bwhile\\b")
-    };
-    for (const QString &pattern : keywordPatterns) {
+        QStringLiteral("\\bwhile\\b")};
+    for (const QString &pattern : keywordPatterns)
+    {
         rule.pattern = QRegularExpression(pattern);
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
 
-    classFormat.setFontWeight(QFont::Bold);
-    classFormat.setForeground(Qt::darkMagenta);
-    rule.pattern = QRegularExpression(QStringLiteral("\\bQ[A-Za-z]+\\b"));
-    rule.format = classFormat;
+    // functions
+    functionFormat.setFontWeight(QFont::Bold);
+    functionFormat.setForeground(Qt::yellow);
+    rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
+    rule.format = functionFormat;
     highlightingRules.append(rule);
 
     // lua strings can use single or double quotes
-    // TODO: this matches more than one quotations as one, if they are on a single line
     quotationFormat.setFontItalic(true);
     quotationFormat.setForeground(Qt::yellow);
-    rule.pattern = QRegularExpression(QStringLiteral("(\".*\")|('.*')"));
+    // regex matches anything in between quotes which does not have a quote inside it.
+    // the regext has two parts one for single quotes pair another for double quotes pair.
+    rule.pattern = QRegularExpression(QStringLiteral("(\"[^\"]*\")|('[^']*')"));
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 
@@ -56,13 +66,6 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
 
     multiLineCommentFormat.setForeground(Qt::cyan);
 
-    // functionFormat.setFontItalic(true);
-    functionFormat.setFontWeight(QFont::Bold);
-    functionFormat.setForeground(Qt::yellow);
-    rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
-    rule.format = functionFormat;
-    highlightingRules.append(rule);
-
     commentStartExpression = QRegularExpression(QStringLiteral("^--\\[\\["));
     commentEndExpression = QRegularExpression(QStringLiteral("\\]\\]"));
 
@@ -72,9 +75,11 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument *parent)
 
 void LuaSyntaxHighlighter::highlightBlock(const QString &text)
 {
-    for (const HighlightingRule &rule : qAsConst(highlightingRules)) {
+    for (const HighlightingRule &rule : qAsConst(highlightingRules))
+    {
         QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
-        while (matchIterator.hasNext()) {
+        while (matchIterator.hasNext())
+        {
             QRegularExpressionMatch match = matchIterator.next();
             setFormat(match.capturedStart(), match.capturedLength(), rule.format);
         }
@@ -82,21 +87,23 @@ void LuaSyntaxHighlighter::highlightBlock(const QString &text)
 
     setCurrentBlockState(0);
 
-
     int quoteStartIndex = 0;
     if (previousBlockState() != 2)
         quoteStartIndex = text.indexOf(quoteStartExpression);
 
-    while (quoteStartIndex >= 0) {
+    while (quoteStartIndex >= 0)
+    {
         QRegularExpressionMatch match = quoteEndExpression.match(text, quoteStartIndex);
         int quoteEndIndex = match.capturedStart();
         int quoteLength = 0;
-        if (quoteEndIndex == -1) {
+        if (quoteEndIndex == -1)
+        {
             setCurrentBlockState(2);
             quoteLength = text.length() - quoteStartIndex;
-        } else {
-            quoteLength = quoteEndIndex - quoteStartIndex
-                            + match.capturedLength();
+        }
+        else
+        {
+            quoteLength = quoteEndIndex - quoteStartIndex + match.capturedLength();
         }
         setFormat(quoteStartIndex, quoteLength, multiLineQuotationFormat);
         quoteStartIndex = text.indexOf(quoteStartExpression, quoteStartIndex + quoteLength);
@@ -106,19 +113,21 @@ void LuaSyntaxHighlighter::highlightBlock(const QString &text)
     if (previousBlockState() != 1)
         startIndex = text.indexOf(commentStartExpression);
 
-    while (startIndex >= 0) {
+    while (startIndex >= 0)
+    {
         QRegularExpressionMatch match = commentEndExpression.match(text, startIndex);
         int endIndex = match.capturedStart();
         int commentLength = 0;
-        if (endIndex == -1) {
+        if (endIndex == -1)
+        {
             setCurrentBlockState(1);
             commentLength = text.length() - startIndex;
-        } else {
-            commentLength = endIndex - startIndex
-                            + match.capturedLength();
+        }
+        else
+        {
+            commentLength = endIndex - startIndex + match.capturedLength();
         }
         setFormat(startIndex, commentLength, multiLineCommentFormat);
         startIndex = text.indexOf(commentStartExpression, startIndex + commentLength);
     }
-
 }
