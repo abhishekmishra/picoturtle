@@ -36,9 +36,30 @@ function Vec2:w()
 	return self._x
 end
 
---- first component
+--- second component
 function Vec2:h()
 	return self._y
+end
+
+--- add vec2 to another vec2
+-- @tparam Vec2 v other vector to add
+-- @return Vec2 vector result of addition
+function Vec2:add(v)
+	return Vec2:new(self:x() + v:x(), self:y() + v:y())
+end
+
+--- subtract another vec2 from this vector
+-- @tparam Vec2 v other vector to subtract
+-- @return Vec2 vector result of subtraction
+function Vec2:subtract(v)
+	return Vec2:new(self:x() - v:x(), self:y() - v:y())
+end
+
+--- scale the vector by a scalar value (n)
+-- @tparam number n number to scale by
+-- @return Vec2 scaled vector
+function Vec2:scale(n)
+	return Vec2:new(self:x() * n, self:y() * n)
 end
 
 --- tostring

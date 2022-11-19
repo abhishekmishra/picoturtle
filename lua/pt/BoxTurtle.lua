@@ -59,7 +59,12 @@ end
 function BoxTurtle:home()
 	local orig = self.box:canvas_orig()
 	local dim = self.box:canvas_dim()
-	self.turtle:setpos(orig:x() + (dim:w()/2), orig:y() + (dim:h()/2))
+	local half_dim = dim:scale(0.5)
+	-- print(tostring(orig) .. tostring(dim) .. tostring(half_dim))
+	-- self.turtle:setpos(orig:x() + (dim:w()/2), orig:y() + (dim:h()/2))
+	local newpos = orig:add(half_dim)
+	print('newpos = ' .. tostring(newpos))
+	self.turtle:setpos(newpos:x(), newpos:y())
 	self.turtle:heading(90)
 end
 
