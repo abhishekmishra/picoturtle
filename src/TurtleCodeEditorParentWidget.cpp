@@ -16,8 +16,13 @@ TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(QWidget* parent)
 
 	connect(tabs, &QTabWidget::tabCloseRequested, [=](int idx) {
 		editor_widgets.removeOne(tabs->widget(idx));
-		delete tabs->widget(idx);
+
+		// get the handle to the editor widget
+		// then remove the tab
+		// and then delete the widget object.
+		QWidget* editor_widget = tabs->widget(idx);
 		tabs->removeTab(idx);
+		delete editor_widget;
 		});
 
 	connect(tabs, &QTabWidget::currentChanged, [=](int idx) {

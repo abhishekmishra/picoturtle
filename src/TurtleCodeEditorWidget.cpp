@@ -76,6 +76,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 
 TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 {
+	qDebug() << "Editor destroyed.";
 }
 
 void TurtleCodeEditorWidget::run_file()
