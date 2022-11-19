@@ -9,16 +9,16 @@ local Vec4 = require 'pt/Vec4'
 --- The Box class defines a rectangular area of the canvas.
 -- It will also provide a way to situate a point in the coordinate system
 -- local to the Box.
--- 
--- A Box instance will have an origin at the bottom left of the rectangular 
+--
+-- A Box instance will have an origin at the bottom left of the rectangular
 -- area, and a given width and height.
--- 
+--
 -- @type Box
 --
 local Box = class('Box')
 
 --- Construct a box with a given origin (bottom-left) and dimensions (width x height) in Canvas coordinates.
--- 
+--
 -- @tparam Vec2 orig bottom-left corner of the box in the canvas coordinates
 -- @tparam Vec2 dim dimensions (width x height) of the box in the canvas coordinates
 function Box:initialize(orig, dim)
@@ -27,6 +27,24 @@ function Box:initialize(orig, dim)
 	self.border_width = Vec4:new()
 	self.margin_width = Vec4:new()
 	self.padding_width = Vec4:new()
+	self.update_internal_coords(self)
+end
+
+function Box:update_internal_coords()
+	self.d_orig = self.c_orig:add(
+		Vec2:new(
+			self.border_width:w() + self.margin_width:w() + self.padding_width:w(),
+			self.border_width:s() + self.margin_width:s() + self.padding_width:s()
+		)
+	)
+	self.d_dim = self.c_dim:subtract(
+		Vec2:new(
+			self.border_width:w() + self.margin_width:w() + self.padding_width:w() +
+			self.border_width:e() + self.margin_width:e() + self.padding_width:e(),
+			self.border_width:s() + self.margin_width:s() + self.padding_width:s() +
+			self.border_width:n() + self.margin_width:n() + self.padding_width:n()
+		)
+	)
 end
 
 --- Get the origin (bottom-left) of the box in canvas coords
@@ -36,11 +54,18 @@ function Box:canvas_orig()
 	return self.c_orig
 end
 
---- Get the dimensions (w x h) of the box in canvas coords
+--- Get the outer dimensions (w x h) of the box in canvas coords
 --
 -- @return Vec2 dimensions in canvas coords
 function Box:canvas_dim()
 	return self.c_dim
+end
+
+--- Get the dimensions (w x h) of the inner drawable area of the box
+--
+-- @return Vec2 dim drawable area dimensions
+function Box:dim()
+	return self.d_dim
 end
 
 --- Set the border width (n, e, w, s)
@@ -59,18 +84,19 @@ function Box:set_border_width(n, e, w, s)
 		local s = s or 0
 		self.border_width = Vec4:new(n, e, w, s)
 	end
+	self.update_internal_coords(self)
 end
 
 --- Convert the given box coords to the corresponding container coords
--- 
+--
 -- @tparam number|Vec2 x either the x coord or a Vec2
 -- @tparam number y y coord
 -- @treturn Vec2 result coordinates
 function Box:to_parent_coords(x, y)
 	if type(x) == "table" and x.class == Vec2 then
-		return self.c_orig:add(x)
+		return self.d_orig:add(x)
 	else
-		return self.c_orig:add(Vec2:new(x, y))
+		return self.d_orig:add(Vec2:new(x, y))
 	end
 end
 

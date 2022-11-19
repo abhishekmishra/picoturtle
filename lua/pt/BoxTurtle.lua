@@ -37,7 +37,7 @@ end
 
 --- Clear the Box (fill with white)
 function BoxTurtle:clear()
-	local dim = self.box:canvas_dim()
+	local dim = self.box:dim()
 	local pos = self.box:to_parent_coords(dim:w()/2, 0)
 	-- print('going to ' .. pos:x() .. ', ' .. pos:y())
 	self.turtle:penup()
@@ -47,6 +47,7 @@ function BoxTurtle:clear()
 	self.turtle:pencolour(128, 128, 128)
 	self.turtle:pendown()
 	self.turtle:fd(dim:h())
+	self.turtle:penup()
 end
 
 --- Stop the turtle
@@ -56,7 +57,7 @@ end
 
 --- Return the turtle to its starting position and heading
 function BoxTurtle:home()
-	local half_dim = self.box:canvas_dim():scale(0.5)
+	local half_dim = self.box:dim():scale(0.5)
 	local newpos = self.box:to_parent_coords(half_dim)
 	self.turtle:setpos(newpos:x(), newpos:y())
 	self.turtle:heading(90)

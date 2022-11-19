@@ -27,42 +27,42 @@ end
 
 --- first component
 function Vec4:a()
-	return self._x
+	return self._a
 end
 
 --- second component
 function Vec4:b()
-	return self._y
+	return self._b
 end
 
 --- third component
 function Vec4:c()
-	return self._x
+	return self._c
 end
 
 --- fourth component
 function Vec4:d()
-	return self._y
+	return self._d
 end
 
 --- first component
 function Vec4:n()
-	return self._x
+	return self._a
 end
 
 --- second component
 function Vec4:e()
-	return self._y
+	return self._b
 end
 
 --- third component
 function Vec4:w()
-	return self._x
+	return self._c
 end
 
 --- fourth component
 function Vec4:s()
-	return self._y
+	return self._d
 end
 
 --- tostring
