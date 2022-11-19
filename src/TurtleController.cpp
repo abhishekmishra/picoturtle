@@ -44,27 +44,10 @@ namespace turtle {
 			{
 				input += " ";
 			}
+
 		 	// luaL_tolstring should ideally call the __tostring function
 			// if it is set in the metatable of the value at i
 			input += luaL_tolstring(LUASTATE, i, NULL);
-
-			// switch (lua_type(LUASTATE, i))
-			// {
-			// case LUA_TSTRING:
-			// 	input += lua_tostring(LUASTATE, i);
-			// 	break;
-			// case LUA_TNUMBER:
-			// 	input += QString::number((int)lua_tonumber(LUASTATE, i));
-			// 	break;
-			// case LUA_TBOOLEAN:
-			// 	input += QString::number(lua_toboolean(LUASTATE, i));
-			// 	break;
-	        // default:
-			// 	// luaL_tolstring should ideally call the __tostring function
-			// 	// if it is set in the metatable of the value at i
-            // 	input += luaL_tolstring(LUASTATE, i, NULL);
-            // 	break;
-			// }
 		}
 
 		TurtleController::turtle_message("program", input);
