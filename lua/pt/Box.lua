@@ -61,6 +61,15 @@ function Box:set_border_width(n, e, w, s)
 	end
 end
 
+--- Convert the given box coords to the corresponding container coords
+-- 
+-- @tparam number x
+-- @tparam number y
+-- @treturn Vec2 result coordinates
+function Box:to_parent_coords(x, y)
+	return self.c_orig:add(Vec2:new(x, y))
+end
+
 --- tostring
 function Box:__tostring()
 	return "Box [orig=" .. tostring(self.c_orig) .. ", dim=" .. tostring(self.c_dim) .. "]"
