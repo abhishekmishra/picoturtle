@@ -56,13 +56,8 @@ end
 
 --- Return the turtle to its starting position and heading
 function BoxTurtle:home()
-	local orig = self.box:canvas_orig()
-	local dim = self.box:canvas_dim()
-	local half_dim = dim:scale(0.5)
-	-- print(tostring(orig) .. tostring(dim) .. tostring(half_dim))
-	-- self.turtle:setpos(orig:x() + (dim:w()/2), orig:y() + (dim:h()/2))
-	local newpos = orig:add(half_dim)
-	-- print('newpos = ' .. tostring(newpos))
+	local half_dim = self.box:canvas_dim():scale(0.5)
+	local newpos = self.box:to_parent_coords(half_dim)
 	self.turtle:setpos(newpos:x(), newpos:y())
 	self.turtle:heading(90)
 end
@@ -156,27 +151,21 @@ end
 -- @tparam number x
 -- @tparam number y
 function BoxTurtle:setpos(x, y)
-	local orig = self.box:canvas_orig()
-	local dim = self.box:canvas_dim()
 	-- TODO: check that the position is within bounds
 	-- otherwise throw an error.
-	self.turtle:setpos(orig:x() + x, orig:y() + y)
+	self.turtle:setpos(self.box:to_parent_coords(x, y))
 end
 
 --- Move the turtle along the x axis, keeping y to its current value.
 -- @taparam number x
 function BoxTurtle:setx(x)
-	local orig = self.box:canvas_orig()
-	local dim = self.box:canvas_dim()
-	self.turtle:setx(orig:x() + x)
+	self.turtle:setx(self.box:to_parent_coords(x, 0))
 end
 
 --- Move the turtle along the y axis, keeping x to its current value.
 -- @tparam number y
 function BoxTurtle:sety(y)
-	local orig = self.box:canvas_orig()
-	local dim = self.box:canvas_dim()
-	self.turtle:sety(orig:y() + y)
+	self.turtle:sety(self.box:to_parent_coords(y, 0))
 end
 
 --- Change the heading of the turtle to "angle" degrees.

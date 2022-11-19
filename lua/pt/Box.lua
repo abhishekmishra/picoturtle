@@ -63,11 +63,15 @@ end
 
 --- Convert the given box coords to the corresponding container coords
 -- 
--- @tparam number x
--- @tparam number y
+-- @tparam number|Vec2 x either the x coord or a Vec2
+-- @tparam number y y coord
 -- @treturn Vec2 result coordinates
 function Box:to_parent_coords(x, y)
-	return self.c_orig:add(Vec2:new(x, y))
+	if type(x) == "table" and x.class == Vec2 then
+		return self.c_orig:add(x)
+	else
+		return self.c_orig:add(Vec2:new(x, y))
+	end
 end
 
 --- tostring
