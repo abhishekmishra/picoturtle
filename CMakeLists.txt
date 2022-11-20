@@ -39,6 +39,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set ( PICOTURTLE_LUA_FILES
   lua/pt/Box.lua
   lua/pt/Vec2.lua
+  lua/pt/Vec4.lua
   lua/pt/BoxTurtle.lua
   lua/pt/BoxUtils.lua
   lua/ptall.lua
