@@ -194,4 +194,8 @@ function BoxTurtle:__tostring()
 	return "BoxTurtle -> " .. tostring(self.box)
 end
 
+function BoxTurtle:draw_border()
+	self.box:draw_border(self.turtle)
+end
+
 return BoxTurtle
