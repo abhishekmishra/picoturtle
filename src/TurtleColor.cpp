@@ -1,14 +1,26 @@
 #include "TurtleColor.hpp"
+#include "color_names.h"
 
 turtle::TurtleColor::TurtleColor()
 {
-    r = 0.0f;
-    g = 0.0f;
-    b = 0.0f;
-    a = 1.0f;
+    r = 0;
+    g = 0;
+    b = 0;
+    a = 255;
 }
 
-turtle::TurtleColor::TurtleColor(unsigned int rv, unsigned int gv, unsigned int bv, unsigned int av)
+int turtle::TurtleColor::get_color_by_name(TurtleColor** c, const char* color_name)
+{
+    uint8_t cr, cg, cb;
+    int res = color_name_get_rgb(color_name, &cr, &cg, &cb);
+    if (res == 0)
+    {
+        (*c) = new TurtleColor(cr, cg, cb, 255);
+    }
+    return res;
+}
+
+turtle::TurtleColor::TurtleColor(uint8_t rv, uint8_t gv, uint8_t bv, uint8_t av)
 {
     setR(rv);
     setG(gv);
@@ -18,23 +30,23 @@ turtle::TurtleColor::TurtleColor(unsigned int rv, unsigned int gv, unsigned int 
 
 turtle::TurtleColor::~TurtleColor() {}
 
-unsigned int turtle::TurtleColor::getR()
+uint8_t turtle::TurtleColor::getR()
 {
     return r;
 }
-unsigned int turtle::TurtleColor::getG()
+uint8_t turtle::TurtleColor::getG()
 {
     return g;
 }
-unsigned int turtle::TurtleColor::getB()
+uint8_t turtle::TurtleColor::getB()
 {
     return b;
 }
-unsigned int turtle::TurtleColor::getA()
+uint8_t turtle::TurtleColor::getA()
 {
     return a;
 }
-void turtle::TurtleColor::setR(unsigned int rv)
+void turtle::TurtleColor::setR(uint8_t rv)
 {
     if (rv > 255)
     {
@@ -45,7 +57,7 @@ void turtle::TurtleColor::setR(unsigned int rv)
         r = rv;
     }
 }
-void turtle::TurtleColor::setG(unsigned int gv)
+void turtle::TurtleColor::setG(uint8_t gv)
 {
     if (gv > 255)
     {
@@ -56,7 +68,7 @@ void turtle::TurtleColor::setG(unsigned int gv)
         g = gv;
     }
 }
-void turtle::TurtleColor::setB(unsigned int bv)
+void turtle::TurtleColor::setB(uint8_t bv)
 {
     if (bv > 255)
     {
@@ -67,7 +79,7 @@ void turtle::TurtleColor::setB(unsigned int bv)
         b = bv;
     }
 }
-void turtle::TurtleColor::setA(unsigned int av)
+void turtle::TurtleColor::setA(uint8_t av)
 {
     if (av > 255)
     {
