@@ -68,6 +68,8 @@ endforeach()
 #--------------------------PicoTurtle Lib---------------------------#
 
 set ( PICOTURTLE_LIB_SOURCES
+  c-color-names/color_names.h
+  c-color-names/color_names.c
   src/TurtleColor.hpp
   src/TurtleColor.cpp
   src/TurtleLocation.hpp
