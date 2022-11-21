@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.20 )
 
-project ( picoturtle VERSION 0.1.0 LANGUAGES CXX )
+project ( picoturtle VERSION 0.1.0 LANGUAGES C CXX )
 
 set (VERBOSE)
 
@@ -94,6 +94,8 @@ set ( PICOTURTLE_LIB_SOURCES
 
 add_library(picoturtle SHARED ${PICOTURTLE_LIB_SOURCES})
 set_property(TARGET picoturtle PROPERTY CXX_STANDARD 17)
+
+target_include_directories(picoturtle PUBLIC c-color-names)
 
 if(WIN32)
   if (NOT TARGET skia)

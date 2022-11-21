@@ -135,19 +135,31 @@ static int skia_turtle_penwidth(lua_State *L)
     return 0;
 }
 
-static int skia_turtle_pencolour(lua_State *L)
+static int skia_turtle_pencolor(lua_State *L)
 {
-    unsigned int b = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
-    lua_pop(L, 1);
-    unsigned int g = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
-    lua_pop(L, 1);
-    unsigned int r = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
-    lua_pop(L, 1);
+    int top = lua_gettop(L);
+    int t = lua_type(L, top);
+    if (t == LUA_TSTRING)
+    {
+        const char *color = luaL_checkstring(L, lua_gettop(L));
+        lua_pop(L, 1);
+        PicoTurtle *t = skia_turtle_getobj(L);
+        lua_pushinteger(L, t->pencolor(color));
+    }
+    else
+    {
+        unsigned int b = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
+        unsigned int g = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
+        unsigned int r = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
 
-    PicoTurtle *t = skia_turtle_getobj(L);
-
-    t->pencolour(r, g, b);
-    return 0;
+        PicoTurtle *t = skia_turtle_getobj(L);
+        t->pencolor(r, g, b);
+        lua_pushinteger(L, 0);
+    }
+    return 1;
 }
 
 static int skia_turtle_stop(lua_State *L)
@@ -360,7 +372,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"pendown", skia_turtle_pendown},
         {"pd", skia_turtle_pendown},
         {"penwidth", skia_turtle_penwidth},
-        {"pencolour", skia_turtle_pencolour},
+        {"pencolor", skia_turtle_pencolor},
         {"stop", skia_turtle_stop},
         {"home", skia_turtle_home},
         {"clear", skia_turtle_clear},

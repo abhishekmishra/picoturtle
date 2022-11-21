@@ -9,7 +9,7 @@ t:canvas_size(256, 256)
 t:reset()
 
 -- Set the pencolour and penwidth of the turtle
-t:pencolour(0, 100, 100) -- red = 0, green = 100, blue = 100
+t:pencolor('red') -- set color to red
 t:penwidth(2)            -- 2 pixels
 
 -- Set the pen down and draw for 100 pixels

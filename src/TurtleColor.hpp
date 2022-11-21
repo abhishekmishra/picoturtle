@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 namespace turtle
 {
@@ -32,7 +33,7 @@ namespace turtle
          * @param c TurtleColor object to return
          * @param color_name name of the color
          * 
-         * @return int flag indicating whether color_name was found, in which case
+         * @return int flag (1=found, 0=not found) indicating whether color_name was found, in which case
          *  TurtleColor object is set.
         */
         static int get_color_by_name(TurtleColor** c, const char* color_name);

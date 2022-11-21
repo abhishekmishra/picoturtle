@@ -1,5 +1,6 @@
 #include "TurtleColor.hpp"
 #include "color_names.h"
+#include <cstdio>
 
 turtle::TurtleColor::TurtleColor()
 {
@@ -13,7 +14,7 @@ int turtle::TurtleColor::get_color_by_name(TurtleColor** c, const char* color_na
 {
     uint8_t cr, cg, cb;
     int res = color_name_get_rgb(color_name, &cr, &cg, &cb);
-    if (res == 0)
+    if (res == 1)
     {
         (*c) = new TurtleColor(cr, cg, cb, 255);
     }

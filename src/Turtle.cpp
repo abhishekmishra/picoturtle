@@ -88,13 +88,13 @@ void Turtle::DrawTurtle()
     float cpw = getPenWidth();
 
     // set turtle colour
-    pencolour(255u, 0u, 0u);
+    pencolor(255u, 0u, 0u);
     penwidth(2);
 
     canvas->DrawTriangle(getCanvasLocationX(), getCanvasLocationY(), x2, y2, x3, y3);
 
     // reset turtle colour and pen width
-    pencolour(cr, cg, cb);
+    pencolor(cr, cg, cb);
     penwidth(cpw);
 }
 
@@ -205,12 +205,24 @@ void Turtle::heading(float a)
     Angle = a;
 }
 
-void Turtle::pencolour(unsigned int r, unsigned int g, unsigned int b)
+void Turtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 {
     PenColor->setR(r);
     PenColor->setG(g);
     PenColor->setB(b);
     canvas->UpdateTurtleBrush(getPenColor(), getPenWidth());
+}
+
+int Turtle::pencolor(const char* color)
+{
+    TurtleColor *c;
+    int res = TurtleColor::get_color_by_name(&c, color);
+    if (res == 1)
+    {
+        pencolor(c->getR(), c->getG(), c->getB());
+        delete c;
+    }
+    return res;
 }
 
 void Turtle::canvas_size(int width, int height)

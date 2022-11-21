@@ -47,8 +47,18 @@ namespace turtle
         //     return new Turtle(new TurtleOptions(), null);
         // }
     public:
+
+        /**
+         * Create a Turtle with the default options.
+         *
+         */
         Turtle();
 
+        /**
+         * Create a Turtle with the given TurtleOptions.
+         *
+         * @param options TurtleOptions object
+         */
         Turtle(TurtleOptions *options); //, Canvas canvas);
 
         void setCanvas(Canvas* c);
@@ -106,7 +116,26 @@ namespace turtle
 
         void heading(float a);
 
-        void pencolour(unsigned int r, unsigned int g, unsigned int b);
+        /**
+         * Set the pen colour using the given rgb values
+         *
+         * @param r red value (0-255)
+         * @param g green value (0-255)
+         * @param b blue value (0-255)
+         */
+        void pencolor(unsigned int r, unsigned int g, unsigned int b);
+
+        /**
+         * Set the pen color using the given color name.
+         * This call will fail to set a color and return a
+         * non-zero code if the given color name is not found
+         * in the existing list of colors in the c-color-names lib.
+         * NOTE: The name of the color MUST be in lowercase.
+         *
+         * @param color name of the color to set.
+         * @return 0 if color was found and set, non-zero otherwise.
+         */
+        int pencolor(const char* color);
 
         // TODO: change width and height to unsigned int
         void canvas_size(int width, int height);
