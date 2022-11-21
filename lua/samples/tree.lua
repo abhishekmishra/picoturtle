@@ -4,7 +4,7 @@
 --
 -- a recursive tree
 --
-
+local t = t or require'picoturtle'.new()
 t:reset()
 
 function tree(size)
@@ -45,5 +45,5 @@ t:penwidth(1)
 t:penup()
 t:back(100)
 t:pendown()
-t:pencolour(165, 42, 42)
+t:pencolor(165, 42, 42)
 tree(128)

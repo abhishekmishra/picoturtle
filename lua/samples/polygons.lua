@@ -4,6 +4,8 @@
 --
 -- Draws a polygon
 --
+local t = t or require'picoturtle'.new()
+t:canvas_size(512, 512)
 t:reset()
 
 -- a simple turtle program to print a polygon
@@ -17,7 +19,7 @@ end
 -- draw a hexagon in red
 t:penwidth(2)
 t:pendown()
-t:pencolour(255, 0, 0)
+t:pencolor('red')
 poly(6, 50, 60)
 
 -- move up 100
@@ -27,5 +29,5 @@ t:right(90)
 
 -- draw a pentagon in blue
 t:pendown()
-t:pencolour(0, 0, 255)
+t:pencolor('blue')
 poly(5, 50, 72)

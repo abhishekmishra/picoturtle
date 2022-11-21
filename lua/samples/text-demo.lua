@@ -4,7 +4,7 @@
 --
 -- text demo
 --
-
+local t = t or require'picoturtle'.new()
 t:reset()
 
 t:penup()
@@ -20,11 +20,11 @@ for i = 1, 40, 1 do
     local fs = i
     if i%2 == 0 then
         t:font('Mangal', fs)
-        t:pencolour(255, 128, 128)
+        t:pencolor(255, 128, 128)
         t:filltext('पीको टर्टल')
     else
         t:font('Calibri', fs)
-        t:pencolour(255, 128, 255)
+        t:pencolor(255, 128, 255)
         t:filltext('PicoTurtle')
     end
     t:penup()

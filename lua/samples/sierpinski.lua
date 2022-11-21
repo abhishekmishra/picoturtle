@@ -4,6 +4,7 @@
 --
 -- Sierpinski triangles
 --
+local t = t or require'picoturtle':new()
 t:reset()
 
 function draw_sierpinski(length, depth)
@@ -36,7 +37,7 @@ t:left(90)
 t:forward(200)
 t:right(90)
 t:forward(-200)
-t:pencolour(255, 69, 0)
+t:pencolor(255, 69, 0)
 t:penwidth(2)
 t:pendown()
 t:right(90)

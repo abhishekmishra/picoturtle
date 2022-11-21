@@ -5,6 +5,7 @@
 -- simplest of turtle files
 -- just two commands
 --
+local t = t or require'picoturtle'.new()
 t:forward(100)
 t:right(90)
 t:forward(100)

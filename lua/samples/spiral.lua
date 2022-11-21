@@ -4,13 +4,14 @@
 --
 -- A spiral
 --
+local t = t or require'picoturtle'.new()
 t:reset()
 
 function spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc)
     r = 0
     g = 0
     b = 255
-    t:pencolour(r, g, b)
+    t:pencolor(r, g, b)
     x = distance
     a = angle
     pw = pwidth
@@ -18,7 +19,7 @@ function spiral(distance, angle, pwidth, distance_inc, angle_inc, pwidth_inc)
         r = r + 2
         g = g + 0
         b = b - 2
-        t:pencolour(r, g, b)
+        t:pencolor(r, g, b)
         t:penwidth(pw)
         t:forward(x)
         t:right(a)
