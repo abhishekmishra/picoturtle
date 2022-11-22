@@ -44,7 +44,7 @@ function BoxTurtle:clear()
 	self.turtle:setpos(pos:x(), pos:y())
 	self.turtle:heading(90)
 	self.turtle:penwidth(dim:w())
-	self.turtle:pencolour(128, 128, 128)
+	self.turtle:pencolor(128, 128, 128)
 	self.turtle:pendown()
 	self.turtle:fd(dim:h())
 	self.turtle:penup()
@@ -83,8 +83,12 @@ end
 -- @tparam number red
 -- @tparam number green
 -- @tparam number blue
-function BoxTurtle:pencolour(red, green, blue)
-	self.turtle:pencolour(red, green, blue)
+function BoxTurtle:pencolor(red, green, blue)
+	if type(red) == 'string' then
+		self.turtle:pencolor(red)
+	else
+		self.turtle:pencolor(red, green, blue)
+	end
 end
 
 --- Move the turtle forward by "dist" pixels.
