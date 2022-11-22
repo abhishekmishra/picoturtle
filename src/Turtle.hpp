@@ -14,7 +14,8 @@ namespace turtle
     class Turtle
     {
     private:
-        TurtleState* turtle_state;
+        TurtleState* current_state;
+        TurtleState* saved_state;
 
         TurtleOptions *options;
 
@@ -40,8 +41,39 @@ namespace turtle
 
         void set_canvas(Canvas* c);
         Canvas *get_canvas();
+
         std::string get_name();
         std::string get_id();
+
+        // state related functions
+        /**
+         * Returns a detached copy of the current turtle state.
+         * Changing the state via the returned object, does
+         * not change the turtle.
+         * 
+         * @return current turtle state as a detached copy.
+        */
+        TurtleState* get_current_state() const;
+
+        /**
+         * Returns a detached copy of the saved turtle state.
+         * Changing the state via the returned object, does
+         * not change the saved state of the turtle.
+         * 
+         * @return saved turtle state as a detached copy.
+        */
+        TurtleState* get_saved_state() const;
+
+        /**
+         * Save the current state as the saved state.
+         * The saved stated can be restored later.
+        */
+        void save();
+
+        /**
+         * Restore the saved state and discard current state.
+        */
+        void restore();
 
         TurtleColor *get_pen_color();
 

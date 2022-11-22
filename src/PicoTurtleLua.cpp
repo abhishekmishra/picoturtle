@@ -74,10 +74,22 @@ static PicoTurtle *skia_turtle_getobj(lua_State *L)
     return t;
 }
 
+static TurtleState *turtle_state_getobj(lua_State *L)
+{
+    int top = lua_gettop(L);
+    TurtleState *state = *static_cast<TurtleState **>(luaL_checkudata(L, top, LUA_TURTLE_STATE_OBJECT));
+    if (state == NULL)
+    {
+        luaL_typeerror(L, top, LUA_TURTLE_STATE_OBJECT);
+    }
+    lua_pop(L, 1);
+    return state;
+}
+
 static int skia_turtle_getwidth(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->getCanvas()->getWidth());
+    lua_pushinteger(L, t->get_canvas()->getWidth());
     return 1;
 }
 
@@ -88,14 +100,14 @@ static int skia_turtle_setwidth(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->getCanvas()->setWidth(width);
+    t->get_canvas()->setWidth(width);
     return 0;
 }
 
 static int skia_turtle_getheight(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->getCanvas()->getHeight());
+    lua_pushinteger(L, t->get_canvas()->getHeight());
     return 1;
 }
 
@@ -106,7 +118,7 @@ static int skia_turtle_setheight(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->getCanvas()->setHeight(height);
+    t->get_canvas()->setHeight(height);
     return 0;
 }
 
@@ -179,7 +191,7 @@ static int skia_turtle_home(lua_State *L)
 static int skia_turtle_clear(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    t->getCanvas()->clear();
+    t->get_canvas()->clear();
     return 0;
 }
 
@@ -301,7 +313,7 @@ static int skia_turtle_export_img(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->getCanvas()->export_img(s);
+    t->get_canvas()->export_img(s);
     return 0;
 }
 
@@ -355,6 +367,107 @@ static int skia_turtle_canvas_size(lua_State *L)
     return 0;
 }
 
+static int skia_turtle_state(lua_State *L)
+{
+    PicoTurtle *t = skia_turtle_getobj(L);
+    TurtleState* state = t->get_current_state();
+
+    *static_cast<TurtleState **>(lua_newuserdata(L, sizeof(TurtleState *))) = state;
+
+    // set metatable of turtle state
+    luaL_getmetatable(L, LUA_TURTLE_STATE_OBJECT);
+    lua_setmetatable(L, -2);
+
+    return 1;
+}
+
+static int skia_turtle_save(lua_State *L)
+{
+    PicoTurtle *t = skia_turtle_getobj(L);
+
+    t->save();
+
+    return 0;
+}
+
+static int skia_turtle_restore(lua_State *L)
+{
+    PicoTurtle *t = skia_turtle_getobj(L);
+
+    t->restore();
+    
+    return 0;
+}
+
+static int turtle_state_free(lua_State *L)
+{
+    delete *static_cast<TurtleState **>(luaL_checkudata(L, 1, LUA_TURTLE_STATE_OBJECT));
+    return 0;
+}
+
+static int turtle_state_x(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_location()->getX());
+    return 1;
+}
+
+static int turtle_state_y(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_location()->getY());
+    return 1;
+}
+
+static int turtle_state_a(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_pen_color()->getA());
+    return 1;
+}
+
+static int turtle_state_r(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_pen_color()->getR());
+    return 1;
+}
+
+static int turtle_state_g(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_pen_color()->getG());
+    return 1;
+}
+
+static int turtle_state_b(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_pen_color()->getB());
+    return 1;
+}
+
+static int turtle_state_heading(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_heading());
+    return 1;
+}
+
+static int turtle_state_pd(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushboolean(L, state->is_pen_down());
+    return 1;
+}
+
+static int turtle_state_pw(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushnumber(L, state->get_pen_width());
+    return 1;
+}
+
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", skia_turtle_new},
@@ -395,8 +508,27 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"font", skia_turtle_font},
         {"filltext", skia_turtle_filltext},
         {"stroketext", skia_turtle_stroketext},
-        {"canvas_size", skia_turtle_canvas_size},
+        {"canvas_size", skia_turtle_canvas_size},        
+        {"state", skia_turtle_state},
+        {"save", skia_turtle_save},
+        {"restore", skia_turtle_restore},
         {NULL, NULL}};
+
+static const luaL_Reg TurtleState_meths[] =
+    {
+        {"__gc", turtle_state_free},
+        {"x", turtle_state_x},
+        {"y", turtle_state_y},
+        {"a", turtle_state_a},
+        {"r", turtle_state_r},
+        {"g", turtle_state_g},
+        {"b", turtle_state_b},
+        {"heading", turtle_state_heading},
+        {"hd", turtle_state_heading},
+        {"pd", turtle_state_pd},
+        {"pw", turtle_state_pw},
+        {NULL, NULL}};
+
 
 int luaopen_picoturtle(lua_State *L)
 {
@@ -409,6 +541,16 @@ int luaopen_picoturtle(lua_State *L)
 
     // register methods
     luaL_setfuncs(L, PicoTurtle_meths, 0);
+
+    // create turtle state metatable
+    luaL_newmetatable(L, LUA_TURTLE_STATE_OBJECT);
+
+    // metatable.__index = metatable
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+
+    // register methods
+    luaL_setfuncs(L, TurtleState_meths, 0);
 
     // register functions - only turtle.new
     luaL_newlib(L, PicoTurtle_funcs);

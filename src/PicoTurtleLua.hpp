@@ -20,6 +20,7 @@ extern "C"
 #endif
 
 #define LUA_PICOTURTLE_OBJECT "PicoTurtle"
+#define LUA_TURTLE_STATE_OBJECT "TurtleState"
 
 MODULE_API int luaopen_picoturtle(lua_State* L);
 

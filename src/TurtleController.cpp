@@ -190,7 +190,7 @@ namespace turtle {
 	{
 		//sk_sp<SkImage> img;
 
-		printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->getName().c_str(), t->getId().c_str());
+		printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->get_name().c_str(), t->get_id().c_str());
 		//img = t->getRasterSurface()->makeImageSnapshot();
 		//if (img)
 		//{
