@@ -28,18 +28,18 @@ TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(QWidget *parent)
 				"File has changes!", 
 				"File " + editor_widget->get_file_name() 
 					+ "has unsaved changed. Save before closing tab?", 
-				QMessageBox::Cancel 
-				| QMessageBox::No 
-				| QMessageBox::Yes,
-				QMessageBox::Yes);
+				QMessageBox::Save 
+				| QMessageBox::Discard 
+				| QMessageBox::Cancel,
+				QMessageBox::Save);
 			switch(btn)
 			{
-				case QMessageBox::Yes:
+				case QMessageBox::Save:
 					qDebug() << "you chose to save file and close tab";
 					editor_widget->save_file();
 					delete_editor_and_tab_at_idx(idx);
 					break;
-				case QMessageBox::No:
+				case QMessageBox::Discard:
 					qDebug() << "you chose to close tab without saving the file";
 					delete_editor_and_tab_at_idx(idx);
 					break;
