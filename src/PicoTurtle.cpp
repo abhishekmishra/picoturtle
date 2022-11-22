@@ -19,11 +19,11 @@ PicoTurtle::PicoTurtle() : Turtle()
         turtleCanvas = new SkiaCanvas();
     }
 
-    this->setCanvas(turtleCanvas);
+    this->set_canvas(turtleCanvas);
 
     this->reset();
 
-    turtleCanvas->UpdateTurtleBrush(this->getPenColor(), this->getPenWidth());
+    turtleCanvas->UpdateTurtleBrush(this->get_pen_color(), this->get_pen_width());
     if (init_cb != NULL)
     {
         init_cb(this, init_cb_args);

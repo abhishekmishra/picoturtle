@@ -15,26 +15,14 @@ namespace turtle
     {
     private:
         TurtleState* turtle_state;
-        TurtleOptions *Options;
-        std::string Name;
-        std::string Id;
+
+        TurtleOptions *options;
+
+        std::string name;
+        std::string id;
 
         Canvas *canvas;
 
-        // private List<TurtleCommand> commands;
-        // public Canvas Canvas { get; set; }
-
-        // private readonly SolidColorBrush turtleDrawingBrush;
-
-        // public FontFamily TurtleFontFamily { get; private set; } = new FontFamily("Arial");
-        // public int TurtleFontSize { get; private set; } = 12;
-
-        // public uint dpi { get; set; }
-
-        // public static Turtle CreateTurtle(string[] args)
-        // {
-        //     return new Turtle(new TurtleOptions(), null);
-        // }
     public:
 
         /**
@@ -50,28 +38,22 @@ namespace turtle
          */
         Turtle(TurtleOptions *options); //, Canvas canvas);
 
-        void setCanvas(Canvas* c);
-        Canvas *getCanvas();
-        std::string getName();
-        std::string getId();
+        void set_canvas(Canvas* c);
+        Canvas *get_canvas();
+        std::string get_name();
+        std::string get_id();
 
-        TurtleColor *getPenColor();
+        TurtleColor *get_pen_color();
 
-        float getCanvasLocationX();
-        float getCanvasLocationY();
-        float getX();
-        float getY();
-        float CanvasAngle(); // return 360.0 - Angle;
-        float getPenWidth();
-        float getHeading();
-
-        TurtleState *CurrentState();
+        float get_canvas_location_x();
+        float get_canvas_location_y();
+        float get_x();
+        float get_y();
+        float canvas_heading(); // return 360.0 - Angle;
+        float get_pen_width();
+        float get_heading();
 
         void DrawTurtle();
-
-        TurtleState TurtleRequest(std::string cmd);
-
-        TurtleState Init();
 
         void penup();
 
@@ -81,7 +63,7 @@ namespace turtle
 
         void stop();
 
-        TurtleState state();
+        // TurtleState state();
 
         void home();
 
