@@ -4,7 +4,6 @@
 
 #include "TurtleCodeEditorWidget.hpp"
 #include <QWidget>
-#include <QList>
 #include <QTabWidget>
 
 namespace turtle
@@ -42,8 +41,8 @@ namespace turtle
 
     private:
         QTabWidget *tabs;
-        QList<TurtleCodeEditorWidget *> editor_widgets;
         TurtleCodeEditorWidget* new_code_editor();
+        void delete_editor_and_tab_at_idx(int idx);
     };
 }
 

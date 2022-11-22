@@ -182,17 +182,9 @@ namespace turtle
 		code_editor_parent->open_file(fileName); });
 
 		// *** Save File
-		connect(save_action, &QAction::triggered, [=]()
-				{
-				if (!code_editor_parent->has_file_path()) {
-					QString fileName = QFileDialog::getSaveFileName(this,
-						tr("Save Turtle Lua File"), "",
-						tr("Turtle/Lua Files (*.lua)"));
-					// TODO: handler return value to show appropriate error.
-					code_editor_parent->set_file_path(fileName);
-				}
-		// TODO: handler return value to show appropriate error.
-		code_editor_parent->save_file(); });
+		connect(save_action, &QAction::triggered, [=]() { // TODO: handler return value to show appropriate error.
+			code_editor_parent->save_file();
+		});
 
 		// *** Save-as File
 		connect(save_as_action, &QAction::triggered, [=]()

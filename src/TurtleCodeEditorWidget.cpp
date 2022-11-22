@@ -11,6 +11,7 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QFontMetrics>
+#include <QFileDialog>
 
 int TurtleCodeEditorWidget::noname_file_count = 0;
 
@@ -138,6 +139,13 @@ int TurtleCodeEditorWidget::open_file(const QString &file_path)
 int TurtleCodeEditorWidget::save_file()
 {
 	if (!has_file_path())
+	{
+		QString fileName = QFileDialog::getSaveFileName(this,
+														tr("Save Turtle Lua File"), "",
+														tr("Turtle/Lua Files (*.lua)"));
+		set_file_path(fileName);
+	}
+	if(!has_file_path())
 	{
 		return -1;
 	}
