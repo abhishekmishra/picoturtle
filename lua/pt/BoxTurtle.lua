@@ -27,12 +27,17 @@ local Box = require'pt/Box'
 local BoxTurtle = class('BoxTurtle')
 
 --- Initialize a BoxTurtle with the given turtle and given box.
+-- If *check_bounds is true* then the BoxTurtle will check if the
+-- relative and absolute movement commands take the turtle out
+-- of the Box - and raise an error if it does.
 --
--- @tparam PicoTurtle turtle
--- @tparam Box box
-function BoxTurtle:initialize(turtle, box)
+-- @tparam PicoTurtle turtle (creates a new turtle if nil)
+-- @tparam Box box (creates a new box if nil)
+-- @tparam boolean check_bounds (default is false)
+function BoxTurtle:initialize(turtle, box, check_bounds)
 	self.turtle = turtle or require'picoturtle'.new()
 	self.box = box or Box:new()
+	self.check_bounds = check_bounds or false
 end
 
 --- Clear the Box (fill with white)
