@@ -468,6 +468,22 @@ static int turtle_state_pw(lua_State *L)
     return 1;
 }
 
+static int turtle_state_tostring(lua_State *L)
+{
+    TurtleState *state = turtle_state_getobj(L);
+    lua_pushfstring(L, 
+        "Turtle state [loc=(%f, %f), col=(%d, %d, %d), pen(down=%d, width=%f)",
+        state->get_location()->getX(),
+        state->get_location()->getY(),
+        state->get_pen_color()->getR(),
+        state->get_pen_color()->getG(),
+        state->get_pen_color()->getB(),
+        state->is_pen_down(),
+        state->get_pen_width()
+    );
+    return 1;
+}
+
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", skia_turtle_new},
@@ -548,6 +564,9 @@ int luaopen_picoturtle(lua_State *L)
     // metatable.__index = metatable
     lua_pushvalue(L, -1);
     lua_setfield(L, -2, "__index");
+
+    lua_pushcfunction(L, turtle_state_tostring);
+    lua_setfield(L, -2, "__tostring");
 
     // register methods
     luaL_setfuncs(L, TurtleState_meths, 0);
