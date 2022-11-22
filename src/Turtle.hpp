@@ -9,26 +9,15 @@
 #include "TurtleState.hpp"
 #include "TurtleOptions.hpp"
 
-#define TURTLE_DEFAULT_PENWIDTH 1
-#define TURTLE_DEFAULT_HEADING 90.0f
-
 namespace turtle
 {
     class Turtle
     {
     private:
+        TurtleState* turtle_state;
         TurtleOptions *Options;
         std::string Name;
         std::string Id;
-
-        bool IsPenDown;
-        TurtleColor *PenColor;
-        float PenWidth;
-        // private SolidColorBrush turtleBrush;
-
-        TurtleLocation *Location;
-        TurtleColor *Colour;
-        float Angle;
 
         Canvas *canvas;
 

@@ -15,14 +15,11 @@ Turtle::Turtle(TurtleOptions *options)
     Name = "PicoTurtle";
     Id = "";
 
-    Location = new TurtleLocation(0, 0);
-    //Location = new TurtleLocation((int)(canvas->getWidth() / 2), (int)(canvas->getHeight() / 2));
-    Angle = TURTLE_DEFAULT_HEADING;
-
-    // TODO: change turtle default colour
-    PenColor = new TurtleColor(128, 64, 32, 255);
-
-    PenWidth = TURTLE_DEFAULT_PENWIDTH;
+    turtle_state = new TurtleState();
+    turtle_state->get_pen_color()->setA(255);
+    turtle_state->get_pen_color()->setR(128);
+    turtle_state->get_pen_color()->setG(64);
+    turtle_state->get_pen_color()->setB(32);
 };
 
 std::string Turtle::getName() {
@@ -35,37 +32,37 @@ std::string Turtle::getId() {
 
 float Turtle::getCanvasLocationX()
 {
-    return Location->getX();
+    return turtle_state->get_location()->getX();
 }
 
 float Turtle::getCanvasLocationY()
 {
-    return this->canvas->getHeight() - Location->getY();
+    return this->canvas->getHeight() - turtle_state->get_location()->getY();
 }
 
 float Turtle::getX()
 {
-    return Location->getX();
+    return turtle_state->get_location()->getX();
 }
 
 float Turtle::getY()
 {
-    return Location->getY();
+    return turtle_state->get_location()->getY();
 }
 
 float Turtle::CanvasAngle()
 {
-    return 360.0 - Angle;
+    return 360.0 - turtle_state->get_heading();
 }
 
 float Turtle::getHeading()
 {
-    return Angle;
+    return turtle_state->get_heading();
 }
 
 float Turtle::getPenWidth()
 {
-    return PenWidth;
+    return turtle_state->get_pen_width();
 }
 
 void Turtle::DrawTurtle()
@@ -80,10 +77,10 @@ void Turtle::DrawTurtle()
 
     // store current colour and pen width
     // to reset later
-    float ca = PenColor->getA();
-    float cr = PenColor->getR();
-    float cg = PenColor->getG();
-    float cb = PenColor->getB();
+    float ca = turtle_state->get_pen_color()->getA();
+    float cr = turtle_state->get_pen_color()->getR();
+    float cg = turtle_state->get_pen_color()->getG();
+    float cb = turtle_state->get_pen_color()->getB();
 
     float cpw = getPenWidth();
 
@@ -107,17 +104,17 @@ void Turtle::DrawTurtle()
 
 void Turtle::penup()
 {
-    IsPenDown = false;
+    turtle_state->set_pen_down(false);
 }
 
 void Turtle::pendown()
 {
-    IsPenDown = true;
+    turtle_state->set_pen_down(true);
 }
 
 void Turtle::penwidth(float w)
 {
-    PenWidth = w;
+    turtle_state->set_pen_width(w);
     canvas->UpdateTurtleBrush(getPenColor(), getPenWidth());
 }
 
@@ -129,29 +126,29 @@ void Turtle::stop()
 
 void Turtle::home()
 {
-    Location->setX(this->canvas->getWidth() / 2.0f);
-    Location->setY(this->canvas->getHeight() / 2.0f);
+    turtle_state->get_location()->setX(this->canvas->getWidth() / 2.0f);
+    turtle_state->get_location()->setY(this->canvas->getHeight() / 2.0f);
 }
 
 void Turtle::forward(float d)
 {
-    float theta = Angle * (M_PI / 180);
+    float theta = turtle_state->get_heading() * (M_PI / 180);
     float canvas_theta = CanvasAngle() * (M_PI / 180);
     // y2 = d sin (theta) + y1
     // x2 = d cos (theta) + x1
-    float y2 = d * (sin(theta)) + Location->getY();
-    float x2 = d * (cos(theta)) + Location->getX();
+    float y2 = d * (sin(theta)) + turtle_state->get_location()->getY();
+    float x2 = d * (cos(theta)) + turtle_state->get_location()->getX();
     float cy2 = d * (sin(canvas_theta)) + getCanvasLocationY();
     float cx2 = d * (cos(canvas_theta)) + getCanvasLocationX();
 
-    // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, Location->getX(), Location->getY(), x2, y2);
-    if (IsPenDown)
+    // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, turtle_state->get_location()->getX(), turtle_state->get_location()->getY(), x2, y2);
+    if (turtle_state->is_pen_down())
     {
         canvas->DrawLine(getCanvasLocationX(), getCanvasLocationY(), cx2, cy2);
     }
 
-    Location->setX(x2);
-    Location->setY(y2);
+    turtle_state->get_location()->setX(x2);
+    turtle_state->get_location()->setY(y2);
 }
 
 void Turtle::back(float d)
@@ -161,55 +158,55 @@ void Turtle::back(float d)
 
 void Turtle::setpos(float x, float y)
 {
-    if (IsPenDown)
+    if (turtle_state->is_pen_down())
     {
         canvas->DrawLine(getCanvasLocationX(), getCanvasLocationY(), x, this->canvas->getHeight() - y);
     }
 
-    Location->setX(x);
-    Location->setY(y);
+    turtle_state->get_location()->setX(x);
+    turtle_state->get_location()->setY(y);
 }
 
 float Turtle::getx()
 {
-    return Location->getX();
+    return turtle_state->get_location()->getX();
 }
 
 float Turtle::gety()
 {
-    return Location->getY();
+    return turtle_state->get_location()->getY();
 }
 
 void Turtle::setx(float x)
 {
-    return setpos(x, Location->getY());
+    return setpos(x, turtle_state->get_location()->getY());
 }
 
 void Turtle::sety(float y)
 {
-    return setpos(Location->getX(), y);
+    return setpos(turtle_state->get_location()->getX(), y);
 }
 
 void Turtle::left(float a)
 {
-    Angle = Angle + a;
+    turtle_state->set_heading(turtle_state->get_heading() + a);
 }
 
 void Turtle::right(float a)
 {
-    Angle = Angle - a;
+    turtle_state->set_heading(turtle_state->get_heading() - a);
 }
 
 void Turtle::heading(float a)
 {
-    Angle = a;
+    turtle_state->set_heading(a);
 }
 
 void Turtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 {
-    PenColor->setR(r);
-    PenColor->setG(g);
-    PenColor->setB(b);
+    turtle_state->get_pen_color()->setR(r);
+    turtle_state->get_pen_color()->setG(g);
+    turtle_state->get_pen_color()->setB(b);
     canvas->UpdateTurtleBrush(getPenColor(), getPenWidth());
 }
 
@@ -244,7 +241,7 @@ void Turtle::reset()
 
 TurtleColor *Turtle::getPenColor()
 {
-    return PenColor;
+    return turtle_state->get_pen_color();
 }
 
 Canvas *Turtle::getCanvas()
@@ -260,12 +257,12 @@ void Turtle::font(const char *f, unsigned int sz)
 
 void Turtle::filltext(const char *text)
 {
-    this->canvas->filltext(getCanvasLocationX(), getCanvasLocationY(), Angle, text);
+    this->canvas->filltext(getCanvasLocationX(), getCanvasLocationY(), turtle_state->get_heading(), text);
 }
 
 void Turtle::stroketext(const char *text)
 {
-    this->canvas->stroketext(getCanvasLocationX(), getCanvasLocationY(), Angle, text);
+    this->canvas->stroketext(getCanvasLocationX(), getCanvasLocationY(), turtle_state->get_heading(), text);
 }
 
 void Turtle::setCanvas(Canvas* c)
