@@ -8,18 +8,18 @@ local t = t or require'picoturtle'.new()
 t:reset()
 
 t:penup()
-t:back(250)
-t:right(90)
 t:forward(200)
-t:left(90)
     
 t:pendown()
-t:right(90)
+t:heading(0)
+--t:right(90)
 
-for i = 1, 40, 1 do
+for i = 10, 80, 1 do
     local fs = i
+	t:save()
+	t:heading(0)
     if i%2 == 0 then
-        t:font('Mangal', fs)
+        t:font('Maku', fs)
         t:pencolor(255, 128, 128)
         t:filltext('पीको टर्टल')
     else
@@ -27,10 +27,11 @@ for i = 1, 40, 1 do
         t:pencolor(255, 128, 255)
         t:filltext('PicoTurtle')
     end
+	t:restore()
     t:penup()
-    t:left(90 + 2)
-    local mv = i * 0.5
+    t:left(10)
+    local mv = i * 1.5 
     t:forward(mv)
-    t:right(90)
+    t:right(0)
     t:pendown()
 end
