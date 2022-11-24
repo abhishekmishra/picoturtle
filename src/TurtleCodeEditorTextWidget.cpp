@@ -15,6 +15,9 @@ TurtleCodeEditorTextWidget::TurtleCodeEditorTextWidget(QWidget *parent) : QPlain
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    // setMinimumHeight(400);
+    // setMinimumWidth(300);
 }
 
 int TurtleCodeEditorTextWidget::lineNumberAreaWidth()

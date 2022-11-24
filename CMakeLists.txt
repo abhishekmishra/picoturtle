@@ -238,6 +238,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleGLWidget.cpp
     src/LuaSyntaxHighlighter.hpp
     src/LuaSyntaxHighlighter.cpp
+    src/TurtleFindReplaceTextWidget.hpp
+    src/TurtleFindReplaceTextWidget.cpp
     src/TurtleLineNumberAreaWidget.hpp
     src/TurtleLineNumberAreaWidget.cpp
     src/TurtleCodeEditorTextWidget.hpp

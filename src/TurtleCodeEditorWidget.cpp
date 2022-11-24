@@ -1,5 +1,6 @@
 #include "TurtleCodeEditorWidget.hpp"
 #include "TurtleController.hpp"
+#include "TurtleFindReplaceTextWidget.hpp"
 #include <QVBoxLayout>
 #include <QFile>
 #include <QTextStream>
@@ -12,6 +13,7 @@
 #include <QFontDatabase>
 #include <QFontMetrics>
 #include <QFileDialog>
+#include <QVBoxLayout>
 
 using namespace turtle;
 
@@ -20,9 +22,11 @@ int TurtleCodeEditorWidget::noname_file_count = 0;
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	: file_path{QString()}
 {
-	turtle_code_edit = new TurtleCodeEditorTextWidget(this);
-	turtle_code_edit->setMinimumHeight(400);
-	turtle_code_edit->setMinimumWidth(300);
+	turtle_code_edit = new TurtleCodeEditorTextWidget();
+	turtle_code_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	auto find_replace = new TurtleFindReplaceTextWidget();
+	find_replace->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
@@ -56,6 +60,9 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 
 	QVBoxLayout *vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_code_edit);
+	vb_layout->addWidget(find_replace);
+	find_replace->hide();
+	vb_layout->setSpacing(0);
 	setLayout(vb_layout);
 
 	connect(turtle_code_edit, &QPlainTextEdit::modificationChanged, [=](bool flag)
