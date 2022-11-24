@@ -65,7 +65,7 @@ float Turtle::get_canvas_location_x()
 
 float Turtle::get_canvas_location_y()
 {
-    return this->canvas->getHeight() - current_state->get_location()->getY();
+    return this->canvas->get_height() - current_state->get_location()->getY();
 }
 
 float Turtle::get_x()
@@ -117,7 +117,7 @@ void Turtle::DrawTurtle()
     pencolor(255u, 0u, 0u);
     penwidth(2);
 
-    canvas->DrawTriangle(get_canvas_location_x(), get_canvas_location_y(), x2, y2, x3, y3);
+    canvas->draw_triangle(get_canvas_location_x(), get_canvas_location_y(), x2, y2, x3, y3);
 
     // reset turtle colour and pen width
     if(cname == "unknown")
@@ -144,7 +144,7 @@ void Turtle::pendown()
 void Turtle::penwidth(float w)
 {
     current_state->set_pen_width(w);
-    canvas->UpdateTurtleBrush(get_pen_color(), get_pen_width());
+    canvas->update_turtle_brush(get_pen_color(), get_pen_width());
 }
 
 void Turtle::stop()
@@ -155,8 +155,8 @@ void Turtle::stop()
 
 void Turtle::home()
 {
-    current_state->get_location()->setX(this->canvas->getWidth() / 2.0f);
-    current_state->get_location()->setY(this->canvas->getHeight() / 2.0f);
+    current_state->get_location()->setX(this->canvas->get_width() / 2.0f);
+    current_state->get_location()->setY(this->canvas->get_height() / 2.0f);
 }
 
 void Turtle::forward(float d)
@@ -173,7 +173,7 @@ void Turtle::forward(float d)
     // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, turtle_state->get_location()->getX(), turtle_state->get_location()->getY(), x2, y2);
     if (current_state->is_pen_down())
     {
-        canvas->DrawLine(get_canvas_location_x(), get_canvas_location_y(), cx2, cy2);
+        canvas->draw_line(get_canvas_location_x(), get_canvas_location_y(), cx2, cy2);
     }
 
     current_state->get_location()->setX(x2);
@@ -189,7 +189,7 @@ void Turtle::setpos(float x, float y)
 {
     if (current_state->is_pen_down())
     {
-        canvas->DrawLine(get_canvas_location_x(), get_canvas_location_y(), x, this->canvas->getHeight() - y);
+        canvas->draw_line(get_canvas_location_x(), get_canvas_location_y(), x, this->canvas->get_height() - y);
     }
 
     current_state->get_location()->setX(x);
@@ -239,7 +239,7 @@ void Turtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 
     // TODO: lookup color in color names list and set appropriately.
     current_state->get_pen_color()->set_color_name("unknown");
-    canvas->UpdateTurtleBrush(get_pen_color(), get_pen_width());
+    canvas->update_turtle_brush(get_pen_color(), get_pen_width());
 }
 
 int Turtle::pencolor(const char *color)
@@ -247,7 +247,7 @@ int Turtle::pencolor(const char *color)
     int res = current_state->get_pen_color()->update_color_by_name(color);
     if (res == 1)
     {
-        canvas->UpdateTurtleBrush(get_pen_color(), get_pen_width());
+        canvas->update_turtle_brush(get_pen_color(), get_pen_width());
     }
     return res;
 }
@@ -255,9 +255,9 @@ int Turtle::pencolor(const char *color)
 void Turtle::canvas_size(int width, int height)
 {
     // printf("Dimensions are now [%d, %d].\n", width, height);
-    this->canvas->setWidth(width);
-    this->canvas->setHeight(height);
-    canvas->UpdateCanvas();
+    this->canvas->set_width(width);
+    this->canvas->set_height(height);
+    canvas->update_canvas();
 }
 
 void Turtle::reset()

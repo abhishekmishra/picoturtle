@@ -24,7 +24,7 @@ PicoTurtle::PicoTurtle() : Turtle()
 
     this->reset();
 
-    turtleCanvas->UpdateTurtleBrush(this->get_pen_color(), this->get_pen_width());
+    turtleCanvas->update_turtle_brush(this->get_pen_color(), this->get_pen_width());
     if (init_cb != NULL)
     {
         init_cb(this, init_cb_args);

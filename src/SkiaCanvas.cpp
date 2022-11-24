@@ -12,13 +12,13 @@ void SkiaCanvas::CreateCanvas()
     //    SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
     //rasterSurface = SkSurface::MakeRaster(image_info);
     rasterSurface =
-        SkSurface::MakeRasterN32Premul(getWidth(), getHeight());
+        SkSurface::MakeRasterN32Premul(get_width(), get_height());
     rasterCanvas = rasterSurface->getCanvas();
 
     rasterCanvas->drawColor(SK_ColorWHITE);
 }
 
-void SkiaCanvas::UpdateCanvas()
+void SkiaCanvas::update_canvas()
 {
     //TODO: cleanup existing skia objects if already created.
     
@@ -30,19 +30,19 @@ void SkiaCanvas::UpdateCanvas()
     font(nullptr, 12);
 
     // todo needs to be called by turtle now
-    // UpdateTurtleBrush();
+    // update_turtle_brush();
 }
 
 SkiaCanvas::SkiaCanvas()
 {
-    UpdateCanvas();
+    update_canvas();
 };
 
 SkiaCanvas::~SkiaCanvas()
 {
 };
 
-void SkiaCanvas::DrawLine(float x1, float y1, float x2, float y2)
+void SkiaCanvas::draw_line(float x1, float y1, float x2, float y2)
 {
     SkPath path;
     path.moveTo(x1, y1);
@@ -50,7 +50,7 @@ void SkiaCanvas::DrawLine(float x1, float y1, float x2, float y2)
     rasterCanvas->drawPath(path, paint);
 }
 
-void SkiaCanvas::DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3)
+void SkiaCanvas::draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3)
 {
     SkPath path;
     path.moveTo(x1, y1);
@@ -97,7 +97,7 @@ void SkiaCanvas::stroketext(int x, int y, float angle, const char *text)
 
     // save canvas settings and rotate
     rasterCanvas->save();
-    
+
     rasterCanvas->rotate(angle, x, y);
 
     sk_sp<SkTextBlob> blob =
@@ -131,7 +131,7 @@ void SkiaCanvas::clear()
     rasterCanvas->drawColor(SK_ColorWHITE);
 }
 
-void SkiaCanvas::UpdateTurtleBrush(TurtleColor *pen_color, int pen_width)
+void SkiaCanvas::update_turtle_brush(TurtleColor *pen_color, int pen_width)
 {
     U8CPU a = pen_color->get_a();
     U8CPU r = pen_color->get_r();

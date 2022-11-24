@@ -32,15 +32,15 @@ namespace turtle
         Canvas(int width, int height);
         ~Canvas();
 
-        int getWidth();
-        void setWidth(int w);
-        int getHeight();
-        void setHeight(int h);
+        int get_width();
+        void set_width(int w);
+        int get_height();
+        void set_height(int h);
 
-        virtual void DrawLine(float x1, float y1, float x2, float y2) = 0;
-        virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
-        virtual void UpdateTurtleBrush(TurtleColor *pen_color, int pen_width) = 0;
-        virtual void UpdateCanvas() = 0;
+        virtual void draw_line(float x1, float y1, float x2, float y2) = 0;
+        virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
+        virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width) = 0;
+        virtual void update_canvas() = 0;
 
         virtual void font(const char *f, unsigned int sz) = 0;
         virtual void filltext(int x, int y, float angle, const char *text) = 0;

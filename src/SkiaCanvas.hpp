@@ -27,10 +27,10 @@ namespace turtle
         SkiaCanvas();
         ~SkiaCanvas();
 
-        virtual void DrawLine(float x1, float y1, float x2, float y2);
-        virtual void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3);
-        virtual void UpdateTurtleBrush(TurtleColor *pen_color, int pen_width);
-        virtual void UpdateCanvas();
+        virtual void draw_line(float x1, float y1, float x2, float y2);
+        virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3);
+        virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width);
+        virtual void update_canvas();
 
         virtual void font(const char *f, unsigned int sz);
         virtual void filltext(int x, int y, float angle, const char *text);

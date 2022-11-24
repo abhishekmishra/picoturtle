@@ -89,7 +89,7 @@ static TurtleState *turtle_state_getobj(lua_State *L)
 static int skia_turtle_getwidth(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->get_canvas()->getWidth());
+    lua_pushinteger(L, t->get_canvas()->get_width());
     return 1;
 }
 
@@ -100,14 +100,14 @@ static int skia_turtle_setwidth(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->get_canvas()->setWidth(width);
+    t->get_canvas()->set_width(width);
     return 0;
 }
 
 static int skia_turtle_getheight(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    lua_pushinteger(L, t->get_canvas()->getHeight());
+    lua_pushinteger(L, t->get_canvas()->get_height());
     return 1;
 }
 
@@ -118,7 +118,7 @@ static int skia_turtle_setheight(lua_State *L)
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->get_canvas()->setHeight(height);
+    t->get_canvas()->set_height(height);
     return 0;
 }
 

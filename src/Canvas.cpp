@@ -14,19 +14,19 @@ Canvas::Canvas(int width, int height)
 
 Canvas::~Canvas(){};
 
-int Canvas::getWidth()
+int Canvas::get_width()
 {
     return width;
 }
-void Canvas::setWidth(int w)
+void Canvas::set_width(int w)
 {
     width = w;
 }
-int Canvas::getHeight()
+int Canvas::get_height()
 {
     return height;
 }
-void Canvas::setHeight(int h)
+void Canvas::set_height(int h)
 {
     height = h;
 }
