@@ -49,6 +49,7 @@ void TurtleGLWidget::paintEvent(QPaintEvent *event)
 {
 	QPainter painter;
 	painter.begin(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 
 	if (turtle == NULL)
 	{
