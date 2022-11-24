@@ -6,6 +6,8 @@
 #include <QWidget>
 #include "TurtleCodeEditorTextWidget.hpp"
 
+// this file is based largely on the example at https://doc.qt.io/qt-6/qtwidgets-widgets-codeeditor-example.html
+
 namespace turtle
 {
 
