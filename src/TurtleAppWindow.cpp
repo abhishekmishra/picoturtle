@@ -221,6 +221,10 @@ namespace turtle
 		file_toolbar->addAction(open_action);
 		file_toolbar->addAction(save_action);
 
+		//TODO: decide if fixed size of toolbars needed.
+		// file_toolbar->setIconSize(QSize(20, 20));
+		// file_toolbar->setFixedHeight(36);
+
 		edit_toolbar = this->addToolBar(tr("Edit"));
 		edit_toolbar->addAction(cut_action);
 		edit_toolbar->addAction(copy_action);
