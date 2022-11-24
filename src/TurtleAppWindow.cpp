@@ -204,6 +204,9 @@ namespace turtle
 		// *** Run Turtle Program
 		connect(run_action, &QAction::triggered, code_editor_parent,
 				&TurtleCodeEditorParentWidget::run_file);
+		connect(run_action, &QAction::triggered, [=]() {
+			turtle_canvas_dock->raise();
+		});
 
 		// connect help menu items
 		// *** Open Turtle API Docs
