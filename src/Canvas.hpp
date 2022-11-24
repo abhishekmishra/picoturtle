@@ -23,7 +23,7 @@ namespace turtle
     
     private:
         // evaluate whether to switch to this class
-        TurtleDimension *Dimension;
+        TurtleDimension *dimension;
         int width;
         int height;
 
