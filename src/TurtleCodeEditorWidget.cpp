@@ -13,12 +13,14 @@
 #include <QFontMetrics>
 #include <QFileDialog>
 
+using namespace turtle;
+
 int TurtleCodeEditorWidget::noname_file_count = 0;
 
 TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
 	: file_path{QString()}
 {
-	turtle_code_edit = new QPlainTextEdit(this);
+	turtle_code_edit = new TurtleCodeEditorTextWidget(this);
 	turtle_code_edit->setMinimumHeight(400);
 	turtle_code_edit->setMinimumWidth(300);
 
