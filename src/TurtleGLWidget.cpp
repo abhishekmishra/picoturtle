@@ -49,7 +49,15 @@ void TurtleGLWidget::paintEvent(QPaintEvent *event)
 {
 	QPainter painter;
 	painter.begin(this);
+
+	// TODO: set all rendering hints to get a much
+	// better quality picture than default.
+	// need to check which one is acutally required.
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::TextAntialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
+	painter.setRenderHint(QPainter::VerticalSubpixelPositioning);
+	painter.setRenderHint(QPainter::LosslessImageRendering);
 
 	if (turtle == NULL)
 	{
