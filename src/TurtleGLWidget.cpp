@@ -9,12 +9,16 @@
 
 #include "Turtle.hpp"
 
+using namespace turtle;
+
+SkColorType TurtleGLWidget::sk_color_type = SkColorType::kUnknown_SkColorType;
+SkAlphaType TurtleGLWidget::sk_alpha_type = SkAlphaType::kUnknown_SkAlphaType;
+
 TurtleGLWidget::TurtleGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent),
 	  turtle{NULL}
 {
 	elapsed = 0;
-	// setFixedSize(GLWIDGET_WIDTH, GLWIDGET_HEIGHT);
 	setAutoFillBackground(false);
 	background = QBrush(Qt::white);
 
@@ -53,50 +57,35 @@ void TurtleGLWidget::paintEvent(QPaintEvent *event)
 	else
 	{
 		sk_sp<SkImage> img = turtle->getRasterSurface()->makeImageSnapshot();
+		TurtleGLWidget::extract_sk_color_props(img);
 
-		// see https://stackoverflow.com/a/48244327/9483968
-		// to debug the image color type of the given snapshot
-		if (!img.get()->isTextureBacked())
+		SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
+		std::vector<uint32_t> srcPixels;
+		const int rowBytes = img->width() * 4;
+		srcPixels.resize(img->height() * rowBytes);
+		SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
+		img->readPixels(pixmap, 0, 0);
+
+		QImage qImg;
+
+		switch (sk_color_type)
 		{
-			SkPixmap peek_pixmap;
-			img->peekPixels(&peek_pixmap);
-			SkColorType colorType = peek_pixmap.colorType();
-			SkAlphaType alphaType = peek_pixmap.alphaType();
-			qDebug() << "color type = " << colorType << " alpha type = " << alphaType;
+		case kRGBA_8888_SkColorType:
+			qImg = QImage((uchar *)&srcPixels.front(), img->width(), img->height(), QImage::Format_RGBA8888);
+			break;
 
-			SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
-			std::vector<uint32_t> srcPixels;
-			const int rowBytes = img->width() * 4;
-			srcPixels.resize(img->height() * rowBytes);
-			SkPixmap pixmap(info, (const void *)&srcPixels.front(), rowBytes);
-			img->readPixels(pixmap, 0, 0);
+		case kBGRA_8888_SkColorType:
+			qImg = QImage((uchar *)&srcPixels.front(), img->width(), img->height(), QImage::Format_ARGB32_Premultiplied);
+			break;
 
-			QImage qImg;
-
-			switch(colorType)
-			{
-				case kRGBA_8888_SkColorType:
-					qImg = QImage((uchar *)&srcPixels.front(), img->width(), img->height(), QImage::Format_RGBA8888);
-					break;
-
-				case kBGRA_8888_SkColorType:
-					qImg = QImage((uchar *)&srcPixels.front(), img->width(), img->height(), QImage::Format_ARGB32_Premultiplied);
-					break;
-
-				default:
-					qDebug() << "Not sure how to deal with this image color type";
-					break;
-
-			}
-			// qDebug() << "Image size is" << img->width() << "x" << img->height();
-			// qDebug() << "GLWidget size is" << size().width() << "x" << size().height();
-
-			painter.drawImage(QRect(0, 0, size().width(), size().height()), qImg);
+		default:
+			qDebug() << "Not sure how to deal with this image color type";
+			break;
 		}
-		else
-		{
-			qDebug() << "this is a texture on the GPU and can't be determined easily";
-		}
+		// qDebug() << "Image size is" << img->width() << "x" << img->height();
+		// qDebug() << "GLWidget size is" << size().width() << "x" << size().height();
+
+		painter.drawImage(QRect(0, 0, size().width(), size().height()), qImg);
 	}
 	painter.end();
 }
@@ -121,4 +110,26 @@ void TurtleGLWidget::resizeEvent(QResizeEvent *event)
 
 	// NOTE: see documentation note about this method in qt documentation
 	QOpenGLWidget::resizeEvent(event);
+}
+
+void TurtleGLWidget::extract_sk_color_props(sk_sp<SkImage> img)
+{
+	if (sk_color_type == SkColorType::kUnknown_SkColorType)
+	{
+		// see https://stackoverflow.com/a/48244327/9483968
+		// to debug the image color type of the given snapshot
+		if (!img.get()->isTextureBacked())
+		{
+
+			SkPixmap peek_pixmap;
+			img->peekPixels(&peek_pixmap);
+			sk_color_type = peek_pixmap.colorType();
+			sk_alpha_type = peek_pixmap.alphaType();
+			qDebug() << "Extracted SkImage (skia image) color type = " << sk_color_type << " alpha type = " << sk_alpha_type;
+		}
+		else
+		{
+			qDebug() << "The given SkImage is a texture on the GPU and can't be determined easily";
+		}
+	}
 }
