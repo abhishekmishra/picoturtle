@@ -20,6 +20,7 @@ PicoTurtle::PicoTurtle() : Turtle()
     }
 
     this->set_canvas(turtleCanvas);
+    this->canvas_size(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
 
     this->reset();
 

@@ -5,8 +5,8 @@
 
 #include "TurtleColor.hpp"
 #include "TurtleDimension.hpp"
-#define TURTLE_DEFAULT_CANVAS_WIDTH 512
-#define TURTLE_DEFAULT_CANVAS_HEIGHT 512
+#define TURTLE_DEFAULT_CANVAS_WIDTH 1024
+#define TURTLE_DEFAULT_CANVAS_HEIGHT 1024
 
 namespace turtle
 {
