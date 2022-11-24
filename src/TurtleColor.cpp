@@ -2,52 +2,83 @@
 #include "color_names.h"
 #include <cstdio>
 
-turtle::TurtleColor::TurtleColor()
+using namespace turtle;
+
+const std::string TurtleColor::DEFAULT_COLOR_NAME = "black";
+
+void TurtleColor::init_default()
 {
+    name = DEFAULT_COLOR_NAME;
     r = 0;
     g = 0;
     b = 0;
     a = 255;
 }
 
-int turtle::TurtleColor::get_color_by_name(TurtleColor** c, const char* color_name)
+TurtleColor::TurtleColor()
+{
+    init_default();
+}
+
+TurtleColor::TurtleColor(std::string name)
 {
     uint8_t cr, cg, cb;
-    int res = color_name_get_rgb(color_name, &cr, &cg, &cb);
+    int res = color_name_get_rgb(name.c_str(), &cr, &cg, &cb);
     if (res == 1)
     {
-        (*c) = new TurtleColor(cr, cg, cb, 255);
+        this->name = name;
+        this->r = cr;
+        this->g = cg;
+        this->b = cb;
+        this->a = 255;
+    }
+    else
+    {
+        init_default();
+    }
+}
+
+int TurtleColor::update_color_by_name(std::string color_name)
+{
+    uint8_t cr, cg, cb;
+    int res = color_name_get_rgb(color_name.c_str(), &cr, &cg, &cb);
+    if (res == 1)
+    {
+        this->name = color_name;
+        this->r = cr;
+        this->g = cg;
+        this->b = cb;
     }
     return res;
 }
 
-turtle::TurtleColor::TurtleColor(uint8_t rv, uint8_t gv, uint8_t bv, uint8_t av)
+TurtleColor::TurtleColor(uint8_t rv, uint8_t gv, uint8_t bv, uint8_t av)
 {
-    setR(rv);
-    setG(gv);
-    setB(bv);
-    setA(av);
+    set_r(rv);
+    set_g(gv);
+    set_b(bv);
+    set_a(av);
 }
 
-turtle::TurtleColor::~TurtleColor() {}
+TurtleColor::~TurtleColor() {}
 
-uint8_t turtle::TurtleColor::getR()
+uint8_t TurtleColor::get_r()
 {
     return r;
 }
-uint8_t turtle::TurtleColor::getG()
+uint8_t TurtleColor::get_g()
 {
     return g;
 }
-uint8_t turtle::TurtleColor::getB()
+uint8_t TurtleColor::get_b()
 {
     return b;
 }
-uint8_t turtle::TurtleColor::getA()
+uint8_t TurtleColor::get_a()
 {
     return a;
 }
-void turtle::TurtleColor::setR(uint8_t rv)
+void TurtleColor::set_r(uint8_t rv)
 {
     if (rv > 255)
     {
@@ -58,7 +89,7 @@ void turtle::TurtleColor::setR(uint8_t rv)
         r = rv;
     }
 }
-void turtle::TurtleColor::setG(uint8_t gv)
+void TurtleColor::set_g(uint8_t gv)
 {
     if (gv > 255)
     {
@@ -69,7 +100,7 @@ void turtle::TurtleColor::setG(uint8_t gv)
         g = gv;
     }
 }
-void turtle::TurtleColor::setB(uint8_t bv)
+void TurtleColor::set_b(uint8_t bv)
 {
     if (bv > 255)
     {
@@ -80,7 +111,7 @@ void turtle::TurtleColor::setB(uint8_t bv)
         b = bv;
     }
 }
-void turtle::TurtleColor::setA(uint8_t av)
+void TurtleColor::set_a(uint8_t av)
 {
     if (av > 255)
     {
@@ -90,4 +121,14 @@ void turtle::TurtleColor::setA(uint8_t av)
     {
         a = av;
     }
+}
+
+std::string TurtleColor::get_color_name()
+{
+    return name;
+}
+
+void TurtleColor::set_color_name(std::string color)
+{
+    name = color;
 }

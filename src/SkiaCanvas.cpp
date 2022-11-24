@@ -131,10 +131,10 @@ void SkiaCanvas::clear()
 
 void SkiaCanvas::UpdateTurtleBrush(TurtleColor *pen_color, int pen_width)
 {
-    U8CPU a = pen_color->getA();
-    U8CPU r = pen_color->getR();
-    U8CPU g = pen_color->getG();
-    U8CPU b = pen_color->getB();
+    U8CPU a = pen_color->get_a();
+    U8CPU r = pen_color->get_r();
+    U8CPU g = pen_color->get_g();
+    U8CPU b = pen_color->get_b();
     paint.setColor(SkColorSetARGB(a, r, g, b));
     paint.setStrokeWidth(pen_width);
 }

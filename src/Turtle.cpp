@@ -18,10 +18,10 @@ Turtle::Turtle(TurtleOptions *options)
     current_state = new TurtleState();
     saved_state = new TurtleState();
 
-    current_state->get_pen_color()->setA(255);
-    current_state->get_pen_color()->setR(128);
-    current_state->get_pen_color()->setG(64);
-    current_state->get_pen_color()->setB(32);
+    current_state->get_pen_color()->set_a(255);
+    current_state->get_pen_color()->set_r(128);
+    current_state->get_pen_color()->set_g(64);
+    current_state->get_pen_color()->set_b(32);
 };
 
 std::string Turtle::get_name()
@@ -105,10 +105,11 @@ void Turtle::DrawTurtle()
 
     // store current colour and pen width
     // to reset later
-    float ca = current_state->get_pen_color()->getA();
-    float cr = current_state->get_pen_color()->getR();
-    float cg = current_state->get_pen_color()->getG();
-    float cb = current_state->get_pen_color()->getB();
+    short ca = current_state->get_pen_color()->get_a();
+    short cr = current_state->get_pen_color()->get_r();
+    short cg = current_state->get_pen_color()->get_g();
+    short cb = current_state->get_pen_color()->get_b();
+    std::string cname = current_state->get_pen_color()->get_color_name();
 
     float cpw = get_pen_width();
 
@@ -119,7 +120,14 @@ void Turtle::DrawTurtle()
     canvas->DrawTriangle(get_canvas_location_x(), get_canvas_location_y(), x2, y2, x3, y3);
 
     // reset turtle colour and pen width
-    pencolor(cr, cg, cb);
+    if(cname == "unknown")
+    {
+        pencolor(cr, cg, cb);
+    }
+    else
+    {
+        pencolor(cname.c_str());
+    }
     penwidth(cpw);
 }
 
@@ -225,20 +233,21 @@ void Turtle::heading(float a)
 
 void Turtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 {
-    current_state->get_pen_color()->setR(r);
-    current_state->get_pen_color()->setG(g);
-    current_state->get_pen_color()->setB(b);
+    current_state->get_pen_color()->set_r(r);
+    current_state->get_pen_color()->set_g(g);
+    current_state->get_pen_color()->set_b(b);
+
+    // TODO: lookup color in color names list and set appropriately.
+    current_state->get_pen_color()->set_color_name("unknown");
     canvas->UpdateTurtleBrush(get_pen_color(), get_pen_width());
 }
 
 int Turtle::pencolor(const char *color)
 {
-    TurtleColor *c;
-    int res = TurtleColor::get_color_by_name(&c, color);
+    int res = current_state->get_pen_color()->update_color_by_name(color);
     if (res == 1)
     {
-        pencolor(c->getR(), c->getG(), c->getB());
-        delete c;
+        canvas->UpdateTurtleBrush(get_pen_color(), get_pen_width());
     }
     return res;
 }

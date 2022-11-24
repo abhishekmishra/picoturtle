@@ -422,28 +422,28 @@ static int turtle_state_y(lua_State *L)
 static int turtle_state_a(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
-    lua_pushnumber(L, state->get_pen_color()->getA());
+    lua_pushnumber(L, state->get_pen_color()->get_a());
     return 1;
 }
 
 static int turtle_state_r(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
-    lua_pushnumber(L, state->get_pen_color()->getR());
+    lua_pushnumber(L, state->get_pen_color()->get_r());
     return 1;
 }
 
 static int turtle_state_g(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
-    lua_pushnumber(L, state->get_pen_color()->getG());
+    lua_pushnumber(L, state->get_pen_color()->get_g());
     return 1;
 }
 
 static int turtle_state_b(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
-    lua_pushnumber(L, state->get_pen_color()->getB());
+    lua_pushnumber(L, state->get_pen_color()->get_b());
     return 1;
 }
 
@@ -472,12 +472,13 @@ static int turtle_state_tostring(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
     lua_pushfstring(L, 
-        "Turtle state [loc=(%f, %f), col=(%d, %d, %d), pen(down=%d, width=%f)",
+        "Turtle state [loc=(%f, %f), col=(%s, %d, %d, %d), pen(down=%d, width=%f)",
         state->get_location()->getX(),
         state->get_location()->getY(),
-        state->get_pen_color()->getR(),
-        state->get_pen_color()->getG(),
-        state->get_pen_color()->getB(),
+        state->get_pen_color()->get_color_name().c_str(),
+        state->get_pen_color()->get_r(),
+        state->get_pen_color()->get_g(),
+        state->get_pen_color()->get_b(),
         state->is_pen_down(),
         state->get_pen_width()
     );

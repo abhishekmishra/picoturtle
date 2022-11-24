@@ -9,15 +9,18 @@ t:canvas_size(256, 256)
 t:reset()
 
 -- Set the pencolour and penwidth of the turtle
-t:pencolor('red') -- set color to red
-t:penwidth(2)            -- 2 pixels
+t:pencolor('ninja turtle') -- set color to "ninja turtle"
+t:penwidth(2)              -- 2 pixels
 
 -- Set the pen down and draw for 100 pixels
 t:pendown()
-t:forward(100)           -- 100 pixels
+t:forward(100)             -- 100 pixels
 
 -- Stop the turtle.
 t:stop()
 
--- Print to console
+-- Print the state of the turtle to the console.
+print(t:state())
+
+-- Done.
 print('Turtle done.')

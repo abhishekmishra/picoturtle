@@ -28,10 +28,12 @@ void TurtleState::copyFromTurtleState(TurtleState *other)
         location->setY(other->get_location()->getY());
         heading = other->get_heading();
 
-        pen_color->setA(other->get_pen_color()->getA());
-        pen_color->setR(other->get_pen_color()->getR());
-        pen_color->setG(other->get_pen_color()->getG());
-        pen_color->setB(other->get_pen_color()->getB());
+        pen_color->set_a(other->get_pen_color()->get_a());
+        pen_color->set_r(other->get_pen_color()->get_r());
+        pen_color->set_g(other->get_pen_color()->get_g());
+        pen_color->set_b(other->get_pen_color()->get_b());
+        pen_color->set_color_name(other->get_pen_color()->get_color_name());
+
         pen_down = other->is_pen_down();
         pen_width = other->get_pen_width();
 
