@@ -163,7 +163,8 @@ end
 function BoxTurtle:setpos(x, y)
 	-- TODO: check that the position is within bounds
 	-- otherwise throw an error.
-	self.turtle:setpos(self.box:to_parent_coords(x, y))
+	local coords = self.box:to_parent_coords(x, y)
+	self.turtle:setpos(coords:x(), coords:y())
 end
 
 --- Move the turtle along the x axis, keeping y to its current value.
