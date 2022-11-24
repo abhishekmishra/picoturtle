@@ -336,16 +336,16 @@ function turtlePrintField(field, imgfile)
             error('field is nil')
         end
 
-        local default_pencolour = function()
-            t:pencolour(0, 0, 0)
+        local default_pencolor = function()
+            t:pencolor(0, 0, 0)
         end
 
-        local startcell_pencolour = function()
-            t:pencolour(255, 0, 0)
+        local startcell_pencolor = function()
+            t:pencolor(255, 0, 0)
         end
 
-        local endcell_pencolour = function()
-            t:pencolour(0, 255, 0)
+        local endcell_pencolor = function()
+            t:pencolor(0, 255, 0)
         end
 
         local cellwidth = 50
@@ -356,7 +356,7 @@ function turtlePrintField(field, imgfile)
 
         t:penup()
 
-        default_pencolour()
+        default_pencolor()
 
         t:penwidth(cellheight)
         t:heading(0.0)
@@ -377,13 +377,13 @@ function turtlePrintField(field, imgfile)
             for j = 1, field.mazewidth, 1 do
                 local cell = field[i][j]
                 if i == 2 and j == 2 then
-                    startcell_pencolour()
+                    startcell_pencolor()
                     t:forward(cellwidth)
-                    default_pencolour()
+                    default_pencolor()
                 elseif i == (field.mazeheight - 1) and j == (field.mazewidth - 1) then
-                    endcell_pencolour()
+                    endcell_pencolor()
                     t:forward(cellwidth)
-                    default_pencolour()
+                    default_pencolor()
                 elseif cell == WALL then
                     t:forward(cellwidth)
                 else

@@ -1,7 +1,7 @@
 local maze = require 'mazes/maze'
 
 local numMazes = 1
-if #arg > 0 then
+if arg and #arg > 0 then
     numMazes = arg[1]
 end
 
