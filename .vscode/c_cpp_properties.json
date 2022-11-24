@@ -30,7 +30,14 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/SDL2"
+                "/usr/include/SDL2",
+                "${vcpkgRoot}/x64-linux/include",
+                "${vcpkgRoot}/x64-linux/include/skia/",
+                "${vcpkgRoot}/x64-linux/include/Qt6/QtCore",
+                "${vcpkgRoot}/x64-linux/include/Qt6/QtWidgets",
+                "${vcpkgRoot}/x64-linux/include/Qt6",
+                "${vcpkgRoot}/x64-linux/include/Qt6/QtGui",
+                "${vcpkgRoot}/x64-linux/include/Qt6/QtOpenGLWidgets"            
             ],
             "defines": [],
             "compilerPath": "/bin/g++",
