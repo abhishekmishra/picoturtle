@@ -23,8 +23,10 @@ namespace turtle
 		// Add widgets
 		create_canvas_widget();
 		create_turtle_code_edit_widget();
-		create_turtle_console_widget();
 		create_turtle_docs_widget();
+
+		tabifyDockWidget(turtle_docs_dock, turtle_canvas_dock);
+		create_turtle_console_widget();
 
 		// toggle the docs view once to hide it
 		turtle_docs_dock->hide();
@@ -206,7 +208,7 @@ namespace turtle
 		// connect help menu items
 		// *** Open Turtle API Docs
 		connect(turtle_docs_action, &QAction::triggered, [=]()
-				{ turtle_docs_dock->show(); });
+				{ turtle_docs_dock->show(); turtle_docs_dock->raise(); });
 
 		// connect quit
 		// *** Quit PicoTurtle
@@ -273,12 +275,20 @@ namespace turtle
 	void TurtleAppWindow::create_canvas_widget()
 	{
 		turtle_canvas = new TurtleCanvasWidget(this);
-		setCentralWidget(turtle_canvas);
+		
+		turtle_canvas_dock = new QDockWidget(tr("Turtle Canvas"), this);
+		turtle_canvas_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+		turtle_canvas_dock->setWidget(turtle_canvas);
+		// turtle_canvas_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
+
+		// setCentralWidget(turtle_canvas);
+
+		addDockWidget(Qt::RightDockWidgetArea, turtle_canvas_dock);
 	}
 
 	void TurtleAppWindow::create_turtle_code_edit_widget()
 	{
-		turtle_code_edit_dock = new QDockWidget(tr("TurtleEdit"), this);
+		turtle_code_edit_dock = new QDockWidget(tr("Turtle Editor"), this);
 		turtle_code_edit_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		turtle_code_edit_dock->setWidget(code_editor_parent);
 		turtle_code_edit_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
@@ -293,7 +303,7 @@ namespace turtle
 		turtle_console_dock->setWidget(turtle_console);
 		turtle_console_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
 
-		addDockWidget(Qt::BottomDockWidgetArea, turtle_console_dock);
+		addDockWidget(Qt::RightDockWidgetArea, turtle_console_dock);
 	}
 	void TurtleAppWindow::create_turtle_docs_widget()
 	{

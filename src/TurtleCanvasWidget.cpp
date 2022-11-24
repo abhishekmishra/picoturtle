@@ -16,6 +16,7 @@ TurtleCanvasWidget::TurtleCanvasWidget(QWidget *parent)
 	// vb_layout->addWidget(gl_widget);
 	// setLayout(vb_layout);
 	// vb_layout->setContentsMargins(0, 0, 0, 0);
+	setMinimumHeight(400);
 }
 
 TurtleCanvasWidget::~TurtleCanvasWidget()

@@ -57,6 +57,7 @@ namespace turtle {
 		TurtleConsoleWidget* turtle_console;
 		TurtleDocsWidget* turtle_docs;
 		QDockWidget* turtle_code_edit_dock;
+		QDockWidget* turtle_canvas_dock;
 		QDockWidget* turtle_console_dock;
 		QDockWidget* turtle_docs_dock;
 
