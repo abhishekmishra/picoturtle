@@ -75,7 +75,8 @@ void SkiaCanvas::filltext(int x, int y, float angle, const char *text)
 
     // save canvas settings and rotate
     rasterCanvas->save();
-    rasterCanvas->rotate(angle);
+
+    rasterCanvas->rotate(angle, x, y);
 
     sk_sp<SkTextBlob> blob =
         SkTextBlob::MakeFromString(text, skfont);
@@ -96,7 +97,8 @@ void SkiaCanvas::stroketext(int x, int y, float angle, const char *text)
 
     // save canvas settings and rotate
     rasterCanvas->save();
-    rasterCanvas->rotate(angle);
+    
+    rasterCanvas->rotate(angle, x, y);
 
     sk_sp<SkTextBlob> blob =
         SkTextBlob::MakeFromString(text, skfont);
