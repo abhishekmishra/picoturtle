@@ -54,6 +54,21 @@ void TurtleGLWidget::paintEvent(QPaintEvent *event)
 	{
 		sk_sp<SkImage> img = turtle->getRasterSurface()->makeImageSnapshot();
 
+		// see https://stackoverflow.com/a/48244327/9483968
+		// to debug the image color type of the given snapshot
+		if (!img.get()->isTextureBacked())
+		{
+			SkPixmap pixmap;
+			img->peekPixels(&pixmap);
+			SkColorType colorType = pixmap.colorType();
+			SkAlphaType alphaType = pixmap.alphaType();
+			qDebug() << "color type = " << colorType << " alpha type = " << alphaType;
+		}
+		else
+		{
+			qDebug() << "this is a texture on the GPU and can't be determined easily";
+		}
+
 		SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
 		std::vector<uint32_t> srcPixels;
 		const int rowBytes = img->width() * 4;
