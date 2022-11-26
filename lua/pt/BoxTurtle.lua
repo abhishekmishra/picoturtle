@@ -40,6 +40,25 @@ function BoxTurtle:initialize(turtle, box, check_bounds)
 	self.check_bounds = check_bounds or false
 end
 
+--- Get the turtle state
+--
+-- @tparam State the detached turtle state
+function BoxTurtle:state()
+	local state = self.turtle:state()
+	local box_coords = self.box:to_box_coords(state:x(), state:y())
+	state.box_coords = box_coords
+
+	state.x = function ()
+		return self.box_coords:x()
+	end
+
+	state.y = function ()
+		return self.box_coords:y()
+	end
+
+	return state
+end
+
 --- Clear the Box (fill with white)
 function BoxTurtle:clear()
 	local dim = self.box:dim()
@@ -99,7 +118,16 @@ end
 --- Move the turtle forward by "dist" pixels.
 -- @tparam number dist
 function BoxTurtle:fd(dist)
-	self.turtle:fd(dist)
+	if self.check_bounds then
+	else
+		self.turtle:fd(dist)
+	end
+end
+
+--- Move the turtle back by "dist" pixels.
+-- @tparam number dist
+function BoxTurtle:bk(dist)
+	self.turtle:bk(dist)
 end
 
 --- Set the font of the text to be drawn as a font string
@@ -123,13 +151,13 @@ end
 --- Move the turtle forward by "dist" pixels.
 -- @tparam number dist
 function BoxTurtle:forward(dist)
-	self.turtle:fd(dist)
+	self.fd(self, dist)
 end
 
 --- Move the turtle back by "dist" pixels.
 -- @tparam number dist
 function BoxTurtle:back(dist)
-	self.turtle:back(dist)
+	self.bk(self, dist)
 end
 
 --- Turn the turtle left by "angle" degrees.
