@@ -23,17 +23,17 @@ function fern(size, sign)
     if (size < 1) then
         return
     end
-    
+
     t:forward(size)
 
     t:right(70 * sign)
-    fern(size/2, sign*-1)
+    fern(size / 2, sign * -1)
     t:left(70 * sign)
 
     t:forward(size)
 
     t:left(70 * sign)
-    fern(size/2, sign)
+    fern(size / 2, sign)
     t:right(70 * sign)
 
     t:right(7 * sign)
