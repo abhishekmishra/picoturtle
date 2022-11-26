@@ -40,22 +40,12 @@ function BoxTurtle:initialize(turtle, box, check_bounds)
 	self.check_bounds = check_bounds or false
 end
 
+-- TODO this should return a state with box coords
 --- Get the turtle state
 --
 -- @tparam State the detached turtle state
 function BoxTurtle:state()
 	local state = self.turtle:state()
-	local box_coords = self.box:to_box_coords(state:x(), state:y())
-	state.box_coords = box_coords
-
-	state.x = function ()
-		return self.box_coords:x()
-	end
-
-	state.y = function ()
-		return self.box_coords:y()
-	end
-
 	return state
 end
 
@@ -117,17 +107,64 @@ end
 
 --- Move the turtle forward by "dist" pixels.
 -- @tparam number dist
+-- @treturn boolean whether forward was successful
 function BoxTurtle:fd(dist)
 	if self.check_bounds then
+		-- save the turtle state before trial move
+		self.turtle:save()
+		local state = self.turtle:state()
+
+		self.penup(self)
+		self.turtle:fd(dist)
+
+		local new_state = self.turtle:state()
+		local new_pos = self.box:to_box_coords(new_state:x(), new_state:y())
+		local oob = self.box:out_of_bounds(new_pos)
+
+		-- restore turtle
+		self.turtle:restore()
+
+		if oob then
+			return false
+		else
+			self.turtle:fd(dist)
+			return true
+		end
 	else
 		self.turtle:fd(dist)
+		return true
 	end
 end
 
 --- Move the turtle back by "dist" pixels.
 -- @tparam number dist
+-- @treturn boolean whether back was successful
 function BoxTurtle:bk(dist)
-	self.turtle:bk(dist)
+	if self.check_bounds then
+		-- save the turtle state before trial move
+		self.turtle:save()
+		local state = self.turtle:state()
+
+		self.penup(self)
+		self.turtle:bk(dist)
+
+		local new_state = self.turtle:state()
+		local new_pos = self.box:to_box_coords(new_state:x(), new_state:y())
+		local oob = self.box:out_of_bounds(new_pos)
+
+		-- restore turtle
+		self.turtle:restore()
+
+		if oob then
+			return false
+		else
+			self.turtle:bk(dist)
+			return true
+		end
+	else
+		self.turtle:bk(dist)
+		return true
+	end
 end
 
 --- Set the font of the text to be drawn as a font string
@@ -150,14 +187,16 @@ end
 
 --- Move the turtle forward by "dist" pixels.
 -- @tparam number dist
+-- @treturn boolean whether forward moved out of bounds
 function BoxTurtle:forward(dist)
-	self.fd(self, dist)
+	return self.fd(self, dist)
 end
 
 --- Move the turtle back by "dist" pixels.
 -- @tparam number dist
+-- @treturn boolean whether back was successful
 function BoxTurtle:back(dist)
-	self.bk(self, dist)
+	return self.bk(self, dist)
 end
 
 --- Turn the turtle left by "angle" degrees.
