@@ -204,8 +204,22 @@ function BoxTurtle:__tostring()
 	return "BoxTurtle -> " .. tostring(self.box)
 end
 
+--- Draw a border around the given Box
+-- This will only work if border width of the Box
+-- is non-zero.
 function BoxTurtle:draw_border()
 	self.box:draw_border(self.turtle)
+end
+
+--- Test if the current position of the turtle is
+-- out of bounds of the current box.
+--
+-- @treturn boolean flag indicating whether turtle is out of bounds
+function BoxTurtle:out_of_bounds()
+	local state = self.turtle:state()
+	local box_coords = self.box:to_box_coords(state:x(), state:y())
+	local oob = self.box:out_of_bounds(box_coords)
+	return oob
 end
 
 return BoxTurtle

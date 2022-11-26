@@ -207,9 +207,42 @@ function Box:to_parent_coords(x, y)
 	end
 end
 
+--- Convert the given container coords to the corresponding box coords
+--
+-- @tparam number|Vec2 x either the x coord or a Vec2
+-- @tparam number y y coord
+-- @treturn Vec2 result coordinates
+function Box:to_box_coords(x, y)
+	if type(x) == "table" and x.class == Vec2 then
+		return x:subtract(self.d_orig)
+	else
+		return Vec2:new(x, y):subtract(self.d_orig)
+	end
+end
+
 --- tostring
 function Box:__tostring()
 	return "Box [orig=" .. tostring(self.c_orig) .. ", dim=" .. tostring(self.c_dim) .. "]"
+end
+
+--- Check if the given coords are out of bounds
+-- of the current box.
+--
+-- @tparam number|Vec2 x either the x coord or a Vec2
+-- @tparam number y y coords
+-- @treturn boolean flag indicating out of bounds
+function Box:out_of_bounds(x, y)
+	local coord = nil
+	if type(x) == "table" and x.class == Vec2 then
+		coord = x
+	else
+		coord = Vec2:new(x, y)
+	end
+	if coord:x() < 0 or coord:x() > self.d_dim:w() or coord:y() < 0 or coord:y() > self.d_dim:h() then
+		return true
+	else
+		return false
+	end
 end
 
 return Box
