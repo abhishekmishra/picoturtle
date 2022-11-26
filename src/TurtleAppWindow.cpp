@@ -371,6 +371,21 @@ namespace turtle
 		turtle_canvas->set_turtle(t);
 	}
 
+	// see https://stackoverflow.com/a/11487434/9483968
+	void delay()
+	{
+		QTime dieTime = QTime::currentTime().addMSecs(1);
+		while (QTime::currentTime() < dieTime)
+			QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+	}
+
+	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle* t)
+	{
+		turtle_canvas->draw_turtle();
+		delay();
+		//qDebug() << "update called.";
+	}
+
 	bool TurtleAppWindow::in_dark_theme()
 	{
 		int text_hsv_val = this->palette().color(QPalette::WindowText).value();

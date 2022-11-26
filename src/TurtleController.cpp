@@ -6,9 +6,12 @@
 // so that it can be run from a non-Qt cli program
 
 namespace turtle {
+
+	// Define static members
 	lua_State* TurtleController::L = NULL;
 	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
 	std::function<void(turtle::PicoTurtle* t)> TurtleController::notify_turtle_created_fn = NULL;
+	std::function<void(turtle::PicoTurtle* t)> TurtleController::notify_turtle_update_fn = NULL;
 
 	void TurtleController::turtle_message(const QString& src, const QString& msg)
 	{
@@ -57,6 +60,7 @@ namespace turtle {
 	int TurtleController::init_turtle_lua_binding()
 	{
 		turtle::PicoTurtle::set_init_callback(&TurtleController::turtle_init_cb, NULL);
+		turtle::PicoTurtle::set_update_callback(&TurtleController::turtle_update_cb, NULL);
 		turtle::PicoTurtle::set_destroy_callback(&TurtleController::turtle_destroy_cb, NULL);
 
 		// Create Lua State
@@ -186,6 +190,14 @@ namespace turtle {
 		//TurtleController::turtle_message("app", (QString("PicoTurtle created - Name: %1, Id: %2").arg(t->getName().c_str(), t->getId().c_str())));
 	}
 
+	void TurtleController::turtle_update_cb(turtle::PicoTurtle* t, void* cb_args)
+	{
+		if (TurtleController::notify_turtle_update_fn != NULL)
+		{
+			TurtleController::notify_turtle_update_fn(t);
+		}
+	}
+
 	void TurtleController::turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)
 	{
 		//sk_sp<SkImage> img;
@@ -207,4 +219,10 @@ namespace turtle {
 	{
 		TurtleController::notify_turtle_created_fn = notifyfn;
 	}
+
+	void TurtleController::set_notify_turtle_update_fn(std::function<void(turtle::PicoTurtle* t)> notifyfn)
+	{
+		TurtleController::notify_turtle_update_fn = notifyfn;
+	}
+
 }

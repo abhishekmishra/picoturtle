@@ -88,6 +88,7 @@ namespace turtle {
 		void show_status_message(const QString& message);
 		void write_to_console(const QString& input) const;
 	    void set_turtle(turtle::PicoTurtle* t);
+		void handle_turtle_update(turtle::PicoTurtle* t);
 	};
 }
 

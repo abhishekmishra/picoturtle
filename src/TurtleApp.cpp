@@ -84,8 +84,13 @@ int gui_window(int argc, char* argv[])
 		mainWindow->set_turtle(t);
 	};
 
+	std::function<void(turtle::PicoTurtle* t)> handle_turtle_update_fn = [=](turtle::PicoTurtle* t) {
+		mainWindow->handle_turtle_update(t);
+	};
+
 	turtle::TurtleController::set_custom_lua_print_fn(printfn);
 	turtle::TurtleController::set_notify_turtle_created_fn(notify_turtle_fn);
+	turtle::TurtleController::set_notify_turtle_update_fn(handle_turtle_update_fn);
 
 	turtle::TurtleController::run_lua_script(
 		"local oldprint = print\n"

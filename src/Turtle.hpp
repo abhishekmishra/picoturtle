@@ -102,32 +102,32 @@ namespace turtle
          * 
          * @param w pixel width as a floating point number.
          */
-        void penwidth(float w);
+        virtual void penwidth(float w);
 
         /**
          * @brief stop the turtle. Does nothing for now except
          * draw the turtle as a red triangle.
          */
-        void stop();
+        virtual void stop();
 
         /**
          * @brief send the turtle home (at the center of the screen).
          */
-        void home();
+        virtual void home();
 
         /**
          * @brief move the turtle forward by d pixels.
          * 
          * @param d distance to move the turtle in pixels.
          */
-        void forward(float d);
+        virtual void forward(float d);
 
         /**
          * @brief move the turtle back by d pixels.
          *
          * @param d distance to move the turtle in pixels.
          */
-        void back(float d);
+        virtual void back(float d);
 
         /**
          * @brief set the position of the turtle to (x,y)
@@ -136,7 +136,7 @@ namespace turtle
          * @param x x-coord
          * @param y y-coord
          */
-        void setpos(float x, float y);
+        virtual void setpos(float x, float y);
 
         /**
          * @brief set the x-coord of the turtle.
@@ -144,7 +144,7 @@ namespace turtle
          *
          * @param x x-coord
          */
-        void setx(float x);
+        virtual void setx(float x);
 
         /**
          * @brief set the y-coord of the turtle.
@@ -152,28 +152,28 @@ namespace turtle
          *
          * @param y y-coord
          */
-        void sety(float y);
+        virtual void sety(float y);
 
         /**
          * @brief turn the turtle left by a degrees.
          *
          * @param a angle (in degrees) to turn the the turtle
          */
-        void left(float a);
+        virtual void left(float a);
 
         /**
          * @brief turn the turtle right by a degrees.
          *
          * @param a angle (in degrees) to turn the the turtle
          */
-        void right(float a);
+        virtual void right(float a);
 
         /**
          * @brief set the heading of the turtle to a degrees
          *
          * @param a angle (in degrees)
          */
-        void heading(float a);
+        virtual void heading(float a);
 
         /**
          * @brief Set the pen colour using the given rgb values
@@ -182,7 +182,7 @@ namespace turtle
          * @param g green value (0-255)
          * @param b blue value (0-255)
          */
-        void pencolor(unsigned int r, unsigned int g, unsigned int b);
+        virtual void pencolor(unsigned int r, unsigned int g, unsigned int b);
 
         /**
          * @brief Set the pen color using the given color name.
@@ -194,15 +194,15 @@ namespace turtle
          * @param color name of the color to set.
          * @return 0 if color was found and set, non-zero otherwise.
          */
-        int pencolor(const char* color);
+        virtual int pencolor(const char* color);
 
         // TODO: change width and height to unsigned int
-        void canvas_size(int width, int height);
+        virtual void canvas_size(int width, int height);
 
         /**
          * @brief Reset the turtle's pen, and location.
          */
-        void reset();
+        virtual void reset();
 
         /**
          * @brief Set the turtle's font to given font name and size
@@ -210,7 +210,7 @@ namespace turtle
          * @param f font name
          * @param sz font size
          */
-        void font(const char *f, unsigned int sz);
+        virtual void font(const char *f, unsigned int sz);
 
         /**
          * @brief Write the given text (filled) at the turtle's position,
@@ -218,7 +218,7 @@ namespace turtle
          *
          * @param text text to write.
          */
-        void filltext(const char *text);
+        virtual void filltext(const char *text);
 
         /**
          * @brief Write the given text (with stroke) at the turtle's position,
@@ -226,6 +226,6 @@ namespace turtle
          *
          * @param text text to write.
          */
-        void stroketext(const char *text);
+        virtual void stroketext(const char *text);
     };
 };
