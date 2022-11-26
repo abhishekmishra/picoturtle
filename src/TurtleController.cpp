@@ -12,6 +12,7 @@ namespace turtle {
 	std::function<void(QString)> TurtleController::custom_lua_print_fn = NULL;
 	std::function<void(turtle::PicoTurtle* t)> TurtleController::notify_turtle_created_fn = NULL;
 	std::function<void(turtle::PicoTurtle* t)> TurtleController::notify_turtle_update_fn = NULL;
+	std::function<void(turtle::PicoTurtle* t, int tm)> TurtleController::turtle_delay_fn = NULL;
 
 	void TurtleController::turtle_message(const QString& src, const QString& msg)
 	{
@@ -61,6 +62,7 @@ namespace turtle {
 	{
 		turtle::PicoTurtle::set_init_callback(&TurtleController::turtle_init_cb, NULL);
 		turtle::PicoTurtle::set_update_callback(&TurtleController::turtle_update_cb, NULL);
+		turtle::PicoTurtle::set_delay_callback(&TurtleController::turtle_delay);
 		turtle::PicoTurtle::set_destroy_callback(&TurtleController::turtle_destroy_cb, NULL);
 
 		// Create Lua State
@@ -210,6 +212,14 @@ namespace turtle {
 		//}
 	}
 
+	void TurtleController::turtle_delay(turtle::PicoTurtle* t, int tm)
+	{
+		if (TurtleController::turtle_delay_fn != NULL)
+		{
+			TurtleController::turtle_delay_fn(t, tm);
+		}
+	}
+
 	void TurtleController::set_custom_lua_print_fn(std::function<void(QString)> printfn)
 	{
 		TurtleController::custom_lua_print_fn = printfn;
@@ -225,4 +235,8 @@ namespace turtle {
 		TurtleController::notify_turtle_update_fn = notifyfn;
 	}
 
+	void TurtleController::set_turtle_delay_fn(std::function<void(turtle::PicoTurtle* t, int tm)> delayfn)
+	{
+		TurtleController::turtle_delay_fn = delayfn;
+	}
 }

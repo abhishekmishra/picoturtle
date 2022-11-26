@@ -10,6 +10,7 @@ picoturtle_callback PicoTurtle::init_cb = NULL;
 void *PicoTurtle::init_cb_args = NULL;
 picoturtle_callback PicoTurtle::update_cb = NULL;
 void* PicoTurtle::update_cb_args = NULL;
+picoturtle_delay PicoTurtle::delay_cb = NULL;
 picoturtle_callback PicoTurtle::destroy_cb = NULL;
 void *PicoTurtle::destroy_cb_args = NULL;
 
@@ -54,6 +55,11 @@ void PicoTurtle::set_update_callback(picoturtle_callback fn, void* cb_args)
     update_cb_args = cb_args;
 }
 
+void PicoTurtle::set_delay_callback(picoturtle_delay fn)
+{
+    delay_cb = fn;
+}
+
 void PicoTurtle::set_destroy_callback(picoturtle_callback fn, void *cb_args)
 {
     destroy_cb = fn;
@@ -72,10 +78,24 @@ void PicoTurtle::unset_update_callback()
     update_cb_args = NULL;
 }
 
+void PicoTurtle::unset_delay_callback()
+{
+    delay_cb = NULL;
+}
+
 void PicoTurtle::unset_destroy_callback()
 {
     destroy_cb = NULL;
     destroy_cb_args = NULL;
+}
+
+void PicoTurtle::delay_ms(int tm)
+{
+    //std::cout << "PicoTurtle delay_ms called with " << tm;
+    if (delay_cb != NULL)
+    {
+        delay_cb(this, tm);
+    }
 }
 
 sk_sp<SkSurface> PicoTurtle::getRasterSurface()

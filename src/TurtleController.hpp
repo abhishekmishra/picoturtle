@@ -17,11 +17,13 @@ namespace turtle {
 		static void turtle_init_cb(turtle::PicoTurtle* t, void* cb_args);
 		static void turtle_update_cb(turtle::PicoTurtle* t, void* cb_args);
 		static void turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args);
+		static void turtle_delay(turtle::PicoTurtle* t, int tm);
 
 	public:
 		static std::function<void(QString)> custom_lua_print_fn;
 		static std::function<void(turtle::PicoTurtle* t)> notify_turtle_created_fn;
 		static std::function<void(turtle::PicoTurtle* t)> notify_turtle_update_fn;
+		static std::function<void(turtle::PicoTurtle* t, int tm)> turtle_delay_fn;
 
 		static void turtle_message(const QString& src, const QString& msg);
 		static int init_turtle_lua_binding();
@@ -29,6 +31,7 @@ namespace turtle {
 		static void set_custom_lua_print_fn(std::function<void(QString)> printfn);
 		static void set_notify_turtle_created_fn(std::function<void(turtle::PicoTurtle* t)> notifyfn);
 		static void set_notify_turtle_update_fn(std::function<void(turtle::PicoTurtle* t)> notifyfn);
+		static void set_turtle_delay_fn(std::function<void(turtle::PicoTurtle* t, int tm)> delayfn);
 		static int handle_turtle_lua_args(int argc, char* argv[]);
 		static int run_lua_file(const char* filename);
 		static int run_lua_script(const char* script);

@@ -44,6 +44,11 @@ long long Turtle::elapsed_time_ms()
     return elapsed_ms;
 }
 
+void Turtle::delay_ms(int tm)
+{
+    // do nothing.
+}
+
 TurtleState *Turtle::get_current_state() const
 {
     TurtleState *detached = new TurtleState();

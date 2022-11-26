@@ -31,6 +31,7 @@ namespace turtle {
 
 	public:
 		bool in_dark_theme();
+		static void delay(int tm);
 
 	signals:
 

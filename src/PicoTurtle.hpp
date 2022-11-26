@@ -10,6 +10,7 @@ namespace turtle
     class PicoTurtle;
 
     typedef void (*picoturtle_callback)(PicoTurtle *, void *);
+    typedef void (*picoturtle_delay)(PicoTurtle*, int tm);
 
     /**
      * @brief PicoTurtle implements the turtle, with the ability
@@ -26,6 +27,8 @@ namespace turtle
         static picoturtle_callback update_cb;
         static void* update_cb_args;
 
+        static picoturtle_delay delay_cb;
+
         static picoturtle_callback destroy_cb;
         static void *destroy_cb_args;
 
@@ -35,11 +38,15 @@ namespace turtle
 
         static void set_init_callback(picoturtle_callback fn, void *cb_args);
         static void set_update_callback(picoturtle_callback fn, void* cb_args);
+        static void set_delay_callback(picoturtle_delay fn);
         static void set_destroy_callback(picoturtle_callback fn, void *cb_args);
 
         static void unset_init_callback();
         static void unset_update_callback();
+        static void unset_delay_callback();
         static void unset_destroy_callback();
+
+        virtual void delay_ms(int tm);
 
         sk_sp<SkSurface> getRasterSurface();
 

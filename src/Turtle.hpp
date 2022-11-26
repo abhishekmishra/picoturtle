@@ -56,6 +56,16 @@ namespace turtle
          */
         long long elapsed_time_ms();
 
+        /**
+         * @brief delay the turtle by given ms.
+         * This method does noting in the base implementation.
+         * Only if a non-blocking delay callback is provided,
+         * will the delay work.
+         *
+         * @param tm time to delay in milliseconds.
+         */
+        virtual void delay_ms(int tm);
+
         // state related functions
         /**
          * Returns a detached copy of the current turtle state.

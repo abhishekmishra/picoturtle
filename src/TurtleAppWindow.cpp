@@ -372,9 +372,10 @@ namespace turtle
 	}
 
 	// see https://stackoverflow.com/a/11487434/9483968
-	void delay()
+	void TurtleAppWindow::delay(int tm)
 	{
-		QTime dieTime = QTime::currentTime().addMSecs(1);
+		//qDebug() << "Delay called for" << tm << "ms";
+		QTime dieTime = QTime::currentTime().addMSecs(tm);
 		while (QTime::currentTime() < dieTime)
 			QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 	}
@@ -382,7 +383,7 @@ namespace turtle
 	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle* t)
 	{
 		turtle_canvas->draw_turtle();
-		delay();
+		//delay();
 		//qDebug() << "update called.";
 	}
 
