@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <chrono>
 
 #include "Canvas.hpp"
 #include "TurtleColor.hpp"
@@ -24,6 +25,8 @@ namespace turtle
 
         Canvas *canvas;
 
+        std::chrono::steady_clock::time_point start_tm;
+
     public:
 
         /**
@@ -44,6 +47,14 @@ namespace turtle
 
         std::string get_name();
         std::string get_id();
+
+        /**
+         * @brief get the elapsed time since the construction
+         * of this turtle object.
+         * 
+         * @return elapsed time in milliseconds
+         */
+        long long elapsed_time_ms();
 
         // state related functions
         /**

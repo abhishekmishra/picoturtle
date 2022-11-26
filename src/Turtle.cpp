@@ -22,6 +22,9 @@ Turtle::Turtle(TurtleOptions *options)
     current_state->get_pen_color()->set_r(128);
     current_state->get_pen_color()->set_g(64);
     current_state->get_pen_color()->set_b(32);
+
+    // set the start time of the turtle
+    start_tm = std::chrono::steady_clock::now();
 };
 
 std::string Turtle::get_name()
@@ -32,6 +35,13 @@ std::string Turtle::get_name()
 std::string Turtle::get_id()
 {
     return id;
+}
+
+long long Turtle::elapsed_time_ms()
+{
+    auto current_tm = std::chrono::steady_clock::now();
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_tm - start_tm).count();
+    return elapsed_ms;
 }
 
 TurtleState *Turtle::get_current_state() const
