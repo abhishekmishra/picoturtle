@@ -13,7 +13,10 @@
 
 namespace turtle
 {
-
+    /**
+     * @brief Adapted from the Qt documentation. 
+     * This widget provides a gl canvas for drawing the turtle.
+     */
     class TurtleGLWidget : public QOpenGLWidget
     {
         Q_OBJECT

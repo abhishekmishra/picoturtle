@@ -79,48 +79,104 @@ namespace turtle
 
         float get_canvas_location_x();
         float get_canvas_location_y();
-        float get_x();
-        float get_y();
+        float getx();
+        float gety();
         float canvas_heading(); // return 360.0 - Angle;
         float get_pen_width();
         float get_heading();
 
         void DrawTurtle();
 
-        void penup();
+        /**
+         * @brief raise the turtle's pen.
+         */
+        virtual void penup();
 
-        void pendown();
+        /**
+         * @brief lower the turtle's pen.
+         */
+        virtual void pendown();
 
+        /**
+         * @brief set the turtle's pen's width in pixels.
+         * 
+         * @param w pixel width as a floating point number.
+         */
         void penwidth(float w);
 
+        /**
+         * @brief stop the turtle. Does nothing for now except
+         * draw the turtle as a red triangle.
+         */
         void stop();
 
-        // TurtleState state();
-
+        /**
+         * @brief send the turtle home (at the center of the screen).
+         */
         void home();
 
+        /**
+         * @brief move the turtle forward by d pixels.
+         * 
+         * @param d distance to move the turtle in pixels.
+         */
         void forward(float d);
 
+        /**
+         * @brief move the turtle back by d pixels.
+         *
+         * @param d distance to move the turtle in pixels.
+         */
         void back(float d);
 
+        /**
+         * @brief set the position of the turtle to (x,y)
+         * on the canvas. x & y are pixels.
+         *
+         * @param x x-coord
+         * @param y y-coord
+         */
         void setpos(float x, float y);
 
-        float getx();
-
-        float gety();
-
+        /**
+         * @brief set the x-coord of the turtle.
+         * on the canvas. x is in pixels.
+         *
+         * @param x x-coord
+         */
         void setx(float x);
 
+        /**
+         * @brief set the y-coord of the turtle.
+         * on the canvas. y is in pixels.
+         *
+         * @param y y-coord
+         */
         void sety(float y);
 
+        /**
+         * @brief turn the turtle left by a degrees.
+         *
+         * @param a angle (in degrees) to turn the the turtle
+         */
         void left(float a);
 
+        /**
+         * @brief turn the turtle right by a degrees.
+         *
+         * @param a angle (in degrees) to turn the the turtle
+         */
         void right(float a);
 
+        /**
+         * @brief set the heading of the turtle to a degrees
+         *
+         * @param a angle (in degrees)
+         */
         void heading(float a);
 
         /**
-         * Set the pen colour using the given rgb values
+         * @brief Set the pen colour using the given rgb values
          *
          * @param r red value (0-255)
          * @param g green value (0-255)
@@ -129,7 +185,7 @@ namespace turtle
         void pencolor(unsigned int r, unsigned int g, unsigned int b);
 
         /**
-         * Set the pen color using the given color name.
+         * @brief Set the pen color using the given color name.
          * This call will fail to set a color and return a
          * non-zero code if the given color name is not found
          * in the existing list of colors in the c-color-names lib.
@@ -143,10 +199,33 @@ namespace turtle
         // TODO: change width and height to unsigned int
         void canvas_size(int width, int height);
 
+        /**
+         * @brief Reset the turtle's pen, and location.
+         */
         void reset();
 
+        /**
+         * @brief Set the turtle's font to given font name and size
+         * 
+         * @param f font name
+         * @param sz font size
+         */
         void font(const char *f, unsigned int sz);
+
+        /**
+         * @brief Write the given text (filled) at the turtle's position,
+         * in the turtle's heading as orientation of text.
+         *
+         * @param text text to write.
+         */
         void filltext(const char *text);
+
+        /**
+         * @brief Write the given text (with stroke) at the turtle's position,
+         * in the turtle's heading as orientation of text.
+         *
+         * @param text text to write.
+         */
         void stroketext(const char *text);
     };
 };

@@ -11,6 +11,10 @@ namespace turtle
 
     typedef void (*picoturtle_callback)(PicoTurtle *, void *);
 
+    /**
+     * @brief PicoTurtle implements the turtle, with the ability
+     * to track the turtle across creation, state changes and destruction.
+     */
     class PicoTurtle : public Turtle
     {
     private:

@@ -68,16 +68,6 @@ float Turtle::get_canvas_location_y()
     return this->canvas->get_height() - current_state->get_location()->getY();
 }
 
-float Turtle::get_x()
-{
-    return current_state->get_location()->getX();
-}
-
-float Turtle::get_y()
-{
-    return current_state->get_location()->getY();
-}
-
 float Turtle::canvas_heading()
 {
     return 360.0 - current_state->get_heading();
