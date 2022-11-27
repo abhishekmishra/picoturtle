@@ -49,6 +49,11 @@ void Turtle::delay_ms(int tm)
     // do nothing.
 }
 
+void Turtle::paint()
+{
+    // do nothing.
+}
+
 TurtleState *Turtle::get_current_state() const
 {
     TurtleState *detached = new TurtleState();
@@ -125,7 +130,7 @@ void Turtle::DrawTurtle()
     canvas->draw_triangle(get_canvas_location_x(), get_canvas_location_y(), x2, y2, x3, y3);
 
     // reset turtle colour and pen width
-    if(cname == "unknown")
+    if (cname == "unknown")
     {
         pencolor(cr, cg, cb);
     }

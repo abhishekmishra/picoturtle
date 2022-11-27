@@ -204,9 +204,8 @@ namespace turtle
 		// *** Run Turtle Program
 		connect(run_action, &QAction::triggered, code_editor_parent,
 				&TurtleCodeEditorParentWidget::run_file);
-		connect(run_action, &QAction::triggered, [=]() {
-			turtle_canvas_dock->raise();
-		});
+		connect(run_action, &QAction::triggered, [=]()
+				{ turtle_canvas_dock->raise(); });
 
 		// connect help menu items
 		// *** Open Turtle API Docs
@@ -226,9 +225,9 @@ namespace turtle
 		file_toolbar->addAction(open_action);
 		file_toolbar->addAction(save_action);
 
-		//TODO: decide if fixed size of toolbars needed.
-		// file_toolbar->setIconSize(QSize(20, 20));
-		// file_toolbar->setFixedHeight(36);
+		// TODO: decide if fixed size of toolbars needed.
+		//  file_toolbar->setIconSize(QSize(20, 20));
+		//  file_toolbar->setFixedHeight(36);
 
 		edit_toolbar = this->addToolBar(tr("Edit"));
 		edit_toolbar->addAction(cut_action);
@@ -278,7 +277,7 @@ namespace turtle
 	void TurtleAppWindow::create_canvas_widget()
 	{
 		turtle_canvas = new TurtleCanvasWidget(this);
-		
+
 		turtle_canvas_dock = new QDockWidget(tr("Turtle Canvas"), this);
 		turtle_canvas_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		turtle_canvas_dock->setWidget(turtle_canvas);
@@ -374,17 +373,22 @@ namespace turtle
 	// see https://stackoverflow.com/a/11487434/9483968
 	void TurtleAppWindow::delay(int tm)
 	{
-		//qDebug() << "Delay called for" << tm << "ms";
+		// qDebug() << "Delay called for" << tm << "ms";
 		QTime dieTime = QTime::currentTime().addMSecs(tm);
 		while (QTime::currentTime() < dieTime)
-			QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+			QCoreApplication::processEvents(QEventLoop::AllEvents, tm);
 	}
 
-	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle* t)
+	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle *t)
+	{
+		// turtle_canvas->draw_turtle();
+		// delay();
+		// qDebug() << "update called.";
+	}
+
+	void TurtleAppWindow::handle_turtle_paint(turtle::PicoTurtle *t)
 	{
 		turtle_canvas->draw_turtle();
-		//delay();
-		//qDebug() << "update called.";
 	}
 
 	bool TurtleAppWindow::in_dark_theme()

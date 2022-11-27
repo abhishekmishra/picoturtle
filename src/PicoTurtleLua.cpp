@@ -370,7 +370,7 @@ static int skia_turtle_canvas_size(lua_State *L)
 static int skia_turtle_state(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
-    TurtleState* state = t->get_current_state();
+    TurtleState *state = t->get_current_state();
 
     *static_cast<TurtleState **>(lua_newuserdata(L, sizeof(TurtleState *))) = state;
 
@@ -395,29 +395,37 @@ static int skia_turtle_restore(lua_State *L)
     PicoTurtle *t = skia_turtle_getobj(L);
 
     t->restore();
-    
+
     return 0;
 }
 
-static int skia_turtle_elapsed_time_ms(lua_State* L)
+static int skia_turtle_elapsed_time_ms(lua_State *L)
 {
-    PicoTurtle* t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
     lua_pushnumber(L, t->elapsed_time_ms());
     return 1;
 }
 
-static int skia_turtle_delay(lua_State* L)
+static int skia_turtle_delay(lua_State *L)
 {
     int tm = (int)(luaL_checkinteger(L, lua_gettop(L)));
     lua_pop(L, 1);
 
-    PicoTurtle* t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->delay_ms(tm);
 
     return 0;
 }
 
+static int skia_turtle_paint(lua_State *L)
+{
+    PicoTurtle *t = skia_turtle_getobj(L);
+
+    t->paint();
+
+    return 0;
+}
 
 static int turtle_state_free(lua_State *L)
 {
@@ -491,17 +499,16 @@ static int turtle_state_pw(lua_State *L)
 static int turtle_state_tostring(lua_State *L)
 {
     TurtleState *state = turtle_state_getobj(L);
-    lua_pushfstring(L, 
-        "Turtle state [loc=(%f, %f), col=(%s, %d, %d, %d), pen(down=%d, width=%f)",
-        state->get_location()->getX(),
-        state->get_location()->getY(),
-        state->get_pen_color()->get_color_name().c_str(),
-        state->get_pen_color()->get_r(),
-        state->get_pen_color()->get_g(),
-        state->get_pen_color()->get_b(),
-        state->is_pen_down(),
-        state->get_pen_width()
-    );
+    lua_pushfstring(L,
+                    "Turtle state [loc=(%f, %f), col=(%s, %d, %d, %d), pen(down=%d, width=%f)",
+                    state->get_location()->getX(),
+                    state->get_location()->getY(),
+                    state->get_pen_color()->get_color_name().c_str(),
+                    state->get_pen_color()->get_r(),
+                    state->get_pen_color()->get_g(),
+                    state->get_pen_color()->get_b(),
+                    state->is_pen_down(),
+                    state->get_pen_width());
     return 1;
 }
 
@@ -545,12 +552,13 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"font", skia_turtle_font},
         {"filltext", skia_turtle_filltext},
         {"stroketext", skia_turtle_stroketext},
-        {"canvas_size", skia_turtle_canvas_size},        
+        {"canvas_size", skia_turtle_canvas_size},
         {"state", skia_turtle_state},
         {"save", skia_turtle_save},
         {"restore", skia_turtle_restore},
         {"elapsed_time_ms", skia_turtle_elapsed_time_ms},
         {"delay", skia_turtle_delay},
+        {"paint", skia_turtle_paint},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =
@@ -567,7 +575,6 @@ static const luaL_Reg TurtleState_meths[] =
         {"pd", turtle_state_pd},
         {"pw", turtle_state_pw},
         {NULL, NULL}};
-
 
 int luaopen_picoturtle(lua_State *L)
 {

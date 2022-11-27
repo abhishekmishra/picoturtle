@@ -15,8 +15,8 @@ namespace turtle
     class Turtle
     {
     private:
-        TurtleState* current_state;
-        TurtleState* saved_state;
+        TurtleState *current_state;
+        TurtleState *saved_state;
 
         TurtleOptions *options;
 
@@ -28,7 +28,6 @@ namespace turtle
         std::chrono::steady_clock::time_point start_tm;
 
     public:
-
         /**
          * Create a Turtle with the default options.
          *
@@ -42,7 +41,7 @@ namespace turtle
          */
         Turtle(TurtleOptions *options); //, Canvas canvas);
 
-        void set_canvas(Canvas* c);
+        void set_canvas(Canvas *c);
         Canvas *get_canvas();
 
         std::string get_name();
@@ -51,7 +50,7 @@ namespace turtle
         /**
          * @brief get the elapsed time since the construction
          * of this turtle object.
-         * 
+         *
          * @return elapsed time in milliseconds
          */
         long long elapsed_time_ms();
@@ -66,34 +65,44 @@ namespace turtle
          */
         virtual void delay_ms(int tm);
 
+        /**
+         * @brief The paint will draw the turtle current state
+         * on a display device. This will only be supported through
+         * an environment which provides a callback for paint.
+         *
+         * In the default implementation, with no display device,
+         * this method has no effect.
+         */
+        virtual void paint();
+
         // state related functions
         /**
          * Returns a detached copy of the current turtle state.
          * Changing the state via the returned object, does
          * not change the turtle.
-         * 
+         *
          * @return current turtle state as a detached copy.
-        */
-        TurtleState* get_current_state() const;
+         */
+        TurtleState *get_current_state() const;
 
         /**
          * Returns a detached copy of the saved turtle state.
          * Changing the state via the returned object, does
          * not change the saved state of the turtle.
-         * 
+         *
          * @return saved turtle state as a detached copy.
-        */
-        TurtleState* get_saved_state() const;
+         */
+        TurtleState *get_saved_state() const;
 
         /**
          * Save the current state as the saved state.
          * The saved stated can be restored later.
-        */
+         */
         void save();
 
         /**
          * Restore the saved state and discard current state.
-        */
+         */
         void restore();
 
         TurtleColor *get_pen_color();
@@ -120,7 +129,7 @@ namespace turtle
 
         /**
          * @brief set the turtle's pen's width in pixels.
-         * 
+         *
          * @param w pixel width as a floating point number.
          */
         virtual void penwidth(float w);
@@ -138,7 +147,7 @@ namespace turtle
 
         /**
          * @brief move the turtle forward by d pixels.
-         * 
+         *
          * @param d distance to move the turtle in pixels.
          */
         virtual void forward(float d);
@@ -215,7 +224,7 @@ namespace turtle
          * @param color name of the color to set.
          * @return 0 if color was found and set, non-zero otherwise.
          */
-        virtual int pencolor(const char* color);
+        virtual int pencolor(const char *color);
 
         // TODO: change width and height to unsigned int
         virtual void canvas_size(int width, int height);
@@ -227,7 +236,7 @@ namespace turtle
 
         /**
          * @brief Set the turtle's font to given font name and size
-         * 
+         *
          * @param f font name
          * @param sz font size
          */
