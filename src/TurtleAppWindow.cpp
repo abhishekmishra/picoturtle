@@ -381,7 +381,7 @@ namespace turtle
 
 	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle *t)
 	{
-		// turtle_canvas->draw_turtle();
+		turtle_canvas->draw_turtle();
 		// delay();
 		// qDebug() << "update called.";
 	}

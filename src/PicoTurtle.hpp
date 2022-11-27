@@ -63,44 +63,44 @@ namespace turtle
         // These methods are overridden to simply call the
         // base class implementation and then call the update callback
         // -----------------------------------------------------------
-        // virtual void penup();
+        virtual void penup();
 
-        // virtual void pendown();
+        virtual void pendown();
 
-        // virtual void penwidth(float w);
+        virtual void penwidth(float w);
 
-        // virtual void stop();
+        virtual void stop();
 
-        // virtual void home();
+        virtual void home();
 
-        // virtual void forward(float d);
+        virtual void forward(float d);
 
-        // virtual void back(float d);
+        virtual void back(float d);
 
-        // virtual void setpos(float x, float y);
+        virtual void setpos(float x, float y);
 
-        // virtual void setx(float x);
+        virtual void setx(float x);
 
-        // virtual void sety(float y);
+        virtual void sety(float y);
 
-        // virtual void left(float a);
+        virtual void left(float a);
 
-        // virtual void right(float a);
+        virtual void right(float a);
 
-        // virtual void heading(float a);
+        virtual void heading(float a);
 
-        // virtual void pencolor(unsigned int r, unsigned int g, unsigned int b);
+        virtual void pencolor(unsigned int r, unsigned int g, unsigned int b);
 
-        // virtual int pencolor(const char *color);
+        virtual int pencolor(const char *color);
 
-        // virtual void canvas_size(int width, int height);
+        virtual void canvas_size(int width, int height);
 
-        // virtual void reset();
+        virtual void reset();
 
-        // virtual void font(const char *f, unsigned int sz);
+        virtual void font(const char *f, unsigned int sz);
 
-        // virtual void filltext(const char *text);
+        virtual void filltext(const char *text);
 
-        // virtual void stroketext(const char *text);
+        virtual void stroketext(const char *text);
     };
 };
