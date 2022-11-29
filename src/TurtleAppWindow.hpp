@@ -14,6 +14,7 @@
 #include "TurtleConsoleWidget.hpp"
 #include "TurtleController.hpp"
 #include "TurtleDocsWidget.hpp"
+#include "LuaReplWidget.hpp"
 
 namespace turtle
 {
@@ -47,6 +48,7 @@ namespace turtle
 		void create_canvas_widget();
 		void create_turtle_code_edit_widget();
 		void create_turtle_console_widget();
+		void create_lua_repl_widget();
 		void create_turtle_docs_widget();
 		void update_title();
 
@@ -57,10 +59,12 @@ namespace turtle
 		TurtleCanvasWidget *turtle_canvas;
 		TurtleCodeEditorParentWidget *code_editor_parent;
 		TurtleConsoleWidget *turtle_console;
+		LuaReplWidget* lua_repl;
 		TurtleDocsWidget *turtle_docs;
 		QDockWidget *turtle_code_edit_dock;
 		QDockWidget *turtle_canvas_dock;
 		QDockWidget *turtle_console_dock;
+		QDockWidget* lua_repl_dock;
 		QDockWidget *turtle_docs_dock;
 
 		// Menu actions and toolbar

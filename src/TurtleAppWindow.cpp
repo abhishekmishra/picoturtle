@@ -11,10 +11,11 @@
 
 namespace turtle
 {
-	TurtleAppWindow::TurtleAppWindow(QWidget *parent)
-		: code_editor_parent{new TurtleCodeEditorParentWidget(this)},
-		  turtle_console{new TurtleConsoleWidget(this)},
-		  QMainWindow{parent}
+	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
+		: code_editor_parent{ new TurtleCodeEditorParentWidget(this) },
+		turtle_console{ new TurtleConsoleWidget(this) },
+		lua_repl{ new LuaReplWidget(this) },
+		QMainWindow{ parent }
 	{
 		create_actions();
 		create_toolbar();
@@ -26,7 +27,11 @@ namespace turtle
 		create_turtle_docs_widget();
 
 		tabifyDockWidget(turtle_docs_dock, turtle_canvas_dock);
+		
 		create_turtle_console_widget();
+		create_lua_repl_widget();
+
+		tabifyDockWidget(turtle_console_dock, lua_repl_dock);
 
 		// toggle the docs view once to hide it
 		turtle_docs_dock->hide();
@@ -40,44 +45,44 @@ namespace turtle
 
 		// *** file created
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::new_file_created, [=]()
-				{ show_status_message("New file created: " + code_editor_parent->get_file_name()); });
+			{ show_status_message("New file created: " + code_editor_parent->get_file_name()); });
 
 		// *** file opened
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::file_opened, [=]()
-				{
+			{
 				show_status_message("File opened: " + code_editor_parent->get_file_path());
 		update_title(); });
 
 		// *** file saved
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::file_saved, [=]()
-				{
+			{
 				show_status_message("File saved: " + code_editor_parent->get_file_path());
 		update_title(); });
 
 		// *** file path changed
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::file_path_changed, [=]()
-				{
+			{
 				show_status_message("File saved: " + code_editor_parent->get_file_path());
 		update_title(); });
 
 		// *** file modified changed
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::file_modified_changed, [=](bool flag)
-				{
+			{
 				show_status_message("File dirty flag: " + QString::number(code_editor_parent->is_dirty()));
-				update_title(); 
-				if(code_editor_parent->is_dirty())
-				{
-					save_action->setDisabled(false);
-					save_as_action->setDisabled(false);
-				}
-				else
-				{
-					save_action->setDisabled(true);
-					save_as_action->setDisabled(true);
-				} });
+		update_title();
+		if (code_editor_parent->is_dirty())
+		{
+			save_action->setDisabled(false);
+			save_as_action->setDisabled(false);
+		}
+		else
+		{
+			save_action->setDisabled(true);
+			save_as_action->setDisabled(true);
+		} });
 
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::turtle_run_complete, [=](const int error_code)
-				{
+			{
 				if (error_code == 0)
 				{
 					show_status_message("Turtle run complete!");
@@ -90,18 +95,18 @@ namespace turtle
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::turtle_run_complete, turtle_canvas, &TurtleCanvasWidget::draw_turtle);
 
 		connect(code_editor_parent, &TurtleCodeEditorParentWidget::current_tab_changed, [=]()
-				{
+			{
 				update_title();
-				if(code_editor_parent->is_dirty())
-				{
-					save_action->setDisabled(false);
-					save_as_action->setDisabled(false);
-				}
-				else
-				{
-					save_action->setDisabled(true);
-					save_as_action->setDisabled(true);
-				} });
+		if (code_editor_parent->is_dirty())
+		{
+			save_action->setDisabled(false);
+			save_as_action->setDisabled(false);
+		}
+		else
+		{
+			save_action->setDisabled(true);
+			save_as_action->setDisabled(true);
+		} });
 
 		qDebug() << "We are in dark theme?" << QString::number(in_dark_theme());
 	}
@@ -176,7 +181,7 @@ namespace turtle
 		// *** Open File
 		QString start_path = qApp->applicationDirPath(); // QDir::homePath()
 		connect(open_action, &QAction::triggered, [=]()
-				{
+			{
 				QString fileName = QFileDialog::getOpenFileName(this,
 				tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
 		qDebug() << fileName;
@@ -186,11 +191,11 @@ namespace turtle
 		// *** Save File
 		connect(save_action, &QAction::triggered, [=]() { // TODO: handler return value to show appropriate error.
 			code_editor_parent->save_file();
-		});
+			});
 
 		// *** Save-as File
 		connect(save_as_action, &QAction::triggered, [=]()
-				{
+			{
 				QString fileName = QFileDialog::getSaveFileName(this,
 				tr("Save As Turtle Lua File"), "",
 				tr("Turtle/Lua Files (*.lua)"));
@@ -203,19 +208,19 @@ namespace turtle
 		// connect turtle actions
 		// *** Run Turtle Program
 		connect(run_action, &QAction::triggered, code_editor_parent,
-				&TurtleCodeEditorParentWidget::run_file);
+			&TurtleCodeEditorParentWidget::run_file);
 		connect(run_action, &QAction::triggered, [=]()
-				{ turtle_canvas_dock->raise(); });
+			{ turtle_canvas_dock->raise(); });
 
 		// connect help menu items
 		// *** Open Turtle API Docs
 		connect(turtle_docs_action, &QAction::triggered, [=]()
-				{ turtle_docs_dock->show(); turtle_docs_dock->raise(); });
+			{ turtle_docs_dock->show(); turtle_docs_dock->raise(); });
 
 		// connect quit
 		// *** Quit PicoTurtle
 		connect(quit_action, &QAction::triggered, [=]()
-				{ QApplication::quit(); });
+			{ QApplication::quit(); });
 	}
 
 	void TurtleAppWindow::create_toolbar()
@@ -250,26 +255,26 @@ namespace turtle
 		menuBar()->setNativeMenuBar(false);
 
 		// Add menus
-		QMenu *file_menu = menuBar()->addMenu(tr("File"));
+		QMenu* file_menu = menuBar()->addMenu(tr("File"));
 		file_menu->addAction(new_action);
 		file_menu->addAction(open_action);
 		file_menu->addAction(save_action);
 		file_menu->addAction(save_as_action);
 		file_menu->addAction(quit_action);
 
-		QMenu *edit_menu = menuBar()->addMenu(tr("Edit"));
+		QMenu* edit_menu = menuBar()->addMenu(tr("Edit"));
 		edit_menu->addAction(cut_action);
 		edit_menu->addAction(copy_action);
 		edit_menu->addAction(paste_action);
 		edit_menu->addAction(undo_action);
 		edit_menu->addAction(redo_action);
 
-		QMenu *turtle_menu = menuBar()->addMenu(tr("Turtle"));
+		QMenu* turtle_menu = menuBar()->addMenu(tr("Turtle"));
 		turtle_menu->addAction(run_action);
 
-		QMenu *settings_menu = menuBar()->addMenu(tr("Settings"));
+		QMenu* settings_menu = menuBar()->addMenu(tr("Settings"));
 
-		QMenu *help_menu = menuBar()->addMenu(tr("Help"));
+		QMenu* help_menu = menuBar()->addMenu(tr("Help"));
 		help_menu->addAction(turtle_docs_action);
 		help_menu->addAction(about_action);
 	}
@@ -307,6 +312,17 @@ namespace turtle
 
 		addDockWidget(Qt::RightDockWidgetArea, turtle_console_dock);
 	}
+
+	void TurtleAppWindow::create_lua_repl_widget()
+	{
+		lua_repl_dock = new QDockWidget(tr("Lua"), this);
+		lua_repl_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+		lua_repl_dock->setWidget(lua_repl);
+		lua_repl_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
+
+		addDockWidget(Qt::RightDockWidgetArea, lua_repl_dock);
+	}
+
 	void TurtleAppWindow::create_turtle_docs_widget()
 	{
 		turtle_docs = new TurtleDocsWidget(this);
@@ -318,7 +334,7 @@ namespace turtle
 		addDockWidget(Qt::RightDockWidgetArea, turtle_docs_dock);
 	}
 
-	void TurtleAppWindow::show_status_message(const QString &message)
+	void TurtleAppWindow::show_status_message(const QString& message)
 	{
 		statusBar()->showMessage(message);
 	}
@@ -326,7 +342,7 @@ namespace turtle
 	void TurtleAppWindow::update_title()
 	{
 		QString title = "PicoTurtle";
-		TurtleCodeEditorWidget *code_edit = code_editor_parent->get_current_editor_widget();
+		TurtleCodeEditorWidget* code_edit = code_editor_parent->get_current_editor_widget();
 
 		if (code_edit)
 		{
@@ -355,7 +371,7 @@ namespace turtle
 		// qDebug() << "Title is" << title;
 	}
 
-	void TurtleAppWindow::write_to_console(const QString &input) const
+	void TurtleAppWindow::write_to_console(const QString& input) const
 	{
 		turtle_console->info(input);
 	}
@@ -365,7 +381,7 @@ namespace turtle
 		return QSize(800, 600);
 	}
 
-	void TurtleAppWindow::set_turtle(turtle::PicoTurtle *t)
+	void TurtleAppWindow::set_turtle(turtle::PicoTurtle* t)
 	{
 		turtle_canvas->set_turtle(t);
 	}
@@ -379,14 +395,14 @@ namespace turtle
 			QCoreApplication::processEvents(QEventLoop::AllEvents, tm);
 	}
 
-	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle *t)
+	void TurtleAppWindow::handle_turtle_update(turtle::PicoTurtle* t)
 	{
 		turtle_canvas->draw_turtle();
 		// delay();
 		// qDebug() << "update called.";
 	}
 
-	void TurtleAppWindow::handle_turtle_paint(turtle::PicoTurtle *t)
+	void TurtleAppWindow::handle_turtle_paint(turtle::PicoTurtle* t)
 	{
 		turtle_canvas->draw_turtle();
 	}
