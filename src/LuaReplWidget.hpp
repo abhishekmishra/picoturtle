@@ -32,10 +32,6 @@ extern "C"
 #define LUA_MAXINPUT 512
 #endif
 
-/* mark in error messages for incomplete statements */
-#define EOFMARK "<eof>"
-#define marklen (sizeof(EOFMARK) / sizeof(char) - 1)
-
 namespace turtle
 {
 	/**
@@ -67,11 +63,19 @@ namespace turtle
 		*/
 		int incomplete(int status);
 
+	public slots:
+		void repl_enter_line();
+
 	private:
 		lua_State* L;
-		QPlainTextEdit* lua_repl_display;
-		QLineEdit* lua_entry;
-		QLabel* lua_prompt;
+		QPlainTextEdit* repl_display;
+		QLineEdit* repl_entry;
+		QLabel* repl_prompt;
+
+		void create_repl_display();
+		void create_repl_entry();
+		void layout_widgets();
+
 		int incomplete(lua_State* L, int status);
 	};
 };
