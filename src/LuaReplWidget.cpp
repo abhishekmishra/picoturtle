@@ -7,7 +7,7 @@ using namespace turtle;
 
 const std::string LuaReplWidget::LUA_REPL_PROMPT = "lua";
 
-LuaReplWidget::LuaReplWidget(QWidget *parent)
+LuaReplWidget::LuaReplWidget(QWidget* parent)
 {
 	lua_repl_display = new QPlainTextEdit(this);
 	lua_repl_display->setReadOnly(true);
@@ -39,36 +39,46 @@ LuaReplWidget::LuaReplWidget(QWidget *parent)
 	lua_entry = new QLineEdit(this);
 	lua_prompt = new QLabel(QString::fromStdString(LUA_REPL_PROMPT) + " >", this);
 
-	QHBoxLayout *lua_line_hbox = new QHBoxLayout(this);
+	QHBoxLayout* lua_line_hbox = new QHBoxLayout(this);
 	lua_line_hbox->addWidget(lua_prompt);
 	lua_line_hbox->addWidget(lua_entry);
-	QWidget *lua_line_widget = new QWidget();
+	QWidget* lua_line_widget = new QWidget();
 	lua_line_widget->setLayout(lua_line_hbox);
 	lua_line_hbox->setContentsMargins(2, 2, 0, 0);
 
-	QVBoxLayout *vb_layout = new QVBoxLayout(this);
+	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(lua_repl_display);
 	vb_layout->addWidget(lua_line_widget);
 	setLayout(vb_layout);
 
 	// actions on the line entry
 	connect(lua_entry, &QLineEdit::returnPressed, [=]()
-			{ auto text = lua_entry->text();
-			lua_repl_display->appendPlainText(text);
-			lua_entry->setText(""); });
+		{ auto text = lua_entry->text();
+	lua_repl_display->appendPlainText(text);
+	lua_entry->setText(""); });
 };
 
-/*
-** Check whether 'status' signals a syntax error and the error
-** message at the top of the stack ends with the above mark for
-** incomplete statements.
-*/
-int LuaReplWidget::incomplete(lua_State *L, int status)
+// TODO: proper message about failure
+// trigger error signal if failure.
+int LuaReplWidget::init_lua()
+{
+	int status;
+	L = luaL_newstate(); // new lua state
+	if (L == NULL)
+	{
+		return EXIT_FAILURE;
+	}
+	luaL_openlibs(L); // open std libraries
+	lua_gc(L, LUA_GCGEN, 0, 0); // gc in generational mode
+	return EXIT_SUCCESS;
+}
+
+int LuaReplWidget::incomplete(int status)
 {
 	if (status == LUA_ERRSYNTAX)
 	{
 		size_t lmsg;
-		const char *msg = lua_tolstring(L, -1, &lmsg);
+		const char* msg = lua_tolstring(L, -1, &lmsg);
 		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0)
 		{
 			lua_pop(L, 1);
