@@ -1,5 +1,4 @@
 #include <QBoxLayout>
-#include <QHboxLayout>
 #include "LuaReplWidget.hpp"
 #include <QTextBlock>
 
