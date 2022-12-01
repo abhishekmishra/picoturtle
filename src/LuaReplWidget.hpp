@@ -32,6 +32,8 @@ extern "C"
 #define LUA_MAXINPUT 512
 #endif
 
+#define REPL_WIDGET_GLOBAL_LUA_NAME "__lua_repl_widget__"
+
 namespace turtle
 {
 	/**
@@ -51,6 +53,7 @@ namespace turtle
 		LuaReplWidget(QWidget *parent = nullptr);
 
 		int init_lua();
+		void print_to_repl(std::string value);
 
 	signals:
 		void prompt_changed(QString prompt);
