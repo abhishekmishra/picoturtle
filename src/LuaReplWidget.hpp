@@ -52,8 +52,23 @@ namespace turtle
 	public:
 		LuaReplWidget(QWidget *parent = nullptr);
 
-		int init_lua();
+		/**
+		 * @brief Prints the given string to the repl
+		 */
 		void print_to_repl(std::string value);
+
+	protected:
+		/**
+		 * @brief Initialize lua state with libraries,
+		 * and some global stuff.
+		 */
+		virtual int init_lua();
+
+		/**
+		 * cleanup lua state and other items related to it.
+		 */
+		virtual void cleanup_lua();
+
 
 	signals:
 		void prompt_changed(QString prompt);

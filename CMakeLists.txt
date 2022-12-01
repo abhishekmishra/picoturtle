@@ -250,6 +250,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleCodeEditorParentWidget.cpp
     src/LuaReplWidget.hpp
     src/LuaReplWidget.cpp
+    src/TurtleLuaReplWidget.hpp
+    src/TurtleLuaReplWidget.cpp
     src/TurtleConsoleWidget.hpp
     src/TurtleConsoleWidget.cpp
     src/TurtleCanvasWidget.hpp

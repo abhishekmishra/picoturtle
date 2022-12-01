@@ -125,8 +125,10 @@ static void stackDump(lua_State *L)
 }
 
 /*
-** Try to compile line on the stack as 'return <line>;'; on return, stack
-** has either compiled chunk or original line (if compilation failed).
+** Try to compile line on the stack as 'return <line>;'; 
+* on return the stack has either the compiled chunk
+* or the error message as the second value.
+* the first return value is the status of lua load.
 */
 static int try_addreturn(lua_State *L)
 {
@@ -266,6 +268,11 @@ int LuaReplWidget::init_lua()
 	lua_setglobal(L, "print");
 
 	return EXIT_SUCCESS;
+}
+
+void LuaReplWidget::cleanup_lua()
+{
+	lua_close(L);
 }
 
 bool LuaReplWidget::singleline_return_syntax_check()
