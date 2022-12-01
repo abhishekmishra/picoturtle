@@ -285,10 +285,9 @@ void LuaReplWidget::repl_enter_line()
 			{
 				code_to_run = all_lines;
 				multi_line_good = true;
-
-				// end multiline mode
-				set_multiline(false);
 			}
+			// end multiline mode
+			set_multiline(false);
 		}
 	}
 
