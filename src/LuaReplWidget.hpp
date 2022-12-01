@@ -52,17 +52,6 @@ namespace turtle
 
 		int init_lua();
 
-		void read_line(QString input);
-		void save_line(QString input);
-		void set_prompt(bool first_line);
-
-		/**
-		 * Check whether 'status' signals a syntax error and the error
-		 * message at the top of the stack ends with the above mark for
-		 * incomplete statements.
-		 */
-		int incomplete(int status);
-
 	signals:
 		void prompt_changed(QString prompt);
 
@@ -86,6 +75,13 @@ namespace turtle
 		bool singleline_return_syntax_check();
 
 		void set_multiline(bool flag);
+
+		/**
+		 * @brief reads all the available values on the
+		 * lua stack and writes their string representations
+		 * to the console
+		 */
+		void print_values_on_stack();
 	};
 };
 

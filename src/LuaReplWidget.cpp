@@ -337,6 +337,8 @@ void LuaReplWidget::repl_enter_line()
 		int res = docall(L, 0, LUA_MULTRET);
 		qDebug() << "ran the code";
 		stackDump(L);
+		print_values_on_stack();
+		lua_settop(L, 0); // clear the stack
 	}
 	current_line = "";
 }
@@ -360,4 +362,38 @@ void LuaReplWidget::set_multiline(bool flag)
 	}
 
 	emit prompt_changed(prompt);
+}
+
+void LuaReplWidget::print_values_on_stack()
+{
+	int i;
+	int top = lua_gettop(L); /* depth of the stack */
+	for (i = 1; i <= top; i++)
+	{ /* repeat for each level */
+		int t = lua_type(L, i);
+		switch (t)
+		{
+		case LUA_TSTRING:
+		{ /* strings */
+			repl_display->appendPlainText(lua_tostring(L, i));
+			break;
+		}
+		case LUA_TBOOLEAN:
+		{ /* Booleans */
+			repl_display->appendPlainText(lua_toboolean(L, i) ? "true" : "false");
+			break;
+		}
+		case LUA_TNUMBER:
+		{ /* numbers */
+			repl_display->appendPlainText(QString::number(lua_tonumber(L, i)));
+			break;
+		}
+		default:
+		{ /* other values */
+			repl_display->appendPlainText(luaL_tolstring(L, i, NULL));
+			break;
+		}
+		}
+	}
+	//repl_display->appendPlainText("\n");
 }
