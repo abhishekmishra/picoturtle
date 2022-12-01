@@ -11,12 +11,12 @@
 ** message at the top of the stack ends with the above mark for
 ** incomplete statements.
 */
-static int incomplete(lua_State *L, int status)
+static int incomplete(lua_State* L, int status)
 {
 	if (status == LUA_ERRSYNTAX)
 	{
 		size_t lmsg;
-		const char *msg = lua_tolstring(L, -1, &lmsg);
+		const char* msg = lua_tolstring(L, -1, &lmsg);
 		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0)
 		{
 			lua_pop(L, 1);
@@ -26,7 +26,7 @@ static int incomplete(lua_State *L, int status)
 	return 0; /* else... */
 }
 
-static void stackDump(lua_State *L)
+static void stackDump(lua_State* L)
 {
 	qDebug() << "----------lua stack begins----------";
 	int i;
@@ -65,32 +65,52 @@ static void stackDump(lua_State *L)
 ** Try to compile line on the stack as 'return <line>;'; on return, stack
 ** has either compiled chunk or original line (if compilation failed).
 */
-static int addreturn(lua_State *L)
+static int try_addreturn(lua_State* L)
 {
-	stackDump(L);
-	const char *line = lua_tostring(L, 1); /* original line */
+	const char* line = lua_tostring(L, 1); /* original line */
 	// qDebug() << "input line is " << line;
 
-	const char *retline = lua_pushfstring(L, "return %s;", line);
+	const char* retline = lua_pushfstring(L, "return %s;", line);
 	// qDebug() << "input line is " << retline;
 	int status = luaL_loadbuffer(L, retline, strlen(retline), "=repl");
-	stackDump(L);
-	qDebug() << "status is " << status;
 	lua_remove(L, -2); /* remove modified line */
 
+	// if status is ok there will be no message
+	// so push an empty string
 	if (status == LUA_OK)
 	{
 		lua_pushstring(L, "");
 	}
+
 	lua_pushinteger(L, status);
 	return 2;
+}
+
+static int try_command(lua_State* L)
+{
+	const char* line = lua_tostring(L, 1); /* original line */
+	// qDebug() << "input line is " << line;
+
+	lua_pushstring(L, line);
+	int status = luaL_loadbuffer(L, line, strlen(line), "=repl");
+	lua_remove(L, -2); /* line */
+
+	// if status is ok there will be no message
+	// so push an empty string
+	if (status == LUA_OK)
+	{
+		lua_pushstring(L, "");
+	}
+	lua_pushboolean(L, incomplete(L, status));
+	lua_pushinteger(L, status);
+	return 3;
 }
 
 using namespace turtle;
 
 const std::string LuaReplWidget::LUA_REPL_PROMPT = "lua";
 
-LuaReplWidget::LuaReplWidget(QWidget *parent) : L{NULL}, multiline{false}
+LuaReplWidget::LuaReplWidget(QWidget* parent) : L{ NULL }
 {
 	init_lua();
 
@@ -102,18 +122,26 @@ LuaReplWidget::LuaReplWidget(QWidget *parent) : L{NULL}, multiline{false}
 
 	// actions on the line entry
 	connect(repl_entry, &QLineEdit::returnPressed, this, &LuaReplWidget::repl_enter_line);
+
+	connect(this, &LuaReplWidget::prompt_changed, [=](QString prompt) {
+		repl_prompt->setText(prompt);
+		});
+
+	// set multiline mode to false,
+	// this will also init the proper prompt.
+	set_multiline(false);
 };
 
 void LuaReplWidget::layout_widgets()
 {
-	QHBoxLayout *lua_line_hbox = new QHBoxLayout(this);
+	QHBoxLayout* lua_line_hbox = new QHBoxLayout(this);
 	lua_line_hbox->addWidget(repl_prompt);
 	lua_line_hbox->addWidget(repl_entry);
-	QWidget *lua_line_widget = new QWidget();
+	QWidget* lua_line_widget = new QWidget();
 	lua_line_widget->setLayout(lua_line_hbox);
 	lua_line_hbox->setContentsMargins(2, 2, 0, 0);
 
-	QVBoxLayout *vb_layout = new QVBoxLayout(this);
+	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(repl_display);
 	vb_layout->addWidget(lua_line_widget);
 	setLayout(vb_layout);
@@ -130,7 +158,7 @@ void LuaReplWidget::create_repl_display()
 {
 	repl_display = new QPlainTextEdit(this);
 	repl_display->setReadOnly(true);
-	repl_display->appendPlainText("############# Lua Session #############");
+	repl_display->appendHtml("<b>############# Lua Session #############</b>");
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
@@ -170,68 +198,125 @@ int LuaReplWidget::init_lua()
 	return EXIT_SUCCESS;
 }
 
-void LuaReplWidget::repl_enter_line()
+bool LuaReplWidget::singleline_return_syntax_check()
 {
-	auto text = repl_entry->text();
-	QString prompt = QString::fromStdString(LUA_REPL_PROMPT) + " >";
-	if (multiline)
-	{
-		prompt += ">";
-	}
-	repl_display->appendPlainText(prompt + text);
-	repl_entry->setText("");
-
-	std::string text_str = text.toUtf8().constData();
-	const char *text_cstr = text_str.c_str();
-
-	qDebug() << "input string" << text_cstr;
-
-	// call addreturn in protected mode.
+	// call try_addreturn in protected mode.
 	// send text as parameter
 	// call method
 	// get result as boolean
 	int status, result;
-	lua_pushcfunction(L, &addreturn);
+	std::string text_str = current_line.toUtf8().constData();
+	const char* text_cstr = text_str.c_str();
+
+	lua_pushcfunction(L, &try_addreturn);
 	lua_pushstring(L, text_cstr);
 	status = lua_pcall(L, 1, 2, 0);
 	stackDump(L);
-	if (!lua_isinteger(L, -1))
+	result = lua_tointeger(L, -1);
+	const char* msg = lua_tostring(L, -2);
+	lua_settop(L, 0); // clear the stack
+
+	qDebug() << "status of try_addreturn is -> " << status << " result is " << result << " msg is" << msg;
+
+	if (result == 0)
 	{
-		qWarning() << "function addreturn must return a number";
+		return true;
 	}
-	else
-	{
-		result = lua_tointeger(L, -1);
-		const char *msg = lua_tostring(L, -2);
+	else {
+		return false;
+	}
+}
 
-		qDebug() << "status of addreturn is -> " << status << " result is " << result << " msg is" << msg;
+void LuaReplWidget::repl_enter_line()
+{
+	QString code_to_run;
 
-		if (result == 0)
+	current_line = repl_entry->text();
+	repl_display->appendHtml(prompt + " " + current_line);
+	repl_entry->setText("");
+
+	bool single_line_good = false;
+	bool multi_line_good = false;
+
+	if (!multiline) {
+		single_line_good = singleline_return_syntax_check();
+		if (single_line_good)
 		{
-			if (status != 0)
-			{
-			}
+			code_to_run = current_line;
+		}
+	}
+
+	// do a multiline syntax check
+	if (!single_line_good)
+	{
+		int status, result;
+		QString all_lines = current_line; 
+		
+		if (previous_lines != "")
+		{
+			all_lines = previous_lines + "\n" + current_line;
+		}
+		
+		std::string text_str = all_lines.toUtf8().constData();
+		const char* text_cstr = text_str.c_str();
+		
+		// try as command
+		lua_pushcfunction(L, &try_command);
+		lua_pushstring(L, text_cstr);
+		status = lua_pcall(L, 1, 3, 0);
+		stackDump(L);
+		result = lua_tointeger(L, -1);
+		bool incomplete = lua_toboolean(L, -2);
+		const char* err_mesg = lua_tostring(L, -3);
+		lua_settop(L, 0); // clear the stack
+
+		if (incomplete)
+		{
+			set_multiline(true);
+			previous_lines = all_lines;
 		}
 		else
 		{
-			repl_display->appendHtml(QString("<i>") + msg + "</i>");
-			// repl_display->appendPlainText("There was an error loading the lua chunk, error -> " + QString::number(result));
+			if (result != 0)
+			{
+				repl_display->appendHtml(QString("<font color=\"magenta\"><i>") + err_mesg + "</i></font>");
+			}
+			else
+			{
+				code_to_run = all_lines;
+				multi_line_good = true;
+
+				// end multiline mode
+				set_multiline(false);
+			}
 		}
 	}
-	// report(L, status);
+
+	if (single_line_good || multi_line_good)
+	{
+		qDebug() << "I will run this code";
+		qDebug() << code_to_run;
+	}
+	current_line = "";
 }
 
-int LuaReplWidget::incomplete(int status)
+void LuaReplWidget::set_multiline(bool flag)
 {
-	if (status == LUA_ERRSYNTAX)
+	if (flag)
 	{
-		size_t lmsg;
-		const char *msg = lua_tolstring(L, -1, &lmsg);
-		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0)
-		{
-			lua_pop(L, 1);
-			return 1;
-		}
+		multiline = true;
 	}
-	return 0; /* else... */
+	else
+	{
+		multiline = false;
+		previous_lines = "";
+	}
+
+	prompt = QString::fromStdString(LUA_REPL_PROMPT) + ">";
+	if (multiline)
+	{
+		prompt += ">";
+	}
+
+	emit prompt_changed(prompt);
 }
