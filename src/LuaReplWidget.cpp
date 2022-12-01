@@ -2,6 +2,38 @@
 #include "LuaReplWidget.hpp"
 #include <QTextBlock>
 
+/*
+** Message handler used to run all chunks
+*/
+static int msghandler(lua_State* L) {
+	const char* msg = lua_tostring(L, 1);
+	if (msg == NULL) {  /* is error object not a string? */
+		if (luaL_callmeta(L, 1, "__tostring") &&  /* does it have a metamethod */
+			lua_type(L, -1) == LUA_TSTRING)  /* that produces a string? */
+			return 1;  /* that is the message */
+		else
+			msg = lua_pushfstring(L, "(error object is a %s value)",
+				luaL_typename(L, 1));
+	}
+	luaL_traceback(L, L, msg, 1);  /* append a standard traceback */
+	return 1;  /* return the traceback */
+}
+
+
+/*
+** Interface to 'lua_pcall', which sets appropriate message function
+** and C-signal handler. Used to run all chunks.
+*/
+static int docall(lua_State* L, int narg, int nres) {
+	int status;
+	int base = lua_gettop(L) - narg;  /* function index */
+	lua_pushcfunction(L, msghandler);  /* push message handler */
+	lua_insert(L, base);  /* put it under function and args */
+	status = lua_pcall(L, narg, nres, base);
+	lua_remove(L, base);  /* remove message handler from the stack */
+	return status;
+}
+
 /* mark in error messages for incomplete statements */
 #define EOFMARK "<eof>"
 #define marklen (sizeof(EOFMARK) / sizeof(char) - 1)
@@ -73,7 +105,10 @@ static int try_addreturn(lua_State* L)
 	const char* retline = lua_pushfstring(L, "return %s;", line);
 	// qDebug() << "input line is " << retline;
 	int status = luaL_loadbuffer(L, retline, strlen(retline), "=repl");
-	lua_remove(L, -2); /* remove modified line */
+	stackDump(L);
+	lua_remove(L, -3);
+	lua_remove(L, -2);
+	stackDump(L);
 
 	// if status is ok there will be no message
 	// so push an empty string
@@ -81,9 +116,15 @@ static int try_addreturn(lua_State* L)
 	{
 		lua_pushstring(L, "");
 	}
+	else
+	{
+		lua_pushnil(L);
+		lua_pushvalue(L, -1);
+	}
 
 	lua_pushinteger(L, status);
-	return 2;
+	stackDump(L);
+	return 3;
 }
 
 static int try_command(lua_State* L)
@@ -93,6 +134,8 @@ static int try_command(lua_State* L)
 
 	lua_pushstring(L, line);
 	int status = luaL_loadbuffer(L, line, strlen(line), "=repl");
+	stackDump(L);
+
 	lua_remove(L, -2); /* line */
 
 	// if status is ok there will be no message
@@ -210,19 +253,20 @@ bool LuaReplWidget::singleline_return_syntax_check()
 
 	lua_pushcfunction(L, &try_addreturn);
 	lua_pushstring(L, text_cstr);
-	status = lua_pcall(L, 1, 2, 0);
+	status = lua_pcall(L, 1, 3, 0);
 	stackDump(L);
 	result = lua_tointeger(L, -1);
-	const char* msg = lua_tostring(L, -2);
-	lua_settop(L, 0); // clear the stack
+	const char *msg = lua_tostring(L, -2);
 
 	qDebug() << "status of try_addreturn is -> " << status << " result is " << result << " msg is" << msg;
 
 	if (result == 0)
 	{
+		lua_pop(L, 2);
 		return true;
 	}
 	else {
+		lua_settop(L, 0); // clear the stack
 		return false;
 	}
 }
@@ -295,6 +339,10 @@ void LuaReplWidget::repl_enter_line()
 	{
 		qDebug() << "I will run this code";
 		qDebug() << code_to_run;
+		stackDump(L);
+		int res = docall(L, 0, LUA_MULTRET);
+		qDebug() << "ran the code";
+		stackDump(L);
 	}
 	current_line = "";
 }
