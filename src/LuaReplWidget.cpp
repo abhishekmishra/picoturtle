@@ -106,25 +106,18 @@ static int try_addreturn(lua_State* L)
 	// qDebug() << "input line is " << retline;
 	int status = luaL_loadbuffer(L, retline, strlen(retline), "=repl");
 	stackDump(L);
+
+	// remove the two input lines
 	lua_remove(L, -3);
 	lua_remove(L, -2);
-	stackDump(L);
 
-	// if status is ok there will be no message
-	// so push an empty string
-	if (status == LUA_OK)
-	{
-		lua_pushstring(L, "");
-	}
-	else
-	{
-		lua_pushnil(L);
-		lua_pushvalue(L, -1);
-	}
+	// now we have just the error message OR compiled chunk
+	// in the stack
+	stackDump(L);
 
 	lua_pushinteger(L, status);
 	stackDump(L);
-	return 3;
+	return 2;
 }
 
 static int try_command(lua_State* L)
@@ -136,14 +129,13 @@ static int try_command(lua_State* L)
 	int status = luaL_loadbuffer(L, line, strlen(line), "=repl");
 	stackDump(L);
 
-	lua_remove(L, -2); /* line */
+	// remove the input line
+	lua_remove(L, -2);
 
-	// if status is ok there will be no message
-	// so push an empty string
-	if (status == LUA_OK)
-	{
-		lua_pushstring(L, "");
-	}
+	// now we have just the error message OR compiled chunk
+	// in the stack
+	stackDump(L);
+
 	lua_pushboolean(L, incomplete(L, status));
 	lua_pushinteger(L, status);
 	return 3;
@@ -253,7 +245,7 @@ bool LuaReplWidget::singleline_return_syntax_check()
 
 	lua_pushcfunction(L, &try_addreturn);
 	lua_pushstring(L, text_cstr);
-	status = lua_pcall(L, 1, 3, 0);
+	status = lua_pcall(L, 1, 2, 0);
 	stackDump(L);
 	result = lua_tointeger(L, -1);
 	const char *msg = lua_tostring(L, -2);
@@ -262,7 +254,7 @@ bool LuaReplWidget::singleline_return_syntax_check()
 
 	if (result == 0)
 	{
-		lua_pop(L, 2);
+		lua_pop(L, 1);
 		return true;
 	}
 	else {
@@ -312,10 +304,10 @@ void LuaReplWidget::repl_enter_line()
 		result = lua_tointeger(L, -1);
 		bool incomplete = lua_toboolean(L, -2);
 		const char* err_mesg = lua_tostring(L, -3);
-		lua_settop(L, 0); // clear the stack
 
 		if (incomplete)
 		{
+			lua_settop(L, 0); // clear the stack
 			set_multiline(true);
 			previous_lines = all_lines;
 		}
@@ -323,10 +315,12 @@ void LuaReplWidget::repl_enter_line()
 		{
 			if (result != 0)
 			{
+				lua_settop(L, 0); // clear the stack
 				repl_display->appendHtml(QString("<font color=\"magenta\"><i>") + err_mesg + "</i></font>");
 			}
 			else
 			{
+				lua_pop(L, 2);
 				code_to_run = all_lines;
 				multi_line_good = true;
 			}
