@@ -3,29 +3,32 @@
 #include <QTextBlock>
 
 /* mark in error messages for incomplete statements */
-#define EOFMARK         "<eof>"
-#define marklen         (sizeof(EOFMARK)/sizeof(char) - 1)
-
+#define EOFMARK "<eof>"
+#define marklen (sizeof(EOFMARK) / sizeof(char) - 1)
 
 /*
 ** Check whether 'status' signals a syntax error and the error
 ** message at the top of the stack ends with the above mark for
 ** incomplete statements.
 */
-static int incomplete(lua_State* L, int status) {
-	if (status == LUA_ERRSYNTAX) {
+static int incomplete(lua_State *L, int status)
+{
+	if (status == LUA_ERRSYNTAX)
+	{
 		size_t lmsg;
-		const char* msg = lua_tolstring(L, -1, &lmsg);
-		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0) {
+		const char *msg = lua_tolstring(L, -1, &lmsg);
+		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0)
+		{
 			lua_pop(L, 1);
 			return 1;
 		}
 	}
-	return 0;  /* else... */
+	return 0; /* else... */
 }
 
-static void stackDump(lua_State* L)
+static void stackDump(lua_State *L)
 {
+	qDebug() << "----------lua stack begins----------";
 	int i;
 	int top = lua_gettop(L); /* depth of the stack */
 	for (i = 1; i <= top; i++)
@@ -55,37 +58,39 @@ static void stackDump(lua_State* L)
 		}
 		}
 	}
-	qDebug() << ""; /* end the listing */
+	qDebug() << "----------lua stack ends----------";
 }
 
 /*
 ** Try to compile line on the stack as 'return <line>;'; on return, stack
 ** has either compiled chunk or original line (if compilation failed).
 */
-static int addreturn(lua_State* L) {
+static int addreturn(lua_State *L)
+{
 	stackDump(L);
-	const char* line = lua_tostring(L, 1);  /* original line */
-	//qDebug() << "input line is " << line;
+	const char *line = lua_tostring(L, 1); /* original line */
+	// qDebug() << "input line is " << line;
 
-	const char* retline = lua_pushfstring(L, "return %s;", line);
-	//qDebug() << "input line is " << retline;
-	int status = luaL_loadbuffer(L, retline, strlen(retline), "t");
-	if (status == LUA_OK) {
-		lua_remove(L, -2);  /* remove modified line */
-	}
-	else
+	const char *retline = lua_pushfstring(L, "return %s;", line);
+	// qDebug() << "input line is " << retline;
+	int status = luaL_loadbuffer(L, retline, strlen(retline), "=repl");
+	stackDump(L);
+	qDebug() << "status is " << status;
+	lua_remove(L, -2); /* remove modified line */
+
+	if (status == LUA_OK)
 	{
-		lua_pop(L, 2);  /* pop result from 'luaL_loadbuffer' and modified line */
+		lua_pushstring(L, "");
 	}
-	return status;
+	lua_pushinteger(L, status);
+	return 2;
 }
-
 
 using namespace turtle;
 
 const std::string LuaReplWidget::LUA_REPL_PROMPT = "lua";
 
-LuaReplWidget::LuaReplWidget(QWidget* parent) :L{ NULL }
+LuaReplWidget::LuaReplWidget(QWidget *parent) : L{NULL}, multiline{false}
 {
 	init_lua();
 
@@ -101,14 +106,14 @@ LuaReplWidget::LuaReplWidget(QWidget* parent) :L{ NULL }
 
 void LuaReplWidget::layout_widgets()
 {
-	QHBoxLayout* lua_line_hbox = new QHBoxLayout(this);
+	QHBoxLayout *lua_line_hbox = new QHBoxLayout(this);
 	lua_line_hbox->addWidget(repl_prompt);
 	lua_line_hbox->addWidget(repl_entry);
-	QWidget* lua_line_widget = new QWidget();
+	QWidget *lua_line_widget = new QWidget();
 	lua_line_widget->setLayout(lua_line_hbox);
 	lua_line_hbox->setContentsMargins(2, 2, 0, 0);
 
-	QVBoxLayout* vb_layout = new QVBoxLayout(this);
+	QVBoxLayout *vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(repl_display);
 	vb_layout->addWidget(lua_line_widget);
 	setLayout(vb_layout);
@@ -160,7 +165,7 @@ int LuaReplWidget::init_lua()
 	{
 		return EXIT_FAILURE;
 	}
-	luaL_openlibs(L); // open std libraries
+	luaL_openlibs(L);			// open std libraries
 	lua_gc(L, LUA_GCGEN, 0, 0); // gc in generational mode
 	return EXIT_SUCCESS;
 }
@@ -168,11 +173,16 @@ int LuaReplWidget::init_lua()
 void LuaReplWidget::repl_enter_line()
 {
 	auto text = repl_entry->text();
-	repl_display->appendPlainText(text);
+	QString prompt = QString::fromStdString(LUA_REPL_PROMPT) + " >";
+	if (multiline)
+	{
+		prompt += ">";
+	}
+	repl_display->appendPlainText(prompt + text);
 	repl_entry->setText("");
 
 	std::string text_str = text.toUtf8().constData();
-	const char* text_cstr = text_str.c_str();
+	const char *text_cstr = text_str.c_str();
 
 	qDebug() << "input string" << text_cstr;
 
@@ -183,11 +193,32 @@ void LuaReplWidget::repl_enter_line()
 	int status, result;
 	lua_pushcfunction(L, &addreturn);
 	lua_pushstring(L, text_cstr);
-	status = lua_pcall(L, 1, 1, 0);
-	result = lua_toboolean(L, -1);
+	status = lua_pcall(L, 1, 2, 0);
+	stackDump(L);
+	if (!lua_isinteger(L, -1))
+	{
+		qWarning() << "function addreturn must return a number";
+	}
+	else
+	{
+		result = lua_tointeger(L, -1);
+		const char *msg = lua_tostring(L, -2);
 
-	qDebug() << "status of addreturn is -> " << result;
-	//report(L, status);
+		qDebug() << "status of addreturn is -> " << status << " result is " << result << " msg is" << msg;
+
+		if (result == 0)
+		{
+			if (status != 0)
+			{
+			}
+		}
+		else
+		{
+			repl_display->appendHtml(QString("<i>") + msg + "</i>");
+			// repl_display->appendPlainText("There was an error loading the lua chunk, error -> " + QString::number(result));
+		}
+	}
+	// report(L, status);
 }
 
 int LuaReplWidget::incomplete(int status)
@@ -195,7 +226,7 @@ int LuaReplWidget::incomplete(int status)
 	if (status == LUA_ERRSYNTAX)
 	{
 		size_t lmsg;
-		const char* msg = lua_tolstring(L, -1, &lmsg);
+		const char *msg = lua_tolstring(L, -1, &lmsg);
 		if (lmsg >= marklen && strcmp(msg + lmsg - marklen, EOFMARK) == 0)
 		{
 			lua_pop(L, 1);

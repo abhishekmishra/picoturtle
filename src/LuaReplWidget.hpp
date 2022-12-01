@@ -45,10 +45,10 @@ namespace turtle
 	{
 		Q_OBJECT
 
-			static const std::string LUA_REPL_PROMPT;
+		static const std::string LUA_REPL_PROMPT;
 
 	public:
-		LuaReplWidget(QWidget* parent = nullptr);
+		LuaReplWidget(QWidget *parent = nullptr);
 
 		int init_lua();
 
@@ -57,26 +57,27 @@ namespace turtle
 		void set_prompt(bool first_line);
 
 		/**
-		* Check whether 'status' signals a syntax error and the error
-		* message at the top of the stack ends with the above mark for
-		* incomplete statements.
-		*/
+		 * Check whether 'status' signals a syntax error and the error
+		 * message at the top of the stack ends with the above mark for
+		 * incomplete statements.
+		 */
 		int incomplete(int status);
 
 	public slots:
 		void repl_enter_line();
 
 	private:
-		lua_State* L;
-		QPlainTextEdit* repl_display;
-		QLineEdit* repl_entry;
-		QLabel* repl_prompt;
+		bool multiline;
+		lua_State *L;
+		QPlainTextEdit *repl_display;
+		QLineEdit *repl_entry;
+		QLabel *repl_prompt;
 
 		void create_repl_display();
 		void create_repl_entry();
 		void layout_widgets();
 
-		int incomplete(lua_State* L, int status);
+		int incomplete(lua_State *L, int status);
 	};
 };
 
