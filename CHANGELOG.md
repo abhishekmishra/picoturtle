@@ -1,6 +1,19 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.1.0-alpha.3**  2022-12-04 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the fourth early alpha weekly release of PicoTurtle. It contains several minor changes/fixes and one major feature.
+- The fern drawing sample program in the README.md file is updated.
+- The Box and BoxTurtle lua classes now optionally check the bounds for each movement of the turtle. The option is supplied in the constructor. If check_bounds is enabled the BoxTurtle keeps the turtle moving only inside the box. Any move taking the turtle outside the box is invalid and has no effect.
+- To enable gameloop like mechanics for some turtle programs the following methods are added to the turtle API:
+
+  1. `elapsed_time_ms` - Gives the total time in millis since the turtle was constructed.
+  2. `paint` - Explicitly calls the paint callback if specified. This should be used to paint the turtle on the UI canvas.
+  3. `delay` - Add an explicit delay to the turtle to slow it down. This calls the delay callback if specified. In non-interactive runs this method can be ignored - by not providing a callback to implement it.
+  4. `update` - A function which calls the update callback whenever the state of the turtle changes. This helps the UI take some actions when the turtle is modified.
+- The major feature added in this release is the Lua Repl Widget in the UI. This widget is based on the code in lua.c of lua5.4 and implements an interactive lua console. Currently the turtle is not enabled in this console. In the next release turtle launches and interaction will be added to this widget.
+
 **0.1.0-alpha.2**  2022-11-26 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - Third alpha release of PicoTurtle with several features and bug fixes.
