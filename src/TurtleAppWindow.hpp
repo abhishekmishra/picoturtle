@@ -14,7 +14,7 @@
 #include "TurtleConsoleWidget.hpp"
 #include "TurtleController.hpp"
 #include "TurtleDocsWidget.hpp"
-#include "LuaReplWidget.hpp"
+#include "TurtleLuaReplWidget.hpp"
 
 namespace turtle
 {
@@ -59,7 +59,7 @@ namespace turtle
 		TurtleCanvasWidget *turtle_canvas;
 		TurtleCodeEditorParentWidget *code_editor_parent;
 		TurtleConsoleWidget *turtle_console;
-		LuaReplWidget* lua_repl;
+		TurtleLuaReplWidget* lua_repl;
 		TurtleDocsWidget *turtle_docs;
 		QDockWidget *turtle_code_edit_dock;
 		QDockWidget *turtle_canvas_dock;

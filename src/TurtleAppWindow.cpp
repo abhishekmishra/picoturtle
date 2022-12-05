@@ -14,7 +14,7 @@ namespace turtle
 	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
 		: code_editor_parent{ new TurtleCodeEditorParentWidget(this) },
 		turtle_console{ new TurtleConsoleWidget(this) },
-		lua_repl{ new LuaReplWidget(this) },
+		lua_repl{ new TurtleLuaReplWidget(this) },
 		QMainWindow{ parent }
 	{
 		create_actions();
