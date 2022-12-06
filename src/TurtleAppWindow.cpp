@@ -13,7 +13,6 @@ namespace turtle
 {
 	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
 		: lua_repl{ new TurtleLuaReplWidget(this) }, 
-		turtle_console{ new TurtleConsoleWidget(this) },
 		QMainWindow{ parent }
 	{
 		// Add widgets
@@ -27,10 +26,7 @@ namespace turtle
 
 		tabifyDockWidget(turtle_docs_dock, turtle_canvas_dock);
 		
-		create_turtle_console_widget();
 		create_lua_repl_widget();
-
-		tabifyDockWidget(turtle_console_dock, lua_repl_dock);
 
 		// toggle the docs view once to hide it
 		turtle_docs_dock->hide();
@@ -112,8 +108,6 @@ namespace turtle
 
 	TurtleAppWindow::~TurtleAppWindow()
 	{
-		// cleanup the turtle lua binding
-		TurtleController::cleanup_turtle_lua_binding();
 	}
 
 	void TurtleAppWindow::create_actions()
@@ -304,16 +298,6 @@ namespace turtle
 		addDockWidget(Qt::LeftDockWidgetArea, turtle_code_edit_dock);
 	}
 
-	void TurtleAppWindow::create_turtle_console_widget()
-	{
-		turtle_console_dock = new QDockWidget(tr("Turtle Console"), this);
-		turtle_console_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
-		turtle_console_dock->setWidget(turtle_console);
-		turtle_console_dock->widget()->layout()->setContentsMargins(0, 0, 0, 0);
-
-		addDockWidget(Qt::RightDockWidgetArea, turtle_console_dock);
-	}
-
 	void TurtleAppWindow::create_lua_repl_widget()
 	{
 		std::function<void(turtle::PicoTurtle* t)> notify_turtle_fn = [=](turtle::PicoTurtle* t)
@@ -399,7 +383,7 @@ namespace turtle
 
 	void TurtleAppWindow::write_to_console(const QString& input) const
 	{
-		turtle_console->info(input);
+		lua_repl->print_to_repl(input.toStdString());
 	}
 
 	QSize TurtleAppWindow::sizeHint() const

@@ -9,7 +9,6 @@
 #include <QFileInfo>
 
 #include "TurtleAppWindow.hpp"
-#include "TurtleController.hpp"
 
 /**
  * Creates the Qt main window and runs the main loop for Qt.
