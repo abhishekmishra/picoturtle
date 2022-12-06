@@ -12,19 +12,18 @@
 namespace turtle
 {
 	TurtleAppWindow::TurtleAppWindow(QWidget* parent)
-		: code_editor_parent{ new TurtleCodeEditorParentWidget(this) },
+		: lua_repl{ new TurtleLuaReplWidget(this) }, 
 		turtle_console{ new TurtleConsoleWidget(this) },
-		lua_repl{ new TurtleLuaReplWidget(this) },
 		QMainWindow{ parent }
 	{
-		create_actions();
-		create_toolbar();
-		create_menubar();
-
 		// Add widgets
 		create_canvas_widget();
 		create_turtle_code_edit_widget();
 		create_turtle_docs_widget();
+
+		create_actions();
+		create_toolbar();
+		create_menubar();
 
 		tabifyDockWidget(turtle_docs_dock, turtle_canvas_dock);
 		
@@ -295,6 +294,8 @@ namespace turtle
 
 	void TurtleAppWindow::create_turtle_code_edit_widget()
 	{
+		code_editor_parent = new TurtleCodeEditorParentWidget(lua_repl, this);
+
 		turtle_code_edit_dock = new QDockWidget(tr("Turtle Editor"), this);
 		turtle_code_edit_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		turtle_code_edit_dock->setWidget(code_editor_parent);
@@ -315,6 +316,31 @@ namespace turtle
 
 	void TurtleAppWindow::create_lua_repl_widget()
 	{
+		std::function<void(turtle::PicoTurtle* t)> notify_turtle_fn = [=](turtle::PicoTurtle* t)
+		{
+			this->set_turtle(t);
+		};
+
+		std::function<void(turtle::PicoTurtle* t)> handle_turtle_update_fn = [=](turtle::PicoTurtle* t)
+		{
+			this->handle_turtle_update(t);
+		};
+
+		std::function<void(turtle::PicoTurtle* t)> handle_turtle_paint_fn = [=](turtle::PicoTurtle* t)
+		{
+			this->handle_turtle_paint(t);
+		};
+
+		std::function<void(turtle::PicoTurtle* t, int tm)> turtle_delay_fn = [=](turtle::PicoTurtle* t, int tm)
+		{
+			turtle::TurtleAppWindow::delay(tm);
+		};
+
+		turtle::TurtleLuaReplWidget::set_notify_turtle_created_fn(notify_turtle_fn);
+		turtle::TurtleLuaReplWidget::set_notify_turtle_update_fn(handle_turtle_update_fn);
+		turtle::TurtleLuaReplWidget::set_notify_turtle_paint_fn(handle_turtle_paint_fn);
+		turtle::TurtleLuaReplWidget::set_turtle_delay_fn(turtle_delay_fn);
+
 		lua_repl_dock = new QDockWidget(tr("Lua"), this);
 		lua_repl_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 		lua_repl_dock->setWidget(lua_repl);

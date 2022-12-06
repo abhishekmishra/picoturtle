@@ -5,8 +5,8 @@
 
 using namespace turtle;
 
-TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(QWidget *parent)
-	: tabs{new QTabWidget(this)}
+TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(TurtleLuaReplWidget* repl, QWidget *parent)
+	: tabs{new QTabWidget(this)}, lua_repl(repl)
 {
 	QVBoxLayout *vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(tabs);
@@ -166,7 +166,7 @@ TurtleCodeEditorWidget *TurtleCodeEditorParentWidget::get_current_editor_widget(
  */
 TurtleCodeEditorWidget *TurtleCodeEditorParentWidget::new_code_editor()
 {
-	TurtleCodeEditorWidget *code_editor = new TurtleCodeEditorWidget(this);
+	TurtleCodeEditorWidget *code_editor = new TurtleCodeEditorWidget(lua_repl, this);
 	tabs->addTab(code_editor, code_editor->get_file_name());
 	tabs->setCurrentWidget(code_editor);
 	code_editor->layout()->setContentsMargins(0, 0, 0, 0);

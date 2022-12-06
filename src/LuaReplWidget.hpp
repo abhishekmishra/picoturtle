@@ -57,7 +57,6 @@ namespace turtle
 		 */
 		void print_to_repl(std::string value);
 
-	protected:
 		/**
 		 * @brief Initialize lua state with libraries,
 		 * and some global stuff.
@@ -69,6 +68,10 @@ namespace turtle
 		 */
 		virtual void cleanup_lua();
 
+	protected:
+		/** Lua State */
+		lua_State* L;
+
 
 	signals:
 		void prompt_changed(QString prompt);
@@ -79,7 +82,6 @@ namespace turtle
 	private:
 		bool multiline;
 		QString prompt;
-		lua_State *L;
 		QPlainTextEdit *repl_display;
 		QLineEdit *repl_entry;
 		QLabel *repl_prompt;

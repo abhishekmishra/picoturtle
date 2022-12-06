@@ -3,6 +3,7 @@
 #define TURTLE_CODE_EDITOR_PARENT_WIDGET_H
 
 #include "TurtleCodeEditorWidget.hpp"
+#include "TurtleLuaReplWidget.hpp"
 #include <QWidget>
 #include <QTabWidget>
 
@@ -13,7 +14,7 @@ namespace turtle
         Q_OBJECT
 
     public:
-        TurtleCodeEditorParentWidget(QWidget *parent = nullptr);
+        TurtleCodeEditorParentWidget(TurtleLuaReplWidget* repl, QWidget *parent = nullptr);
         ~TurtleCodeEditorParentWidget();
 
     signals:
@@ -40,6 +41,7 @@ namespace turtle
         TurtleCodeEditorWidget* get_current_editor_widget();
 
     private:
+        TurtleLuaReplWidget* lua_repl;
         QTabWidget *tabs;
         TurtleCodeEditorWidget* new_code_editor();
         void delete_editor_and_tab_at_idx(int idx);

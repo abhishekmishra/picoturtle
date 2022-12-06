@@ -6,6 +6,7 @@
 #include <QPlainTextEdit>
 #include "LuaSyntaxHighlighter.hpp"
 #include "TurtleCodeEditorTextWidget.hpp"
+#include "TurtleLuaReplWidget.hpp"
 
 namespace turtle
 {
@@ -15,7 +16,7 @@ namespace turtle
         Q_OBJECT
 
     public:
-        TurtleCodeEditorWidget(QWidget *parent = nullptr);
+        TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidget *parent = nullptr);
         ~TurtleCodeEditorWidget();
 
     signals:
@@ -46,6 +47,7 @@ namespace turtle
         QString noname_fname;
         QString basic_turtle_text;
         LuaSyntaxHighlighter *lua_highlighter;
+        TurtleLuaReplWidget* lua_repl;
     };
 }
 #endif // TURTLE_CODE_EDITOR_WIDGET_H

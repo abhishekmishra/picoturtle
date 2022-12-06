@@ -19,8 +19,8 @@ using namespace turtle;
 
 int TurtleCodeEditorWidget::noname_file_count = 0;
 
-TurtleCodeEditorWidget::TurtleCodeEditorWidget(QWidget *parent)
-	: file_path{QString()}
+TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidget *parent)
+	: file_path{QString()}, lua_repl{repl}
 {
 	turtle_code_edit = new TurtleCodeEditorTextWidget();
 	turtle_code_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -92,21 +92,13 @@ TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 void TurtleCodeEditorWidget::run_file()
 {
 	// init a new lua state
-	turtle::TurtleController::init_turtle_lua_binding();
-
-	// apply the custom print function to the lua state
-	// TODO: this should be moved to a utility function in the lua controller
-	turtle::TurtleController::run_lua_script(
-		"local oldprint = print\n"
-		"print = function(...)\n"
-		"  turtle_print(...)\n"
-		"end\n");
+	lua_repl->init_lua();
 
 	// execute the script and get the result code
-	int res = turtle::TurtleController::run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
+	int res = lua_repl->run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
 
 	// cleanup the lua state
-	turtle::TurtleController::cleanup_turtle_lua_binding();
+	lua_repl->cleanup_lua();
 
 	// emit the signal with the res code.
 	emit turtle_run_complete(res);
