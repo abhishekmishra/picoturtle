@@ -176,8 +176,6 @@ static int try_command(lua_State *L)
 
 LuaReplWidget::LuaReplWidget(QWidget *parent) : L{NULL}
 {
-	init_lua();
-
 	create_repl_display();
 
 	create_repl_entry();
@@ -193,6 +191,8 @@ LuaReplWidget::LuaReplWidget(QWidget *parent) : L{NULL}
 	// set multiline mode to false,
 	// this will also init the proper prompt.
 	set_multiline(false);
+
+	init_lua();
 };
 
 void LuaReplWidget::layout_widgets()
@@ -221,7 +221,7 @@ void LuaReplWidget::create_repl_display()
 {
 	repl_display = new QPlainTextEdit(this);
 	repl_display->setReadOnly(true);
-	repl_display->appendHtml("<b>----------- Lua Session Created -----------</b>");
+	//repl_display->appendHtml("<b>-- Lua Session --</b>");
 
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
@@ -269,6 +269,8 @@ int LuaReplWidget::init_lua()
 
 	lua_pushcfunction(L, print);
 	lua_setglobal(L, "print");
+
+	print_to_repl("-- lua session --");
 
 	return EXIT_SUCCESS;
 }
@@ -468,40 +470,19 @@ bool LuaReplWidget::handleLuaError(int luaErrorCode)
 	}
 }
 
-int LuaReplWidget::run_lua_file(const char* filename)
-{
-	if (filename != NULL && strlen(filename) > 0)
-	{
-		if (handleLuaError(luaL_dofile(L, filename)))
-		{
-			// TurtleLuaReplWidget::turtle_message("app", QString("File execution complete -> ") + filename);
-		}
-		return 0;
-	}
-	else
-	{
-		return -1;
-	}
+int LuaReplWidget::dochunk(int status) {
+	if (status == LUA_OK) status = docall(L, 0, 0);
+	return handleLuaError(status);
 }
 
+int LuaReplWidget::run_lua_file(const char* filename)
+{
+	return dochunk(luaL_loadfile(L, filename));
+}
+
+//TODO: add optional script name argument, which is hardcoded
+//to "buffer" for now
 int LuaReplWidget::run_lua_script(const char* script)
 {
-	// TurtleLuaReplWidget::turtle_message("app", QString("running lua script."));
-	if (script != NULL && strlen(script) > 0)
-	{
-		if (handleLuaError(luaL_dostring(L, script)))
-		{
-			// uncomment for debug only.
-			// printf("Script execution complete.\n");
-			return 0;
-		}
-		else
-		{
-			return 1;
-		}
-	}
-	else
-	{
-		return -1;
-	}
+	return dochunk(luaL_loadbuffer(L, script, strlen(script), "buffer"));
 }

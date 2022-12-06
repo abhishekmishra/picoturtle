@@ -69,6 +69,7 @@ namespace turtle
 		virtual void cleanup_lua();
 
 		bool handleLuaError(int luaErrorCode);
+		int dochunk(int status);
 		int run_lua_file(const char* filename);
 		int run_lua_script(const char* script);
 
