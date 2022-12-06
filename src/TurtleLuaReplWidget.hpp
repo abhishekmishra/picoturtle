@@ -22,8 +22,6 @@ namespace turtle
 
 		int init_turtle_lua_binding();
 		void cleanup_turtle_lua_binding();
-		int run_lua_file(const char* filename);
-		int run_lua_script(const char* script);
 
 		static std::function<void(PicoTurtle* t)> notify_turtle_created_fn;
 		static std::function<void(PicoTurtle* t)> notify_turtle_update_fn;
@@ -47,7 +45,6 @@ namespace turtle
 		virtual void cleanup_lua();
 
 	private:
-		bool handleLuaError(int luaErrorCode);
 		static void turtle_init_cb(PicoTurtle* t, void* cb_args);
 		static void turtle_update_cb(PicoTurtle* t, void* cb_args);
 		static void turtle_paint_cb(PicoTurtle* t, void* cb_args);

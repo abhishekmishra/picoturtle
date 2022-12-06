@@ -451,3 +451,57 @@ void LuaReplWidget::print_to_repl(std::string value)
 {
 	repl_display->appendPlainText(QString::fromStdString(value));
 }
+
+
+bool LuaReplWidget::handleLuaError(int luaErrorCode)
+{
+	if (luaErrorCode == LUA_OK)
+	{
+		return true;
+	}
+	else
+	{
+		const char* err_msg = lua_tostring(L, -1);
+		qDebug() << err_msg;
+		print_to_repl(err_msg);
+		return false;
+	}
+}
+
+int LuaReplWidget::run_lua_file(const char* filename)
+{
+	if (filename != NULL && strlen(filename) > 0)
+	{
+		if (handleLuaError(luaL_dofile(L, filename)))
+		{
+			// TurtleLuaReplWidget::turtle_message("app", QString("File execution complete -> ") + filename);
+		}
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+int LuaReplWidget::run_lua_script(const char* script)
+{
+	// TurtleLuaReplWidget::turtle_message("app", QString("running lua script."));
+	if (script != NULL && strlen(script) > 0)
+	{
+		if (handleLuaError(luaL_dostring(L, script)))
+		{
+			// uncomment for debug only.
+			// printf("Script execution complete.\n");
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		return -1;
+	}
+}
