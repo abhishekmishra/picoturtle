@@ -250,6 +250,9 @@ void LuaReplWidget::create_repl_display()
 // trigger error signal if failure.
 int LuaReplWidget::init_lua()
 {
+	// cleanup lua if already initialized
+	cleanup_lua();
+
 	int status;
 	L = luaL_newstate(); // new lua state
 	if (L == NULL)
@@ -272,7 +275,9 @@ int LuaReplWidget::init_lua()
 
 void LuaReplWidget::cleanup_lua()
 {
-	lua_close(L);
+	if (L != NULL) {
+		lua_close(L);
+	}
 }
 
 bool LuaReplWidget::singleline_return_syntax_check()

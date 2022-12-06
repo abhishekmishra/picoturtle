@@ -86,6 +86,9 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 
 TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 {
+	// cleanup the lua state
+	lua_repl->cleanup_lua();
+
 	qDebug() << "Editor destroyed.";
 }
 
@@ -96,9 +99,6 @@ void TurtleCodeEditorWidget::run_file()
 
 	// execute the script and get the result code
 	int res = lua_repl->run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
-
-	// cleanup the lua state
-	lua_repl->cleanup_lua();
 
 	// emit the signal with the res code.
 	emit turtle_run_complete(res);
