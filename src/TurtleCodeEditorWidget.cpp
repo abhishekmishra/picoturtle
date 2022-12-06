@@ -31,7 +31,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-	font.setPointSize(11);
+	font.setPointSize(10);
 	QFontInfo info(font);
 	// qDebug() << font << info.family() << info.fixedPitch();
 	turtle_code_edit->setFont(font);

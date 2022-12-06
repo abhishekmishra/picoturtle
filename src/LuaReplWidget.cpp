@@ -226,7 +226,7 @@ void LuaReplWidget::create_repl_display()
 	// Set the default monospace font for now
 	// TODO: perhaps include a decent open source font
 	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-	font.setPointSize(12);
+	font.setPointSize(10);
 	QFontInfo info(font);
 	// qDebug() << font << info.family() << info.fixedPitch();
 	repl_display->setFont(font);
