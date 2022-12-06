@@ -232,8 +232,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
 set ( PICOTURTLE_APP_SOURCES
     res/picoturtle.qrc
-    src/TurtleController.hpp
-    src/TurtleController.cpp
     src/TurtleGLWidget.hpp
     src/TurtleGLWidget.cpp
     src/LuaSyntaxHighlighter.hpp
