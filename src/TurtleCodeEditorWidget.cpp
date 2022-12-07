@@ -205,3 +205,8 @@ bool TurtleCodeEditorWidget::is_dirty()
 {
 	return turtle_code_edit->document()->isModified();
 }
+
+TurtleCodeEditorTextWidget* TurtleCodeEditorWidget::get_editor()
+{
+	return turtle_code_edit;
+}

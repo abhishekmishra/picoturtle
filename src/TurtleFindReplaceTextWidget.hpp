@@ -14,6 +14,13 @@ namespace turtle
 
     public:
         TurtleFindReplaceTextWidget(QWidget *parent = nullptr);
+        bool is_replace_enabled();
+
+    public slots:
+        void set_replace_enabled(bool flag);
+
+    private:
+        bool replace_enabled;
     };
 
 };

@@ -26,7 +26,7 @@ namespace turtle
 	{
 		Q_OBJECT
 	public:
-		explicit TurtleAppWindow(QWidget *parent = nullptr);
+		explicit TurtleAppWindow(QWidget* parent = nullptr);
 		~TurtleAppWindow();
 
 	public:
@@ -50,44 +50,46 @@ namespace turtle
 		void update_title();
 
 		// Widgets
-		TurtleCanvasWidget *turtle_canvas;
-		TurtleCodeEditorParentWidget *code_editor_parent;
+		TurtleCanvasWidget* turtle_canvas;
+		TurtleCodeEditorParentWidget* code_editor_parent;
 		TurtleLuaReplWidget* lua_repl;
-		TurtleDocsWidget *turtle_docs;
-		QDockWidget *turtle_code_edit_dock;
-		QDockWidget *turtle_canvas_dock;
+		TurtleDocsWidget* turtle_docs;
+		QDockWidget* turtle_code_edit_dock;
+		QDockWidget* turtle_canvas_dock;
 		QDockWidget* lua_repl_dock;
-		QDockWidget *turtle_docs_dock;
+		QDockWidget* turtle_docs_dock;
 
 		// Menu actions and toolbar
-		QAction *quit_action;
-		QAction *new_action;
-		QAction *open_action;
-		QAction *save_action;
-		QAction *save_as_action;
+		QAction* quit_action;
+		QAction* new_action;
+		QAction* open_action;
+		QAction* save_action;
+		QAction* save_as_action;
 
-		QAction *cut_action;
-		QAction *copy_action;
-		QAction *paste_action;
-		QAction *undo_action;
-		QAction *redo_action;
+		QAction* cut_action;
+		QAction* copy_action;
+		QAction* paste_action;
+		QAction* undo_action;
+		QAction* redo_action;
+		QAction* find_action;
+		QAction* find_replace_action;
 
-		QAction *run_action;
+		QAction* run_action;
 
-		QAction *turtle_docs_action;
-		QAction *about_action;
+		QAction* turtle_docs_action;
+		QAction* about_action;
 
-		QToolBar *file_toolbar;
-		QToolBar *edit_toolbar;
-		QToolBar *turtle_toolbar;
-		QToolBar *extras_toolbar;
+		QToolBar* file_toolbar;
+		QToolBar* edit_toolbar;
+		QToolBar* turtle_toolbar;
+		QToolBar* extras_toolbar;
 
 	public slots:
-		void show_status_message(const QString &message);
-		void write_to_console(const QString &input) const;
-		void set_turtle(turtle::PicoTurtle *t);
-		void handle_turtle_update(turtle::PicoTurtle *t);
-		void handle_turtle_paint(turtle::PicoTurtle *t);
+		void show_status_message(const QString& message);
+		void write_to_console(const QString& input) const;
+		void set_turtle(turtle::PicoTurtle* t);
+		void handle_turtle_update(turtle::PicoTurtle* t);
+		void handle_turtle_paint(turtle::PicoTurtle* t);
 	};
 }
 

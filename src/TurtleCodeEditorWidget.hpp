@@ -39,6 +39,7 @@ namespace turtle
         bool is_dirty();
         const QString get_file_name();
         const QString &get_file_path();
+        TurtleCodeEditorTextWidget* get_editor();
 
     private:
         TurtleCodeEditorTextWidget *turtle_code_edit;

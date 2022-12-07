@@ -154,6 +154,12 @@ namespace turtle
 		redo_action->setIcon(get_icon("redo"));
 		redo_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
 
+		find_action = new QAction(tr("Find"));
+		find_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F));
+
+		find_replace_action = new QAction(tr("Find/Replace"));
+		find_replace_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
+
 		run_action = new QAction(tr("Run"));
 		run_action->setIcon(get_icon("slideshow"));
 		run_action->setShortcut(QKeySequence(Qt::Key_F5));
@@ -214,6 +220,22 @@ namespace turtle
 		// *** Quit PicoTurtle
 		connect(quit_action, &QAction::triggered, [=]()
 			{ QApplication::quit(); });
+
+		connect(cut_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->get_editor()->cut();
+			});
+		connect(copy_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->get_editor()->copy();
+			});
+		connect(paste_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->get_editor()->paste();
+			});
+		connect(undo_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->get_editor()->undo();
+			});
+		connect(redo_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->get_editor()->redo();
+			});
 	}
 
 	void TurtleAppWindow::create_toolbar()
@@ -261,6 +283,8 @@ namespace turtle
 		edit_menu->addAction(paste_action);
 		edit_menu->addAction(undo_action);
 		edit_menu->addAction(redo_action);
+		edit_menu->addAction(find_action);
+		edit_menu->addAction(find_replace_action);
 
 		QMenu* turtle_menu = menuBar()->addMenu(tr("Turtle"));
 		turtle_menu->addAction(run_action);
