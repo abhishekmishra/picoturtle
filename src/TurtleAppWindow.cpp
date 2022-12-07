@@ -236,6 +236,12 @@ namespace turtle
 		connect(redo_action, &QAction::triggered, [=]() {
 			code_editor_parent->get_current_editor_widget()->get_editor()->redo();
 			});
+		connect(find_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->toggle_find();
+			});
+		connect(find_replace_action, &QAction::triggered, [=]() {
+			code_editor_parent->get_current_editor_widget()->toggle_find_replace();
+			});
 	}
 
 	void TurtleAppWindow::create_toolbar()

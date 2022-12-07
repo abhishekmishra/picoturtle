@@ -1,6 +1,5 @@
 #include "TurtleCodeEditorWidget.hpp"
 #include "TurtleController.hpp"
-#include "TurtleFindReplaceTextWidget.hpp"
 #include <QVBoxLayout>
 #include <QFile>
 #include <QTextStream>
@@ -19,13 +18,13 @@ using namespace turtle;
 
 int TurtleCodeEditorWidget::noname_file_count = 0;
 
-TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidget *parent)
-	: file_path{QString()}, lua_repl{repl}
+TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidget* parent)
+	: file_path{ QString() }, lua_repl{ repl }
 {
 	turtle_code_edit = new TurtleCodeEditorTextWidget();
 	turtle_code_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	auto find_replace = new TurtleFindReplaceTextWidget();
+	find_replace = new TurtleFindReplaceTextWidget();
 	find_replace->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	// Set the default monospace font for now
@@ -58,7 +57,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	// create and set highlighter
 	lua_highlighter = new LuaSyntaxHighlighter(turtle_code_edit->document());
 
-	QVBoxLayout *vb_layout = new QVBoxLayout(this);
+	QVBoxLayout* vb_layout = new QVBoxLayout(this);
 	vb_layout->addWidget(turtle_code_edit);
 	vb_layout->addWidget(find_replace);
 	find_replace->hide();
@@ -66,7 +65,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	setLayout(vb_layout);
 
 	connect(turtle_code_edit, &QPlainTextEdit::modificationChanged, [=](bool flag)
-			{ emit file_modified_changed(flag); });
+		{ emit file_modified_changed(flag); });
 
 	QFile file(":/lua/turtle/basic_turtle.lua");
 	// QFile file(":/lua/learnlua.lua");
@@ -74,7 +73,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		QMessageBox::information(this, tr("Unable to open file"),
-								 file.errorString());
+			file.errorString());
 	}
 	else
 	{
@@ -118,7 +117,7 @@ void TurtleCodeEditorWidget::new_file()
 	emit new_file_created();
 }
 
-int TurtleCodeEditorWidget::open_file(const QString &file_path)
+int TurtleCodeEditorWidget::open_file(const QString& file_path)
 {
 	QFile file(file_path);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -142,11 +141,11 @@ int TurtleCodeEditorWidget::save_file()
 	if (!has_file_path())
 	{
 		QString fileName = QFileDialog::getSaveFileName(this,
-														tr("Save Turtle Lua File"), "",
-														tr("Turtle/Lua Files (*.lua)"));
+			tr("Save Turtle Lua File"), "",
+			tr("Turtle/Lua Files (*.lua)"));
 		set_file_path(fileName);
 	}
-	if(!has_file_path())
+	if (!has_file_path())
 	{
 		return -1;
 	}
@@ -154,7 +153,7 @@ int TurtleCodeEditorWidget::save_file()
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		QMessageBox::information(this, tr("Unable to open file"),
-								 file.errorString());
+			file.errorString());
 		return file.error();
 	}
 
@@ -173,7 +172,7 @@ bool TurtleCodeEditorWidget::has_file_path()
 	return !(file_path.isNull());
 }
 
-bool TurtleCodeEditorWidget::set_file_path(const QString &file_path, bool override_current_path)
+bool TurtleCodeEditorWidget::set_file_path(const QString& file_path, bool override_current_path)
 {
 	bool has_fp = has_file_path();
 	if ((has_fp && override_current_path) || (!has_fp))
@@ -196,7 +195,7 @@ const QString TurtleCodeEditorWidget::get_file_name()
 	return QString(QFileInfo(file_path).fileName());
 }
 
-const QString &TurtleCodeEditorWidget::get_file_path()
+const QString& TurtleCodeEditorWidget::get_file_path()
 {
 	return file_path;
 }
@@ -209,4 +208,30 @@ bool TurtleCodeEditorWidget::is_dirty()
 TurtleCodeEditorTextWidget* TurtleCodeEditorWidget::get_editor()
 {
 	return turtle_code_edit;
+}
+
+void TurtleCodeEditorWidget::toggle_find()
+{
+	find_replace->set_replace_enabled(false);
+	if (find_replace->isVisible())
+	{
+		find_replace->hide();
+	}
+	else 
+	{
+		find_replace->show();
+	}
+}
+
+void TurtleCodeEditorWidget::toggle_find_replace() 
+{
+	find_replace->set_replace_enabled(true);
+	if (find_replace->isVisible())
+	{
+		find_replace->hide();
+	}
+	else
+	{
+		find_replace->show();
+	}
 }

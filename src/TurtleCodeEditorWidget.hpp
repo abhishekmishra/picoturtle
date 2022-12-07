@@ -7,6 +7,7 @@
 #include "LuaSyntaxHighlighter.hpp"
 #include "TurtleCodeEditorTextWidget.hpp"
 #include "TurtleLuaReplWidget.hpp"
+#include "TurtleFindReplaceTextWidget.hpp"
 
 namespace turtle
 {
@@ -33,6 +34,8 @@ namespace turtle
         int save_file();
         bool set_file_path(const QString &file_path, bool override_current_path = false);
         void run_file();
+        void toggle_find();
+        void toggle_find_replace();
 
     public:
         bool has_file_path();
@@ -49,6 +52,7 @@ namespace turtle
         QString basic_turtle_text;
         LuaSyntaxHighlighter *lua_highlighter;
         TurtleLuaReplWidget* lua_repl;
+        TurtleFindReplaceTextWidget* find_replace;
     };
 }
 #endif // TURTLE_CODE_EDITOR_WIDGET_H
