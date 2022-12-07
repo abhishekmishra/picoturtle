@@ -24,7 +24,7 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	turtle_code_edit = new TurtleCodeEditorTextWidget();
 	turtle_code_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	find_replace = new TurtleFindReplaceTextWidget();
+	find_replace = new TurtleFindReplaceTextWidget(turtle_code_edit);
 	find_replace->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	// Set the default monospace font for now

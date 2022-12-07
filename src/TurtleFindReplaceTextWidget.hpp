@@ -3,6 +3,7 @@
 #ifndef TURTLEFINDREPLACETEXTWIDGET_H
 #define TURTLEFINDREPLACETEXTWIDGET_H
 
+#include "TurtleCodeEditorTextWidget.hpp"
 #include <QWidget>
 
 namespace turtle
@@ -13,7 +14,7 @@ namespace turtle
         Q_OBJECT
 
     public:
-        TurtleFindReplaceTextWidget(QWidget *parent = nullptr);
+        TurtleFindReplaceTextWidget(TurtleCodeEditorTextWidget* ed, QWidget *parent = nullptr);
         bool is_replace_enabled();
 
     public slots:
@@ -21,6 +22,7 @@ namespace turtle
 
     private:
         bool replace_enabled;
+        TurtleCodeEditorTextWidget* editor;
     };
 
 };
