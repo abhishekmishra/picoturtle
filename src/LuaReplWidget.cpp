@@ -279,6 +279,7 @@ void LuaReplWidget::cleanup_lua()
 {
 	if (L != NULL) {
 		lua_close(L);
+		L = NULL;
 	}
 }
 
