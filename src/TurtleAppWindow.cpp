@@ -184,8 +184,11 @@ namespace turtle
 				QString fileName = QFileDialog::getOpenFileName(this,
 				tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
 		qDebug() << fileName;
-		//TODO: handle return value to show appropriate error.
-		code_editor_parent->open_file(fileName); });
+		if (!fileName.isEmpty()) 
+		{
+			//TODO: handle return value to show appropriate error.
+			code_editor_parent->open_file(fileName);
+		}});
 
 		// *** Save File
 		connect(save_action, &QAction::triggered, [=]() { // TODO: handler return value to show appropriate error.
