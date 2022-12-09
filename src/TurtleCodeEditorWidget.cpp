@@ -223,6 +223,7 @@ void TurtleCodeEditorWidget::toggle_find()
 	else 
 	{
 		find_replace->show();
+		find_replace->setFocus(Qt::MouseFocusReason);
 	}
 }
 
@@ -236,5 +237,6 @@ void TurtleCodeEditorWidget::toggle_find_replace()
 	else
 	{
 		find_replace->show();
+		find_replace->setFocus(Qt::MouseFocusReason);
 	}
 }

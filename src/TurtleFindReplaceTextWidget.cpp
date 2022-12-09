@@ -53,6 +53,7 @@ TurtleFindReplaceTextWidget::TurtleFindReplaceTextWidget(TurtleCodeEditorTextWid
 		option |= QTextDocument::FindBackward;
 		editor->find(find_text->text(), option);
 		});
+
 };
 
 bool TurtleFindReplaceTextWidget::is_replace_enabled()
