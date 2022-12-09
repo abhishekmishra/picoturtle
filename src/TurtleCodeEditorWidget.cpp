@@ -97,7 +97,10 @@ void TurtleCodeEditorWidget::run_file()
 	lua_repl->init_lua();
 
 	// execute the script and get the result code
-	int res = lua_repl->run_lua_script(turtle_code_edit->toPlainText().toLocal8Bit().data());
+	int res = lua_repl->run_lua_script_path(
+		turtle_code_edit->toPlainText().toLocal8Bit().data(), 
+		file_path.isEmpty()? NULL : file_path.toLocal8Bit().data()
+	);
 
 	// emit the signal with the res code.
 	emit turtle_run_complete(res);

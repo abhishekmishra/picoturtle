@@ -47,10 +47,10 @@ namespace turtle
 	{
 		Q_OBJECT
 
-		static const std::string LUA_REPL_PROMPT;
+			static const std::string LUA_REPL_PROMPT;
 
 	public:
-		LuaReplWidget(QWidget *parent = nullptr);
+		LuaReplWidget(QWidget* parent = nullptr);
 
 		/**
 		 * @brief Prints the given string to the repl
@@ -68,10 +68,54 @@ namespace turtle
 		 */
 		virtual void cleanup_lua();
 
-		bool handleLuaError(int luaErrorCode);
+		/**
+		 * accept a lua error code, and print
+		 * an appropriate message to the console.
+		 */
+		bool handle_lua_error(int luaErrorCode);
+
+		/**
+		 * run a lua chunk, with the given compilation status
+		 * @param status
+		 * @return result status
+		 */
 		int dochunk(int status);
+
+		/**
+		 * run a lua file as a chunk in the current lua repl
+		 * @param filename
+		 * @return status
+		 */
 		int run_lua_file(const char* filename);
+
+		/**
+		 * run a lua script as a chunk in the current lua repl
+		 * @param script
+		 * @return status
+		 */
 		int run_lua_script(const char* script);
+
+		/**
+		 * run a lua script as a chunk in the current lua repl
+		 * with an optional file_path argument.
+		 * The parent directory of the file_path (if it is not null) will be added to
+		 * lua path.
+		 * @param script
+		 * @param file_path
+		 * @return status
+		 */
+		int run_lua_script_path(const char* script, const char* file_path = NULL);
+
+		/**
+		 * prepend the given lua path fragment to the lua path variable.
+		 * 
+		 * the resultant path will be 
+		 * 
+		 * package.path = "<path_fragment>/?.lua;" .. package.path
+		 * 
+		 * @param path_fragment
+		 */
+		void add_to_lua_path(const char* path_fragment);
 
 	protected:
 		/** Lua State */
@@ -87,9 +131,9 @@ namespace turtle
 	private:
 		bool multiline;
 		QString prompt;
-		QPlainTextEdit *repl_display;
-		QLineEdit *repl_entry;
-		QLabel *repl_prompt;
+		QPlainTextEdit* repl_display;
+		QLineEdit* repl_entry;
+		QLabel* repl_prompt;
 		QString current_line;
 		QString previous_lines;
 

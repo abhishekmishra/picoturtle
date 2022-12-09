@@ -1,6 +1,7 @@
 #include <QBoxLayout>
 #include "LuaReplWidget.hpp"
 #include <QTextBlock>
+#include <QFileInfo>
 
 using namespace turtle;
 
@@ -138,7 +139,7 @@ static int try_addreturn(lua_State *L)
 	const char *retline = lua_pushfstring(L, "return %s;", line);
 	// qDebug() << "input line is " << retline;
 	int status = luaL_loadbuffer(L, retline, strlen(retline), "=repl");
-	stackDump(L);
+	//stackDump(L);
 
 	// remove the two input lines
 	lua_remove(L, -3);
@@ -146,10 +147,10 @@ static int try_addreturn(lua_State *L)
 
 	// now we have just the error message OR compiled chunk
 	// in the stack
-	stackDump(L);
+	//stackDump(L);
 
 	lua_pushinteger(L, status);
-	stackDump(L);
+	//stackDump(L);
 	return 2;
 }
 
@@ -160,14 +161,14 @@ static int try_command(lua_State *L)
 
 	lua_pushstring(L, line);
 	int status = luaL_loadbuffer(L, line, strlen(line), "=repl");
-	stackDump(L);
+	//stackDump(L);
 
 	// remove the input line
 	lua_remove(L, -2);
 
 	// now we have just the error message OR compiled chunk
 	// in the stack
-	stackDump(L);
+	//stackDump(L);
 
 	lua_pushboolean(L, incomplete(L, status));
 	lua_pushinteger(L, status);
@@ -296,7 +297,7 @@ bool LuaReplWidget::singleline_return_syntax_check()
 	lua_pushcfunction(L, &try_addreturn);
 	lua_pushstring(L, text_cstr);
 	status = lua_pcall(L, 1, 2, 0);
-	stackDump(L);
+	//stackDump(L);
 	result = lua_tointeger(L, -1);
 	const char *msg = lua_tostring(L, -2);
 
@@ -352,7 +353,7 @@ void LuaReplWidget::repl_enter_line()
 		lua_pushcfunction(L, &try_command);
 		lua_pushstring(L, text_cstr);
 		status = lua_pcall(L, 1, 3, 0);
-		stackDump(L);
+		//stackDump(L);
 		result = lua_tointeger(L, -1);
 		bool incomplete = lua_toboolean(L, -2);
 		const char *err_mesg = lua_tostring(L, -3);
@@ -385,10 +386,10 @@ void LuaReplWidget::repl_enter_line()
 	{
 		qDebug() << "I will run this code";
 		qDebug() << code_to_run;
-		stackDump(L);
+		//stackDump(L);
 		int res = docall(L, 0, LUA_MULTRET);
 		qDebug() << "ran the code";
-		stackDump(L);
+		//stackDump(L);
 		print_values_on_stack();
 		lua_settop(L, 0); // clear the stack
 	}
@@ -456,7 +457,7 @@ void LuaReplWidget::print_to_repl(std::string value)
 }
 
 
-bool LuaReplWidget::handleLuaError(int luaErrorCode)
+bool LuaReplWidget::handle_lua_error(int luaErrorCode)
 {
 	if (luaErrorCode == LUA_OK)
 	{
@@ -473,11 +474,14 @@ bool LuaReplWidget::handleLuaError(int luaErrorCode)
 
 int LuaReplWidget::dochunk(int status) {
 	if (status == LUA_OK) status = docall(L, 0, 0);
-	return handleLuaError(status);
+	return handle_lua_error(status);
 }
 
 int LuaReplWidget::run_lua_file(const char* filename)
 {
+	QFileInfo file_info(filename);
+	add_to_lua_path(file_info.absolutePath().toLocal8Bit().constData());
+
 	return dochunk(luaL_loadfile(L, filename));
 }
 
@@ -486,4 +490,30 @@ int LuaReplWidget::run_lua_file(const char* filename)
 int LuaReplWidget::run_lua_script(const char* script)
 {
 	return dochunk(luaL_loadbuffer(L, script, strlen(script), "buffer"));
+}
+
+int LuaReplWidget::run_lua_script_path(const char* script, const char* file_path)
+{
+	if (file_path != NULL)
+	{
+		QFileInfo file_info(file_path);
+		add_to_lua_path(file_info.absolutePath().toLocal8Bit().constData());
+	}
+	return run_lua_script(script);
+}
+
+void LuaReplWidget::add_to_lua_path(const char* path_fragment)
+{
+	size_t len_of_path_str = strlen(path_fragment) + 1024;
+	char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
+	if (setPathCodeStr == NULL)
+	{
+		LuaReplWidget::print_to_repl("Fatal: Unable to alloc string to set load path in lua!\n");
+	}
+	else {
+		snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;' .. package.path", path_fragment);
+		// for debug
+		LuaReplWidget::print_to_repl("Setting path via code -> |" + std::string(setPathCodeStr) + "|");
+		run_lua_script(setPathCodeStr);
+	}
 }
