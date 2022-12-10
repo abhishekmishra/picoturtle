@@ -80,6 +80,11 @@
         "string_view": "cpp",
         "variant": "cpp",
         "qregularexpression": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "deque": "cpp",
+        "future": "cpp",
+        "iomanip": "cpp",
+        "stack": "cpp",
+        "thread": "cpp"
     }
 }
