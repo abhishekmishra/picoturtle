@@ -1,6 +1,19 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.1.0-alpha.4**  2022-12-10 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the fifth early alpha weekly release of PicoTurtle. It contains a couple of major features and a few bug fixes.
+- The first major feature is *Turtle Lua Console Integration*. All turtle programs are now run as chunks in the lua repl widget. 
+  - Every program run restarts the lua repl session 
+  - This enables the reload of any dependent lua modules which might have changed.
+  - The use of docall to load the chunk implies that the global variables are available for inspection post the run.
+  - The turtle object is created by the repl class in global scope. This allows the inspection of turtle object in the repl post-run. It also allows user to issue turtle commands via the repl.
+- The second major feature is "Find/replace widget". A naive implementation without current support for regex or match/ignore case is implemented. These features will be added in the coming releases.
+- Bug fix: if open file dialog was cancelled, an empty tab was added to editor. This is now fixed - no tab is added when the action is cancelled.
+- The menu editor commands are now connected to corresponding actions in the editor widget.
+- If the lua file being run is saved on disk (has a valid path) then the directory containing the file is added to the lua path. Thus all require commands can resolve modules in that directory. This is helpful for running multi-file projects.
+
 **0.1.0-alpha.3**  2022-12-04 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the fourth early alpha weekly release of PicoTurtle. It contains several minor changes/fixes and one major feature.
