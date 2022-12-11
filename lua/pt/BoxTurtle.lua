@@ -49,8 +49,12 @@ function BoxTurtle:state()
 	return state
 end
 
---- Clear the Box (fill with white)
-function BoxTurtle:clear()
+--- Clear the Box (fill with color)
+--
+-- @tparam color the color name
+-- @tparam rest if color is r, then g and b can be supplied.
+function BoxTurtle:clear(color, ...)
+	local color = color or 'black'
 	local dim = self.box:dim()
 	local pos = self.box:to_parent_coords(dim:w()/2, 0)
 	-- print('going to ' .. pos:x() .. ', ' .. pos:y())
@@ -58,7 +62,7 @@ function BoxTurtle:clear()
 	self.turtle:setpos(pos:x(), pos:y())
 	self.turtle:heading(90)
 	self.turtle:penwidth(dim:w())
-	self.turtle:pencolor(128, 128, 128)
+	self.turtle:pencolor(color, ...)
 	self.turtle:pendown()
 	self.turtle:fd(dim:h())
 	self.turtle:penup()
@@ -169,8 +173,8 @@ end
 
 --- Set the font of the text to be drawn as a font string
 -- @tparam string font
-function BoxTurtle:font(font_string)
-	self.turtle:font(font_string)
+function BoxTurtle:font(font_string, ...)
+	self.turtle:font(font_string, ...)
 end
 
 --- Draw the text with a stroke (no fill), using the set font, in the direction the turtle is facing, at the turtle's location.
