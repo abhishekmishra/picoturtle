@@ -26,7 +26,7 @@ PicoTurtle::PicoTurtle() : Turtle()
     }
 
     this->set_canvas(turtleCanvas);
-    this->canvas_size(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
+    this->set_canvas_size(TURTLE_DEFAULT_CANVAS_WIDTH, TURTLE_DEFAULT_CANVAS_HEIGHT);
 
     this->reset();
 
@@ -216,9 +216,9 @@ int PicoTurtle::pencolor(const char *color)
     return res;
 }
 
-void PicoTurtle::canvas_size(int width, int height)
+void PicoTurtle::set_canvas_size(unsigned int width, unsigned int height)
 {
-    Turtle::canvas_size(width, height);
+    Turtle::set_canvas_size(width, height);
     update_cb(this, update_cb_args);
 }
 

@@ -262,13 +262,24 @@ int Turtle::pencolor(const char *color)
     return res;
 }
 
-void Turtle::canvas_size(int width, int height)
+void Turtle::set_canvas_size(unsigned int width, unsigned int height)
 {
     // printf("Dimensions are now [%d, %d].\n", width, height);
     this->canvas->set_width(width);
     this->canvas->set_height(height);
     canvas->update_canvas();
 }
+
+unsigned int Turtle::get_canvas_width()
+{
+    return this->canvas->get_width();
+}
+
+unsigned int Turtle::get_canvas_height()
+{
+    return this->canvas->get_height();
+}
+
 
 void Turtle::reset()
 {

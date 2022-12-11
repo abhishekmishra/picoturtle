@@ -93,7 +93,7 @@ namespace turtle
 
         virtual int pencolor(const char *color);
 
-        virtual void canvas_size(int width, int height);
+        virtual void set_canvas_size(unsigned int width, unsigned int height);
 
         virtual void reset();
 

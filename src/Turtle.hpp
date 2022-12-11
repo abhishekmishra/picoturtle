@@ -226,8 +226,27 @@ namespace turtle
          */
         virtual int pencolor(const char *color);
 
-        // TODO: change width and height to unsigned int
-        virtual void canvas_size(int width, int height);
+        /**
+         * Set the canvas size of the canvas assigned to the turtle object.
+         *
+         * @param width width of canvas in pixels.
+         * @param height height of canvas in pixels.
+         */
+        virtual void set_canvas_size(unsigned int width, unsigned int height);
+
+        /**
+         * Get the width of the assigned canvas in pixels.
+         *
+         * @return width of canvas.
+         */
+        virtual unsigned int get_canvas_width();
+
+        /**
+         * Get the height of the assigned canvas in pixels.
+         *
+         * @return height of canvas.
+         */
+        virtual unsigned int get_canvas_height();
 
         /**
          * @brief Reset the turtle's pen, and location.

@@ -355,16 +355,33 @@ static int skia_turtle_stroketext(lua_State *L)
 
 static int skia_turtle_canvas_size(lua_State *L)
 {
-    int height = (int)(luaL_checkinteger(L, lua_gettop(L)));
-    lua_pop(L, 1);
+    PicoTurtle* t;
 
-    int width = (int)(luaL_checkinteger(L, lua_gettop(L)));
-    lua_pop(L, 1);
+    if (lua_gettop(L) == 3) 
+    {
+        int height = (int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
 
-    PicoTurtle *t = skia_turtle_getobj(L);
+        int width = (int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
 
-    t->canvas_size(width, height);
-    return 0;
+        t = skia_turtle_getobj(L);
+
+        t->set_canvas_size(width, height);
+    }
+    else if (lua_gettop(L) == 1) 
+    {
+        t = skia_turtle_getobj(L);
+    }
+    else
+    {
+        return luaL_error(L, "expecting exactly 3 arguments OR exactly 1 argument");
+    }
+
+    lua_pushnumber(L, t->get_canvas_width());
+    lua_pushnumber(L, t->get_canvas_height());
+
+    return 2;
 }
 
 static int skia_turtle_state(lua_State *L)
