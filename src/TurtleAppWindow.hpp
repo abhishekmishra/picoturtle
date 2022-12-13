@@ -13,6 +13,7 @@
 #include "TurtleCodeEditorParentWidget.hpp"
 #include "TurtleDocsWidget.hpp"
 #include "TurtleLuaReplWidget.hpp"
+#include "TurtleAboutDialog.hpp"
 
 namespace turtle
 {
@@ -54,6 +55,8 @@ namespace turtle
 		TurtleCodeEditorParentWidget* code_editor_parent;
 		TurtleLuaReplWidget* lua_repl;
 		TurtleDocsWidget* turtle_docs;
+		TurtleAboutDialog* turtle_about;
+
 		QDockWidget* turtle_code_edit_dock;
 		QDockWidget* turtle_canvas_dock;
 		QDockWidget* lua_repl_dock;

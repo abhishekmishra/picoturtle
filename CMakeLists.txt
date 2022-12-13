@@ -256,6 +256,8 @@ set ( PICOTURTLE_APP_SOURCES
     src/TurtleCanvasWidget.cpp
     src/TurtleDocsWidget.hpp
     src/TurtleDocsWidget.cpp
+    src/TurtleAboutDialog.hpp
+    src/TurtleAboutDialog.cpp
     src/TurtleAppWindow.hpp
     src/TurtleAppWindow.cpp
     src/TurtleApp.cpp
