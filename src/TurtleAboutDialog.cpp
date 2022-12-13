@@ -18,13 +18,15 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget* parent)
 	setWindowTitle(tr("About PicoTurtle"));
 
 	// TODO: get actual version from cmake build.
-	QLabel* program_name = new QLabel("<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> v0.1.0-alpha");
+	QLabel* program_name = new QLabel("<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> v0.1.0-alpha is a Turtle programming environment.");
 	enable_hyperlinks(program_name);
 
 	QLabel* author_name = new QLabel("by Abhishek Mishra (<a href='https://github.com/abhishekmishra'>github.com/abhishekmishra</a>)");
 	enable_hyperlinks(author_name);
 
-	QLabel* license_brief = new QLabel("Picoturte license - <a href='https://www.gnu.org/licenses/gpl-3.0-standalone.html'>GNU General Public License v3.0 only</a>. For the detailed license notices including those of dependencies see the source code.");
+	QLabel* license_brief = new QLabel("PicoTurtle license - <a href='https://raw.githubusercontent.com/abhishekmishra/picoturtle/main/LICENSE'>GNU General Public License v3.0 only</a>.");
+	enable_hyperlinks(license_brief);
+	QLabel* license_brief_part2 = new QLabel("For full license notices including those of dependencies see the source code.");
 	QLabel* copyright_brief = new QLabel("PicoTurtle  Copyright (C) 2018-2022  Abhishek Mishra");
 
 	QDialogButtonBox* button_box = new QDialogButtonBox(QDialogButtonBox::Ok);
@@ -34,6 +36,7 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget* parent)
 	vb_layout->addWidget(program_name);
 	vb_layout->addWidget(author_name);
 	vb_layout->addWidget(license_brief);
+	vb_layout->addWidget(license_brief_part2);
 	vb_layout->addWidget(copyright_brief);
 	vb_layout->addWidget(button_box);
 
