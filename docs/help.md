@@ -26,7 +26,7 @@ lua.
 Since all PicoTurtle programs are Lua programs, you must create a new Lua file for every turtle program you write.
 In the Lua program you must make sure to initialize the turtle before giving it commands.
 
-### picoturtle.new
+###  picoturtle.new
 
 The PicoTurtle turtle is available in lua via the module `picoturtle`. This can be loaded using the standard
 Lua `require` call
@@ -51,36 +51,88 @@ you can use the following snippet, which creates a new turtle object only if doe
 ```
 local t = t or require 'picoturtle'.new()
 ```
+###  Calling picoturtle commands on a turtle
+
+Once you have a Lua turtle object - lets say named `t`, you can issue commands to the turtle object.
+The lua syntax for calling a method on an object is `<objectname>:<method>(<args>)`; i.e. object
+name followed by a colon followed by method name and then the arguments in parenthesis.
+
+There for to call a method/command named `foo` with a numeric argument,  on turtle `t` you can write
+`t:foo(10)`.
+
+The subsequent sections list the various commands available.
 
 ## Turtle State Commands
-1. **clear** -> Clear the canvas.
-1. **stop** -> Stop the turtle. This MUST be called at the end of every program.
-1. **home** -> Return the turtle to its starting position and heading.
-1. **state** -> Return the current state of turtle.
+
+### clear
+Clear the canvas.
+
+### stop
+Stop the turtle. This MUST be called at the end of every program.
+
+### home
+Return the turtle to its starting position and heading.
+
+### state
+Return the current state of turtle.
 
 ## Turtle Pen Commands
-1. **penup** -> Raise the pen so that the turtle does not write when it moves.
-1. **pendown** -> Lower the pen so that the turtle writes when it moves.
-1. **penwidth (width)** -> Set the width of the pen to "width" pixels.
-1. **pencolour (red, blue, green)** -> Set the colour of the pen by providing "red", "blue" and "green" values each in the range 0-255.
+
+### penup
+Raise the pen so that the turtle does not write when it moves.
+
+### pendown
+Lower the pen so that the turtle writes when it moves.
+
+### penwidth (width)
+Set the width of the pen to "width" pixels.
+
+### pencolour (red, blue, green)
+Set the colour of the pen by providing "red", "blue" and "green" values each in the range 0-255.
 
 ## Turtle Text Commands
-1. **font (font string)** -> Set the font of the text to be drawn as a web font string. for e.g. '14pt Arial'.
-1. **stroketext (text)** -> Draw the given text with a stroke (no fill), using the set font, in the direction the turtle is facing, at the turtle's location.
-1. **filltext (text)** -> Draw the given text with fill, using the set font, in the direction the turtle is facing, at the turtle's location.
+
+### font (font string)
+Set the font of the text to be drawn as a web font string. for e.g. '14pt Arial'.
+
+### stroketext (text)
+Draw the given text with a stroke (no fill), using the set font, in the direction the turtle is facing, at the turtle's location.
+
+### filltext (text)
+Draw the given text with fill, using the set font, in the direction the turtle is facing, at the turtle's location.
 
 ## Turtle Relative Movement Commands
-1. **forward (distance)** -> Move the turtle forward by the amount "distance" in pixels, in the direction it is facing.
-1. **back (distance)** -> Move the turtle back by the amount "distance" in pixels, opposite to the direction it is facing.
-1. **left (angle)** -> Turn the turtle left by "angle" degrees.
-1. **right (angle)** -> Turn the turtle right by "angle" degrees.
+
+### forward (distance)
+Move the turtle forward by the amount "distance" in pixels, in the direction it is facing.
+
+### back (distance)
+Move the turtle back by the amount "distance" in pixels, opposite to the direction it is facing.
+
+### left (angle)
+Turn the turtle left by "angle" degrees.
+
+### right (angle)
+Turn the turtle right by "angle" degrees.
 
 ## Turtle Absolute Movement Commands
-1. **goto (x,y)** -> Called **setpos** in languages where goto is a keyword. Move the turtle to (x,y) on the canvas.
-1. **setx (x)** -> Move the turtle along the x axis, keeping y to it's current value.
-1. **sety (y)** -> Move the turtle along the y axis, keeping x to it's current value.
-1. **heading (angle)** -> Change the heading of the turtle to "angle" degrees.
+
+### goto (x,y)
+Called **setpos** in languages where goto is a keyword. Move the turtle to (x,y) on the canvas.
+
+### setx (x)
+Move the turtle along the x axis, keeping y to it's current value.
+
+### sety (y)
+Move the turtle along the y axis, keeping x to it's current value.
+
+### heading (angle)
+Change the heading of the turtle to "angle" degrees.
 
 ## Turtle Canvas Commands
-1. **canvas_size (width, height)** -> Change the canvas size to [width X height] pixels.
-1. **export_img (filename)** -> Export the current canvas as a PNG file to the given path.
+
+### canvas_size (width, height)
+Change the canvas size to [width X height] pixels.
+
+### export_img (filename)
+Export the current canvas as a PNG file to the given path.
