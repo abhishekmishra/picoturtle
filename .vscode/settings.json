@@ -85,6 +85,7 @@
         "future": "cpp",
         "iomanip": "cpp",
         "stack": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "qtextbrowser": "cpp"
     }
 }

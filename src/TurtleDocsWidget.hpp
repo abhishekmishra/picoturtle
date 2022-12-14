@@ -3,7 +3,7 @@
 #define TURTLE_DOCS_WIDGET_H
 
 #include <QWidget>
-#include <QTextEdit>
+#include <QTextBrowser>
 
 class TurtleDocsWidget : public QWidget
 {
@@ -13,7 +13,7 @@ public:
     TurtleDocsWidget(QWidget *parent = nullptr);
 
 private:
-    QTextEdit* docs_text_display;
+    QTextBrowser* docs_text_display;
 };
 
 #endif

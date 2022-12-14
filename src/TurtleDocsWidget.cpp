@@ -5,13 +5,16 @@
 #include <QMessageBox>
 
 TurtleDocsWidget::TurtleDocsWidget(QWidget *parent)
-: docs_text_display{ new QTextEdit(this)},
+: docs_text_display{ new QTextBrowser(this)},
 QWidget(parent)
 {
 	docs_text_display->setMinimumHeight(400);
 	docs_text_display->setMinimumWidth(300);
 
     docs_text_display->setReadOnly(true);
+	docs_text_display->setTextInteractionFlags(Qt::TextBrowserInteraction);
+	docs_text_display->setOpenExternalLinks(true);
+	docs_text_display->setOpenLinks(true);
 
     QFile file(":/docs/help.html");
 	// QFile file(":/lua/learnlua.lua");
