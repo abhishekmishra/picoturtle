@@ -16,10 +16,43 @@ You control the turtle by writing a program which control its movements.
 
 # Turtle Commands
 
-You can use the following turtle commands in your program:
+This section describes the Turtle API (application programmer's interface). The API is just a fancy name in this case for
+the turtle commands available to you the programmer. This section describes how to create and use a turtle. Note that the
+PicoTurtle turtle commands are written in the Lua programming language. This document does not teach you how to program in
+lua.
+
+## Turtle Creation
+
+Since all PicoTurtle programs are Lua programs, you must create a new Lua file for every turtle program you write.
+In the Lua program you must make sure to initialize the turtle before giving it commands.
+
+### picoturtle.new
+
+The PicoTurtle turtle is available in lua via the module `picoturtle`. This can be loaded using the standard
+Lua `require` call
+
+```
+local picoturtle = require 'picoturtle'
+```
+
+Once you have loaded the `picoturtle` module, you can create a turtle object. We give it a name `t` - a single character
+because you have to type this many times in a turtle program.
+
+```
+local t = picoturtle.new()
+```
+
+If you are running your PicoTurtle commands in the PicoTurtle GUI a `t` turtle object is already created for you in the Lua session. 
+You can write commands to this turtle object without creating a new one.
+
+Finally, if you wish to write a program which can run in GUI and from the PicoTurtle command-line,
+you can use the following snippet, which creates a new turtle object only if does not exist.
+
+```
+local t = t or require 'picoturtle'.new()
+```
 
 ## Turtle State Commands
-1. **create_turtle** -> This command creates a new turtle (with a unique name, which is displayed in the statusbar). The command MUST be called before you start using the turtle.
 1. **clear** -> Clear the canvas.
 1. **stop** -> Stop the turtle. This MUST be called at the end of every program.
 1. **home** -> Return the turtle to its starting position and heading.
