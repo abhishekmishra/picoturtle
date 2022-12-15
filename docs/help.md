@@ -65,16 +65,44 @@ The subsequent sections list the various commands available.
 ## Turtle State Commands
 
 ### clear
-Clear the canvas.
+Clears the canvas by painting it in white. This will wipe out everything that's been drawn on the canvas. This command is helpful in starting over again.
+
+Example:
+```lua
+t:clear()
+```
 
 ### stop
-Stop the turtle. This MUST be called at the end of every program.
+Stop the turtle.
+
+Example:
+```lua
+t:stop()
+```
 
 ### home
-Return the turtle to its starting position and heading.
+Return the turtle to its starting position and heading. The starting position is at the center of the canvas, and with a heading of 90 degrees facing upwards.
+
+Example:
+```lua
+t:home()
+```
 
 ### state
-Return the current state of turtle.
+Returns the current state of turtle. This is helpful in figuring out where the turtle is at the moment, what is its heading and what are its pen settings.
+
+Example:
+```lua
+--- print the current turtle state at the console
+print(t:state())
+
+--- this command will display something like this on the console
+--- Turtle state [loc=(512.0, 512.0), col=(black, 128, 64, 32), pen(down=1, width=1.0)
+--- note that loc stands for location, col for color and pen shows pen settings
+--- the loc/location is the pair (x, y) coordinate of the current turtle position
+--- the col/color shows the color name if available and the rgb values for the color
+--- the pen shows whether the turtle has its pen pressed on the canvas, and what is the pen's width
+```
 
 ## Turtle Pen Commands
 
@@ -117,8 +145,8 @@ Turn the turtle right by "angle" degrees.
 
 ## Turtle Absolute Movement Commands
 
-### goto (x,y)
-Called **setpos** in languages where goto is a keyword. Move the turtle to (x,y) on the canvas.
+### setpos (x,y)
+Move the turtle to (x,y) on the canvas.
 
 ### setx (x)
 Move the turtle along the x axis, keeping y to it's current value.
