@@ -362,4 +362,36 @@ if (WIN32)
   install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/styles DESTINATION bin)
 endif(WIN32)
 
+# ----- Windows specific NSIS settings ------
+if (WIN32)
+  # set the install/uninstall icon used for the installer itself
+  set (CPACK_NSIS_MUI_ICON
+      "${CMAKE_CURRENT_SOURCE_DIR}/res/icons/pico.ico")
+  set (CPACK_NSIS_MUI_UNIICON
+      "${CMAKE_CURRENT_SOURCE_DIR}/res/icons/pico.ico")
+  
+  # set the add/remove programs icon using an installed executable
+  set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/picoturtle.exe")
+
+  # set the image displayed on the top left of installer screen
+  #set (CPACK_PACKAGE_ICON
+  #   "${CMAKE_CURRENT_SOURCE_DIR}/res/icons/pico.bmp")
+
+  # License displayed in installer
+  set (CPACK_RESOURCE_FILE_LICENSE
+     "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+
+  # Create desktop links
+  set (CPACK_CREATE_DESKTOP_LINKS picoturtle)
+
+  # Set start menu links
+  set (CPACK_PACKAGE_EXECUTABLES "picoturtle" "PicoTurtle" )
+
+  # TODO: use this to create additional links to docs, license etc.
+  #set (CPACK_NSIS_MENU_LINKS
+  #   "doc/cmake-${VERSION_MAJOR}.${VERSION_MINOR}/cmake-gui.html"
+  #   "cmake-gui Help" "http://www.cmake.org" "CMake Web Site")
+
+endif(WIN32)
+
 include(CPack)
