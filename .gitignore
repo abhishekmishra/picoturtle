@@ -72,3 +72,6 @@ out/
 
 # macos ds store
 .DS_Store
+
+# install
+install/
