@@ -47,6 +47,9 @@ clean:
 install:
 	cmake --build ./build --target install
 
+package:	install
+	cmake --build ./build --target package
+
 sln:
 ifeq ($(OSFLAG),WIN32)
 	cygstart ".\build\picoturtle.sln"
