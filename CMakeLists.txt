@@ -297,17 +297,19 @@ set_property(TARGET picoturtle-app PROPERTY CXX_STANDARD 17)
 
 # The output name of target should be "picoturtle"
 # which generates picoturtle.exe on windows
-set_target_properties(picoturtle-app PROPERTIES OUTPUT_NAME "picoturtle")
+set_target_properties(
+  picoturtle-app 
+  PROPERTIES OUTPUT_NAME "picoturtle"
+  FRAMEWORK FALSE
+)
 
 target_link_libraries(picoturtle-app PRIVATE picoturtle)
 
 install(TARGETS picoturtle-app
     BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-install(TARGETS picoturtle-app
-    BUNDLE DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # ----- Install all the dependencies of the application to the bin folder ------
 # ----- (exclude windows runtime dependencies (handled separately))       ------
@@ -315,6 +317,8 @@ install(TARGETS picoturtle-app
     RUNTIME_DEPENDENCIES
     PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
     POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION .
 )
 
 # see instructions at https://www.qt.io/blog/cmake-deployment-api
