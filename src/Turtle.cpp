@@ -160,7 +160,7 @@ void Turtle::penwidth(float w)
 void Turtle::stop()
 {
     // does nothing for now
-    draw_turtle();
+    // draw_turtle();
 }
 
 void Turtle::home()
