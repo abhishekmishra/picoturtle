@@ -1,6 +1,17 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.1.0-alpha.5**  2022-12-17 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the 6th alpha weekly release of PicoTurtle. This is perhaps the last source only release. It contains the following changes.
+- The turtle `canvas_size` method now accepts either 2 arguments (to specify a new canvas size width X height) or 0 arguments. In both cases the current canvas size is returned as two values width, height.
+- Minor fix in `BoxTurtle` class now passes the proper font arguments to the turtle `font` call.
+- The `BoxTurtle` class now allows passing a color argument to the `clear` method. Thus the canvas can be cleared to any colour. This will later be added to the main turtle `clear` method as well.
+- A new About dialog is added to PicoTurtle gui.
+- The PicoTurtle docs are updated to use section numbers, and has a new turtle creation section.
+- The docs are now displayed in a `QTextBrowser` for better readability.
+- CPack is added to the cmake build. The windows installer creation is now working. A complete set of files will be added - and the windows installer will be part of the next release.
+
 **0.1.0-alpha.4**  2022-12-10 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the fifth early alpha weekly release of PicoTurtle. It contains a couple of major features and a few bug fixes.
