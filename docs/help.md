@@ -72,14 +72,6 @@ Example:
 t:clear()
 ```
 
-### stop
-Stop the turtle.
-
-Example:
-```lua
-t:stop()
-```
-
 ### home
 Return the turtle to its starting position and heading. The starting position is at the center of the canvas, and with a heading of 90 degrees facing upwards.
 
@@ -109,14 +101,49 @@ print(t:state())
 ### penup
 Raise the pen so that the turtle does not write when it moves.
 
+Example:
+
+```lua
+t:reset()         -- will set pen down for writing, among other things
+t:forward(100)    -- move 100 px while writing with the current pen
+t:penup()         -- lift the pen
+t:forward(100)    -- move 100 px without writing
+```
+
 ### pendown
 Lower the pen so that the turtle writes when it moves.
+
+Example:
+
+```lua
+t:pendown()       -- will set pen down for writing
+t:forward(100)    -- move 100 px while writing with the current pen
+```
 
 ### penwidth (width)
 Set the width of the pen to "width" pixels.
 
-### pencolour (red, blue, green)
-Set the colour of the pen by providing "red", "blue" and "green" values each in the range 0-255.
+Example:
+
+```lua
+t:penwidth(10)    -- will set pen thickness/width to 10px
+t:forward(100)    -- move 100 px while writing with the current pen
+```
+
+### pencolour (color name) / (red, green, blue)
+Set the colour of the pen by providing 
+* either the color name of the pen. 
+* or "red", "green" and "blue" values each in the range 0-255.
+
+Example:
+
+```lua
+t:pencolor('red')     -- will set pen color to red
+t:forward(100)        -- move 100 px while writing with the current pen
+
+t:pencolor(0, 255, 0) -- will set pen color to green
+t:forward(100)        -- move 100 px while writing with the current pen
+```
 
 ## Turtle Text Commands
 
@@ -164,3 +191,13 @@ Change the canvas size to [width X height] pixels.
 
 ### export_img (filename)
 Export the current canvas as a PNG file to the given path.
+
+## Other Commands
+
+### stop
+Stop the turtle.
+
+Example:
+```lua
+t:stop()
+```
