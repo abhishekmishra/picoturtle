@@ -1,32 +1,21 @@
--- basic turtle lua program
+--- tiny turtle lua program
 
--- This magical incantation helps reuse a turtle named t if already created
--- Or create a new one if one doesn't
+-- reuse a turtle named t if already created or create a new one
 local t = t or require 'picoturtle'.new()
 
--- set canvas size to width=512px, height=512px
-t:canvas_size(512, 512)
-t:reset()
-
 -- Set the pencolour and penwidth of the turtle
-t:pencolor('ninja turtle') -- set color to "ninja turtle"
-t:penwidth(2)              -- 2 pixels
+t:pencolor('ninja turtle')      -- set color to "ninja turtle"
+t:penwidth(4)                   -- 2 pixels
 
 -- Set the pen down and draw for 100 pixels
 t:pendown()
-t:forward(100)             -- 100 pixels
+t:forward(200)                  -- 100 pixels
 
 -- write some text on the canvas
-t:heading(0)
-t:font('arial', 20)
-t:pencolor('black')
-t:filltext('i am a turtle')
-
--- Stop the turtle.
-t:stop()
+t:heading(0)                    -- face right
+t:font('arial', 32)             -- set font to Arial size 32pt
+t:pencolor('black')             -- set pen color to 'black'
+t:filltext('i am a turtle')     -- write 'i am a turtle' on the canvas
 
 -- Print the state of the turtle to the console.
-print(t:state())
-
--- Done.
-print('Turtle done.')
+print('Done -> ' .. t:state())

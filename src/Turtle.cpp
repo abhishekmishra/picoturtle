@@ -103,7 +103,7 @@ float Turtle::get_pen_width()
     return current_state->get_pen_width();
 }
 
-void Turtle::draw_turtle()
+void Turtle::draw_me()
 {
     int d = 25;
     float theta1 = (canvas_heading() - 145) * (M_PI / 180);
@@ -160,7 +160,7 @@ void Turtle::penwidth(float w)
 void Turtle::stop()
 {
     // does nothing for now
-    // draw_turtle();
+    // draw_me();
 }
 
 void Turtle::home()

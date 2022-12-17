@@ -115,7 +115,7 @@ namespace turtle
         float get_pen_width();
         float get_heading();
 
-        void draw_turtle();
+        void draw_me();
 
         /**
          * @brief raise the turtle's pen.

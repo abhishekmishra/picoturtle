@@ -102,6 +102,8 @@ void TurtleCodeEditorWidget::run_file()
 		file_path.isEmpty()? NULL : file_path.toLocal8Bit().data()
 	);
 
+	lua_repl->run_lua_script("t:drawme()");
+
 	// emit the signal with the res code.
 	emit turtle_run_complete(res);
 }

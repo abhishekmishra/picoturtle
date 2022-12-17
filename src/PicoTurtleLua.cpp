@@ -444,6 +444,15 @@ static int skia_turtle_paint(lua_State *L)
     return 0;
 }
 
+static int skia_turtle_drawme(lua_State* L)
+{
+    PicoTurtle* t = skia_turtle_getobj(L);
+
+    t->draw_me();
+
+    return 0;
+}
+
 static int turtle_state_free(lua_State *L)
 {
     delete *static_cast<TurtleState **>(luaL_checkudata(L, 1, LUA_TURTLE_STATE_OBJECT));
@@ -576,6 +585,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"elapsed_time_ms", skia_turtle_elapsed_time_ms},
         {"delay", skia_turtle_delay},
         {"paint", skia_turtle_paint},
+        {"drawme", skia_turtle_drawme},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =
