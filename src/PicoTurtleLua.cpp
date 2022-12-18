@@ -190,8 +190,42 @@ static int skia_turtle_home(lua_State *L)
 
 static int skia_turtle_clear(lua_State *L)
 {
-    PicoTurtle *t = skia_turtle_getobj(L);
-    t->get_canvas()->clear();
+    PicoTurtle* t;
+
+    if (lua_gettop(L) == 4)
+    {
+        unsigned int b = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
+
+        unsigned int g = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
+
+        unsigned int r = (unsigned int)(luaL_checkinteger(L, lua_gettop(L)));
+        lua_pop(L, 1);
+
+        t = skia_turtle_getobj(L);
+
+        t->clear(r, g, b);
+    }
+    else if (lua_gettop(L) == 2)
+    {
+        const char* color = luaL_checkstring(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        t = skia_turtle_getobj(L);
+
+        t->clear(color);
+    }
+    else if (lua_gettop(L) == 1)
+    {
+        t = skia_turtle_getobj(L);
+
+        t->clear();
+    }
+    else
+    {
+        return luaL_error(L, "expecting exactly 3 arguments for (r, g, b) OR exactly 1 argument for color name OR exactly 0 arguments for default color");
+    }
     return 0;
 }
 

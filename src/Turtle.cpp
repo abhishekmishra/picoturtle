@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
+#include "color_names.h"
 
 using namespace turtle;
 
@@ -280,6 +281,43 @@ unsigned int Turtle::get_canvas_height()
     return this->canvas->get_height();
 }
 
+void Turtle::clear(unsigned int r, unsigned int g, unsigned int b)
+{
+    save();
+
+    pencolor(r, g, b);
+    penup();
+    setpos(0, get_canvas_height() / 2);
+    heading(0);
+    pendown();
+    penwidth(get_canvas_height());
+    forward(get_canvas_width());
+
+    restore();
+
+}
+
+void Turtle::clear(const char* color)
+{
+    if (color_name_exists(color) == 1) {
+        save();
+
+        pencolor(color);
+        penup();
+        setpos(0, get_canvas_height() / 2);
+        heading(0);
+        pendown();
+        penwidth(get_canvas_height());
+        forward(get_canvas_width());
+
+        restore();
+    }
+}
+
+void Turtle::clear()
+{
+    clear("white");
+}
 
 void Turtle::reset()
 {

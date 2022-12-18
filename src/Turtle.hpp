@@ -254,6 +254,26 @@ namespace turtle
         virtual void reset();
 
         /**
+         * Clear the canvas with color represented by given
+         * rgb values.
+         *
+         * @param r red value (0-255)
+         * @param g green value (0-255)
+         * @param b blue value (0-255)
+         */
+        virtual void clear(unsigned int r, unsigned int g, unsigned int b);
+
+        /**
+         * Clear the canvas with given color. 
+         */
+        virtual void clear(const char* color);
+
+        /**
+         * Clear the canvas with the color white
+         */
+        virtual void clear();
+
+        /**
          * @brief Set the turtle's font to given font name and size
          *
          * @param f font name
