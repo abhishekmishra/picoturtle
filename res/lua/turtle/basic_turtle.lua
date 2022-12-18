@@ -18,4 +18,4 @@ t:pencolor('black')             -- set pen color to 'black'
 t:filltext('i am a turtle')     -- write 'i am a turtle' on the canvas
 
 -- Print the state of the turtle to the console.
-print('Done -> ' .. t:state())
+print('Done -> ' .. tostring(t:state()))
