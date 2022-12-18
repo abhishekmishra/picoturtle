@@ -513,7 +513,7 @@ void LuaReplWidget::add_to_lua_path(const char* path_fragment)
 	else {
 		snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;' .. package.path", path_fragment);
 		// for debug
-		LuaReplWidget::print_to_repl("Setting path via code -> |" + std::string(setPathCodeStr) + "|");
+		// LuaReplWidget::print_to_repl("Setting path via code -> |" + std::string(setPathCodeStr) + "|");
 		run_lua_script(setPathCodeStr);
 	}
 }
