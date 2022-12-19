@@ -54,7 +54,7 @@ end
 -- @tparam color the color name
 -- @tparam rest if color is r, then g and b can be supplied.
 function BoxTurtle:clear(color, ...)
-	local color = color or 'black'
+	local color = color or 'white'
 	local dim = self.box:dim()
 	local pos = self.box:to_parent_coords(dim:w()/2, 0)
 	-- print('going to ' .. pos:x() .. ', ' .. pos:y())
