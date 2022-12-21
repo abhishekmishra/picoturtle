@@ -12,6 +12,7 @@
         <file>images/outline_redo_black_24dp.png</file>
         <file>images/outline_undo_black_24dp.png</file>
         <file>images/outline_help_outline_black_24dp.png</file>
+        <file>images/outline_clear_all_black_24dp.png</file>
 
         <file>images/outline_exit_to_app_white_24dp.png</file>
         <file>images/outline_file_open_white_24dp.png</file>
@@ -25,6 +26,7 @@
         <file>images/outline_redo_white_24dp.png</file>
         <file>images/outline_undo_white_24dp.png</file>
         <file>images/outline_help_outline_white_24dp.png</file>
+        <file>images/outline_clear_all_white_24dp.png</file>
 
         <file>lua/learnlua.lua</file>
         <file>lua/turtle/basic_turtle.lua</file>

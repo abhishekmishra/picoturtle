@@ -47,10 +47,10 @@ namespace turtle
 	{
 		Q_OBJECT
 
-			static const std::string LUA_REPL_PROMPT;
+		static const std::string LUA_REPL_PROMPT;
 
 	public:
-		LuaReplWidget(QWidget* parent = nullptr);
+		LuaReplWidget(QWidget *parent = nullptr);
 
 		/**
 		 * @brief Prints the given string to the repl
@@ -86,14 +86,14 @@ namespace turtle
 		 * @param filename
 		 * @return status
 		 */
-		int run_lua_file(const char* filename);
+		int run_lua_file(const char *filename);
 
 		/**
 		 * run a lua script as a chunk in the current lua repl
 		 * @param script
 		 * @return status
 		 */
-		int run_lua_script(const char* script);
+		int run_lua_script(const char *script);
 
 		/**
 		 * run a lua script as a chunk in the current lua repl
@@ -104,23 +104,22 @@ namespace turtle
 		 * @param file_path
 		 * @return status
 		 */
-		int run_lua_script_path(const char* script, const char* file_path = NULL);
+		int run_lua_script_path(const char *script, const char *file_path = NULL);
 
 		/**
 		 * prepend the given lua path fragment to the lua path variable.
-		 * 
-		 * the resultant path will be 
-		 * 
+		 *
+		 * the resultant path will be
+		 *
 		 * package.path = "<path_fragment>/?.lua;" .. package.path
-		 * 
+		 *
 		 * @param path_fragment
 		 */
-		void add_to_lua_path(const char* path_fragment);
+		void add_to_lua_path(const char *path_fragment);
 
 	protected:
 		/** Lua State */
-		lua_State* L;
-
+		lua_State *L;
 
 	signals:
 		void prompt_changed(QString prompt);
@@ -128,12 +127,17 @@ namespace turtle
 	public slots:
 		void repl_enter_line();
 
+		/**
+		 * @brief clear the lua repl console.
+		 */
+		void clear_console();
+
 	private:
 		bool multiline;
 		QString prompt;
-		QPlainTextEdit* repl_display;
-		QLineEdit* repl_entry;
-		QLabel* repl_prompt;
+		QPlainTextEdit *repl_display;
+		QLineEdit *repl_entry;
+		QLabel *repl_prompt;
 		QString current_line;
 		QString previous_lines;
 
