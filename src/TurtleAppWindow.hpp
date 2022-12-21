@@ -88,6 +88,9 @@ namespace turtle
 		QToolBar *turtle_toolbar;
 		QToolBar *extras_toolbar;
 
+		QLabel *turtle_status;
+		QLabel *editor_status;
+
 	public slots:
 		void show_status_message(const QString &message);
 		void write_to_console(const QString &input) const;

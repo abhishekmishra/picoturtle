@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include <QPalette>
 #include <QLayout>
+#include <QLabel>
 
 namespace turtle
 {
@@ -34,6 +35,10 @@ namespace turtle
 
 		// Set statusbar items
 		statusBar()->showMessage("Starting PicoTurtle ...");
+		turtle_status = new QLabel("");
+		statusBar()->addPermanentWidget(turtle_status, 0);
+		editor_status = new QLabel("");
+		statusBar()->addPermanentWidget(editor_status, 0);
 
 		update_title();
 
