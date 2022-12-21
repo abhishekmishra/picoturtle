@@ -20,6 +20,8 @@ namespace turtle
 
         void lineNumberAreaPaintEvent(QPaintEvent *event);
         int lineNumberAreaWidth();
+        int current_line();
+        int current_column();
 
     protected:
         void resizeEvent(QResizeEvent *event) override;

@@ -59,13 +59,28 @@ TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(TurtleLuaReplWidget* 
 	}});
 
 	connect(tabs, &QTabWidget::currentChanged, [=](int idx)
-		{ emit current_tab_changed(idx); });
+		{
+			handle_current_tab_changed(idx);
+			emit current_tab_changed(idx); 
+		});
 
 	new_file();
 }
 
 TurtleCodeEditorParentWidget::~TurtleCodeEditorParentWidget()
 {
+}
+
+void TurtleCodeEditorParentWidget::handle_current_tab_changed(int idx)
+{
+	for (int i = 0; i < tabs->count(); i++)
+	{
+		disconnect(((TurtleCodeEditorWidget*)tabs->widget(i))->get_editor(), &TurtleCodeEditorTextWidget::cursorPositionChanged, 0, 0);
+	}
+	TurtleCodeEditorTextWidget* editor = ((TurtleCodeEditorWidget*)tabs->widget(idx))->get_editor();
+	connect(editor, &TurtleCodeEditorTextWidget::cursorPositionChanged, [=]() {
+		emit cursor_position_changed(editor->current_line(), editor->current_column());
+		});
 }
 
 void TurtleCodeEditorParentWidget::delete_editor_and_tab_at_idx(int idx)

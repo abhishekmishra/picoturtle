@@ -25,6 +25,7 @@ namespace turtle
         void file_path_changed();
         void file_modified_changed(bool modified);
         void current_tab_changed(int idx);
+        void cursor_position_changed(int line, int col);
 
     public slots:
         void new_file();
@@ -45,6 +46,7 @@ namespace turtle
         QTabWidget *tabs;
         TurtleCodeEditorWidget* new_code_editor();
         void delete_editor_and_tab_at_idx(int idx);
+        void handle_current_tab_changed(int idx);
     };
 }
 

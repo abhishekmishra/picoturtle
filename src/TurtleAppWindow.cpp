@@ -40,6 +40,11 @@ namespace turtle
 		editor_status = new QLabel("");
 		statusBar()->addPermanentWidget(editor_status, 0);
 
+		connect(code_editor_parent, &TurtleCodeEditorParentWidget::cursor_position_changed, [=](int ln, int col) {
+			// TODO: use fixed width formatting if possible.
+			editor_status->setText(QString("Line:") + QString::number(ln) + QString(", Col:") + QString::number(col));
+			});
+
 		update_title();
 
 		// Connect to file actions.
