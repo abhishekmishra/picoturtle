@@ -49,6 +49,8 @@ namespace turtle
 		void create_lua_repl_widget();
 		void create_turtle_docs_widget();
 		void update_title();
+		void create_statusbar_items();
+		void set_editor_status_text(int ln, int col, bool changed);
 
 		// Widgets
 		TurtleCanvasWidget *turtle_canvas;

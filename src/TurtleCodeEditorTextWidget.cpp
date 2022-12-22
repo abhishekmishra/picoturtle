@@ -106,7 +106,6 @@ void TurtleCodeEditorTextWidget::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
-
 int TurtleCodeEditorTextWidget::current_line()
 {
     return textCursor().blockNumber() + 1;
@@ -115,4 +114,11 @@ int TurtleCodeEditorTextWidget::current_line()
 int TurtleCodeEditorTextWidget::current_column()
 {
     return textCursor().positionInBlock() + 1;
+}
+
+void TurtleCodeEditorTextWidget::move_cursor_to_end()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::End);
+    setTextCursor(cursor);
 }

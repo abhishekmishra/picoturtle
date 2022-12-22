@@ -22,6 +22,7 @@ namespace turtle
         int lineNumberAreaWidth();
         int current_line();
         int current_column();
+        void move_cursor_to_end();
 
     protected:
         void resizeEvent(QResizeEvent *event) override;
