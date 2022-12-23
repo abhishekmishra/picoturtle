@@ -378,6 +378,9 @@ endif(WIN32)
 
 # ----- Windows specific NSIS settings ------
 if (WIN32)
+  # include windows runtime libraries
+  include (InstallRequiredSystemLibraries)
+
   # set the install/uninstall icon used for the installer itself
   set (CPACK_NSIS_MUI_ICON
       "${CMAKE_CURRENT_SOURCE_DIR}/res/icons/pico.ico")
