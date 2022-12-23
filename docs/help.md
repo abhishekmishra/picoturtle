@@ -147,50 +147,150 @@ t:forward(100)        -- move 100 px while writing with the current pen
 
 ## Turtle Text Commands
 
-### font (font string)
-Set the font of the text to be drawn as a web font string. for e.g. '14pt Arial'.
+### font (font name, font size)
+Set the font of the text to be drawn by providing a font name and a size in pixels.
+
+Example:
+
+```lua
+t:font('Arial', 14)
+```
 
 ### stroketext (text)
 Draw the given text with a stroke (no fill), using the set font, in the direction the turtle is facing, at the turtle's location.
 
+__Note__: At the moment filltext and stroketext do the same thing - filltext
+
+Example:
+
+```lua
+t:heading(0)
+t:stroketext("Hello, World!")
+```
+
 ### filltext (text)
 Draw the given text with fill, using the set font, in the direction the turtle is facing, at the turtle's location.
 
+__Note__: At the moment filltext and stroketext do the same thing - filltext
+
+Example:
+
+```lua
+t:heading(0)
+t:filltext("Hello, World!")
+```
+
 ## Turtle Relative Movement Commands
 
-### forward (distance)
+### forward/fd (distance)
 Move the turtle forward by the amount "distance" in pixels, in the direction it is facing.
+
+Example:
+
+```lua
+t:forward(100)  -- move the turtle 100 pixels in the direction it is facing
+t:fd(100)       -- fd is alias for forward so does the same thing as previous line
+```
 
 ### back (distance)
 Move the turtle back by the amount "distance" in pixels, opposite to the direction it is facing.
 
+Example:
+
+```lua
+t:back(100)     -- move the turtle 100 pixels in the opposite direction to the one it is facing
+t:bk(100)       -- bk is alias for back so does the same thing as previous line
+```
+
 ### left (angle)
 Turn the turtle left by "angle" degrees.
 
+Example:
+
+```lua
+t:left(90)     -- turn the heading (direction turtle is facing) left (counter-clockwise) by 90 degrees
+t:lt(90)       -- lt is alias for left so does the same thing as previous line
+```
+
 ### right (angle)
 Turn the turtle right by "angle" degrees.
+
+Example:
+
+```lua
+t:right(90)     -- turn the heading (direction turtle is facing) right (clockwise) by 90 degrees
+t:rt(90)        -- rt is alias for right so does the same thing as previous line
+```
 
 ## Turtle Absolute Movement Commands
 
 ### setpos (x,y)
 Move the turtle to (x,y) on the canvas.
 
+Example:
+
+```lua
+t:setpos(0, 0)   -- move the turtle to the bottom left of the canvas
+```
+
 ### setx (x)
 Move the turtle along the x axis, keeping y to it's current value.
+
+Example:
+
+```lua
+t:setx(0)   -- if turtle is at (x, y) move the turtle to (0, y)
+```
 
 ### sety (y)
 Move the turtle along the y axis, keeping x to it's current value.
 
+Example:
+
+```lua
+t:sety(0)   -- if turtle is at (x, y) move the turtle to (x, 0)
+```
+
 ### heading (angle)
 Change the heading of the turtle to "angle" degrees.
 
+Example:
+
+```lua
+t:heading(90) -- turn the turtle to face upwards on the canvas.
+t:heading(0) -- turn the heading to face right on the canvas.
+```
+
 ## Turtle Canvas Commands
 
-### canvas_size (width, height)
-Change the canvas size to [width X height] pixels.
+### canvas_size (width, height) | ()
+This method accepts two argument or none at all.
+In the two arguments mode it accepts two numeric arguments width and height, and changes the canvas size to [width X height] pixels.
+In the single argument mode - no change is made to the canvs.
+
+However in both forms of the command the current width and height of the canvas is returned as two return values.
+
+__Note:__ Lua function calls can have multiple return values.
+
+Example:
+
+```lua
+local w
+local h
+
+w, h = t:canvas_size(100, 200)
+
+print(w .. ', ' .. h) -- should print 100, 200 as that is the new canvas size returned by the method.
+```
 
 ### export_img (filename)
 Export the current canvas as a PNG file to the given path.
+
+Example:
+
+```lua
+t:export_img("C:\\tmp\\turtle.png") -- write the current canvas contents as a png file.
+```
 
 ## Other Commands
 
