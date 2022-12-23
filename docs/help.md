@@ -266,7 +266,7 @@ t:heading(0) -- turn the heading to face right on the canvas.
 ### canvas_size (width, height) | ()
 This method accepts two argument or none at all.
 In the two arguments mode it accepts two numeric arguments width and height, and changes the canvas size to [width X height] pixels.
-In the single argument mode - no change is made to the canvs.
+In the single argument mode - no change is made to the canvas.
 
 However in both forms of the command the current width and height of the canvas is returned as two return values.
 
@@ -290,6 +290,20 @@ Example:
 
 ```lua
 t:export_img("C:\\tmp\\turtle.png") -- write the current canvas contents as a png file.
+```
+
+### clear (color) | (red, green, blue) | ()
+This command has 3 argument modes:
+1. **No arguments:** The entire canvas is painted the default clear color which is __white__.
+2. **One argument (color)** The argument is a color name - which if part of the color-names list then the canvas is painted with this color.
+3. **Three argumens (r, g, b)** The three numeric arguments in the range [0-255] specify an RGB triple and thus a color. The canvas is painted with this color.
+
+__Note:__ this command overwrites everything on the canvas
+
+```lua
+t:clear()                      -- clear canvas with white
+t:clear('red')                 -- clear canvas with red color
+t:clear(0, 255, 0)             -- clear canvas with (0, 255, 0) i.e. green color
 ```
 
 ## Other Commands
