@@ -1,6 +1,16 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.0**  2022-12-17 Abhishek Mishra  <abhishekmishra3@gmail.com>
+- This is the 7th weekly release of PicoTurtle. I've bumped the minor version to 2 - as starting this release there will be a windows installer available. The release contains the following changes.
+- The mechanism of drawing the turtle (tiny red triangle indicating the turtle's position and heading) is moved to the canvas painter widget. This allows the gui to control when the turtle is drawn.
+- Therefore the stop command is not longer explicitly needed in code - and does not do anything for now.
+- Documentation is fully updated for all turtle commands in the docs/help.md file.
+- `pw` and `pc` are new two letter aliases for `penwidth` and `pencolor` in the Turtle Lua API.
+- The color-names dependency is upgraded to its **v0.1.0-aplha.0** tag - which contains the latest changes from upstream color-names package.
+- The statusbar now has a separate display for showing current line number and column number of the editor.
+- The CPack config to create a windows installer was added in last release - there are some minor changes to this section. This will be used to create the installer for windows and uploaded as part of this release.
+
 **0.1.0-alpha.5**  2022-12-17 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the 6th alpha weekly release of PicoTurtle. This is perhaps the last source only release. It contains the following changes.
