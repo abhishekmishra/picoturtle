@@ -7,7 +7,7 @@ This file documents major changes in every release of the project. The project f
 - Therefore the stop command is not longer explicitly needed in code - and does not do anything for now.
 - Documentation is fully updated for all turtle commands in the docs/help.md file.
 - `pw` and `pc` are new two letter aliases for `penwidth` and `pencolor` in the Turtle Lua API.
-- The color-names dependency is upgraded to its **v0.1.0-aplha.0** tag - which contains the latest changes from upstream color-names package.
+- The color-names dependency is upgraded to its **v0.1.0-alpha.0** tag - which contains the latest changes from upstream color-names package.
 - The statusbar now has a separate display for showing current line number and column number of the editor.
 - The CPack config to create a windows installer was added in last release - there are some minor changes to this section. This will be used to create the installer for windows and uploaded as part of this release.
 
