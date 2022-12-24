@@ -1,7 +1,7 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
-**0.2.0-alpha.0**  2022-12-17 Abhishek Mishra  <abhishekmishra3@gmail.com>
+**0.2.0-alpha.0**  2022-12-24 Abhishek Mishra  <abhishekmishra3@gmail.com>
 - This is the 7th weekly release of PicoTurtle. I've bumped the minor version to 2 - as starting this release there will be a windows installer available. The release contains the following changes.
 - The mechanism of drawing the turtle (tiny red triangle indicating the turtle's position and heading) is moved to the canvas painter widget. This allows the gui to control when the turtle is drawn.
 - Therefore the stop command is not longer explicitly needed in code - and does not do anything for now.
