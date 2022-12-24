@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.20 )
 
-project ( picoturtle VERSION 0.1.0 LANGUAGES C CXX )
+project ( picoturtle VERSION 0.2.0 LANGUAGES C CXX )
 
 set (VERBOSE)
 
@@ -16,7 +16,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # It's useful to setup the current version of our code in the build system
 # using a `semver` style
 set ( PICOTURTLE_VERSION_MAJOR 0 )
-set ( PICOTURTLE_VERSION_MINOR 1 )
+set ( PICOTURTLE_VERSION_MINOR 2 )
 set ( PICOTURTLE_VERSION_PATCH 0 )
 
 # https://stackoverflow.com/a/63037953
