@@ -38,7 +38,18 @@ delbuild:
 	rm -fR $(CMAKE_BUILD_DIR)
 
 build:
+ifeq ($(OSFLAG),WIN32)
+	cmake --build $(CMAKE_BUILD_DIR) --config Debug
+else
 	cmake --build $(CMAKE_BUILD_DIR)
+endif
+
+buildrelease:
+ifeq ($(OSFLAG),WIN32)
+	cmake --build $(CMAKE_BUILD_DIR) --config Release
+else
+	echo "buildrelease make target is only supported on multi-config project types."
+endif
 
 run:
 ifeq ($(OSFLAG),WIN32)
@@ -50,14 +61,29 @@ else
 	$(CMAKE_BUILD_DIR)/bin/picoturtle 
 endif
 
+runrelease:
+ifeq ($(OSFLAG),WIN32)
+	$(CMAKE_BUILD_DIR)/bin/Release/picoturtle
+else
+	echo "runrelease make target is only supported on multi-config project types."
+endif
+
 clean:
 	cmake --build $(CMAKE_BUILD_DIR) --target clean
 
 install:
+ifeq ($(OSFLAG),WIN32)
+	cmake --build $(CMAKE_BUILD_DIR) --config Release --target install
+else
 	cmake --build $(CMAKE_BUILD_DIR) --target install
+endif
 
 package:	install
+ifeq ($(OSFLAG),WIN32)
+	cmake --build $(CMAKE_BUILD_DIR) --config Release --target package
+else
 	cmake --build $(CMAKE_BUILD_DIR) --target package
+endif
 
 sln:
 ifeq ($(OSFLAG),WIN32)

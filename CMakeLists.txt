@@ -340,19 +340,25 @@ add_custom_command(
   )
 
 # Run the qt deploy script for windows only
-# TODO: need to check for release or Debug build to run different programs
+# This command uses generator expressions to figure out which windeployqt command to use
+# if $<CONFIG:Debug> is 1 it uses the debug extension,
+# if $<CONFIG:Release> is 1 it uses the exe.
+# similar logic is used to choose the argument of the command
+# which should be the executable built for this config
 if (WIN32)
   add_custom_command(
     TARGET picoturtle-app
     POST_BUILD
-    COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/build/bin/Debug/picoturtle.exe
+    COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.$<$<CONFIG:Debug>:debug.bat>$<$<CONFIG:Release>:exe> D:/code2/picoturtle/build/bin/$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>/picoturtle.exe
   )
 endif(WIN32)
 
 # Run the qt deploy script for windows only
 # TODO: need to check for release or Debug build to run different programs
 if (WIN32)
-  install(CODE "execute_process(COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/install/bin/picoturtle.exe)")
+  if($<CONFIG:Debug>)
+    install(CODE "execute_process(COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/install/bin/picoturtle.exe)")
+  endif()
 else()
   install(SCRIPT ${deploy_script})
 endif(WIN32)
