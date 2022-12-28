@@ -1,5 +1,8 @@
 .PHONY: all genbuild delbuild build run clean install help sln
 
+# set the build type for single-config generators.
+CMAKE_BUILD_TYPE=Debug
+
 # see https://gist.github.com/sighingnow/deee806603ec9274fd47
 # for details on the following snippet to get the OS
 # (removed the flags about arch as it is not needed for now)
@@ -16,39 +19,45 @@ else
 	endif
 endif
 
+ifeq ($(OSFLAG),WIN32)
+	CMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake
+else
+	CMAKE_TOOLCHAIN_FILE=${VCPKG_HOME}/scripts/buildsystems/vcpkg.cmake
+endif
+
+CMAKE_PRJ_FLAGS=-DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX=./install
+
+CMAKE_BUILD_DIR=./build
+
 all: clean build run
 
 genbuild:
-ifeq ($(OSFLAG),WIN32)
-	cmake . -B ./build -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=./install
-else
-	cmake . -B ./build -DCMAKE_TOOLCHAIN_FILE=${VCPKG_HOME}/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=./install
-endif
+	cmake . -B $(CMAKE_BUILD_DIR) $(CMAKE_PRJ_FLAGS)
 
 delbuild:
-	rm -fR ./build
+	rm -fR $(CMAKE_BUILD_DIR)
 
 build:
-	cmake --build ./build
+	cmake --build $(CMAKE_BUILD_DIR)
 
 run:
 ifeq ($(OSFLAG),WIN32)
-	./build/bin/Debug/picoturtle 
+	$(CMAKE_BUILD_DIR)/bin/Debug/picoturtle 
 else ifeq ($(OSFLAG),OSX)
-	#open -n ./build/bin/picoturtle.app --args 
-	./build/bin/picoturtle.app/Contents/MacOS/picoturtle --args 
+	#open -n $(CMAKE_BUILD_DIR)/bin/picoturtle.app --args 
+	$(CMAKE_BUILD_DIR)/bin/picoturtle.app/Contents/MacOS/picoturtle --args 
 else
-	./build/bin/picoturtle 
+	$(CMAKE_BUILD_DIR)/bin/picoturtle 
 endif
 
 clean:
-	cmake --build ./build --target clean
+	cmake --build $(CMAKE_BUILD_DIR) --target clean
 
 install:
-	cmake --build ./build --target install
+	cmake --build $(CMAKE_BUILD_DIR) --target install
 
 package:	install
-	cmake --build ./build --target package
+	cmake --build $(CMAKE_BUILD_DIR) --target package
 
 sln:
 ifeq ($(OSFLAG),WIN32)
