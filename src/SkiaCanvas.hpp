@@ -29,6 +29,7 @@ namespace turtle
 
         virtual void draw_line(float x1, float y1, float x2, float y2);
         virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3);
+	    virtual void draw_circle(float x, float y, float radius);
         virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width);
         virtual void update_canvas();
 
@@ -37,7 +38,7 @@ namespace turtle
         virtual void stroketext(int x, int y, float angle, const char *text);
         virtual void export_img(const char *filename);
         virtual void clear();
-        
+
         sk_sp<SkSurface> getRasterSurface();
 
     private:

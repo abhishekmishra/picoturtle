@@ -13,14 +13,14 @@ namespace turtle
     /**
      * Abstract Canvas class which declares the primitive operations
      * that a Canvas capable of turtle drawing should support.
-     * 
+     *
      * It should be possible to implement this class using an external
      * library for drawing and then use the rest of the turtle programs
      * without any changes.
     */
     class Canvas
     {
-    
+
     private:
         // evaluate whether to switch to this class
         TurtleDimension *dimension;
@@ -39,6 +39,7 @@ namespace turtle
 
         virtual void draw_line(float x1, float y1, float x2, float y2) = 0;
         virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
+	virtual void draw_circle(float x, float y, float radius) = 0;
         virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width) = 0;
         virtual void update_canvas() = 0;
 

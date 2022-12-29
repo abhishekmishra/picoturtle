@@ -296,5 +296,13 @@ namespace turtle
          * @param text text to write.
          */
         virtual void stroketext(const char *text);
+
+	/**
+	 * @brief Draw a circle with center at the current turtle position,
+	 * and the given radius.
+	 *
+	 * @param radius of the circle to be drawn.
+	 */
+	virtual void circle(float radius);
     };
 };

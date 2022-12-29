@@ -357,3 +357,8 @@ void Turtle::set_canvas(Canvas *c)
 {
     this->canvas = c;
 }
+
+void Turtle::circle(float radius)
+{
+    this->canvas->draw_circle(get_canvas_location_x(), get_canvas_location_y(), radius);
+}

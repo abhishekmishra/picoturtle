@@ -102,5 +102,7 @@ namespace turtle
         virtual void filltext(const char *text);
 
         virtual void stroketext(const char *text);
+
+        virtual void circle(float radius);
     };
 };

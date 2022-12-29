@@ -60,6 +60,11 @@ void SkiaCanvas::draw_triangle(float x1, float y1, float x2, float y2, float x3,
     rasterCanvas->drawPath(path, paint);
 }
 
+void SkiaCanvas::draw_circle(float x, float y, float radius)
+{
+    rasterCanvas->drawCircle(x, y, radius, paint);
+}
+
 void SkiaCanvas::font(const char *f, unsigned int sz)
 {
     sk_sp<SkTypeface> typeface = SkTypeface::MakeFromName(f, SkFontStyle::Normal());

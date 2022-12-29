@@ -293,4 +293,10 @@ function BoxTurtle:out_of_bounds()
 	return oob
 end
 
+function BoxTurtle:getpos()
+	local state = self.turtle:state()
+	local box_coords = self.box:to_box_coords(state:x(), state:y())
+	return box_coords:x(), box_coords:y()
+end
+
 return BoxTurtle

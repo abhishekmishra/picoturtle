@@ -487,6 +487,17 @@ static int skia_turtle_drawme(lua_State* L)
     return 0;
 }
 
+static int skia_turtle_circle(lua_State *L)
+{
+    float radius = luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    PicoTurtle *t = skia_turtle_getobj(L);
+
+    t->circle(radius);
+    return 0;
+}
+
 static int turtle_state_free(lua_State *L)
 {
     delete *static_cast<TurtleState **>(luaL_checkudata(L, 1, LUA_TURTLE_STATE_OBJECT));
@@ -622,6 +633,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"delay", skia_turtle_delay},
         {"paint", skia_turtle_paint},
         {"drawme", skia_turtle_drawme},
+        {"circle", skia_turtle_circle},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =

@@ -245,3 +245,9 @@ void PicoTurtle::stroketext(const char *text)
     Turtle::stroketext(text);
     update_cb(this, update_cb_args);
 }
+
+void PicoTurtle::circle(float radius)
+{
+    Turtle::circle(radius);
+    update_cb(this, update_cb_args);
+}
