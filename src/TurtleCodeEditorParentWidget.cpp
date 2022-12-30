@@ -85,9 +85,13 @@ void TurtleCodeEditorParentWidget::handle_current_tab_changed(int idx)
 
 void TurtleCodeEditorParentWidget::delete_editor_and_tab_at_idx(int idx)
 {
+	qDebug() << "Request to delete tab at index:" << idx;
 	TurtleCodeEditorWidget* editor_widget = (TurtleCodeEditorWidget*)tabs->widget(idx);
+	qDebug() << "Editor widget extracted";
 	tabs->removeTab(idx);
+	qDebug() << "Tab removed";
 	delete editor_widget;
+	qDebug() << "Editor widget delete called.";
 }
 
 void TurtleCodeEditorParentWidget::new_file()
