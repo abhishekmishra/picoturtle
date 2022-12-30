@@ -112,7 +112,7 @@ TurtleAppWindow::TurtleAppWindow(QWidget *parent)
 			save_as_action->setDisabled(true);
 		} });
 
-	qDebug() << "We are in dark theme?" << QString::number(in_dark_theme());
+	// qDebug() << "We are in dark theme?" << QString::number(in_dark_theme());
 }
 
 TurtleAppWindow::~TurtleAppWindow()
