@@ -108,7 +108,7 @@ void TurtleLuaReplWidget::turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args
 {
 	// sk_sp<SkImage> img;
 
-	printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->get_name().c_str(), t->get_id().c_str());
+	// printf("PicoTurtle destroyed - Name: %s, Id: %s\n", t->get_name().c_str(), t->get_id().c_str());
 	// img = t->getRasterSurface()->makeImageSnapshot();
 	// if (img)
 	//{
