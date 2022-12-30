@@ -190,7 +190,7 @@ static int skia_turtle_home(lua_State *L)
 
 static int skia_turtle_clear(lua_State *L)
 {
-    PicoTurtle* t;
+    PicoTurtle *t;
 
     if (lua_gettop(L) == 4)
     {
@@ -209,7 +209,7 @@ static int skia_turtle_clear(lua_State *L)
     }
     else if (lua_gettop(L) == 2)
     {
-        const char* color = luaL_checkstring(L, lua_gettop(L));
+        const char *color = luaL_checkstring(L, lua_gettop(L));
         lua_pop(L, 1);
 
         t = skia_turtle_getobj(L);
@@ -389,9 +389,9 @@ static int skia_turtle_stroketext(lua_State *L)
 
 static int skia_turtle_canvas_size(lua_State *L)
 {
-    PicoTurtle* t;
+    PicoTurtle *t;
 
-    if (lua_gettop(L) == 3) 
+    if (lua_gettop(L) == 3)
     {
         int height = (int)(luaL_checkinteger(L, lua_gettop(L)));
         lua_pop(L, 1);
@@ -403,7 +403,7 @@ static int skia_turtle_canvas_size(lua_State *L)
 
         t->set_canvas_size(width, height);
     }
-    else if (lua_gettop(L) == 1) 
+    else if (lua_gettop(L) == 1)
     {
         t = skia_turtle_getobj(L);
     }
@@ -478,9 +478,9 @@ static int skia_turtle_paint(lua_State *L)
     return 0;
 }
 
-static int skia_turtle_drawme(lua_State* L)
+static int skia_turtle_drawme(lua_State *L)
 {
-    PicoTurtle* t = skia_turtle_getobj(L);
+    PicoTurtle *t = skia_turtle_getobj(L);
 
     t->draw_me();
 
@@ -495,6 +495,51 @@ static int skia_turtle_circle(lua_State *L)
     PicoTurtle *t = skia_turtle_getobj(L);
 
     t->circle(radius);
+    return 0;
+}
+
+static int skia_turtle_arc(lua_State *L)
+{
+    int num_args = lua_gettop(L);
+
+    if (num_args == 2)
+    {
+        float radius = luaL_checknumber(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        PicoTurtle *t = skia_turtle_getobj(L);
+
+        t->arc(radius);
+    }
+
+    if (num_args == 3)
+    {
+        float extent = luaL_checknumber(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        float radius = luaL_checknumber(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        PicoTurtle *t = skia_turtle_getobj(L);
+
+        t->arc(radius, extent);
+    }
+
+    if (num_args == 4)
+    {
+        int steps = luaL_checkinteger(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        float extent = luaL_checknumber(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        float radius = luaL_checknumber(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        PicoTurtle *t = skia_turtle_getobj(L);
+
+        t->arc(radius, extent, steps);
+    }
     return 0;
 }
 
@@ -634,6 +679,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"paint", skia_turtle_paint},
         {"drawme", skia_turtle_drawme},
         {"circle", skia_turtle_circle},
+        {"arc", skia_turtle_arc},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =

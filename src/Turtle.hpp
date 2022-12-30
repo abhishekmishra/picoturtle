@@ -264,9 +264,9 @@ namespace turtle
         virtual void clear(unsigned int r, unsigned int g, unsigned int b);
 
         /**
-         * Clear the canvas with given color. 
+         * Clear the canvas with given color.
          */
-        virtual void clear(const char* color);
+        virtual void clear(const char *color);
 
         /**
          * Clear the canvas with the color white
@@ -297,12 +297,30 @@ namespace turtle
          */
         virtual void stroketext(const char *text);
 
-	/**
-	 * @brief Draw a circle with center at the current turtle position,
-	 * and the given radius.
-	 *
-	 * @param radius of the circle to be drawn.
-	 */
-	virtual void circle(float radius);
+        /**
+         * @brief Draw a circle with center at the current turtle position,
+         * and the given radius.
+         *
+         * @param radius of the circle to be drawn.
+         */
+        virtual void circle(float radius);
+
+        /**
+         * @brief Draw an arc with the given radius. The circle is radius pixels
+         * left of the position of the turtle.
+         * \a extent is the size in degrees of the arc. If it is not provided or if
+         * it is a multiple of 360 then a whole circle is drawn.
+         * The endpoint of the turtle is where the arc stops drawing.
+         * The \a steps argument determines the number of line segments used to approximate
+         * the arc. If it is not provided (or is -1), then a calculated value is used.
+         * automatically.
+         *
+         * If the \a radius is negative, the arc is drawn counter-clockwise.
+         *
+         * @param radius radius of the arc
+         * @param extent size of arc in degrees
+         * @param steps number of line segments to approximate the arc
+         */
+        virtual void arc(float radius, float extent = -1, int steps = -1);
     };
 };

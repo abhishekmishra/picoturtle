@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "color_names.h"
+#include <algorithm>
 
 using namespace turtle;
 
@@ -294,12 +295,12 @@ void Turtle::clear(unsigned int r, unsigned int g, unsigned int b)
     forward(get_canvas_width());
 
     restore();
-
 }
 
-void Turtle::clear(const char* color)
+void Turtle::clear(const char *color)
 {
-    if (color_name_exists(color) == 1) {
+    if (color_name_exists(color) == 1)
+    {
         save();
 
         pencolor(color);
@@ -361,4 +362,41 @@ void Turtle::set_canvas(Canvas *c)
 void Turtle::circle(float radius)
 {
     this->canvas->draw_circle(get_canvas_location_x(), get_canvas_location_y(), radius);
+}
+
+// This implementation is largely based on the Turtle:circle method
+// in the Python turtle module
+void Turtle::arc(float radius, float extent, int steps)
+{
+    if (extent < 0)
+    {
+        extent = 360.0;
+    }
+    if (steps <= 0)
+    {
+        float frac = abs(extent) / 360.0;
+        steps = 1 + (std::min(11 + abs(radius) / 6.0, 59.0) * frac);
+    }
+
+    // printf("radius, extent, steps -> %f, %f, %d\n", radius, extent, steps);
+
+    float w = 1.0 * extent / steps;
+    float w2 = 0.5 * w;
+    float l = 2.0 * radius * sin(w2 * (M_PI / 180.0));
+    if (radius < 0)
+    {
+        l = -l;
+        w = -w;
+        w2 = -w2;
+    }
+
+    left(w2);
+
+    for (int i = 0; i < steps; i++)
+    {
+        forward(l);
+        right(w);
+    }
+
+    right(w2);
 }

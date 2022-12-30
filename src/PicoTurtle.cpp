@@ -251,3 +251,9 @@ void PicoTurtle::circle(float radius)
     Turtle::circle(radius);
     update_cb(this, update_cb_args);
 }
+
+void PicoTurtle::arc(float radius, float extent, int steps)
+{
+    Turtle::arc(radius, extent, steps);
+    update_cb(this, update_cb_args);
+}
