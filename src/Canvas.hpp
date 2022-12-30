@@ -17,7 +17,7 @@ namespace turtle
      * It should be possible to implement this class using an external
      * library for drawing and then use the rest of the turtle programs
      * without any changes.
-    */
+     */
     class Canvas
     {
 
@@ -39,7 +39,7 @@ namespace turtle
 
         virtual void draw_line(float x1, float y1, float x2, float y2) = 0;
         virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3) = 0;
-	virtual void draw_circle(float x, float y, float radius) = 0;
+        virtual void draw_circle(float x, float y, float radius) = 0;
         virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width) = 0;
         virtual void update_canvas() = 0;
 
@@ -48,6 +48,11 @@ namespace turtle
         virtual void stroketext(int x, int y, float angle, const char *text) = 0;
         virtual void export_img(const char *filename) = 0;
         virtual void clear() = 0;
+
+        // fill methods
+        virtual void begin_fill() = 0;
+        virtual void end_fill() = 0;
+        virtual bool filling() = 0;
     };
 };
 

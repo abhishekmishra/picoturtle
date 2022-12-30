@@ -8,9 +8,9 @@ using namespace turtle;
 
 void SkiaCanvas::CreateCanvas()
 {
-    //SkImageInfo image_info = SkImageInfo::Make(getWidth(), getHeight(), 
-    //    SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
-    //rasterSurface = SkSurface::MakeRaster(image_info);
+    // SkImageInfo image_info = SkImageInfo::Make(getWidth(), getHeight(),
+    //     SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
+    // rasterSurface = SkSurface::MakeRaster(image_info);
     rasterSurface =
         SkSurface::MakeRasterN32Premul(get_width(), get_height());
     rasterCanvas = rasterSurface->getCanvas();
@@ -20,15 +20,15 @@ void SkiaCanvas::CreateCanvas()
 
 void SkiaCanvas::update_canvas()
 {
-    //TODO: cleanup existing skia objects if already created.
-    
+    // TODO: cleanup existing skia objects if already created.
+
     CreateCanvas();
 
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setStrokeWidth(1);
     font(nullptr, 12);
-
+    in_fill = false;
     // todo needs to be called by turtle now
     // update_turtle_brush();
 }
@@ -38,9 +38,7 @@ SkiaCanvas::SkiaCanvas()
     update_canvas();
 };
 
-SkiaCanvas::~SkiaCanvas()
-{
-};
+SkiaCanvas::~SkiaCanvas(){};
 
 void SkiaCanvas::draw_line(float x1, float y1, float x2, float y2)
 {
@@ -146,7 +144,25 @@ void SkiaCanvas::update_turtle_brush(TurtleColor *pen_color, int pen_width)
     paint.setStrokeWidth(pen_width);
 }
 
-sk_sp<SkSurface> SkiaCanvas::getRasterSurface() 
+sk_sp<SkSurface> SkiaCanvas::getRasterSurface()
 {
     return rasterSurface;
+}
+
+// fill methods
+void SkiaCanvas::begin_fill()
+{
+    paint.setStyle(SkPaint::kFill_Style);
+    in_fill = true;
+}
+
+void SkiaCanvas::end_fill()
+{
+    paint.setStyle(SkPaint::kStroke_Style);
+    in_fill = false;
+}
+
+bool SkiaCanvas::filling()
+{
+    return in_fill;
 }

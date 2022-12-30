@@ -29,7 +29,7 @@ namespace turtle
 
         virtual void draw_line(float x1, float y1, float x2, float y2);
         virtual void draw_triangle(float x1, float y1, float x2, float y2, float x3, float y3);
-	    virtual void draw_circle(float x, float y, float radius);
+        virtual void draw_circle(float x, float y, float radius);
         virtual void update_turtle_brush(TurtleColor *pen_color, int pen_width);
         virtual void update_canvas();
 
@@ -39,11 +39,16 @@ namespace turtle
         virtual void export_img(const char *filename);
         virtual void clear();
 
+        // fill methods
+        virtual void begin_fill();
+        virtual void end_fill();
+        virtual bool filling();
+
         sk_sp<SkSurface> getRasterSurface();
 
     private:
         void CreateCanvas();
-
+        bool in_fill;
     };
 }
 #endif // SKIACANVAS_H
