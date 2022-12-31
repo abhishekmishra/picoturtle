@@ -17,7 +17,7 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget *parent)
 	setWindowTitle(tr("About PicoTurtle"));
 
 	// TODO: get actual version from cmake build.
-	QLabel *program_name = new QLabel("<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> v0.2.0-alpha.0 is a Turtle programming environment.");
+	QLabel *program_name = new QLabel("<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> v0.2.0-alpha.1 is a Turtle programming environment.");
 	enable_hyperlinks(program_name);
 
 	QLabel *author_name = new QLabel("by Abhishek Mishra (<a href='https://github.com/abhishekmishra'>github.com/abhishekmishra</a>)");
