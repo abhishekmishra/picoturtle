@@ -1,7 +1,10 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
-**0.2.0-alpha.1**  2022-12-31 Abhishek Mishra  <abhishekmishra3@gmail.com>
+**0.2.0-alpha.2**  2022-12-31 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+_Edit: I made an error while making the release tag - called it alpha.2. So this release note is also amended accordingly._
+
 - This is the 8th weekly release of PicoTurtle and the last one in 2022. This release contains a few minor features and bug fixes.
 - The build targets for install and release have been changed to work with release binaries on Windows/Visual Studio.
 - The installer build now contains release binaries instead of debug binaries. Since this was a relatively minor change, the binary for the previous version was also changed on the github release page.
