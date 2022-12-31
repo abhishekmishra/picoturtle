@@ -1,6 +1,14 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.1**  2022-12-31 Abhishek Mishra  <abhishekmishra3@gmail.com>
+- This is the 8th weekly release of PicoTurtle and the last one in 2022. This release contains a few minor features and bug fixes.
+- The build targets for install and release have been changed to work with release binaries on Windows/Visual Studio.
+- The installer build now contains release binaries instead of debug binaries. Since this was a relatively minor change, the binary for the previous version was also changed on the github release page.
+- A new `circle(radius)` method is added to the `Turtle`. It draws a circle with the given radius around the current position of the turtle.
+- A new `arc(radius, extent, steps)` based on the python turtle _circle_ method is added. This allows drawing of arcs, circles and regular polygons.
+- The Canvas now supports a begin and end fill mode. This will be used to build fill capability in the turtle.
+
 **0.2.0-alpha.0**  2022-12-24 Abhishek Mishra  <abhishekmishra3@gmail.com>
 - This is the 7th weekly release of PicoTurtle. I've bumped the minor version to 2 - as starting this release there will be a windows installer available. The release contains the following changes.
 - The mechanism of drawing the turtle (tiny red triangle indicating the turtle's position and heading) is moved to the canvas painter widget. This allows the gui to control when the turtle is drawn.
