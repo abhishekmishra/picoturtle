@@ -384,7 +384,7 @@ endif(WIN32)
 
 # ----- Windows specific NSIS settings ------
 if (WIN32)
-  set (CPACK_NSIS_DISPLAY_NAME "PicoTurtle v0.2.0-alpha.0")
+  set (CPACK_NSIS_DISPLAY_NAME "PicoTurtle v0.2.0-alpha.1")
   set (CPACK_NSIS_PACKAGE_NAME "PicoTurtle")
 
   set(CPACK_NSIS_HELP_LINK "https://github.com/abhishekmishra/picoturtle")
@@ -393,7 +393,7 @@ if (WIN32)
 
   set(CPACK_NSIS_WELCOME_TITLE "Welcome to PicoTurtle Setup.")
   set(CPACK_NSIS_FINISH_TITLE "Congrats! You've successfully installed PicoTurtle!")
-  set(CPACK_NSIS_BRANDING_TEXT "PicoTurtle v0.2.0-alpha.0 by Abhishek Mishra")
+  set(CPACK_NSIS_BRANDING_TEXT "PicoTurtle v0.2.0-alpha.1 by Abhishek Mishra")
 
   # include windows runtime libraries
   include (InstallRequiredSystemLibraries)
