@@ -14,7 +14,7 @@ namespace turtle
         Q_OBJECT
 
     public:
-        TurtleCodeEditorParentWidget(TurtleLuaReplWidget* repl, QWidget *parent = nullptr);
+        TurtleCodeEditorParentWidget(TurtleLuaReplWidget *repl, QWidget *parent = nullptr);
         ~TurtleCodeEditorParentWidget();
 
     signals:
@@ -39,14 +39,17 @@ namespace turtle
         bool is_dirty();
         const QString get_file_name();
         const QString &get_file_path();
-        TurtleCodeEditorWidget* get_current_editor_widget();
+        TurtleCodeEditorWidget *get_current_editor_widget();
 
     private:
-        TurtleLuaReplWidget* lua_repl;
+        TurtleLuaReplWidget *lua_repl;
         QTabWidget *tabs;
-        TurtleCodeEditorWidget* new_code_editor();
+        TurtleCodeEditorWidget *new_code_editor();
         void delete_editor_and_tab_at_idx(int idx);
+
+    private slots:
         void handle_current_tab_changed(int idx);
+        void handle_tab_close_requested(int idx);
     };
 }
 

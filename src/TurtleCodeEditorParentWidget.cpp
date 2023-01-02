@@ -15,22 +15,30 @@ TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(TurtleLuaReplWidget *
 	tabs->setTabsClosable(true);
 	tabs->setDocumentMode(true);
 
-	connect(tabs, &QTabWidget::tabCloseRequested, [=](int idx)
-			{
-			// get the handle to the editor widget
-			// then remove the tab
-			// and then delete the widget object.
-			TurtleCodeEditorWidget* editor_widget = (TurtleCodeEditorWidget*)tabs->widget(idx);
+	connect(tabs, &QTabWidget::tabCloseRequested, this, &TurtleCodeEditorParentWidget::handle_tab_close_requested);
+
+	connect(tabs, &QTabWidget::currentChanged, this, &TurtleCodeEditorParentWidget::handle_current_tab_changed);
+
+	new_file();
+}
+
+TurtleCodeEditorParentWidget::~TurtleCodeEditorParentWidget()
+{
+}
+
+void TurtleCodeEditorParentWidget::handle_tab_close_requested(int idx)
+{
+	// get the handle to the editor widget
+	// then remove the tab
+	// and then delete the widget object.
+	TurtleCodeEditorWidget *editor_widget = (TurtleCodeEditorWidget *)tabs->widget(idx);
 	if (editor_widget->is_dirty())
 	{
 		QMessageBox::StandardButton btn = QMessageBox::question(
 			this,
 			"File has changes!",
-			"File " + editor_widget->get_file_name()
-			+ "has unsaved changed. Save before closing tab?",
-			QMessageBox::Save
-			| QMessageBox::Discard
-			| QMessageBox::Cancel,
+			"File " + editor_widget->get_file_name() + "has unsaved changed. Save before closing tab?",
+			QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
 			QMessageBox::Save);
 		switch (btn)
 		{
@@ -54,20 +62,10 @@ TurtleCodeEditorParentWidget::TurtleCodeEditorParentWidget(TurtleLuaReplWidget *
 			break;
 		}
 	}
-	else {
+	else
+	{
 		delete_editor_and_tab_at_idx(idx);
-	} });
-
-	connect(tabs, &QTabWidget::currentChanged, [=](int idx)
-			{
-			handle_current_tab_changed(idx);
-			emit current_tab_changed(idx); });
-
-	new_file();
-}
-
-TurtleCodeEditorParentWidget::~TurtleCodeEditorParentWidget()
-{
+	}
 }
 
 void TurtleCodeEditorParentWidget::handle_current_tab_changed(int idx)
@@ -79,6 +77,8 @@ void TurtleCodeEditorParentWidget::handle_current_tab_changed(int idx)
 	TurtleCodeEditorTextWidget *editor = ((TurtleCodeEditorWidget *)tabs->widget(idx))->get_editor();
 	connect(editor, &TurtleCodeEditorTextWidget::cursorPositionChanged, [=]()
 			{ emit cursor_position_changed(editor->current_line(), editor->current_column()); });
+
+	emit current_tab_changed(tabs->currentIndex());
 }
 
 // While deleting tab at index 0, if it is the last one,
@@ -99,6 +99,8 @@ void TurtleCodeEditorParentWidget::delete_editor_and_tab_at_idx(int idx)
 	// qDebug() << "Tab removed";
 	delete editor_widget;
 	// qDebug() << "Editor widget delete called.";
+
+	emit current_tab_changed(tabs->currentIndex());
 }
 
 void TurtleCodeEditorParentWidget::new_file()
