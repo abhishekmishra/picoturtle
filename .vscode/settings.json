@@ -86,6 +86,7 @@
         "iomanip": "cpp",
         "stack": "cpp",
         "thread": "cpp",
-        "qtextbrowser": "cpp"
+        "qtextbrowser": "cpp",
+        "*.in": "cpp"
     }
 }

@@ -2,6 +2,7 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
+#include <PicoTurtleVersion.hpp>
 
 using namespace turtle;
 
@@ -16,9 +17,14 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget *parent)
 {
 	setWindowTitle(tr("About PicoTurtle"));
 
-	// TODO: get actual version from cmake build.
-	QLabel *program_name = new QLabel("<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> v0.2.0-alpha.1 is a Turtle programming environment.");
+	QString verstion_string = QString::fromUtf8(PICOTURTLE_VERSION_STR);
+	QString program_name_label_str = "<a href='https://github.com/abhishekmishra/picoturtle'>PicoTurtle</a> is a Turtle programming environment.";
+	QString version_label_str = QString("Application Version: %1").arg(verstion_string);
+
+	QLabel *program_name = new QLabel(program_name_label_str);
 	enable_hyperlinks(program_name);
+
+	QLabel *version = new QLabel(version_label_str);
 
 	QLabel *author_name = new QLabel("by Abhishek Mishra (<a href='https://github.com/abhishekmishra'>github.com/abhishekmishra</a>)");
 	enable_hyperlinks(author_name);
@@ -33,6 +39,7 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget *parent)
 	QVBoxLayout *vb_layout = new QVBoxLayout(this);
 
 	vb_layout->addWidget(program_name);
+	vb_layout->addWidget(version);
 	vb_layout->addWidget(author_name);
 	vb_layout->addWidget(license_brief);
 	vb_layout->addWidget(license_brief_part2);

@@ -15,9 +15,13 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # It's useful to setup the current version of our code in the build system
 # using a `semver` style
-set ( PICOTURTLE_VERSION_MAJOR 0 )
-set ( PICOTURTLE_VERSION_MINOR 2 )
-set ( PICOTURTLE_VERSION_PATCH 0 )
+set ( PICOTURTLE_VERSION_MAJOR "0" )
+set ( PICOTURTLE_VERSION_MINOR "2" )
+set ( PICOTURTLE_VERSION_PATCH "0" )
+set ( PICOTURTLE_VERSION_PRERELEASE "-alpha.2" )
+
+# ----------- Configure Version File
+configure_file( src/PicoTurtleVersion.hpp.in src/PicoTurtleVersion.hpp )
 
 # https://stackoverflow.com/a/63037953
 include(CheckLibraryExists)
@@ -96,6 +100,8 @@ add_library(picoturtle SHARED ${PICOTURTLE_LIB_SOURCES})
 set_property(TARGET picoturtle PROPERTY CXX_STANDARD 17)
 
 target_include_directories(picoturtle PUBLIC c-color-names)
+
+target_include_directories(picoturtle PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/src)
 
 if(WIN32)
   if (NOT TARGET skia)
