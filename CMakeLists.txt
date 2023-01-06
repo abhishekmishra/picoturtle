@@ -19,6 +19,7 @@ set ( PICOTURTLE_VERSION_MAJOR "0" )
 set ( PICOTURTLE_VERSION_MINOR "2" )
 set ( PICOTURTLE_VERSION_PATCH "0" )
 set ( PICOTURTLE_VERSION_PRERELEASE "-alpha.2" )
+set ( PICOTURTLE_VERSION_STR ${PICOTURTLE_VERSION_MAJOR}.${PICOTURTLE_VERSION_MINOR}.${PICOTURTLE_VERSION_PATCH}${PICOTURTLE_VERSION_PRERELEASE})
 
 # ----------- Configure Version File
 configure_file( src/PicoTurtleVersion.hpp.in src/PicoTurtleVersion.hpp )
@@ -390,7 +391,7 @@ endif(WIN32)
 
 # ----- Windows specific NSIS settings ------
 if (WIN32)
-  set (CPACK_NSIS_DISPLAY_NAME "PicoTurtle v0.2.0-alpha.1")
+  set (CPACK_NSIS_DISPLAY_NAME "PicoTurtle v${PICOTURTLE_VERSION_STR}")
   set (CPACK_NSIS_PACKAGE_NAME "PicoTurtle")
 
   set(CPACK_NSIS_HELP_LINK "https://github.com/abhishekmishra/picoturtle")
@@ -399,7 +400,7 @@ if (WIN32)
 
   set(CPACK_NSIS_WELCOME_TITLE "Welcome to PicoTurtle Setup.")
   set(CPACK_NSIS_FINISH_TITLE "Congrats! You've successfully installed PicoTurtle!")
-  set(CPACK_NSIS_BRANDING_TEXT "PicoTurtle v0.2.0-alpha.1 by Abhishek Mishra")
+  set(CPACK_NSIS_BRANDING_TEXT "PicoTurtle v${PICOTURTLE_VERSION_STR} by Abhishek Mishra")
 
   # include windows runtime libraries
   include (InstallRequiredSystemLibraries)
