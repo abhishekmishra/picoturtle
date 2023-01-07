@@ -328,6 +328,7 @@ t:arc(100, 90)    -- draw a 90degree arc with radius 100
 t:arc(10)         -- draw a circle with radius 10
 
 t:arc(50, 360, 6) -- draw a hexagon
+```
 
 ## Other Commands
 
