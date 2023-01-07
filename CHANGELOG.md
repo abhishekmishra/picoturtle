@@ -1,6 +1,15 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.3**  2023-01-07 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the 9th weekly release of PicoTurtle and the first one in 2023. This release contains several documentation and installer related changed - and one major bug fix.
+- The CMAKE build is used to generate an internal version header file - which can be used by other code to display the currect built version.
+- The About Dialog now uses the version headers instead of hardcoding version.
+- The CMAKE package section for windows uses the build version variables for generating installer strings.
+- BugFix: When the last tab was closed in the IDE, the tab widget segfaults in the internal Qt handler. Essentially Qt does not support 0 tabs in the current version. So there is a workaround to add a new empty tab if the last editor is closed by the user.
+- Documentation for `circle` and `arc` commands is added.
+
 **0.2.0-alpha.2**  2022-12-31 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 _Edit: I made an error while making the release tag - called it alpha.2. So this release note is also amended accordingly._
