@@ -306,6 +306,29 @@ t:clear('red')                 -- clear canvas with red color
 t:clear(0, 255, 0)             -- clear canvas with (0, 255, 0) i.e. green color
 ```
 
+## Turtle Shape Commands
+
+### circle (radius)
+This command draws a circle around the current position of the turtle. The circle uses the turtle's current postion as center and provided radius.
+
+Example:
+
+```lua
+t:circle(100)
+```
+
+### arc (radius, [extent, steps])
+This command draws an arc starting at the current position of the turtle. The radius is used to set the curvature of the arc (the radius of the circle which this arc is part of). The extent is provided in degrees and determines the size of the arc. The arc is constructed using small lines that approximate the arc. The number of lines used is set using steps. If not provided, the steps are calculated internally.
+
+Example:
+
+```lua
+t:arc(100, 90)    -- draw a 90degree arc with radius 100
+
+t:arc(10)         -- draw a circle with radius 10
+
+t:arc(50, 360, 6) -- draw a hexagon
+
 ## Other Commands
 
 ### stop
