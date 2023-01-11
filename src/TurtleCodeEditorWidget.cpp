@@ -27,33 +27,6 @@ TurtleCodeEditorWidget::TurtleCodeEditorWidget(TurtleLuaReplWidget* repl, QWidge
 	find_replace = new TurtleFindReplaceTextWidget(turtle_code_edit);
 	find_replace->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-	// Set the default monospace font for now
-	// TODO: perhaps include a decent open source font
-	QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-	font.setPointSize(10);
-	QFontInfo info(font);
-	// qDebug() << font << info.family() << info.fixedPitch();
-	turtle_code_edit->setFont(font);
-
-	QFontMetrics fontMetrics = QFontMetrics(font);
-	int fontWidth = fontMetrics.averageCharWidth();
-	turtle_code_edit->setTabStopDistance(fontWidth * 4);
-
-	QPalette p = turtle_code_edit->palette();
-
-	// set background colour
-	p.setColor(QPalette::Active, QPalette::Base, Qt::darkBlue);
-	p.setColor(QPalette::Inactive, QPalette::Base, Qt::darkBlue);
-
-	// set foreground colour
-	p.setColor(QPalette::Active, QPalette::Text, Qt::yellow);
-	p.setColor(QPalette::Inactive, QPalette::Text, Qt::yellow);
-
-	turtle_code_edit->setPalette(p);
-
-	// set minimum width of code_edit
-	turtle_code_edit->setMinimumWidth(512);
-
 	// create and set highlighter
 	lua_highlighter = new LuaSyntaxHighlighter(turtle_code_edit->document());
 
