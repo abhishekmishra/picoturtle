@@ -150,7 +150,30 @@ void TurtleCodeEditorTextWidget::move_cursor_to_end()
 
 void TurtleCodeEditorTextWidget::indent_line_or_selection()
 {
+    if (textCursor().hasSelection())
+    {
+        //int start = textCursor().selectionStart();
+        //int end = textCursor().selectionEnd();
 
+        //QTextCursor indent_cur = textCursor();
+        //indent_cur.setPosition(start);
+
+        //while (indent_cur.position() < end)
+        //{
+        //    qDebug() << "start = " << start << " end = " << end << " current = " << indent_cur.position();
+
+        //    indent_cur.movePosition(QTextCursor::StartOfLine);
+        //    indent_cur.insertText("\t");
+        //    indent_cur.movePosition(QTextCursor::EndOfLine);
+        //}
+    }
+    else
+    {
+        int pos = textCursor().position();
+        textCursor().movePosition(QTextCursor::StartOfLine);
+        insertPlainText("\t");
+        textCursor().setPosition(pos + 1);
+    }
 }
 
 void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)
@@ -160,6 +183,10 @@ void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)
         if (!textCursor().hasSelection())
         {
             insertPlainText("\t");
+        }
+        else
+        {
+            indent_line_or_selection();
         }
     }
     else
