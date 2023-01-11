@@ -24,8 +24,12 @@ namespace turtle
         int current_column();
         void move_cursor_to_end();
 
+    public slots:
+        void indent_line_or_selection();
+
     protected:
         void resizeEvent(QResizeEvent *event) override;
+        void keyPressEvent(QKeyEvent* e) override;
 
     private slots:
         void updateLineNumberAreaWidth(int newBlockCount);

@@ -147,3 +147,23 @@ void TurtleCodeEditorTextWidget::move_cursor_to_end()
     cursor.movePosition(QTextCursor::End);
     setTextCursor(cursor);
 }
+
+void TurtleCodeEditorTextWidget::indent_line_or_selection()
+{
+
+}
+
+void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)
+{
+    if (e->key() == Qt::Key_Tab)
+    {
+        if (!textCursor().hasSelection())
+        {
+            insertPlainText("\t");
+        }
+    }
+    else
+    {
+        QPlainTextEdit::keyPressEvent(e);
+    }
+}
