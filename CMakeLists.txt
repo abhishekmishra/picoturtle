@@ -435,4 +435,14 @@ if (WIN32)
 
 endif(WIN32)
 
+if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+    message ( "***** Setting CPack Generator Options For Linux *****" )
+    set ( CPACK_BINARY_DEB ON )
+    set ( CPACK_BINARY_STGZ OFF )
+    set ( CPACK_BINARY_TGZ OFF )
+    set ( CPACK_BINARY_TZ OFF )
+    
+    set ( CPACK_DEBIAN_PACKAGE_MAINTAINER "Abhishek Mishra" )
+endif(Linux)
+
 include(CPack)
