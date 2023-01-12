@@ -215,3 +215,8 @@ void TurtleCodeEditorWidget::toggle_find_replace()
 		find_replace->setFocus(Qt::MouseFocusReason);
 	}
 }
+
+void TurtleCodeEditorWidget::indent_line_or_selection()
+{
+	turtle_code_edit->indent_line_or_selection();
+}

@@ -36,6 +36,7 @@ namespace turtle
         void run_file();
         void toggle_find();
         void toggle_find_replace();
+        void indent_line_or_selection();
 
     public:
         bool has_file_path();

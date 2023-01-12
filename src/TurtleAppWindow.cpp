@@ -174,6 +174,12 @@ void TurtleAppWindow::create_actions()
 	find_replace_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
 #endif
 
+	indent_action = new QAction(tr("Indent Code"));
+	indent_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_BracketRight));
+
+	deindent_action = new QAction(tr("De-Indent Code"));
+	deindent_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_BracketLeft));
+
 	run_action = new QAction(tr("Run"));
 	run_action->setIcon(get_icon("slideshow"));
 	run_action->setShortcut(QKeySequence(Qt::Key_F5));
@@ -258,6 +264,9 @@ void TurtleAppWindow::create_actions()
 	connect(find_replace_action, &QAction::triggered, [=]()
 			{ code_editor_parent->get_current_editor_widget()->toggle_find_replace(); });
 
+	connect(indent_action, &QAction::triggered, [=]()
+			{ code_editor_parent->get_current_editor_widget()->indent_line_or_selection(); });
+
 	// connect about
 	connect(about_action, &QAction::triggered, turtle_about, &TurtleAboutDialog::exec);
 }
@@ -310,6 +319,8 @@ void TurtleAppWindow::create_menubar()
 	edit_menu->addAction(redo_action);
 	edit_menu->addAction(find_action);
 	edit_menu->addAction(find_replace_action);
+	edit_menu->addAction(indent_action);
+	edit_menu->addAction(deindent_action);
 
 	QMenu *turtle_menu = menuBar()->addMenu(tr("Turtle"));
 	turtle_menu->addAction(run_action);
