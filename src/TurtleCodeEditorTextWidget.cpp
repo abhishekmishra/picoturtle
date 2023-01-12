@@ -150,28 +150,61 @@ void TurtleCodeEditorTextWidget::move_cursor_to_end()
 
 void TurtleCodeEditorTextWidget::indent_line_or_selection()
 {
+    /* if the current cursor has a selection,
+       we want to indent the entire selection.
+       i.e. add tabs at the beginning of every line
+       occuring in the selection.
+       
+       however if there is no selection,
+       a tab should be added at the beginning of the
+       current line.
+       
+       NOTE: that this is different from what just pressing TAB key 
+       does - which is to add a tab at the current position.
+    */
     if (textCursor().hasSelection())
     {
-        //int start = textCursor().selectionStart();
-        //int end = textCursor().selectionEnd();
+        /* get the beginning and end of selection*/
+        int start = textCursor().selectionStart();
+        int end = textCursor().selectionEnd();
 
-        //QTextCursor indent_cur = textCursor();
-        //indent_cur.setPosition(start);
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor indent_cur = textCursor();
+        /* set the indentation cursor to start of selection */
+        indent_cur.setPosition(start);
 
-        //while (indent_cur.position() < end)
-        //{
-        //    qDebug() << "start = " << start << " end = " << end << " current = " << indent_cur.position();
+        /* if the indentation cursor is ahead of the end of selection */
+        while (indent_cur.position() < end)
+        {
+            //qDebug() << "start = " << start << " end = " << end 
+            //     << " current = " << indent_cur.position();
 
-        //    indent_cur.movePosition(QTextCursor::StartOfLine);
-        //    indent_cur.insertText("\t");
-        //    indent_cur.movePosition(QTextCursor::EndOfLine);
-        //}
+            /* move the indentation cursor to the beginning of current line */
+            indent_cur.movePosition(QTextCursor::StartOfLine);
+            /* insert the tab */
+            indent_cur.insertText("\t");
+            /* now move to one character beyond the end of the current line*/
+            indent_cur.movePosition(QTextCursor::EndOfLine);
+            indent_cur.setPosition(indent_cur.position() + 1);
+
+            /* since there has been an insertion get the 
+               current selection end from the current text cursor
+            */
+            end = textCursor().selectionEnd();
+        }
     }
     else
     {
+        /* if there is no selction get the current position
+           and move to the beginning of the line*/
         int pos = textCursor().position();
         textCursor().movePosition(QTextCursor::StartOfLine);
+
+        /* insert a tab */
         insertPlainText("\t");
+
+        /* change the current position to one beyond the original,
+           as a new tab has been added.*/
         textCursor().setPosition(pos + 1);
     }
 }
