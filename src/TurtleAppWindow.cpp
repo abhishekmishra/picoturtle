@@ -267,6 +267,9 @@ void TurtleAppWindow::create_actions()
 	connect(indent_action, &QAction::triggered, [=]()
 			{ code_editor_parent->get_current_editor_widget()->indent_line_or_selection(); });
 
+	connect(deindent_action, &QAction::triggered, [=]()
+		{ code_editor_parent->get_current_editor_widget()->deindent_line_or_selection(); });
+
 	// connect about
 	connect(about_action, &QAction::triggered, turtle_about, &TurtleAboutDialog::exec);
 }

@@ -25,7 +25,27 @@ namespace turtle
         void move_cursor_to_end();
 
     public slots:
+
+        /**
+         * if the current cursor has a selection,
+         * we want to indent the entire selection.
+         * i.e. add tabs at the beginning of every line
+         * occuring in the selection.
+         *
+         * however if there is no selection,
+         * a tab should be added at the beginning of the
+         * current line.
+
+         * NOTE: that this is different from what just pressing TAB key
+         * does - which is to add a tab at the current position.
+         */
         void indent_line_or_selection();
+
+        /**
+         * reduce the number of tabs at the beginning of the text.
+         * only if found.
+         */
+        void deindent_line_or_selection();
 
     protected:
         void resizeEvent(QResizeEvent *event) override;

@@ -220,3 +220,8 @@ void TurtleCodeEditorWidget::indent_line_or_selection()
 {
 	turtle_code_edit->indent_line_or_selection();
 }
+
+void TurtleCodeEditorWidget::deindent_line_or_selection()
+{
+	turtle_code_edit->deindent_line_or_selection();
+}

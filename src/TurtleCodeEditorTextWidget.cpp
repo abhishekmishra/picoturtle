@@ -150,18 +150,6 @@ void TurtleCodeEditorTextWidget::move_cursor_to_end()
 
 void TurtleCodeEditorTextWidget::indent_line_or_selection()
 {
-    /* if the current cursor has a selection,
-       we want to indent the entire selection.
-       i.e. add tabs at the beginning of every line
-       occuring in the selection.
-       
-       however if there is no selection,
-       a tab should be added at the beginning of the
-       current line.
-       
-       NOTE: that this is different from what just pressing TAB key 
-       does - which is to add a tab at the current position.
-    */
     if (textCursor().hasSelection())
     {
         /* get the beginning and end of selection*/
@@ -170,6 +158,10 @@ void TurtleCodeEditorTextWidget::indent_line_or_selection()
 
         /* get a cursor object to use for indentation related insertions */
         QTextCursor indent_cur = textCursor();
+        
+        /* begin atomic undoable option */
+        indent_cur.beginEditBlock();
+
         /* set the indentation cursor to start of selection */
         indent_cur.setPosition(start);
 
@@ -192,6 +184,9 @@ void TurtleCodeEditorTextWidget::indent_line_or_selection()
             */
             end = textCursor().selectionEnd();
         }
+
+        /* begin atomic undoable option */
+        indent_cur.endEditBlock();
     }
     else
     {
@@ -215,9 +210,91 @@ void TurtleCodeEditorTextWidget::indent_line_or_selection()
     }
 }
 
+/**
+ * reduce the number of tabs at the beginning of the text.
+ * only if found.
+ */
+void TurtleCodeEditorTextWidget::deindent_line_or_selection()
+{
+    if (textCursor().hasSelection())
+    {
+        /* get the beginning and end of selection*/
+        int start = textCursor().selectionStart();
+        int end = textCursor().selectionEnd();
+
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor indent_cur = textCursor();
+
+        /* begin atomic undoable option */
+        indent_cur.beginEditBlock();
+
+        /* set the indentation cursor to start of selection */
+        indent_cur.setPosition(start);
+
+        /* if the indentation cursor is ahead of the end of selection */
+        while (indent_cur.position() < end)
+        {
+            //qDebug() << "start = " << start << " end = " << end 
+            //     << " current = " << indent_cur.position();
+
+            /* move the indentation cursor to the beginning of current line */
+            indent_cur.movePosition(QTextCursor::StartOfLine);
+            
+            /* delete the tab */
+            if (toPlainText().at(indent_cur.position()) == QString("\t"))
+            {
+                indent_cur.deleteChar();
+            }
+
+            /* now move to one character beyond the end of the current line*/
+            indent_cur.movePosition(QTextCursor::EndOfLine);
+            indent_cur.setPosition(indent_cur.position() + 1);
+
+            /* since there has been an insertion get the
+               current selection end from the current text cursor
+            */
+            end = textCursor().selectionEnd();
+        }
+
+        /* begin atomic undoable option */
+        indent_cur.endEditBlock();
+    }
+    else
+    {
+        /* if there is no selction get the current position
+           and move to the beginning of the line*/
+        int pos = textCursor().position();
+
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor indent_cur = textCursor();
+        indent_cur.movePosition(QTextCursor::StartOfLine);
+
+        /* delete a tab */
+        if (toPlainText().at(indent_cur.position()) == QString("\t"))
+        {
+            indent_cur.deleteChar();
+        }
+
+        /* set the cursor so that position is set back to the editor */
+        setTextCursor(indent_cur);
+    }
+
+}
+
 void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)
 {
-    if (e->key() == Qt::Key_Tab)
+    if (e->modifiers() == Qt::ShiftModifier) 
+    {
+        if (e->key() == Qt::Key_Backtab)
+        {
+            deindent_line_or_selection();
+        }
+        else
+        {
+            QPlainTextEdit::keyPressEvent(e);
+        }
+    }
+    else if (e->key() == Qt::Key_Tab)
     {
         if (!textCursor().hasSelection())
         {
