@@ -198,14 +198,20 @@ void TurtleCodeEditorTextWidget::indent_line_or_selection()
         /* if there is no selction get the current position
            and move to the beginning of the line*/
         int pos = textCursor().position();
-        textCursor().movePosition(QTextCursor::StartOfLine);
+
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor indent_cur = textCursor();
+        indent_cur.movePosition(QTextCursor::StartOfLine);
 
         /* insert a tab */
-        insertPlainText("\t");
+        indent_cur.insertText("\t");
 
         /* change the current position to one beyond the original,
            as a new tab has been added.*/
-        textCursor().setPosition(pos + 1);
+        indent_cur.setPosition(pos + 1);
+
+        /* set the cursor so that position is set back to the editor */
+        setTextCursor(indent_cur);
     }
 }
 
