@@ -80,6 +80,7 @@ namespace turtle
 		QAction *find_replace_action;
 		QAction *indent_action;
 		QAction *deindent_action;
+		QAction *comment_action;
 
 		QAction *run_action;
 		QAction *clear_console_action;

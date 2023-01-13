@@ -180,6 +180,9 @@ void TurtleAppWindow::create_actions()
 	deindent_action = new QAction(tr("De-Indent Code"));
 	deindent_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_BracketLeft));
 
+	comment_action = new QAction(tr("Toggle Comment"));
+	comment_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Slash));
+
 	run_action = new QAction(tr("Run"));
 	run_action->setIcon(get_icon("slideshow"));
 	run_action->setShortcut(QKeySequence(Qt::Key_F5));
@@ -324,6 +327,7 @@ void TurtleAppWindow::create_menubar()
 	edit_menu->addAction(find_replace_action);
 	edit_menu->addAction(indent_action);
 	edit_menu->addAction(deindent_action);
+	edit_menu->addAction(comment_action);
 
 	QMenu *turtle_menu = menuBar()->addMenu(tr("Turtle"));
 	turtle_menu->addAction(run_action);
