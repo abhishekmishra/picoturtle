@@ -47,6 +47,8 @@ namespace turtle
          */
         void deindent_line_or_selection();
 
+        void toggle_comment_selection();
+
     protected:
         void resizeEvent(QResizeEvent *event) override;
         void keyPressEvent(QKeyEvent* e) override;

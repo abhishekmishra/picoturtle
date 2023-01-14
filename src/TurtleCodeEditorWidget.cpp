@@ -225,3 +225,8 @@ void TurtleCodeEditorWidget::deindent_line_or_selection()
 {
 	turtle_code_edit->deindent_line_or_selection();
 }
+
+void turtle::TurtleCodeEditorWidget::toggle_comment_selection()
+{
+	turtle_code_edit->toggle_comment_selection();
+}

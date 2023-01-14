@@ -281,6 +281,11 @@ void TurtleCodeEditorTextWidget::deindent_line_or_selection()
 
 }
 
+void turtle::TurtleCodeEditorTextWidget::toggle_comment_selection()
+{
+    //TODO:implement
+}
+
 void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)
 {
     if (e->modifiers() == Qt::ShiftModifier) 
