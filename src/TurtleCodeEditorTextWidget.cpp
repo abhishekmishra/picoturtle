@@ -421,7 +421,26 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
     }
     else
     {
+        /* if there is no selction get the current position
+           and move to the beginning of the line*/
+        int pos = textCursor().position();
 
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor cmt_cur = textCursor();
+        cmt_cur.movePosition(QTextCursor::StartOfLine);
+
+        int cmt_loc = find_first_comment(cmt_cur);
+        if(cmt_loc == -1)
+        {
+            cmt_cur.setPosition(cmt_loc);
+            cmt_cur.insertText("--");
+        }
+        else
+        {
+            cmt_cur.setPosition(cmt_loc);
+            cmt_cur.deleteChar();
+            cmt_cur.deleteChar();
+        }
     }
 }
 
