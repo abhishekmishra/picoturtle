@@ -197,7 +197,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
   find_package(freetype CONFIG REQUIRED)
   target_link_libraries(picoturtle PRIVATE freetype)
 
-message(CHECK_START "Finding skia")
+  message(CHECK_START "Finding skia")
   if (skia_FOUND)
     message(CHECK_PASS "skia found")
   else()
@@ -443,6 +443,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
     set ( CPACK_BINARY_TZ OFF )
     
     set ( CPACK_DEBIAN_PACKAGE_MAINTAINER "Abhishek Mishra" )
-endif(Linux)
+endif()
 
 include(CPack)
