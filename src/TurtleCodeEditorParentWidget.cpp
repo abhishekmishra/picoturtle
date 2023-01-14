@@ -132,7 +132,7 @@ bool TurtleCodeEditorParentWidget::set_file_path(const QString &file_path, bool 
 	{
 		return code_editor->set_file_path(file_path, override_current_path);
 	}
-	return -1;
+	return false;
 }
 
 void TurtleCodeEditorParentWidget::run_file()
