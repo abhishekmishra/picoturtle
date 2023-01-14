@@ -432,7 +432,6 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
         int cmt_loc = find_first_comment(cmt_cur);
         if(cmt_loc == -1)
         {
-            cmt_cur.setPosition(cmt_loc);
             cmt_cur.insertText("--");
         }
         else
