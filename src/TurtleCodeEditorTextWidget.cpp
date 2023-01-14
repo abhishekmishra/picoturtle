@@ -281,9 +281,148 @@ void TurtleCodeEditorTextWidget::deindent_line_or_selection()
 
 }
 
-void turtle::TurtleCodeEditorTextWidget::toggle_comment_selection()
+int TurtleCodeEditorTextWidget::find_first_comment(QTextCursor cur)
 {
-    //TODO:implement
+    cur.movePosition(QTextCursor::EndOfLine);
+    int end_pos = cur.position();
+    cur.movePosition(QTextCursor::StartOfLine);
+    int start_pos = cur.position();
+    int cur_pos = cur.position();
+
+    int whitespace = 1;
+
+    while(cur_pos < end_pos)
+    {
+        // gobble whitespace
+        // and first two non-whitespace should be two dashes for lua comment.
+        QChar cur_char = toPlainText().at(cur_pos);
+        QChar next_char = toPlainText().at(cur_pos + 1);
+        if(whitespace)
+        {
+            if (cur_char == '\t' || cur_char == ' ')
+            {
+                cur.setPosition(cur.position() + 1);
+                cur_pos = cur.position();
+            }
+            else
+            {
+                whitespace = 0;
+            }
+        }
+        else
+        {
+            if(cur_char == '-' && next_char == '-')
+            {
+                return cur_pos;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+    return -1;
+}
+
+void TurtleCodeEditorTextWidget::toggle_comment_selection()
+{
+    if (textCursor().hasSelection())
+    {
+        /* get the beginning and end of selection*/
+        int start = textCursor().selectionStart();
+        int end = textCursor().selectionEnd();
+
+        /* get a cursor object to use for indentation related insertions */
+        QTextCursor cmt_cur = textCursor();
+
+        /* begin atomic undoable option */
+        cmt_cur.beginEditBlock();
+
+        /* set the indentation cursor to start of selection */
+        cmt_cur.setPosition(start);
+
+        int all_comment = 1;
+
+        /* if the indentation cursor is ahead of the end of selection */
+        while (cmt_cur.position() < end)
+        {
+            /* move the indentation cursor to the beginning of current line */
+            cmt_cur.movePosition(QTextCursor::StartOfLine);
+            
+            if(find_first_comment(cmt_cur) == -1)
+            {
+                all_comment = 0;
+                break;
+            }
+
+            /* now move to one character beyond the end of the current line*/
+            cmt_cur.movePosition(QTextCursor::EndOfLine);
+            cmt_cur.setPosition(cmt_cur.position() + 1);
+
+            /* since there has been an insertion get the
+               current selection end from the current text cursor
+            */
+            end = textCursor().selectionEnd();
+        }
+
+        /* set the indentation cursor to start of selection */
+        cmt_cur.setPosition(start);
+
+        //if all lines are comments, uncomment
+        //else add comments
+        if (all_comment == 1)
+        {
+            /* if the indentation cursor is ahead of the end of selection */
+            while (cmt_cur.position() < end)
+            {
+                /* move the indentation cursor to the beginning of current line */
+                cmt_cur.movePosition(QTextCursor::StartOfLine);
+                
+                int cmt_loc = find_first_comment(cmt_cur);
+                cmt_cur.setPosition(cmt_loc);
+                cmt_cur.deleteChar();
+                cmt_cur.deleteChar();
+
+                /* now move to one character beyond the end of the current line*/
+                cmt_cur.movePosition(QTextCursor::EndOfLine);
+                cmt_cur.setPosition(cmt_cur.position() + 1);
+
+                /* since there has been an insertion get the
+                current selection end from the current text cursor
+                */
+                end = textCursor().selectionEnd();
+            }
+        }
+        else
+        {
+            /* if the indentation cursor is ahead of the end of selection */
+            while (cmt_cur.position() < end)
+            {
+                /* move the indentation cursor to the beginning of current line */
+                cmt_cur.movePosition(QTextCursor::StartOfLine);
+                
+                int cmt_loc = find_first_comment(cmt_cur);
+                cmt_cur.setPosition(cmt_loc);
+                cmt_cur.insertText("--");
+
+                /* now move to one character beyond the end of the current line*/
+                cmt_cur.movePosition(QTextCursor::EndOfLine);
+                cmt_cur.setPosition(cmt_cur.position() + 1);
+
+                /* since there has been an insertion get the
+                current selection end from the current text cursor
+                */
+                end = textCursor().selectionEnd();
+            }
+        }
+
+        /* begin atomic undoable option */
+        cmt_cur.endEditBlock();
+    }
+    else
+    {
+
+    }
 }
 
 void TurtleCodeEditorTextWidget::keyPressEvent(QKeyEvent* e)

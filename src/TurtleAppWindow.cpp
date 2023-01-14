@@ -273,6 +273,9 @@ void TurtleAppWindow::create_actions()
 	connect(deindent_action, &QAction::triggered, [=]()
 		{ code_editor_parent->get_current_editor_widget()->deindent_line_or_selection(); });
 
+	connect(comment_action, &QAction::triggered, [=]()
+			{ code_editor_parent->get_current_editor_widget()->toggle_comment_selection(); });
+
 	// connect about
 	connect(about_action, &QAction::triggered, turtle_about, &TurtleAboutDialog::exec);
 }

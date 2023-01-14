@@ -60,6 +60,8 @@ namespace turtle
 
     private:
         QWidget *lineNumberArea;
+        int find_first_comment(QTextCursor cur);
+
     };
 
 };
