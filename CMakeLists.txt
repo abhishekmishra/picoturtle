@@ -209,6 +209,24 @@ find_package(Lua REQUIRED)
 target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
 
+#--------------------------PicoTurtle CLI---------------------------#
+
+set ( PICOTURTLE_CLI_SOURCES
+    src/PicoTurtleCli.cpp
+)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable( ptcli ${PICOTURTLE_CLI_SOURCES} )
+target_link_libraries( ptcli PRIVATE picoturtle )
+
+find_package(coll CONFIG REQUIRED)
+target_link_libraries(ptcli PUBLIC coll::coll)
+
+find_package(zclk CONFIG REQUIRED)
+target_link_libraries(ptcli PUBLIC zclk::zclk)
+
 #--------------------------PicoTurtle App---------------------------#
 
 # see https://doc.qt.io/qt-6/resources.html for resource packaging.
