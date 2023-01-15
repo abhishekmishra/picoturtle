@@ -1,6 +1,15 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.4**  2023-01-15 Abhishek Mishra  <abhishekmishra3@gmail.com>
+- This is the 10th weekly release of PicoTurtle. It incorporates two major features in the Turtle lua code editor and some minor changes.
+- The Turtle Lua Editor now has two edit action for **indent code** and **de-indent code** code. These have shortcuts assigned, and work like the usual indentation actions in other code editors.
+- The editor also has a **toggle comment** action which comments (or uncomments) one or more lines using Lua "--" single line comments. Again these work similar to indentation actions in other code editor.
+- The `Tab` key when pressed in the editor now adds a tab when there is no selection, and calls the **indent code** action when there is a selection.
+- The `Shift-Tab` key always calls **de-indent** action whether there is a selection or not.
+- The `c-color-names` version used in PicoTurtle is updated to the lates head version.
+- There is a minor fix in documentation markdown.
+
 **0.2.0-alpha.3**  2023-01-07 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the 9th weekly release of PicoTurtle and the first one in 2023. This release contains several documentation and installer related changed - and one major bug fix.
