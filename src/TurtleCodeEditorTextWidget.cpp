@@ -177,7 +177,10 @@ void TurtleCodeEditorTextWidget::indent_line_or_selection()
             indent_cur.insertText("\t");
             /* now move to one character beyond the end of the current line*/
             indent_cur.movePosition(QTextCursor::EndOfLine);
-            indent_cur.setPosition(indent_cur.position() + 1);
+            if(!indent_cur.atEnd())
+            {
+                indent_cur.setPosition(indent_cur.position() + 1);
+            }
 
             /* since there has been an insertion get the 
                current selection end from the current text cursor
@@ -248,7 +251,10 @@ void TurtleCodeEditorTextWidget::deindent_line_or_selection()
 
             /* now move to one character beyond the end of the current line*/
             indent_cur.movePosition(QTextCursor::EndOfLine);
-            indent_cur.setPosition(indent_cur.position() + 1);
+            if(!indent_cur.atEnd())
+            {
+                indent_cur.setPosition(indent_cur.position() + 1);
+            }
 
             /* since there has been an insertion get the
                current selection end from the current text cursor
@@ -357,7 +363,10 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
 
             /* now move to one character beyond the end of the current line*/
             cmt_cur.movePosition(QTextCursor::EndOfLine);
-            cmt_cur.setPosition(cmt_cur.position() + 1);
+            if(!cmt_cur.atEnd())
+            {
+                cmt_cur.setPosition(cmt_cur.position() + 1);
+            }
 
             /* since there has been an insertion get the
                current selection end from the current text cursor
@@ -385,7 +394,10 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
 
                 /* now move to one character beyond the end of the current line*/
                 cmt_cur.movePosition(QTextCursor::EndOfLine);
-                cmt_cur.setPosition(cmt_cur.position() + 1);
+                if(!cmt_cur.atEnd())
+                {
+                    cmt_cur.setPosition(cmt_cur.position() + 1);
+                }
 
                 /* since there has been an insertion get the
                 current selection end from the current text cursor
@@ -405,7 +417,10 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
 
                 /* now move to one character beyond the end of the current line*/
                 cmt_cur.movePosition(QTextCursor::EndOfLine);
-                cmt_cur.setPosition(cmt_cur.position() + 1);
+                if(!cmt_cur.atEnd())
+                {
+                    cmt_cur.setPosition(cmt_cur.position() + 1);
+                }
 
                 /* since there has been an insertion get the
                 current selection end from the current text cursor
