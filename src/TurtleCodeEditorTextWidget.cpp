@@ -401,8 +401,6 @@ void TurtleCodeEditorTextWidget::toggle_comment_selection()
                 /* move the indentation cursor to the beginning of current line */
                 cmt_cur.movePosition(QTextCursor::StartOfLine);
                 
-                int cmt_loc = find_first_comment(cmt_cur);
-                cmt_cur.setPosition(cmt_loc);
                 cmt_cur.insertText("--");
 
                 /* now move to one character beyond the end of the current line*/
