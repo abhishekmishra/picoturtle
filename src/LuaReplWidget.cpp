@@ -475,8 +475,11 @@ bool LuaReplWidget::handle_lua_error(int luaErrorCode)
 int LuaReplWidget::dochunk(int status)
 {
 	if (status == LUA_OK)
+	{
 		status = docall(L, 0, 0);
-	return handle_lua_error(status);
+	}
+	handle_lua_error(status);
+	return status;
 }
 
 int LuaReplWidget::run_lua_file(const char *filename)
