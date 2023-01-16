@@ -10,19 +10,12 @@ extern "C"
 #include <string.h>
 #include <coll_arraylist.h>
 
-zclk_res basic_handler(zclk_command* cmd, void* handler_args)
-{
-    if(arraylist_length(cmd->args) > 0)
-    {
-        zclk_argument* turtle_prog = (zclk_argument*) arraylist_get(cmd->args, 0);
-        printf("Program to run: %s\n", zclk_argument_get_val_string(turtle_prog));
-    }
-    else
-    {
-        printf("No input program.\n");
-    }
-    return ZCLK_RES_SUCCESS;
-}
+#include "PicoTurtle.hpp"
+#include "PicoTurtleLua.hpp"
+
+#define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
+
+using namespace turtle;
 
 /**
  * accept a lua error code, and print
@@ -157,10 +150,138 @@ int run_lua_file(lua_State* L, const char* filename)
     return dochunk(L, luaL_loadfile(L, filename));
 }
 
+
+void cleanup_lua(lua_State *L)
+{
+	if (L != NULL)
+	{
+		lua_close(L);
+		L = NULL;
+	}
+}
+
+// TODO: proper message about failure
+// trigger error signal if failure.
+int init_lua(lua_State ** Lptr)
+{
+	// cleanup lua if already initialized
+	cleanup_lua(*Lptr);
+
+	int status;
+	(*Lptr) = luaL_newstate(); // new lua state
+    lua_State *L = *Lptr;
+    
+	if (L == NULL)
+	{
+		return EXIT_FAILURE;
+	}
+	
+	luaL_openlibs(L);			// open std libraries
+	lua_gc(L, LUA_GCGEN, 0, 0); // gc in generational mode
+
+// 	lua_pushcfunction(L, print);
+// 	lua_setglobal(L, "print");
+
+	return EXIT_SUCCESS;
+}
+
+void turtle_init_cb(turtle::PicoTurtle* t, void* cb_args)
+{
+}
+
+void turtle_update_cb(turtle::PicoTurtle* t, void* cb_args)
+{
+}
+
+void turtle_paint_cb(turtle::PicoTurtle* t, void* cb_args)
+{
+}
+
+void turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)
+{
+}
+
+void turtle_delay(turtle::PicoTurtle* t, int tm)
+{
+// 	if (turtle_delay_fn != NULL)
+// 	{
+// 		turtle_delay_fn(t, tm);
+// 	}
+}
+
+int init_turtle_lua_binding(lua_State *L)
+{
+	PicoTurtle::set_init_callback(&turtle_init_cb, NULL);
+	PicoTurtle::set_update_callback(&turtle_update_cb, NULL);
+	PicoTurtle::set_paint_callback(&turtle_paint_cb, NULL);
+	PicoTurtle::set_delay_callback(&turtle_delay);
+	PicoTurtle::set_destroy_callback(&turtle_destroy_cb, NULL);
+
+	// picoturtle = require "picoturtle"
+	luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
+	lua_pop(L, 1); /* remove result from previous call */
+
+	// TODO: Set path using optional args
+	char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
+	if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
+	{
+		// turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
+		turtleLuaDir = (char*)"lua";
+	}
+
+	size_t len_of_path_str = strlen(turtleLuaDir) + 1024;
+	char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
+	if (setPathCodeStr == NULL)
+	{
+		printf("Fatal: Unable to alloc string to set load path in lua!\n");
+		return -2;
+	}
+
+	snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
+	// for debug
+	// turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
+
+	run_lua_script(L, setPathCodeStr);
+
+	// create the default turtle as global variable t
+	run_lua_script(L, "t = require'picoturtle'.new()");
+
+	return 0;
+}
+
+zclk_res ptcli_main(zclk_command* cmd, void* handler_args)
+{
+    lua_State *L = NULL;
+    int res = init_lua(&L);
+    if(res == 0)
+    {
+        init_turtle_lua_binding(L);
+        if(arraylist_length(cmd->args) > 0)
+        {
+            zclk_argument* turtle_prog = (zclk_argument*) arraylist_get(cmd->args, 0);
+            printf("Program to run: %s\n", zclk_argument_get_val_string(turtle_prog));
+            run_lua_file(L, zclk_argument_get_val_string(turtle_prog));
+        }
+        else
+        {
+            printf("No input program.\n");
+        }
+        run_lua_script(L, "t:export_img('out.png')");
+        cleanup_lua(L);
+        return ZCLK_RES_SUCCESS;
+    }
+    else
+    {
+        printf("Error: Unable to initialize Lua\n");
+        handle_lua_error(L, res);
+        return ZCLK_RES_ERR_UNKNOWN;
+    }
+}
+
 int main(int argc, char* argv[])
 {
     zclk_command *cmd = new_zclk_command(argv[0], "ptcli",
-                            "PicoTurtle CLI", &basic_handler);
+                            "PicoTurtle CLI", &ptcli_main);
     
     zclk_command_string_argument(
         cmd,
