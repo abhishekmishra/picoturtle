@@ -227,6 +227,10 @@ target_link_libraries(ptcli PUBLIC coll::coll)
 find_package(zclk CONFIG REQUIRED)
 target_link_libraries(ptcli PUBLIC zclk::zclk)
 
+find_package(Lua REQUIRED)
+target_include_directories(ptcli PUBLIC ${LUA_INCLUDE_DIR})
+target_link_libraries(ptcli PUBLIC ${LUA_LIBRARIES})
+
 #--------------------------PicoTurtle App---------------------------#
 
 # see https://doc.qt.io/qt-6/resources.html for resource packaging.
