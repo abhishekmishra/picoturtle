@@ -151,7 +151,8 @@ void add_to_lua_path(lua_State* L, const char* path_fragment)
 int run_lua_file(lua_State* L, const char* filename)
 {
     //TODO: need to convert to absolute filename.
-    add_to_lua_path(L, filename);
+    //TODO: should add parent folder of filename?
+    add_to_lua_path(L, ".");
 
     return dochunk(L, luaL_loadfile(L, filename));
 }
