@@ -15,6 +15,14 @@ extern "C"
 
 #define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
 
+#define PTCLI_OPT_IMGFILE_NAME      "img-file"
+#define PTCLI_OPT_IMGFILE_SHORT     "i"
+#define PTCLI_OPT_IMGFILE_DEFAULT   "turtle.png"
+#define PTCLI_OPT_IMGFILE_DESC      "Image file name for Turtle Canvas Output."
+#define PTCLI_ARG_FILE_NAME         "path-to-program"
+#define PTCLI_ARG_FILE_DEFAULT      NULL
+#define PTCLI_ARG_FILE_DESC         "Turtle lua program to execute"
+
 using namespace turtle;
 
 /**
@@ -249,26 +257,73 @@ int init_turtle_lua_binding(lua_State *L)
 	return 0;
 }
 
+/**
+ * @brief Main command handler for the PicoTurtle CLI.
+ * 
+ * @param cmd The command object received from ZClk
+ * @param handler_args any args passed to ZClk (unused)
+ * @return zclk_res returns error code indicating whether turtle execution
+ *  was a success.
+ */
 zclk_res ptcli_main(zclk_command* cmd, void* handler_args)
 {
     lua_State *L = NULL;
     int res = init_lua(&L);
     if(res == 0)
     {
-        init_turtle_lua_binding(L);
-        if(arraylist_length(cmd->args) > 0)
+        res = init_turtle_lua_binding(L);
+        if (res == 0)
         {
-            zclk_argument* turtle_prog = (zclk_argument*) arraylist_get(cmd->args, 0);
-            printf("Program to run: %s\n", zclk_argument_get_val_string(turtle_prog));
-            run_lua_file(L, zclk_argument_get_val_string(turtle_prog));
+            zclk_argument *turtle_prog = zclk_command_get_argument(cmd, PTCLI_ARG_FILE_NAME);
+            zclk_option *img_file = zclk_command_get_option(cmd, PTCLI_OPT_IMGFILE_NAME);
+            if(turtle_prog != NULL && img_file != NULL)
+            {
+                const char *program_path = zclk_argument_get_val_string(turtle_prog);
+                const char *img_filename = zclk_option_get_val_string(img_file);
+
+                if (program_path != NULL)
+                {
+                    printf("Program to run: %s\n", program_path);
+                    res = run_lua_file(L, program_path);
+                    if (res != 0)
+                    {
+                        cleanup_lua(L);
+                        printf("Error executing Turtle Lua program.\n");
+                        return ZCLK_RES_ERR_UNKNOWN;
+                    }
+
+                    int cmd_len = 8192;
+                    char lua_export_cmd[cmd_len];
+                    lua_export_cmd[0] = '\0';
+
+                    snprintf(lua_export_cmd, cmd_len, "t:export_img('%s')", img_filename);
+                    printf("Running export command: [%s]\n", lua_export_cmd);
+                    res = run_lua_script(L, lua_export_cmd);
+                    if (res != 0)
+                    {
+                        cleanup_lua(L);
+                        printf("Error executing Turtle Lua program.\n");
+                        return ZCLK_RES_ERR_UNKNOWN;
+                    }
+                }
+            }
+            else
+            {
+                cleanup_lua(L);
+                printf("Program path not provided.\n");
+                return ZCLK_RES_ERR_UNKNOWN;
+            }
+
+
+            cleanup_lua(L);
+            return ZCLK_RES_SUCCESS;
         }
         else
         {
-            printf("No input program.\n");
+            printf("Error initializing picoturtle lua binding.\n");
+            cleanup_lua(L);
+            return ZCLK_RES_ERR_UNKNOWN;
         }
-        run_lua_script(L, "t:export_img('out.png')");
-        cleanup_lua(L);
-        return ZCLK_RES_SUCCESS;
     }
     else
     {
@@ -282,13 +337,22 @@ int main(int argc, char* argv[])
 {
     zclk_command *cmd = new_zclk_command(argv[0], "ptcli",
                             "PicoTurtle CLI", &ptcli_main);
-    
+
+    zclk_command_string_option(
+        cmd,
+        PTCLI_OPT_IMGFILE_NAME,
+        PTCLI_OPT_IMGFILE_SHORT,
+        PTCLI_OPT_IMGFILE_DEFAULT,
+        PTCLI_OPT_IMGFILE_DEFAULT,
+        PTCLI_OPT_IMGFILE_DESC
+    );
+
     zclk_command_string_argument(
         cmd,
-        "path_to_program",
-        "",
-        "",
-        "Turtle lua program to execute",
+        PTCLI_ARG_FILE_NAME,
+        PTCLI_ARG_FILE_DEFAULT,
+        PTCLI_ARG_FILE_DEFAULT,
+        PTCLI_ARG_FILE_DESC,
         1
     );
     
