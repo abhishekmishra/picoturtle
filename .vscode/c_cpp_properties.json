@@ -12,7 +12,9 @@
                 "${vcpkgRoot}/x64-windows/include/Qt6/QtGui",
                 "${vcpkgRoot}/x64-windows/include/skia",
                 "${vcpkgRoot}/x64-windows/include/Qt6/",
-                "${vcpkgRoot}/x64-windows/include/SDL2/"
+                "${vcpkgRoot}/x64-windows/include/SDL2/",
+                "${workspaceFolder}/../zclk/src",
+                "${workspaceFolder}/../coll/src"
             ],
             "defines": [
                 "_DEBUG",
@@ -37,7 +39,9 @@
                 "${vcpkgRoot}/x64-linux/include/Qt6/QtWidgets",
                 "${vcpkgRoot}/x64-linux/include/Qt6",
                 "${vcpkgRoot}/x64-linux/include/Qt6/QtGui",
-                "${vcpkgRoot}/x64-linux/include/Qt6/QtOpenGLWidgets"            
+                "${vcpkgRoot}/x64-linux/include/Qt6/QtOpenGLWidgets",
+                "${workspaceFolder}/../zclk/src",
+                "${workspaceFolder}/../coll/src"            
             ],
             "defines": [],
             "compilerPath": "/bin/g++",
