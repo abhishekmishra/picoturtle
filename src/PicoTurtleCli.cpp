@@ -15,10 +15,13 @@ extern "C"
 
 #define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
 
-#define PTCLI_OPT_IMGFILE_NAME      "img-file"
-#define PTCLI_OPT_IMGFILE_SHORT     "i"
+#define PTCLI_OPT_IMGFILE_NAME      "output"
+#define PTCLI_OPT_IMGFILE_SHORT     "o"
 #define PTCLI_OPT_IMGFILE_DEFAULT   "turtle.png"
-#define PTCLI_OPT_IMGFILE_DESC      "Image file name for Turtle Canvas Output."
+#define PTCLI_OPT_IMGFILE_DESC      "Image filename for PicoTurtle canvas " \
+                                    "output. " \
+                                    "Note: the image file is written in "\
+                                    "PNG format."
 #define PTCLI_ARG_FILE_NAME         "path-to-program"
 #define PTCLI_ARG_FILE_DEFAULT      NULL
 #define PTCLI_ARG_FILE_DESC         "Turtle lua program to execute"
