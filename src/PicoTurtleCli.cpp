@@ -13,7 +13,7 @@ extern "C"
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
-#define TURTLE_LUA_DIR_ENV_VAR "TURTLE_LUA_DIR"
+#define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
 
 #define PTCLI_OPT_IMGFILE_NAME      "img-file"
 #define PTCLI_OPT_IMGFILE_SHORT     "i"
@@ -22,6 +22,8 @@ extern "C"
 #define PTCLI_ARG_FILE_NAME         "path-to-program"
 #define PTCLI_ARG_FILE_DEFAULT      NULL
 #define PTCLI_ARG_FILE_DESC         "Turtle lua program to execute"
+
+#define TURTLE_EXPORT_CMD_LEN       8192
 
 using namespace turtle;
 
@@ -292,11 +294,10 @@ zclk_res ptcli_main(zclk_command* cmd, void* handler_args)
                         return ZCLK_RES_ERR_UNKNOWN;
                     }
 
-                    int cmd_len = 8192;
-                    char lua_export_cmd[cmd_len];
+                    char lua_export_cmd[TURTLE_EXPORT_CMD_LEN];
                     lua_export_cmd[0] = '\0';
 
-                    snprintf(lua_export_cmd, cmd_len, "t:export_img('%s')", img_filename);
+                    snprintf(lua_export_cmd, TURTLE_EXPORT_CMD_LEN, "t:export_img('%s')", img_filename);
                     printf("Running export command: [%s]\n", lua_export_cmd);
                     res = run_lua_script(L, lua_export_cmd);
                     if (res != 0)
