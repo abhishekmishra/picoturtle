@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PicoTurtle: Turtle Graphics Programming Environment</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PicoTurtle: Turtle Graphics Programming Environment</title>
+  <link rel="stylesheet" href="css/bulma.min.css">
+</head>
+
+<body>
   <section class="section">
     <div class="container">
       <h1 class="title">
@@ -18,7 +20,27 @@
       <p>
         <strong>Under Construction!</strong>
       </p>
+      <p id="OS">Could not detect OS</p>
     </div>
   </section>
-  </body>
+</body>
+
+<script>
+
+  <!-- Script to display the OS name -->
+  function operatingSytem() {
+    var OSName = "Unknown OS";
+    if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+    if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+    if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+    if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+
+    // Display the OS name
+    document.getElementById("OS").innerHTML = OSName;
+  }
+
+  operatingSytem();
+
+</script>
+
 </html>
