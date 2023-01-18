@@ -347,14 +347,12 @@ int main(int argc, char* argv[])
         PTCLI_OPT_IMGFILE_NAME,
         PTCLI_OPT_IMGFILE_SHORT,
         PTCLI_OPT_IMGFILE_DEFAULT,
-        PTCLI_OPT_IMGFILE_DEFAULT,
         PTCLI_OPT_IMGFILE_DESC
     );
 
     zclk_command_string_argument(
         cmd,
         PTCLI_ARG_FILE_NAME,
-        PTCLI_ARG_FILE_DEFAULT,
         PTCLI_ARG_FILE_DEFAULT,
         PTCLI_ARG_FILE_DESC,
         1
