@@ -2,6 +2,7 @@
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
 **0.2.0-alpha.4**  2023-01-15 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
 - This is the 10th weekly release of PicoTurtle. It incorporates two major features in the Turtle lua code editor and some minor changes.
 - The Turtle Lua Editor now has two edit action for **indent code** and **de-indent code** code. These have shortcuts assigned, and work like the usual indentation actions in other code editors.
 - The editor also has a **toggle comment** action which comments (or uncomments) one or more lines using Lua "--" single line comments. Again these work similar to indentation actions in other code editor.
