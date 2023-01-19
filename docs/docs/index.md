@@ -1,17 +1,33 @@
 # PicoTurtle
 
-PicoTurtle is a Turtle Graphics Programming Environment.
+PicoTurtle is a **"Lua Turtle Graphics Programming Environment"**. 
 
-## Commands
+Now that's a mouthful!. So let's break it down...starting from the right of that expression.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Programming Environment
+A Programming Environment or an "Integrated Development Environment" is a software program that provides a toolset to "design, develop, run, visualize the results of, and debug programs".
 
-## Project layout
+PicoTurtle is **a programming environment** which provides libraries, command-line tools and a desktop application to design and develop graphics programs written in the "Lua Programming Language" using "Turtle Graphics APIs".
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Turtle Graphics
+Turtle Graphics is one of the simplest ways of drawing on a screen using simple vector graphics. You (the turtle graphics programmer) are provided an empty canvas on the screen, and a drawing agent (usually called a turtle) which responds to some basic drawing and movement commands.
+
+The simplicity of the turtle graphics programming environment with just a canvas and a drawing turtle are deceptive. These two provide sufficient power to draw curves, shapes, text in infinite ways. Turtle grapics enables the exploration of two-dimensional geometry using programs instead of formulas. It enables exploration of programmatic drawing using generative graphics programs.
+
+Since PicoTurtle provides Turtle Graphics APIs in the Lua programming language, one can explore and draw graphics in the PicoTurtle desktop application - and then include them in their own Lua programs.
+
+If you're new to Turtle Graphics, start with the [Introduction to Turtle Graphics].
+
+## Lua Programming Language
+Lua is a simple and easy to learn programming language. It is designed for embedded-use in programs to allow users to change program behaviour without rebuilding the application. If you don't get what the last sentence means, don't worry!
+
+What you need to understand is Lua is a easy to learn. It is perhaps one of the easiest programming languages to learn. However it still is an incredibly powerful language.
+
+If you're new to programming or to Lua programming the PicoTurtle [Programmer's Guide] will provide a gentle introduction to a few Lua concepts - enough to create interesting graphics programs. However at some stage you will want to use the full power of the Lua programming language - and at this stage you can head over to [Learning Lua].
+
+
+## PicoTurtle Desktop Application
+
+![Screenshot on Win11/64-bit](./images/pt-ss-mazes-win11-v0_2_0.png)
+
+## PicoTurtle CLI
