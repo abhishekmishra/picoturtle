@@ -32,6 +32,7 @@ _Edit: I made an error while making the release tag - called it alpha.2. So this
 - The Canvas now supports a begin and end fill mode. This will be used to build fill capability in the turtle.
 
 **0.2.0-alpha.0**  2022-12-24 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
 - This is the 7th weekly release of PicoTurtle. I've bumped the minor version to 2 - as starting this release there will be a windows installer available. The release contains the following changes.
 - The mechanism of drawing the turtle (tiny red triangle indicating the turtle's position and heading) is moved to the canvas painter widget. This allows the gui to control when the turtle is drawn.
 - Therefore the stop command is not longer explicitly needed in code - and does not do anything for now.
