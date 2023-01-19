@@ -3,7 +3,7 @@
 all:	prep apidocs
 
 apidocs:
-	pandoc -s --embed-resources --toc --number-sections -o api.html -M document-css=false --template ../templates/pandoc-www-template.html ../help.md
+	mkdocs build
 
 prep:
 	cp ../CHANGELOG.md docs/
@@ -14,5 +14,6 @@ help:
 	@echo "********************************************************"
 	@echo ""
 	@echo "  all:      Generate all site related files."
+	@echo "  prep:     Get artifacts from other directories."
 	@echo "  apidocs:  Generate the turtle lua api docs page(s)."
 	@echo "********************************************************"
