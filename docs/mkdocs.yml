@@ -9,3 +9,6 @@ nav:
     - About:
         - 'License': 'LICENSE.md'
         - 'Release Notes': 'CHANGELOG.md'
+
+theme:
+  name: material
