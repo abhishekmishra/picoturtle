@@ -1,5 +1,5 @@
 ---
-title: PicoTurtle Docs
+title: Turtle API
 ---
 
 # PicoTurtle

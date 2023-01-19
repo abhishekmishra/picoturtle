@@ -1,9 +1,12 @@
-.PHONY:	all apidocs
+.PHONY:	all apidocs prep
 
-all:	apidocs
+all:	prep apidocs
 
 apidocs:
 	pandoc -s --embed-resources --toc --number-sections -o api.html -M document-css=false --template ../templates/pandoc-www-template.html ../help.md
+
+prep:
+	cp ../CHANGELOG.md docs/
 
 help:
 	@echo "********************************************************"
