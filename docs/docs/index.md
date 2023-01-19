@@ -1,5 +1,7 @@
 # PicoTurtle
 
+![Screenshot on Win11/64-bit](./images/pt-ss-default-win11-v0_2_0.png)
+
 PicoTurtle is a **"Lua Turtle Graphics Programming Environment"**. 
 
 Now that's a mouthful!. So let's break it down...starting from the right of that expression.
