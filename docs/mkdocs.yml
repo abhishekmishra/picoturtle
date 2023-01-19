@@ -3,12 +3,10 @@ site_name: "PicoTurtle"
 nav:
     - Home: 'index.md'
     - 'Getting Started': 'getting-started.md'
-    - Documentation:
-        - 'Turtle Graphics': 'turtle.md'
-        - 'Turtle API': 'api.md'
-    - About:
-        - 'License': 'LICENSE.md'
-        - 'Release Notes': 'CHANGELOG.md'
+    - 'Turtle Graphics': 'turtle.md'
+    - 'Turtle API': 'api.md'
+    - 'License': 'LICENSE.md'
+    - 'Release Notes': 'CHANGELOG.md'
 
 theme:
   name: material
