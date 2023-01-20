@@ -6,7 +6,7 @@ apidocs:
 	mkdocs build
 
 gen_samples:
-	lua gen_samples.lua
+	lua gen-samples.lua
 
 prep:
 	cp ../CHANGELOG.md docs/
