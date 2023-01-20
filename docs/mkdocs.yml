@@ -19,6 +19,22 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
 #    - toc.integrate
-  
+
+    - search.suggest
+    - search.highlight
+
+extra:
+  social:
+    - icon: fontawesome/brands/github 
+      link: https://github.com/abhishekmishra/picoturtle
+
+plugins:
+  - search
+
+copyright: Copyright &copy; 2017 - 2023 Abhishek Mishra
