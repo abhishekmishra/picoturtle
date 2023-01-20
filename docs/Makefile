@@ -1,6 +1,6 @@
 .PHONY:	all apidocs prep
 
-all:	prep apidocs
+all:	gen_samples prep apidocs
 
 apidocs:
 	mkdocs build
@@ -19,7 +19,8 @@ help:
 	@echo "  Makefile to build [picoturtle-www]"
 	@echo "********************************************************"
 	@echo ""
-	@echo "  all:      Generate all site related files."
-	@echo "  prep:     Get artifacts from other directories."
-	@echo "  apidocs:  Generate the turtle lua api docs page(s)."
+	@echo "  all:      		Generate all site related files."
+	@echo "  prep:     		Get artifacts from other directories."
+	@echo "  gen_samples:   Get samples markdown files."
+	@echo "  apidocs:  		Generate the turtle lua api docs page(s)."
 	@echo "********************************************************"
