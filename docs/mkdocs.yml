@@ -4,7 +4,8 @@ nav:
     - Home: 'index.md'
     - 'Getting Started': 'getting-started.md'
     - 'Turtle Graphics': 'turtle.md'
-    - 'Turtle API': 'api.md'
+    - 'User Guide': 'api.md'
+    - 'API': 'api.md'
     - 'License': 'LICENSE.md'
     - 'Release Notes': 'CHANGELOG.md'
 

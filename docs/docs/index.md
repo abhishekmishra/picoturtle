@@ -4,7 +4,7 @@ PicoTurtle is a **"Lua Turtle Graphics Programming Environment"**.
 
 ![Screenshot on Win11/64-bit](./images/pt-ss-default-win11-v0_2_0.png)
 
-Lua Turtle Graphics Programming Environment. Now that's a mouthful!. So let's break it down...starting from the right of that expression.
+Lua Turtle Graphics Programming Environment. Now that's a mouthful!. So let's break it down...
 
 ## Programming Environment
 A Programming Environment or an "Integrated Development Environment" is a software program that provides a toolset to "design, develop, run, visualize the results of, and debug programs".
@@ -33,3 +33,5 @@ If you're new to programming or to Lua programming the PicoTurtle [Programmer's 
 ![Screenshot on Win11/64-bit](./images/pt-ss-mazes-win11-v0_2_0.png)
 
 ## PicoTurtle CLI
+
+Sometimes you've got a program which you just want to run as a script - and generate results based on some input. The PicoTurtle CLI program `ptcli` allows one to run a turtle lua program from the command line.
