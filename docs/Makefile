@@ -8,6 +8,9 @@ apidocs:
 prep:
 	cp ../CHANGELOG.md docs/
 
+dev: prep
+	mkdocs serve
+
 help:
 	@echo "********************************************************"
 	@echo "  Makefile to build [picoturtle-www]"
