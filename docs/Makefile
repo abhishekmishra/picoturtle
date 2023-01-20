@@ -1,6 +1,6 @@
 .PHONY:	all apidocs prep
 
-all:	gen_samples prep apidocs
+all:	prep apidocs
 
 apidocs:
 	mkdocs build
@@ -11,7 +11,7 @@ gen_samples:
 prep:
 	cp ../CHANGELOG.md docs/
 
-dev: prep gen_samples
+dev: prep
 	mkdocs serve
 
 help:
