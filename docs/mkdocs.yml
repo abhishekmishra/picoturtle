@@ -14,4 +14,10 @@ theme:
     scheme: slate
     primary: black
     accent: lime
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+#    - toc.integrate
   
