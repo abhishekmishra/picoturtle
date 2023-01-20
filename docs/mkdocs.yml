@@ -4,8 +4,17 @@ nav:
     - Home: 'index.md'
     - 'Getting Started': 'getting-started.md'
     - 'Turtle Graphics': 'turtle.md'
-    - 'User Guide': 'api.md'
+    - 'User Guide': 'userguide.md'
     - 'API': 'api.md'
+    - 'Samples':
+      - 'sample_empty.md'
+      - 'sample_fern.md'
+      - 'sample_polygons.md'
+      - 'sample_sierpinski.md'
+      - 'sample_spiral.md'
+      - 'sample_text-demo.md'
+      - 'sample_tree.md'
+      - 'sample_turtle_basic.md'
     - 'License': 'LICENSE.md'
     - 'Release Notes': 'CHANGELOG.md'
 

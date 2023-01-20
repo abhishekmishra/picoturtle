@@ -5,10 +5,13 @@ all:	prep apidocs
 apidocs:
 	mkdocs build
 
+gen_samples:
+	lua gen_samples.lua
+
 prep:
 	cp ../CHANGELOG.md docs/
 
-dev: prep
+dev: prep gen_samples
 	mkdocs serve
 
 help:
