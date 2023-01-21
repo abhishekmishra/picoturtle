@@ -33,7 +33,7 @@ theme:
     - navigation.expand
     - navigation.indexes
     - navigation.top
-#    - toc.integrate
+    - toc.integrate
 
     - search.suggest
     - search.highlight
