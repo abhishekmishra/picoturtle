@@ -24,6 +24,10 @@ theme:
     scheme: slate
     primary: black
     accent: lime
+
+  logo: images/pico.png
+  favicon: images/pico.png
+    
   features:
     - navigation.instant
     - navigation.tracking
@@ -33,10 +37,13 @@ theme:
     - navigation.expand
     - navigation.indexes
     - navigation.top
+    
     - toc.integrate
 
     - search.suggest
     - search.highlight
+
+    - header.autohide
 
 extra:
   social:
