@@ -1,6 +1,14 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.5**  2023-01-23 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the 11th weekly release of PicoTurtle. It incorporates a new **PicoTurtle CLI** program, and a brand new documentation site which is work in progress.
+- There is a new program `ptcli` added to PicoTurtle which allows the user to run a PicoTurtle Lua program from the command line. This could be useful for automating some graphics generation. I've added this program because I want to generate the sample programs and images for the new documentation site in a bulk.
+- The documentation site is added in the docs folder - and is built using [mkdocs](https://www.mkdocs.org/) and the [mkdocs Material theme](https://squidfunk.github.io/mkdocs-material/)
+- The documentation is currently deployed using github actions. It is available at https://abhishekmishra.github.io/picoturtle. However the URL might change at a later date.
+
+
 **0.2.0-alpha.4**  2023-01-15 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the 10th weekly release of PicoTurtle. It incorporates two major features in the Turtle lua code editor and some minor changes.
