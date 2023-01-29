@@ -23,4 +23,5 @@ help:
 	@echo "  prep:     		Get artifacts from other directories."
 	@echo "  gen_samples:   Get samples markdown files."
 	@echo "  apidocs:  		Generate the turtle lua api docs page(s)."
+	@echo "  dev:  		Run dev server."
 	@echo "********************************************************"
