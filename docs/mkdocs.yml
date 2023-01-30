@@ -1,5 +1,8 @@
 site_name: "PicoTurtle"
 
+repo_url: https://github.com/abhishekmishra/picoturtle
+repo_name: abhishekmishra/picoturtle
+
 nav:
     - Home: 'index.md'
     - 'Getting Started': 'getting-started.md'
@@ -20,14 +23,16 @@ nav:
 
 theme:
   name: material
-  palette: 
+  palette:
     scheme: slate
     primary: black
     accent: lime
 
   logo: images/pico.png
   favicon: images/pico.png
-    
+  icon:
+    repo: fontawesome/brands/github-alt
+
   features:
     - navigation.instant
     - navigation.tracking
@@ -37,7 +42,7 @@ theme:
     - navigation.expand
     - navigation.indexes
     - navigation.top
-    
+
     - toc.integrate
 
     - search.suggest
@@ -47,10 +52,13 @@ theme:
 
 extra:
   social:
-    - icon: fontawesome/brands/github 
+    - icon: fontawesome/brands/github
       link: https://github.com/abhishekmishra/picoturtle
 
 plugins:
   - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+
 
 copyright: Copyright &copy; 2017 - 2023 Abhishek Mishra
