@@ -2,31 +2,27 @@
 title: Turtle API
 ---
 
-# PicoTurtle
+# PicoTurtle API
 
-PicoTurtle lets your create turtle graphics in the [Lua](https://lua.org) programming language.
-
-## Application
-You get an editor window on the left to write your program, and you get a canvas on the right to look at the results.
-You also get a small window on the bottom right to look at any print statements from your program (or any errors).
+PicoTurtle lets your create turtle graphics in the [Lua](https://lua.org) programming language. This document discusses the API exposed by PicoTurtle to facilitate turtle graphics.
 
 ## What is a Turtle?
 A turtle is a simple painter which lives on a flat 2D world. When it moves it can paint on its world creating beautiful drawings. 
 You control the turtle by writing a program which control its movements. 
 
-# Turtle Commands
+## Turtle Commands
 
 This section describes the Turtle API (application programmer's interface). The API is just a fancy name in this case for
 the turtle commands available to you the programmer. This section describes how to create and use a turtle. Note that the
 PicoTurtle turtle commands are written in the Lua programming language. This document does not teach you how to program in
 lua.
 
-## Turtle Creation
+### Turtle Creation
 
 Since all PicoTurtle programs are Lua programs, you must create a new Lua file for every turtle program you write.
 In the Lua program you must make sure to initialize the turtle before giving it commands.
 
-###  picoturtle.new
+####  picoturtle.new
 
 The PicoTurtle turtle is available in lua via the module `picoturtle`. This can be loaded using the standard
 Lua `require` call
