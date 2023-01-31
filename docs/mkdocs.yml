@@ -54,11 +54,13 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/abhishekmishra/picoturtle
+  analytics:
+    provider: google
+    property: G-X02ZCZMC1F
 
 plugins:
   - search
   - git-revision-date-localized:
       enable_creation_date: true
-
 
 copyright: Copyright &copy; 2017 - 2023 Abhishek Mishra
