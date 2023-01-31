@@ -42,5 +42,5 @@ print('Spiral done.')
 ```
 ## Output Image
 
-![Turtle Output](images/sample_spiral.png)
+![Turtle Output](../images/sample_spiral.png)
 

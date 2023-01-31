@@ -68,5 +68,5 @@ fern(25, 1)
 ```
 ## Output Image
 
-![Turtle Output](images/sample_fern.png)
+![Turtle Output](../images/sample_fern.png)
 

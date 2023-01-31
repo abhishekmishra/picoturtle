@@ -55,5 +55,5 @@ tree(128)
 ```
 ## Output Image
 
-![Turtle Output](images/sample_tree.png)
+![Turtle Output](../images/sample_tree.png)
 

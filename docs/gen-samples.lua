@@ -39,12 +39,12 @@ local samples_list = {
 }
 
 --- output folder for the markdown dows
-local docs_folder = "docs/"
+local docs_folder = "docs/samples/"
 
 --- output folder for the turtle output images
 local images_folder = "docs/images/"
 
-local image_path_in_md = "images/"
+local image_path_in_md = "../images/"
 
 --- picoturtle cli app
 local ptcli_path = "\"..\\build\\bin\\Debug\\ptcli\""

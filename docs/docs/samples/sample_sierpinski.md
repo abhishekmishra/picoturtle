@@ -51,5 +51,5 @@ draw_sierpinski(6000, 5)
 ```
 ## Output Image
 
-![Turtle Output](images/sample_sierpinski.png)
+![Turtle Output](../images/sample_sierpinski.png)
 

@@ -39,5 +39,5 @@ poly(5, 50, 72)
 ```
 ## Output Image
 
-![Turtle Output](images/sample_polygons.png)
+![Turtle Output](../images/sample_polygons.png)
 

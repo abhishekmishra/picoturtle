@@ -18,5 +18,5 @@ t:forward(100)
 ```
 ## Output Image
 
-![Turtle Output](images/sample_turtle_basic.png)
+![Turtle Output](../images/sample_turtle_basic.png)
 

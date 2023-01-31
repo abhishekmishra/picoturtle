@@ -42,5 +42,5 @@ end
 ```
 ## Output Image
 
-![Turtle Output](images/sample_text-demo.png)
+![Turtle Output](../images/sample_text-demo.png)
 

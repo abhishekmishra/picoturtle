@@ -10,13 +10,14 @@ nav:
     - 'User Guide': 'userguide.md'
     - 'API': 'api.md'
     - 'Samples':
-      - 'sample_fern.md'
-      - 'sample_polygons.md'
-      - 'sample_sierpinski.md'
-      - 'sample_spiral.md'
-      - 'sample_text-demo.md'
-      - 'sample_tree.md'
-      - 'sample_turtle_basic.md'
+      - samples/index.md
+      - samples/sample_fern.md
+      - samples/sample_polygons.md
+      - samples/sample_sierpinski.md
+      - samples/sample_spiral.md
+      - samples/sample_text-demo.md
+      - samples/sample_tree.md
+      - samples/sample_turtle_basic.md
     - 'License': 'LICENSE.md'
     - 'Release Notes': 'CHANGELOG.md'
 
