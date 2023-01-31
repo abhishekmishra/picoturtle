@@ -38,6 +38,61 @@ valid reason you are here - which I haven't heard of before :smile:.
 
 ## How-to Draw With A Turtle
 
+To draw with a turtle one must give it commands. In any turtle graphics
+environment you are provided a place to enter commands and another place to
+look at the canvas with the turtle in it. Once you enter commands, you can
+press the run (or equivalent) button and then the turtle must act according
+to the given commands.
+
+A turtle has the following types of commands typically:
+1. **Movement commands**: To turn and move around the canvas for e.g. 
+   `right(deg)` turns a turtle by the given degrees, and `forward(dist)`
+   will move the turtle by the given distance in pixels.
+2. **Drawing/Pen commands**: The turtle's pen can be picked up or put down to
+   draw and the pen color and pen's line width can be changed. A few examples
+   are `penup()` which pulls up the pen from the canvas, `pencolor(color)`
+   that changes the pen's ink color to the given color.
+3. **State Commands**: One can query the state of the turtle - for example its
+   current position, pen color etc.
+4. **Canvas Commands**: One can change the canvas settings - for example its
+   size.
+
+## Example Turtle Programs
+
+Here's some pseudo-code of a few really simple turtle programs. For a larger
+list of programs that are written in PicoTurtle see the 
+[Samples](Samples) page.
+
+### Draw a Square
+
+This pseudocode draws a square with sides 100 pixels in black pen with width 1
+pixel.
+
+```
+pendown()
+penwidth(1)
+pencolor('black')
+
+repeat 4 times:
+    right(90)
+    forward(100)
+
+```
+
+### Draw a Circle
+
+This program draws a circle with circumference 360px and radius 360/2π. It is
+also drawn in black with the pen width of 1 pixel.
+
+```
+pendown()
+penwidth(1)
+pencolor('black')
+
+repeat 360 times:
+    right(1)
+    forward(1)
+```
 ## Further Reading
 
 ## References
