@@ -61,7 +61,7 @@ A turtle has the following types of commands typically:
 
 Here's some pseudo-code of a few really simple turtle programs. For a larger
 list of programs that are written in PicoTurtle see the 
-[Samples](Samples) page.
+[Samples](/Samples) page.
 
 ### Draw a Square
 

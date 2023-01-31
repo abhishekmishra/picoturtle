@@ -11,13 +11,13 @@ nav:
     - 'API': 'api.md'
     - 'Samples':
       - samples/index.md
-      - samples/sample_fern.md
-      - samples/sample_polygons.md
-      - samples/sample_sierpinski.md
-      - samples/sample_spiral.md
-      - samples/sample_text-demo.md
-      - samples/sample_tree.md
-      - samples/sample_turtle_basic.md
+      - 'Basic Program': samples/sample_turtle_basic.md
+      - 'Fern': samples/sample_fern.md
+      - 'Polygons': samples/sample_polygons.md
+      - 'Sierpinski Triangle': samples/sample_sierpinski.md
+      - 'Spiral': samples/sample_spiral.md
+      - 'Text': samples/sample_text-demo.md
+      - 'Tree': samples/sample_tree.md
     - 'License': 'LICENSE.md'
     - 'Release Notes': 'CHANGELOG.md'
 
