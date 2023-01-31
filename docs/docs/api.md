@@ -27,14 +27,14 @@ In the Lua program you must make sure to initialize the turtle before giving it 
 The PicoTurtle turtle is available in lua via the module `picoturtle`. This can be loaded using the standard
 Lua `require` call
 
-```
+```lua
 local picoturtle = require 'picoturtle'
 ```
 
 Once you have loaded the `picoturtle` module, you can create a turtle object. We give it a name `t` - a single character
 because you have to type this many times in a turtle program.
 
-```
+```lua
 local t = picoturtle.new()
 ```
 
@@ -44,7 +44,7 @@ You can write commands to this turtle object without creating a new one.
 Finally, if you wish to write a program which can run in GUI and from the PicoTurtle command-line,
 you can use the following snippet, which creates a new turtle object only if does not exist.
 
-```
+```lua
 local t = t or require 'picoturtle'.new()
 ```
 ###  Calling picoturtle commands on a turtle
