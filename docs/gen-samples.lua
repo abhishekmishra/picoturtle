@@ -29,7 +29,6 @@ local samples_folder = "../lua/samples/"
 
 --- list of sample programs
 local samples_list = {
-	"empty",
 	"fern",
 	"polygons",
 	"sierpinski",

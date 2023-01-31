@@ -10,7 +10,6 @@ nav:
     - 'User Guide': 'userguide.md'
     - 'API': 'api.md'
     - 'Samples':
-      - 'sample_empty.md'
       - 'sample_fern.md'
       - 'sample_polygons.md'
       - 'sample_sierpinski.md'
