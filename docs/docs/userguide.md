@@ -8,8 +8,6 @@ I urge that you take a quick look at this document and then try things out
 yourself. If there are any doubts or questions you can always come back to it
 and refer to the relevant area.
 
-_Note: This document is work in progress..._
-
 ## PicoTurtle App
 
 When you launch the PicoTurtle desktop application on your system you are
@@ -49,20 +47,72 @@ in the next screenshot:
 
 ![PicoTurtle First Run](images/pt-ss-default-win11-v0_2_0-annotated.png "PicoTurtle First Run")
 
-### The Lua Editor
+In the following sections the major components will be described in a bit
+more detail.
+
+### The Lua Turtle Editor
+
+The Turtle Editor is a simple text editor which supports editing Lua code.
+It has the following features:
+
+1. Lua Syntax Highlighting
+2. Line Numbers
+3. Multiple Tabs (for multiple open files)
+4. Docked Window (can maximize and move)
+5. Indent and De-indent (using shortcuts `Tab` and `Shift-Tab`)
+6. Comment and Un-comment (using toggle shortcut `Ctrl-/`)
+
+![Lua Editor](images/pt-ss-editor-sun-macos-v0_2_0.png "Lua Editor")
 
 ### The Turtle Canvas
 
+The Turtle Canvas is one of the simplest widgets - it just displays the output
+of the current turtle program when run. It is also a Docked window.
+
+![Turtle Canvas](images/pt-ss-canvas-sun-macos-v0_2_0.png "Turtle Canvas")
+
 ### Toolbar and Menubar
 
-### Statusbar
+The Menubar provides access to **ALL** PicoTurtle functions. Whereas the
+Toolbar provides access to a few frequently used functions.
+
+The **Edit Menu** looks like this... The commands which have a shortcut,
+have the shortcut code displayed alongside their names.
+
+![Edit Menu](images/pt-ss-editmenu-macos-v0_2_0.png "Edit Menu")
 
 ### Lua Interactive Console
 
+* The Lua Console is a window where you might interact with the current 
+  *Turtle*.
+* You can write Lua statements in the text entry at the bottom of the console.
+* Once you press `Enter`, the Lua statement is sent to the interal Lua runtime.
+* The statement followed by its results are shown in the multi-line text
+  display above the text entry.
+* If the statement is a Turtle command, then the changes should reflect in the
+  canvas.
+
+![Lua Console](images/pt-ss-luaconsole-macos-v0_2_0.png "Lua Console")
+
+### Statusbar
+
+The statusbar is at the bottom of the window and shows a few interesting
+information or error messages.
+
+
 ## PicoTurtle CLI
+
+TBD
 
 ## PicoTurtle Library
 
 ### C Library Usage
 
+TBD
+
 ### Lua Module Usage
+
+```lua
+local picoturtle = require'picoturtle'
+local t = picoturtle.new()
+```

@@ -93,7 +93,6 @@ repeat 360 times:
     right(1)
     forward(1)
 ```
-## Further Reading
 
 ## References
 
