@@ -102,6 +102,9 @@ namespace turtle
 		void set_turtle(turtle::PicoTurtle *t);
 		void handle_turtle_update(turtle::PicoTurtle *t);
 		void handle_turtle_paint(turtle::PicoTurtle *t);
+	
+	protected:
+		virtual void closeEvent(QCloseEvent *event);
 	};
 }
 

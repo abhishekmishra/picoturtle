@@ -9,6 +9,7 @@
 #include <QPalette>
 #include <QLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 using namespace turtle;
 TurtleAppWindow::TurtleAppWindow(QWidget *parent)
@@ -513,4 +514,18 @@ void TurtleAppWindow::set_editor_status_text(int ln, int col, bool changed)
 {
 	// TODO: use fixed width formatting if possible.
 	editor_status->setText(QString("Line:") + QString::number(ln) + QString(", Col:") + QString::number(col));
+}
+
+void TurtleAppWindow::closeEvent (QCloseEvent *event)
+{
+    QMessageBox::StandardButton resBtn = 
+		QMessageBox::question( this, "PicoTurtle",
+			tr("Are you sure?\n"),
+			QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+			QMessageBox::Yes);
+    if (resBtn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
 }
