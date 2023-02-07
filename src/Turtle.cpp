@@ -78,6 +78,7 @@ void Turtle::save()
 void Turtle::restore()
 {
     current_state->copyFromTurtleState(saved_state);
+    canvas->update_turtle_brush(get_pen_color(), get_pen_width());
 }
 
 float Turtle::get_canvas_location_x()
