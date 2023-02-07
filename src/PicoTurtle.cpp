@@ -154,132 +154,132 @@ sk_sp<SkSurface> PicoTurtle::getRasterSurface()
 void PicoTurtle::penup()
 {
     Turtle::penup();
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::pendown()
 {
     Turtle::pendown();
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::penwidth(float w)
 {
     Turtle::penwidth(w);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::stop()
 {
     Turtle::stop();
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::home()
 {
     Turtle::home();
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::forward(float d)
 {
     Turtle::forward(d);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::back(float d)
 {
     Turtle::back(d);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::setpos(float x, float y)
 {
     Turtle::setpos(x, y);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::setx(float x)
 {
     Turtle::setx(x);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::sety(float y)
 {
     Turtle::sety(y);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::left(float a)
 {
     Turtle::left(a);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::right(float a)
 {
     Turtle::right(a);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::heading(float a)
 {
     Turtle::heading(a);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 {
     Turtle::pencolor(r, g, b);
-    this->call_update();
+    call_update();
 }
 
 int PicoTurtle::pencolor(const char *color)
 {
     int res = Turtle::pencolor(color);
-    this->call_update();
+    call_update();
     return res;
 }
 
 void PicoTurtle::set_canvas_size(unsigned int width, unsigned int height)
 {
     Turtle::set_canvas_size(width, height);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::reset()
 {
     Turtle::reset();
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::font(const char *f, unsigned int sz)
 {
     Turtle::font(f, sz);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::filltext(const char *text)
 {
     Turtle::filltext(text);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::stroketext(const char *text)
 {
     Turtle::stroketext(text);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::circle(float radius)
 {
     Turtle::circle(radius);
-    this->call_update();
+    call_update();
 }
 
 void PicoTurtle::arc(float radius, float extent, int steps)
 {
     Turtle::arc(radius, extent, steps);
-    this->call_update();
+    call_update();
 }

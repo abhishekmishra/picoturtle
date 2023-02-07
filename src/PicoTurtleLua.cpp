@@ -543,6 +543,22 @@ static int skia_turtle_arc(lua_State *L)
     return 0;
 }
 
+static int skia_turtle_enable_update(lua_State* L)
+{
+    PicoTurtle* t = skia_turtle_getobj(L);
+
+    t->enable_update();
+    return 0;
+}
+
+static int skia_turtle_disable_update(lua_State* L)
+{
+    PicoTurtle* t = skia_turtle_getobj(L);
+
+    t->disable_update();
+    return 0;
+}
+
 static int turtle_state_free(lua_State *L)
 {
     delete *static_cast<TurtleState **>(luaL_checkudata(L, 1, LUA_TURTLE_STATE_OBJECT));
@@ -680,6 +696,8 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"drawme", skia_turtle_drawme},
         {"circle", skia_turtle_circle},
         {"arc", skia_turtle_arc},
+        {"enable_update", skia_turtle_enable_update},
+        {"disable_update", skia_turtle_disable_update},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =
