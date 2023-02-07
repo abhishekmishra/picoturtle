@@ -7,7 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <QFileInfo>
+#include <QSettings>
 
+#include <PicoTurtleVersion.hpp>
 #include "TurtleAppWindow.hpp"
 
 /**
@@ -27,6 +29,15 @@ int main(int argc, char *argv[])
 int gui_window(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+
+	// set the settings configuration before initializing
+	// any settings such that it is not repeated all over
+	// the application.
+	QCoreApplication::setOrganizationName("neolateral");
+	QCoreApplication::setOrganizationDomain("neolateral.in");
+	QCoreApplication::setApplicationName("PicoTurtle");
+	QCoreApplication::setApplicationVersion(PICOTURTLE_VERSION_STR);
+	QSettings::setDefaultFormat(QSettings::IniFormat);
 
 	turtle::TurtleAppWindow *mainWindow = new turtle::TurtleAppWindow();
 	mainWindow->show();
