@@ -35,6 +35,9 @@ PicoTurtle::PicoTurtle() : Turtle()
     {
         init_cb(this, init_cb_args);
     }
+
+    // set update enabled flag to on
+    this->enable_update();
 };
 
 PicoTurtle::~PicoTurtle()
@@ -120,6 +123,29 @@ void PicoTurtle::paint()
     }
 }
 
+void PicoTurtle::enable_update()
+{
+    this->update_enabled = true;
+}
+
+void PicoTurtle::disable_update()
+{
+    this->update_enabled = false;
+}
+
+bool PicoTurtle::is_update_enabled()
+{
+    return this->update_enabled;
+}
+
+void PicoTurtle::call_update()
+{
+    if (is_update_enabled())
+    {
+        update_cb(this, update_cb_args);
+    }
+}
+
 sk_sp<SkSurface> PicoTurtle::getRasterSurface()
 {
     return turtleCanvas->getRasterSurface();
@@ -128,132 +154,132 @@ sk_sp<SkSurface> PicoTurtle::getRasterSurface()
 void PicoTurtle::penup()
 {
     Turtle::penup();
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::pendown()
 {
     Turtle::pendown();
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::penwidth(float w)
 {
     Turtle::penwidth(w);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::stop()
 {
     Turtle::stop();
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::home()
 {
     Turtle::home();
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::forward(float d)
 {
     Turtle::forward(d);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::back(float d)
 {
     Turtle::back(d);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::setpos(float x, float y)
 {
     Turtle::setpos(x, y);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::setx(float x)
 {
     Turtle::setx(x);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::sety(float y)
 {
     Turtle::sety(y);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::left(float a)
 {
     Turtle::left(a);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::right(float a)
 {
     Turtle::right(a);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::heading(float a)
 {
     Turtle::heading(a);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::pencolor(unsigned int r, unsigned int g, unsigned int b)
 {
     Turtle::pencolor(r, g, b);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 int PicoTurtle::pencolor(const char *color)
 {
     int res = Turtle::pencolor(color);
-    update_cb(this, update_cb_args);
+    this->call_update();
     return res;
 }
 
 void PicoTurtle::set_canvas_size(unsigned int width, unsigned int height)
 {
     Turtle::set_canvas_size(width, height);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::reset()
 {
     Turtle::reset();
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::font(const char *f, unsigned int sz)
 {
     Turtle::font(f, sz);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::filltext(const char *text)
 {
     Turtle::filltext(text);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::stroketext(const char *text)
 {
     Turtle::stroketext(text);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::circle(float radius)
 {
     Turtle::circle(radius);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }
 
 void PicoTurtle::arc(float radius, float extent, int steps)
 {
     Turtle::arc(radius, extent, steps);
-    update_cb(this, update_cb_args);
+    this->call_update();
 }

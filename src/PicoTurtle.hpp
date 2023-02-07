@@ -35,6 +35,8 @@ namespace turtle
         static picoturtle_callback destroy_cb;
         static void *destroy_cb_args;
 
+        bool update_enabled;
+
     public:
         PicoTurtle();
         ~PicoTurtle();
@@ -53,6 +55,11 @@ namespace turtle
 
         virtual void delay_ms(int tm);
         virtual void paint();
+
+        virtual void enable_update();
+        virtual void disable_update();
+        virtual bool is_update_enabled();
+        virtual void call_update();
 
         sk_sp<SkSurface> getRasterSurface();
 
