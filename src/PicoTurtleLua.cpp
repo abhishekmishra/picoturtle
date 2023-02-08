@@ -683,6 +683,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"lt", skia_turtle_left},
         {"heading", skia_turtle_heading},
         {"export_img", skia_turtle_export_img},
+        {"snap", skia_turtle_export_img},
         {"font", skia_turtle_font},
         {"filltext", skia_turtle_filltext},
         {"stroketext", skia_turtle_stroketext},
