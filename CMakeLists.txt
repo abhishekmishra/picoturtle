@@ -75,6 +75,8 @@ endforeach()
 set ( PICOTURTLE_LIB_SOURCES
   c-color-names/color_names.h
   c-color-names/color_names.c
+  src/GifUtil.h
+  src/GifUtil.c
   src/TurtleColor.hpp
   src/TurtleColor.cpp
   src/TurtleLocation.hpp
@@ -208,6 +210,10 @@ endif()
 find_package(Lua REQUIRED)
 target_include_directories(picoturtle PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(picoturtle PUBLIC ${LUA_LIBRARIES})
+
+find_package(unofficial-graphicsmagick CONFIG REQUIRED)
+target_link_libraries(picoturtle PUBLIC 
+  unofficial::graphicsmagick::graphicsmagick)
 
 #--------------------------PicoTurtle CLI---------------------------#
 

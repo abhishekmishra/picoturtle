@@ -62,6 +62,11 @@ static int skia_turtle_new(lua_State *L)
     return 1;
 }
 
+static int image_utils_make_gif(lua_State *L)
+{
+    return 0;
+}
+
 static PicoTurtle *skia_turtle_getobj(lua_State *L)
 {
     int top = lua_gettop(L);
@@ -647,6 +652,7 @@ static int turtle_state_tostring(lua_State *L)
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", skia_turtle_new},
+        {"makegif", image_utils_make_gif},
         {NULL, NULL}};
 
 static const luaL_Reg PicoTurtle_meths[] =
