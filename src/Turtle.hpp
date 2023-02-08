@@ -265,6 +265,8 @@ namespace turtle
 
         /**
          * Clear the canvas with given color.
+         * 
+         * @param color color to paint the screen with
          */
         virtual void clear(const char *color);
 
