@@ -75,3 +75,6 @@ out/
 
 # install
 install/
+
+# don't check-in image files from current folder
+/*.png
