@@ -5,6 +5,10 @@
 #include "PicoTurtleLua.hpp"
 #include "PicoTurtle.hpp"
 
+extern "C" {
+#include "GifUtil.h"
+}
+
 //------LUA BINDING--------
 
 using namespace turtle;
@@ -64,6 +68,52 @@ static int skia_turtle_new(lua_State *L)
 
 static int image_utils_make_gif(lua_State *L)
 {
+    const char *gif_fname = luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    if(lua_istable(L, lua_gettop(L))) {
+        int num_images = luaL_len(L, lua_gettop(L));
+        char** imgnames_arr = (char **)calloc(num_images, sizeof(char *));
+        if(imgnames_arr == NULL)
+        {
+            return luaL_error(L, "Error allocating array of img names.\n");
+        }
+
+        /* table is in the stack at index 't' */
+        lua_pushnil(L);  /* first key */
+
+        for (int i = 1; i < num_images + 1; i++)
+        {
+            if (lua_next(L, -2) != 0)
+            {
+                /* uses 'key' (at index -2) and 'value' (at index -1) */
+                // printf("%s - %s\n",
+                //        lua_typename(L, lua_type(L, -2)),
+                //        lua_typename(L, lua_type(L, -1)));
+
+                const char *imgname = luaL_checkstring(L, -1);
+                // printf("Found img %s\n", imgname);
+                imgnames_arr[i - 1] = (char *)imgname;
+                /* removes 'value'; keeps 'key' for next iteration */
+                lua_pop(L, 1);
+            }
+            else
+            {
+                return luaL_error(L, "image name #%d not found.\n", i);
+            }
+        }
+
+        /* pop the index for the lua_next call*/
+        lua_pop(L, 1);
+
+        /* pop the image names table */
+        lua_pop(L, 1);
+
+        init_gif_util();
+        make_gif_from_images(imgnames_arr, num_images, gif_fname);
+        exit_gif_util();
+    }
+
     return 0;
 }
 

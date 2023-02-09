@@ -13,10 +13,22 @@ t:pencolor('red')
 
 local num = 5
 
+local snaps = {}
+
 for i = 1, 5, 1 do
     t:fd((num - i) * 100)
     t:rt(90)
-    t:snap('out/basic' .. tostring(i) .. '.png')
+    local imgname = 'out/basic' .. tostring(i) .. '.png'
+    snaps[i] = imgname
+    t:snap(imgname)
 end
 
-pt.makegif()
+for k, v in ipairs(snaps) do
+    print('snap#' .. tostring(k) .. ' = ' .. tostring(v))
+end
+
+local gif_fname = "out/basic.gif"
+
+pt.makegif(snaps, gif_fname)
+
+print('Gif written to '.. gif_fname)

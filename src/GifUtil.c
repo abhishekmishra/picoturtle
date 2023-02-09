@@ -14,7 +14,7 @@ void exit_gif_util()
 }
 
 int make_gif_from_images(char *img_filenames[], int num_images, 
-    char *output_filename)
+    const char *output_filename)
 {
     if(img_filenames == NULL)
     {
@@ -44,6 +44,7 @@ int make_gif_from_images(char *img_filenames[], int num_images,
         MagickReadImage(wand, img_filenames[i]);
     }
 
+    // printf("Writing file %s\n", output_filename);
     MagickWriteImages(wand, output_filename, MagickTrue);
 
     return 0;
