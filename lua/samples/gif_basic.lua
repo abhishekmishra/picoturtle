@@ -19,8 +19,8 @@ for i = 1, 5, 1 do
     t:fd((num - i) * 100)
     t:rt(90)
     local imgname = 'out/basic' .. tostring(i) .. '.png'
-    snaps[i] = imgname
-    t:snap(imgname)
+    -- snaps[i] = imgname
+    snaps[i] = t:snap(imgname)
 end
 
 for k, v in ipairs(snaps) do

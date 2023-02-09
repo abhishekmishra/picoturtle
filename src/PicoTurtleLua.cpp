@@ -393,13 +393,16 @@ static int skia_turtle_heading(lua_State *L)
 
 static int skia_turtle_export_img(lua_State *L)
 {
-    const char *s = luaL_checkstring(L, lua_gettop(L));
+    const char *img_filename = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->get_canvas()->export_img(s);
-    return 0;
+    t->get_canvas()->export_img(img_filename);
+
+    lua_pushstring(L, img_filename);
+    
+    return 1;
 }
 
 static int skia_turtle_font(lua_State *L)
