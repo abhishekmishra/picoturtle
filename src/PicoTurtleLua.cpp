@@ -86,14 +86,10 @@ static int image_utils_make_gif(lua_State *L)
         {
             if (lua_next(L, -2) != 0)
             {
-                /* uses 'key' (at index -2) and 'value' (at index -1) */
-                // printf("%s - %s\n",
-                //        lua_typename(L, lua_type(L, -2)),
-                //        lua_typename(L, lua_type(L, -1)));
-
                 const char *imgname = luaL_checkstring(L, -1);
                 // printf("Found img %s\n", imgname);
                 imgnames_arr[i - 1] = (char *)imgname;
+
                 /* removes 'value'; keeps 'key' for next iteration */
                 lua_pop(L, 1);
             }
