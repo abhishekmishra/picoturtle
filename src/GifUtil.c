@@ -1,7 +1,18 @@
 #include "GifUtil.h"
-#include <wand/magick_wand.h>
 #include <string.h>
 #include <stdio.h>
+
+/* 
+    IMP: magick_wand.h refers to ssize_t which is not available on windows 
+    The next few lines make sure it is defined on windows build.
+    also see https://www.scivision.dev/ssize_t-visual-studio-posix/
+*/
+#ifdef _MSC_VER
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
+#include <wand/magick_wand.h>
 
 void init_gif_util()
 {
