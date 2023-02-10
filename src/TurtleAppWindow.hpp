@@ -96,6 +96,8 @@ namespace turtle
 		QLabel *turtle_status;
 		QLabel *editor_status;
 
+		void open_action_handler();
+
 	public slots:
 		void show_status_message(const QString &message);
 		void write_to_console(const QString &input) const;

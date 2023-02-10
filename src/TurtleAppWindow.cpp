@@ -10,6 +10,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QSettings>
 
 using namespace turtle;
 TurtleAppWindow::TurtleAppWindow(QWidget *parent)
@@ -205,17 +206,8 @@ void TurtleAppWindow::create_actions()
 	// note - samples are in application_dir/lua
 
 	// *** Open File
-	QString start_path = qApp->applicationDirPath(); // QDir::homePath()
 	connect(open_action, &QAction::triggered, [=]()
-			{
-				QString fileName = QFileDialog::getOpenFileName(this,
-				tr("Open Turtle Lua File"), start_path, tr("Turtle/Lua Files (*.lua)"));
-		qDebug() << fileName;
-		if (!fileName.isEmpty())
-		{
-			//TODO: handle return value to show appropriate error.
-			code_editor_parent->open_file(fileName);
-		} });
+			{ this->open_action_handler(); });
 
 	// *** Save File
 	connect(save_action, &QAction::triggered, [=]() { // TODO: handler return value to show appropriate error.
@@ -280,6 +272,26 @@ void TurtleAppWindow::create_actions()
 	// connect about
 	connect(about_action, &QAction::triggered, turtle_about, &TurtleAboutDialog::exec);
 }
+
+void TurtleAppWindow::open_action_handler()
+{
+	QSettings settings;
+	// no longer using qApp->applicationDirPath()
+	QString start_path = settings.value("app/fileOpenDir",
+										QDir::homePath()).toString();
+	QString fileName = QFileDialog::getOpenFileName(this,
+										tr("Open Turtle Lua File"), 
+										start_path, 
+										tr("Turtle/Lua Files (*.lua)"));
+
+	if (!fileName.isEmpty())
+	{
+		QFileInfo fileInfo(fileName);
+		settings.setValue("app/fileOpenDir", fileInfo.absolutePath());
+		// TODO: handle return value to show appropriate error.
+		code_editor_parent->open_file(fileName);
+	}
+};
 
 void TurtleAppWindow::create_toolbar()
 {
