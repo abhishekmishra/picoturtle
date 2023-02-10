@@ -613,7 +613,7 @@ static int skia_turtle_disable_update(lua_State* L)
     return 0;
 }
 
-static int skia_turtle_drawimg(lua_State *L)
+static int skia_turtle_pic(lua_State *L)
 {
     const char *img = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
@@ -766,7 +766,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"arc", skia_turtle_arc},
         {"enable_update", skia_turtle_enable_update},
         {"disable_update", skia_turtle_disable_update},
-        {"drawimg", skia_turtle_drawimg},
+        {"pic", skia_turtle_pic},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =

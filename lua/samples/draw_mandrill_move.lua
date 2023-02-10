@@ -12,6 +12,6 @@ t:pu()
 for i = 1, 3, 1 do
 	t:setpos(100, i * 100)
 	t:clear()
-	t:drawimg("res/images/mandrill.png")
+	t:pic("res/images/mandrill.png")
 	t:delay(100)
 end

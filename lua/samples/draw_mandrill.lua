@@ -7,4 +7,6 @@
 
 local t = t or require'picoturtle'.new()
 
-t:drawimg("res/images/mandrill.png")
+t:pu()
+t:setpos(256, 256)
+t:pic("res/images/mandrill.png")
