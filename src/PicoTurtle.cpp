@@ -146,6 +146,24 @@ void PicoTurtle::call_update()
     }
 }
 
+PicoTurtleImage* PicoTurtle::load_image(const char *img_path)
+{
+    return new PicoTurtleImage(img_path);
+}
+
+void PicoTurtle::draw_image_file(const char *img_path)
+{
+    std::cout << "drawing image file -> " << img_path << "\n";
+    PicoTurtleImage *img = load_image(img_path);
+    std::cout << "img object -> " << img << "\n";
+    draw_image(img);
+}
+
+void PicoTurtle::draw_image(PicoTurtleImage *img)
+{
+    turtleCanvas->draw_skimage(img->get_image(), getx(), gety());
+}
+
 sk_sp<SkSurface> PicoTurtle::getRasterSurface()
 {
     return turtleCanvas->getRasterSurface();

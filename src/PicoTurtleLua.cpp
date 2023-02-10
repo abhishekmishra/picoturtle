@@ -401,7 +401,7 @@ static int skia_turtle_export_img(lua_State *L)
     t->get_canvas()->export_img(img_filename);
 
     lua_pushstring(L, img_filename);
-    
+
     return 1;
 }
 
@@ -613,6 +613,18 @@ static int skia_turtle_disable_update(lua_State* L)
     return 0;
 }
 
+static int skia_turtle_drawimg(lua_State *L)
+{
+    const char *img = luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    PicoTurtle *t = skia_turtle_getobj(L);
+
+    t->draw_image_file(img);
+    return 0;
+}
+
+
 static int turtle_state_free(lua_State *L)
 {
     delete *static_cast<TurtleState **>(luaL_checkudata(L, 1, LUA_TURTLE_STATE_OBJECT));
@@ -754,6 +766,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"arc", skia_turtle_arc},
         {"enable_update", skia_turtle_enable_update},
         {"disable_update", skia_turtle_disable_update},
+        {"drawimg", skia_turtle_drawimg},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =

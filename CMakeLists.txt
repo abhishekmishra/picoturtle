@@ -97,6 +97,8 @@ set ( PICOTURTLE_LIB_SOURCES
   src/PicoTurtle.cpp
   src/PicoTurtleLua.hpp
   src/PicoTurtleLua.cpp
+  src/PicoTurtleImage.hpp
+  src/PicoTurtleImage.cpp
 )
 
 add_library(picoturtle SHARED ${PICOTURTLE_LIB_SOURCES})

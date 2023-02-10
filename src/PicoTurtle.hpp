@@ -4,6 +4,7 @@
 
 #include "Turtle.hpp"
 #include "SkiaCanvas.hpp"
+#include "PicoTurtleImage.hpp"
 
 namespace turtle
 {
@@ -60,6 +61,10 @@ namespace turtle
         virtual void disable_update();
         virtual bool is_update_enabled();
         virtual void call_update();
+
+        virtual PicoTurtleImage* load_image(const char *img_path);
+        virtual void draw_image_file(const char *img_path);
+        virtual void draw_image(PicoTurtleImage *img);
 
         sk_sp<SkSurface> getRasterSurface();
 

@@ -39,6 +39,9 @@ namespace turtle
         virtual void export_img(const char *filename);
         virtual void clear();
 
+        virtual void draw_skimage(const sk_sp<SkImage> &image, float left, 
+            float top);
+
         // fill methods
         virtual void begin_fill();
         virtual void end_fill();

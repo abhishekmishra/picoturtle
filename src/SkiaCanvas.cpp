@@ -134,6 +134,12 @@ void SkiaCanvas::clear()
     rasterCanvas->drawColor(SK_ColorWHITE);
 }
 
+void SkiaCanvas::draw_skimage(const sk_sp<SkImage> &image, float left,
+                              float top)
+{
+    rasterCanvas->drawImage(image, left, top);
+}
+
 void SkiaCanvas::update_turtle_brush(TurtleColor *pen_color, int pen_width)
 {
     U8CPU a = pen_color->get_a();
