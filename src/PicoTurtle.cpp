@@ -153,9 +153,9 @@ PicoTurtleImage* PicoTurtle::load_image(const char *img_path)
 
 void PicoTurtle::draw_image_file(const char *img_path)
 {
-    std::cout << "drawing image file -> " << img_path << "\n";
+    // std::cout << "drawing image file -> " << img_path << "\n";
     PicoTurtleImage *img = load_image(img_path);
-    std::cout << "img object -> " << img << "\n";
+    // std::cout << "img object -> " << img << "\n";
     draw_image(img);
 }
 
