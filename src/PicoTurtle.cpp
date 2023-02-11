@@ -157,6 +157,8 @@ void PicoTurtle::draw_image_file(const char *img_path)
     PicoTurtleImage *img = load_image(img_path);
     // std::cout << "img object -> " << img << "\n";
     draw_image(img);
+
+    delete img;
 }
 
 void PicoTurtle::draw_image(PicoTurtleImage *img)

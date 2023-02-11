@@ -10,7 +10,9 @@ PicoTurtleImage::PicoTurtleImage(const char *img)
 
 PicoTurtleImage::~PicoTurtleImage()
 {
-    free(this->image_path);
+    // nothing to delete for now as image_path is a const char* owned by
+    // caller, and image is a member variable which will be deleted with
+    // the object
 }
 
 const sk_sp<SkImage>& PicoTurtleImage::get_image()
