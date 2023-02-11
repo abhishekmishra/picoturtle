@@ -137,6 +137,18 @@ static TurtleState *turtle_state_getobj(lua_State *L)
     return state;
 }
 
+static PicoTurtleImage *turtle_image_getobj(lua_State *L)
+{
+    int top = lua_gettop(L);
+    PicoTurtleImage *img = *static_cast<PicoTurtleImage **>(luaL_checkudata(L, top, LUA_TURTLE_IMAGE_OBJECT));
+    if (img == NULL)
+    {
+        luaL_typeerror(L, top, LUA_TURTLE_IMAGE_OBJECT);
+    }
+    lua_pop(L, 1);
+    return img;
+}
+
 static int skia_turtle_getwidth(lua_State *L)
 {
     PicoTurtle *t = skia_turtle_getobj(L);
@@ -615,15 +627,58 @@ static int skia_turtle_disable_update(lua_State* L)
 
 static int skia_turtle_pic(lua_State *L)
 {
-    const char *img = luaL_checkstring(L, lua_gettop(L));
+    /* 
+    if the argument is a turtle image userdata,
+    then call turtle->draw_image
+    */
+    if(lua_isuserdata(L, lua_gettop(L)))
+    {
+        PicoTurtleImage *img = turtle_image_getobj(L);
+        
+        PicoTurtle *t = skia_turtle_getobj(L);
+        
+        t->draw_image(img);
+        
+        return 0;
+    }
+
+    /*
+    if the argument is a string,
+    then call turtle->draw_image_file
+    */
+    if(lua_isstring(L, lua_gettop(L)))
+    {
+        const char *img_file = luaL_checkstring(L, lua_gettop(L));
+        lua_pop(L, 1);
+
+        PicoTurtle *t = skia_turtle_getobj(L);
+
+        t->draw_image_file(img_file);
+        return 0;
+    }
+
+    return luaL_error(L, "expect 1 argument - either turtle image or image path");
+}
+
+static int skia_turtle_loadpic(lua_State *L)
+{
+    const char *img_file = luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
 
     PicoTurtle *t = skia_turtle_getobj(L);
 
-    t->draw_image_file(img);
+    PicoTurtleImage *img = t->load_image(img_file);
+
+    *static_cast<PicoTurtleImage **>(lua_newuserdata(L, sizeof(PicoTurtleImage *))) = img;
+
+    // set metatable of turtle state
+    luaL_getmetatable(L, LUA_TURTLE_IMAGE_OBJECT);
+    lua_setmetatable(L, -2);
+
+    return 1;
+
     return 0;
 }
-
 
 static int turtle_state_free(lua_State *L)
 {
@@ -710,6 +765,21 @@ static int turtle_state_tostring(lua_State *L)
     return 1;
 }
 
+static int turtle_image_free(lua_State *L)
+{
+    delete *static_cast<PicoTurtleImage **>(luaL_checkudata(L, 1, LUA_TURTLE_IMAGE_OBJECT));
+    return 0;
+}
+
+static int turtle_image_tostring(lua_State *L)
+{
+    PicoTurtleImage *img = turtle_image_getobj(L);
+    lua_pushfstring(L,
+                    "Turtle image [%s]",
+                    img->get_image_path());
+    return 1;
+}
+
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", skia_turtle_new},
@@ -766,6 +836,7 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"arc", skia_turtle_arc},
         {"enable_update", skia_turtle_enable_update},
         {"disable_update", skia_turtle_disable_update},
+        {"loadpic", skia_turtle_loadpic},
         {"pic", skia_turtle_pic},
         {NULL, NULL}};
 
@@ -782,6 +853,11 @@ static const luaL_Reg TurtleState_meths[] =
         {"hd", turtle_state_heading},
         {"pd", turtle_state_pd},
         {"pw", turtle_state_pw},
+        {NULL, NULL}};
+
+static const luaL_Reg TurtleImage_meths[] =
+    {
+        {"__gc", turtle_image_free},
         {NULL, NULL}};
 
 int luaopen_picoturtle(lua_State *L)
@@ -808,6 +884,19 @@ int luaopen_picoturtle(lua_State *L)
 
     // register methods
     luaL_setfuncs(L, TurtleState_meths, 0);
+
+    // create turtle state metatable
+    luaL_newmetatable(L, LUA_TURTLE_IMAGE_OBJECT);
+
+    // metatable.__index = metatable
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+
+    lua_pushcfunction(L, turtle_image_tostring);
+    lua_setfield(L, -2, "__tostring");
+
+    // register methods
+    luaL_setfuncs(L, TurtleImage_meths, 0);
 
     // register functions - only turtle.new
     luaL_newlib(L, PicoTurtle_funcs);

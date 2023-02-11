@@ -21,6 +21,7 @@ extern "C"
 
 #define LUA_PICOTURTLE_OBJECT "PicoTurtle"
 #define LUA_TURTLE_STATE_OBJECT "TurtleState"
+#define LUA_TURTLE_IMAGE_OBJECT "TurtleImage"
 
 MODULE_API int luaopen_picoturtle(lua_State* L);
 

@@ -7,19 +7,22 @@
 
 local t = t or require'picoturtle'.new()
 
-local mandrill = "res/images/mandrill.png"
+-- load mandrill pic for reuse
+local mandrill_pic = t:loadpic("res/images/mandrill.png")
+print(mandrill_pic)
+
 t:pu()
 
 for i = 1, 5, 1 do
 	t:setpos(256, (i - 1) * 128)
 	t:clear()
-	t:pic(mandrill)
+	t:pic(mandrill_pic)
 	t:delay(100)
 end
 
 for i = 5, 1, -1 do
 	t:setpos(256, (i - 1) * 128)
 	t:clear()
-	t:pic(mandrill)
+	t:pic(mandrill_pic)
 	t:delay(100)
 end

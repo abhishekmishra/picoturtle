@@ -7,7 +7,7 @@ namespace turtle
     class PicoTurtleImage
     {
         private:
-            char* image_path;
+            const char* image_path;
             sk_sp<SkImage> image;
 
         public:

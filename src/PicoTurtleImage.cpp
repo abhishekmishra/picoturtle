@@ -5,7 +5,8 @@ using namespace turtle;
 
 PicoTurtleImage::PicoTurtleImage(const char *img)
 {
-    this->image = SkImage::MakeFromEncoded(SkData::MakeFromFileName(img));
+    this->image_path = img;
+    this->image = SkImage::MakeFromEncoded(SkData::MakeFromFileName(this->image_path));
 }
 
 PicoTurtleImage::~PicoTurtleImage()
@@ -22,5 +23,5 @@ const sk_sp<SkImage>& PicoTurtleImage::get_image()
 
 const char * PicoTurtleImage::get_image_path()
 {
-    return (const char *)this->image_path;
+    return this->image_path;
 }
