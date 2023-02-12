@@ -358,6 +358,22 @@ install(TARGETS picoturtle-app
     BUNDLE DESTINATION .
 )
 
+install(TARGETS ptcli
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# ----- Install all the dependencies of the application to the bin folder ------
+# ----- (exclude windows runtime dependencies (handled separately))       ------
+install(TARGETS ptcli
+    RUNTIME_DEPENDENCIES
+    PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+    POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION .
+)
+
 # see instructions at https://www.qt.io/blog/cmake-deployment-api
 qt_generate_deploy_app_script(
     TARGET picoturtle-app
