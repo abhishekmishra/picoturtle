@@ -1,6 +1,32 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.6**  2023-02-12 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the 12th release of PicoTurtle. I've changed the cadence on release 
+  as changes are slowing down.
+- This release contains several new turtle commands, new features and bug fixes.
+- The documentation using `mkdocs` was completed sometime last week
+  and went live at https://picoturtle.neolateral.in
+- The color names lib `c-color-names` was updated to the latest release tag.
+- The turtle API now contains two new commands `enable_update` and 
+  `disable_update` which enable and disable screen updates respectively. These
+  commands when used with `paint` command (which forces screen update) can be
+  used to build animations on the turtle canvas. I've developed a few examples
+  which show how this can be used.
+- A utility method `makegif` is added to the PicoTurtle lua module to enable
+  creation of gifs from the snapshots taken from the turtle canvas. This can
+  be used to build offline animations - when not using the on-screen canvas.
+- The command `snap` is now an alias for `export_img` command.
+- Two new commands `loadpic` and `pic` are added to the turtle API which enable
+  loading of images from disk and drawing them on the turtle's location. More
+  parameters will be added to the `pic` function to make it more powerful.
+- A few new sample programs are added to the samples folder which use some of
+  these new commands.
+- The start location for the **Open File** dialog now uses the last opened
+  file's location. This saves some time navigating to the same folder again and
+  again.
+
 **0.2.0-alpha.5**  2023-01-23 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the 11th weekly release of PicoTurtle. It incorporates a new **PicoTurtle CLI** program, and a brand new documentation site which is work in progress.
