@@ -340,9 +340,9 @@ set_target_properties(
   FRAMEWORK FALSE
 )
 
-target_link_libraries(picoturtle-app PRIVATE picoturtle)
+target_link_libraries(picoturtle-app PUBLIC picoturtle)
 
-install(TARGETS picoturtle-app
+install(TARGETS picoturtle-app picoturtle
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
