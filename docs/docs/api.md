@@ -176,6 +176,33 @@ t:heading(0)
 t:filltext("Hello, World!")
 ```
 
+## Turtle Picture Commands
+
+### loadpic (path-to-image)
+
+Load the given image and return an image object which can be used to draw on the
+canvas using other picture commands.
+
+Example:
+
+```lua
+local img = t:loadpic('c:\pictures\test.png') -- load the given image
+```
+
+### pic (image object | path-to-image)
+
+Draw the given image as a picture in the canvas at the turtle's current location.
+The image can be provided as an image object loaded using the `loadpic` method, 
+or it can be the path to an image file on disk.
+
+```lua
+local img = t:loadpic('c:\pictures\test.png') -- load the given image
+t:pic(img) -- draw the image loaded above
+
+t:fd(100)
+t:pic('c:\pictures\test.png') -- load and draw the image
+```
+
 ## Turtle Relative Movement Commands
 
 ### forward/fd (distance)
@@ -279,13 +306,13 @@ w, h = t:canvas_size(100, 200)
 print(w .. ', ' .. h) -- should print 100, 200 as that is the new canvas size returned by the method.
 ```
 
-### export_img (filename)
+### snap (filename) / export_img (filename)
 Export the current canvas as a PNG file to the given path.
 
 Example:
 
 ```lua
-t:export_img("C:\\tmp\\turtle.png") -- write the current canvas contents as a png file.
+t:snap("C:\\tmp\\turtle.png") -- write the current canvas contents as a png file.
 ```
 
 ### clear (color) | (red, green, blue) | ()
