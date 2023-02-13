@@ -96,7 +96,6 @@ namespace turtle
 		QLabel *turtle_status;
 		QLabel *editor_status;
 
-		void open_action_handler();
 
 	public slots:
 		void show_status_message(const QString &message);
@@ -104,7 +103,9 @@ namespace turtle
 		void set_turtle(turtle::PicoTurtle *t);
 		void handle_turtle_update(turtle::PicoTurtle *t);
 		void handle_turtle_paint(turtle::PicoTurtle *t);
-	
+		void handle_run_action();
+		void handle_open_action();
+
 	protected:
 		virtual void closeEvent(QCloseEvent *event);
 	};

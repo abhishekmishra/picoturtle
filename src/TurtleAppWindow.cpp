@@ -206,8 +206,8 @@ void TurtleAppWindow::create_actions()
 	// note - samples are in application_dir/lua
 
 	// *** Open File
-	connect(open_action, &QAction::triggered, [=]()
-			{ this->open_action_handler(); });
+	connect(open_action, &QAction::triggered, this, 
+		&TurtleAppWindow::handle_open_action);
 
 	// *** Save File
 	connect(save_action, &QAction::triggered, [=]() { // TODO: handler return value to show appropriate error.
@@ -228,10 +228,9 @@ void TurtleAppWindow::create_actions()
 
 	// connect turtle actions
 	// *** Run Turtle Program
-	connect(run_action, &QAction::triggered, code_editor_parent,
-			&TurtleCodeEditorParentWidget::run_file);
-	connect(run_action, &QAction::triggered, [=]()
-			{ turtle_canvas_dock->raise(); });
+	connect(run_action, &QAction::triggered, this,
+		&TurtleAppWindow::handle_run_action);
+
 	connect(clear_console_action, &QAction::triggered, lua_repl,
 			&TurtleLuaReplWidget::clear_console);
 
@@ -273,7 +272,22 @@ void TurtleAppWindow::create_actions()
 	connect(about_action, &QAction::triggered, turtle_about, &TurtleAboutDialog::exec);
 }
 
-void TurtleAppWindow::open_action_handler()
+void TurtleAppWindow::handle_run_action()
+{
+	// disable run action during run
+	run_action->setEnabled(false);
+	
+	// raise the turtle canvas
+	turtle_canvas_dock->raise();
+
+	// run the turtle program
+	code_editor_parent->run_file();
+
+	// enable run action post run
+	run_action->setEnabled(true);
+}
+
+void TurtleAppWindow::handle_open_action()
 {
 	QSettings settings;
 	// no longer using qApp->applicationDirPath()
