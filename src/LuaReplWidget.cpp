@@ -271,7 +271,7 @@ int LuaReplWidget::init_lua()
 	lua_pushcfunction(L, print);
 	lua_setglobal(L, "print");
 
-	print_to_repl("-- lua session --");
+	print_to_repl("-- Lua session started --");
 
 	return EXIT_SUCCESS;
 }

@@ -90,6 +90,16 @@
         "*.in": "cpp",
         "stdio.h": "c",
         "gifutil.h": "c",
-        "magick_wand.h": "c"
+        "magick_wand.h": "c",
+        "charconv": "cpp",
+        "filesystem": "cpp",
+        "forward_list": "cpp",
+        "sstream": "cpp",
+        "stop_token": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp",
+        "xtree": "cpp"
     }
 }

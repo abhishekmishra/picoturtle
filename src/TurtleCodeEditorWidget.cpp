@@ -13,6 +13,7 @@
 #include <QFontMetrics>
 #include <QFileDialog>
 #include <QVBoxLayout>
+#include <chrono>
 
 using namespace turtle;
 
@@ -66,6 +67,9 @@ TurtleCodeEditorWidget::~TurtleCodeEditorWidget()
 
 void TurtleCodeEditorWidget::run_file()
 {
+	// record start time
+	auto start = std::chrono::high_resolution_clock::now();
+
 	// init a new lua state
 	lua_repl->init_lua();
 
@@ -76,6 +80,13 @@ void TurtleCodeEditorWidget::run_file()
 	);
 
 	lua_repl->run_lua_script("t:drawme()");
+
+	// record start time
+	auto end = std::chrono::high_resolution_clock::now();
+	auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+	auto completion_str = QString("print('-- Lua session complete, took %1 ms --')").arg(time_taken);
+	lua_repl->run_lua_script(completion_str.toStdString().c_str());
 
 	// emit the signal with the res code.
 	emit turtle_run_complete(res);
