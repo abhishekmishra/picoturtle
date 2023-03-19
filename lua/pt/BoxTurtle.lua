@@ -259,8 +259,18 @@ end
 --- Change the box size to [width x height]
 -- @tparam number width
 -- @tparam number height
+-- @return current box size
 function BoxTurtle:box_size(width, height)
-	error('not implemented yet')
+	if(width ~= nil and height ~= nil) then
+		error('setting widthxheight is not implemented yet')
+	else
+		local sz = self.box:dim()
+		return sz:x(), sz:y()
+	end
+end
+
+function BoxTurtle:canvas_size(width, height)
+	return self:box_size(width, height)
 end
 
 --- Export the current box as a PNG file to the given path
