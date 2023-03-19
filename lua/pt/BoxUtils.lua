@@ -3,8 +3,8 @@
 local Vec2 = require'pt/Vec2'
 local Box = require'pt/Box'
 
---- Create a grid of boxes (nrows x ncols) with size such that they fit in the given parent Box
--- @tparam Box parent
+--- Create a grid of boxes (nrows x ncols) with size such that they fit in the given parent Turtle
+-- @tparam Turtle parent
 -- @tparam number nrows
 -- @tparam number ncols
 local function create_box_grid(parent, nrows, ncols)
@@ -15,16 +15,15 @@ local function create_box_grid(parent, nrows, ncols)
 	local nrows = nrows or 1
 	local ncols = ncols or 1
 
-	local dim = parent:canvas_dim()
-	local orig = parent:canvas_orig()
+	local pw, ph = parent:canvas_size()
 
-	local cdim = Vec2:new(dim:w()/ncols, dim:h()/nrows)
+	local cdim = Vec2:new(pw/ncols, ph/nrows)
 	-- print(cdim:w() .. 'x' .. cdim:h())
 
 	local grid = {}
 	for i = 0, ncols-1 do
 		for j = 0, nrows-1 do
-			local orig = Vec2:new(i * (dim:w()/ncols), j * (dim:h()/nrows))
+			local orig = Vec2:new(i * (pw/ncols), j * (ph/nrows))
 			local d = Vec2:new(cdim:w(), cdim:h())
 			-- print(i .. ',' .. 'j = ' .. orig:x() .. 'x' .. orig:y())
 			table.insert(grid, Box:new(orig, d))
