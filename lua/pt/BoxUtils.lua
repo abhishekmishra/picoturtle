@@ -1,6 +1,5 @@
 --- Utility functions for boxes (might move to their own types/modules later)
 --
-
 local Vec2 = require'pt/Vec2'
 local Box = require'pt/Box'
 
@@ -8,7 +7,7 @@ local Box = require'pt/Box'
 -- @tparam Box parent
 -- @tparam number nrows
 -- @tparam number ncols
-function create_box_grid(parent, nrows, ncols)
+local function create_box_grid(parent, nrows, ncols)
 	if parent == nil then
 		error("parent box is nil!")
 	end
