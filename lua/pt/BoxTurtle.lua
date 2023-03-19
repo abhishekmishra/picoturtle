@@ -309,4 +309,16 @@ function BoxTurtle:getpos()
 	return box_coords:x(), box_coords:y()
 end
 
+function BoxTurtle:save()
+	self.turtle:save()
+end
+
+function BoxTurtle:restore()
+	self.turtle:restore()
+end
+
+function BoxTurtle:circle(radius)
+	self.turtle:circle(radius)
+end
+
 return BoxTurtle
