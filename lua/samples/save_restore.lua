@@ -20,22 +20,27 @@ t:penup()
 t:setpos(w/2, h/2)
 t:pendown()
 t:circle(300)
+print(t:state())
 
 -- save state and draw circle with red
 t:save()
 t:pencolor('red')
 t:circle(200)
+print(t:state())
 
 -- save state and draw circle with blue
 t:save()
 t:pencolor('blue')
 t:circle(100)
+print(t:state())
 
 -- restore state (top of state stack - last in first out)
 -- therefore red pen is restored
 t:restore()
+print(t:state())
 t:circle(150)
 
 -- restore state, to black pen now
 t:restore()
+print(t:state())
 t:circle(250)
