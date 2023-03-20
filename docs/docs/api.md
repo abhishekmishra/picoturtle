@@ -92,7 +92,7 @@ print(t:state())
 --- the pen shows whether the turtle has its pen pressed on the canvas, and what is the pen's width
 ```
 
-### save
+### save and restore
 - The functions `save()` and `restore()` are a pair of functions that operate on
 the "saved states stack". 
 - The *saved states stack* is a LIFO (last in first out) structure
