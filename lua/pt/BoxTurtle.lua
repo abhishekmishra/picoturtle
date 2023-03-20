@@ -321,4 +321,8 @@ function BoxTurtle:circle(radius)
 	self.turtle:circle(radius)
 end
 
+function BoxTurtle:elapsed_time_ms()
+	return self.turtle:elapsed_time_ms()
+end
+
 return BoxTurtle
