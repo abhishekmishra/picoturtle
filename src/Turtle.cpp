@@ -18,7 +18,7 @@ Turtle::Turtle(TurtleOptions *options)
     id = "";
 
     current_state = new TurtleState();
-    saved_state = new TurtleState();
+    saved_states = new std::stack<TurtleState *>();
 
     current_state->get_pen_color()->set_a(255);
     current_state->get_pen_color()->set_r(128);
@@ -66,19 +66,36 @@ TurtleState *Turtle::get_current_state() const
 TurtleState *Turtle::get_saved_state() const
 {
     TurtleState *detached = new TurtleState();
-    detached->copyFromTurtleState(saved_state);
+        if(saved_states->empty())
+    {
+        detached->copyFromTurtleState(current_state);
+    } 
+    else 
+    {
+        TurtleState *saved_state = saved_states->top();
+        detached->copyFromTurtleState(saved_state);
+    }
+
     return detached;
 }
 
 void Turtle::save()
 {
+    TurtleState *saved_state = new TurtleState();
     saved_state->copyFromTurtleState(current_state);
+    saved_states->push(saved_state);
 }
 
 void Turtle::restore()
 {
-    current_state->copyFromTurtleState(saved_state);
-    canvas->update_turtle_brush(get_pen_color(), get_pen_width());
+    if(!saved_states->empty())
+    {
+        TurtleState *saved_state = saved_states->top();
+        saved_states->pop();
+        current_state->copyFromTurtleState(saved_state);
+        canvas->update_turtle_brush(get_pen_color(), get_pen_width());
+        delete saved_state;
+    }
 }
 
 float Turtle::get_canvas_location_x()

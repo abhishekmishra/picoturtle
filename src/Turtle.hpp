@@ -2,6 +2,7 @@
 
 #include <string>
 #include <chrono>
+#include <stack>
 
 #include "Canvas.hpp"
 #include "TurtleColor.hpp"
@@ -15,8 +16,8 @@ namespace turtle
     class Turtle
     {
     private:
+        std::stack<TurtleState *> *saved_states;
         TurtleState *current_state;
-        TurtleState *saved_state;
 
         TurtleOptions *options;
 
