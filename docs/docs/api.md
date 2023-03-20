@@ -92,6 +92,38 @@ print(t:state())
 --- the pen shows whether the turtle has its pen pressed on the canvas, and what is the pen's width
 ```
 
+### save
+- The functions `save()` and `restore()` are a pair of functions that operate on
+the "saved states stack". 
+- The *saved states stack* is a LIFO (last in first out) structure
+that records the current state as a new entry at the top of the stack when `save()`
+method is called.
+- The `save()` method can be called any number of times. And every time the
+current state will be recorded at the top of the stack.
+- The `restore()` method does exactly the opposite of the `save()` method. It takes
+the state at the top of the saved states stack and replaces the current state of the
+turtle with it. The "restored" state is removed from the top of the stack.
+- Therefore every *saved* state can be *restored* only once, and that too in the
+reverse order in which they were saved.
+
+Example:
+```lua
+--- print current state and then save it
+print(t:state())
+--- Output - Turtle state [loc=(512.0, 512.0), col=(black, 128, 64, 32), pen(down=1, width=1.0)
+t:save()
+
+--- change turtle settings and print state
+t:pencolor('azure')
+print(t:state())
+--- Output - Turtle state [loc=(512.0, 512.0), col=(azure, 0, 127, 255), pen(down=1, width=1.0)
+
+-- restore turtle state and print state
+t:restore()
+print(t:state())
+--- Output - Turtle state [loc=(512.0, 512.0), col=(black, 128, 64, 32), pen(down=1, width=1.0)
+
+```
 ## Turtle Pen Commands
 
 ### penup
