@@ -2,6 +2,7 @@
 #include "TurtleLineNumberAreaWidget.hpp"
 #include <QPainter>
 #include <QTextBlock>
+#include <QSettings>
 
 using namespace turtle;
 
@@ -10,11 +11,16 @@ TurtleCodeEditorTextWidget::TurtleCodeEditorTextWidget(QWidget *parent) : QPlain
 
     // Set the default monospace font for now
     // TODO: perhaps include a decent open source font
-    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    font.setPointSize(10);
-    QFontInfo info(font);
-    // qDebug() << font << info.family() << info.fixedPitch();
+    QSettings settings;
+    QFont font;
+    QFont default_font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    default_font.setPointSize(10);
+
+    QString font_key = "editor/font";
+    QString font_str = settings.value(font_key, default_font.toString()).toString();
+    font.fromString(font_str);
     setFont(font);
+    settings.setValue(font_key, font.toString());
 
     QFontMetrics fontMetrics = QFontMetrics(font);
     int fontWidth = fontMetrics.averageCharWidth();
