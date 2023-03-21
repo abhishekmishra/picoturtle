@@ -21,8 +21,8 @@ local function create_box_grid(parent, nrows, ncols)
 	-- print(cdim:w() .. 'x' .. cdim:h())
 
 	local grid = {}
-	for i = 0, ncols-1 do
-		for j = 0, nrows-1 do
+	for j = nrows-1, 0, -1 do
+		for i = 0, ncols-1 do
 			local orig = Vec2:new(i * (pw/ncols), j * (ph/nrows))
 			local d = Vec2:new(cdim:w(), cdim:h())
 			-- print(i .. ',' .. 'j = ' .. orig:x() .. 'x' .. orig:y())
@@ -31,6 +31,26 @@ local function create_box_grid(parent, nrows, ncols)
 	end
 	return grid
 end
+
+--[[--
+--- Test code, uncomment to run
+
+local t = require'picoturtle'.new()
+local BoxTurtle = require'BoxTurtle'
+t:canvas_size(900, 900)
+bg = create_box_grid(t, 3, 3)
+for idx, box in ipairs(bg) do
+	local bt = BoxTurtle(t, box)
+	local cw, ch = bt:canvas_size()
+	print(string.format("%g, %g", cw, ch))
+	bt:penup()
+	bt:setpos(cw/2, ch/2)
+	bt:heading(0)
+	bt:font('normal', 40)
+	bt:filltext(idx)
+	bt:draw_border()
+end
+--]]--
 
 --- @export
 return {
