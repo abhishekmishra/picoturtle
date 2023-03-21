@@ -10,6 +10,8 @@ extern "C"
 #include <string.h>
 #include <coll_arraylist.h>
 
+#include <filesystem>
+
 #include "PicoTurtle.hpp"
 #include "PicoTurtleLua.hpp"
 
@@ -157,10 +159,19 @@ void add_to_lua_path(lua_State* L, const char* path_fragment)
  */
 int run_lua_file(lua_State* L, const char* filename)
 {
-    //TODO: need to convert to absolute filename.
-    //TODO: should add parent folder of filename?
+    // add the current directory to the lua path
     add_to_lua_path(L, ".");
 
+    // get the absolute path of the script to run, and then its parent path
+    auto filepath = std::filesystem::absolute(std::filesystem::path(filename));
+    auto parentpath = filepath.parent_path();
+
+    //printf("parent path = %s\n", parentpath.c_str());
+
+    // add the parent path of the script to the lua path as well
+    add_to_lua_path(L, parentpath.c_str());
+
+    // now load the script, run it and return the result
     return dochunk(L, luaL_loadfile(L, filename));
 }
 
