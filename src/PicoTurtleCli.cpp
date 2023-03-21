@@ -33,7 +33,7 @@ using namespace turtle;
 /**
  * accept a lua error code, and print
  * an appropriate message to the console.
- * 
+ *
  * @param L lua state
  * @param luaErrorCode lua error code
  * @return flag indicating error or not
@@ -59,22 +59,22 @@ int msghandler(lua_State* L)
 {
     const char* msg = lua_tostring(L, 1);
     if (msg == NULL)
-    {											 /* is error object not a string? */
-        if (luaL_callmeta(L, 1, "__tostring") && /* does it have a metamethod */
-            lua_type(L, -1) == LUA_TSTRING)		 /* that produces a string? */
-            return 1;							 /* that is the message */
+    {                                               /* is error object not a string? */
+        if (luaL_callmeta(L, 1, "__tostring") &&    /* does it have a metamethod */
+            lua_type(L, -1) == LUA_TSTRING)         /* that produces a string? */
+            return 1;                               /* that is the message */
         else
             msg = lua_pushfstring(L, "(error object is a %s value)",
                 luaL_typename(L, 1));
     }
-    luaL_traceback(L, L, msg, 1); /* append a standard traceback */
-    return 1;					  /* return the traceback */
+    luaL_traceback(L, L, msg, 1);  /* append a standard traceback */
+    return 1;                      /* return the traceback */
 }
 
 /*
 ** Interface to 'lua_pcall', which sets appropriate message function
 ** and C-signal handler. Used to run all chunks.
-* 
+*
 * @param L lua state
 * @param narg num arguments
 * @param nres num or results
@@ -85,7 +85,7 @@ int docall(lua_State* L, int narg, int nres)
     int status;
     int base = lua_gettop(L) - narg;  /* function index */
     lua_pushcfunction(L, msghandler); /* push message handler */
-    lua_insert(L, base);			  /* put it under function and args */
+    lua_insert(L, base);              /* put it under function and args */
     status = lua_pcall(L, narg, nres, base);
     lua_remove(L, base); /* remove message handler from the stack */
     return status;
@@ -93,7 +93,7 @@ int docall(lua_State* L, int narg, int nres)
 
 /**
  * run a lua chunk, with the given compilation status
- * 
+ *
  * @param L lua state
  * @param status
  * @return result status
@@ -149,7 +149,7 @@ void add_to_lua_path(lua_State* L, const char* path_fragment)
 
 /**
  * run a lua file as a chunk in the current lua repl
- * 
+ *
  * @param L lua state
  * @param filename
  * @return status
@@ -166,36 +166,36 @@ int run_lua_file(lua_State* L, const char* filename)
 
 void cleanup_lua(lua_State *L)
 {
-	if (L != NULL)
-	{
-		lua_close(L);
-		L = NULL;
-	}
+    if (L != NULL)
+    {
+        lua_close(L);
+        L = NULL;
+    }
 }
 
 // TODO: proper message about failure
 // trigger error signal if failure.
 int init_lua(lua_State ** Lptr)
 {
-	// cleanup lua if already initialized
-	cleanup_lua(*Lptr);
+    // cleanup lua if already initialized
+    cleanup_lua(*Lptr);
 
-	int status;
-	(*Lptr) = luaL_newstate(); // new lua state
+    int status;
+    (*Lptr) = luaL_newstate(); // new lua state
     lua_State *L = *Lptr;
-    
-	if (L == NULL)
-	{
-		return EXIT_FAILURE;
-	}
-	
-	luaL_openlibs(L);			// open std libraries
-	lua_gc(L, LUA_GCGEN, 0, 0); // gc in generational mode
 
-// 	lua_pushcfunction(L, print);
-// 	lua_setglobal(L, "print");
+    if (L == NULL)
+    {
+        return EXIT_FAILURE;
+    }
 
-	return EXIT_SUCCESS;
+    luaL_openlibs(L);            // open std libraries
+    lua_gc(L, LUA_GCGEN, 0, 0); // gc in generational mode
+
+//     lua_pushcfunction(L, print);
+//     lua_setglobal(L, "print");
+
+    return EXIT_SUCCESS;
 }
 
 void turtle_init_cb(turtle::PicoTurtle* t, void* cb_args)
@@ -216,55 +216,55 @@ void turtle_destroy_cb(turtle::PicoTurtle* t, void* cb_args)
 
 void turtle_delay(turtle::PicoTurtle* t, int tm)
 {
-// 	if (turtle_delay_fn != NULL)
-// 	{
-// 		turtle_delay_fn(t, tm);
-// 	}
+//     if (turtle_delay_fn != NULL)
+//     {
+//         turtle_delay_fn(t, tm);
+//     }
 }
 
 int init_turtle_lua_binding(lua_State *L)
 {
-	PicoTurtle::set_init_callback(&turtle_init_cb, NULL);
-	PicoTurtle::set_update_callback(&turtle_update_cb, NULL);
-	PicoTurtle::set_paint_callback(&turtle_paint_cb, NULL);
-	PicoTurtle::set_delay_callback(&turtle_delay);
-	PicoTurtle::set_destroy_callback(&turtle_destroy_cb, NULL);
+    PicoTurtle::set_init_callback(&turtle_init_cb, NULL);
+    PicoTurtle::set_update_callback(&turtle_update_cb, NULL);
+    PicoTurtle::set_paint_callback(&turtle_paint_cb, NULL);
+    PicoTurtle::set_delay_callback(&turtle_delay);
+    PicoTurtle::set_destroy_callback(&turtle_destroy_cb, NULL);
 
-	// picoturtle = require "picoturtle"
-	luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
-	lua_pop(L, 1); /* remove result from previous call */
+    // picoturtle = require "picoturtle"
+    luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
+    lua_pop(L, 1); /* remove result from previous call */
 
-	// TODO: Set path using optional args
-	char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
-	if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
-	{
-		// turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
-		turtleLuaDir = (char*)"lua";
-	}
+    // TODO: Set path using optional args
+    char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
+    if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
+    {
+        // turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
+        turtleLuaDir = (char*)"lua";
+    }
 
-	size_t len_of_path_str = strlen(turtleLuaDir) + 1024;
-	char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
-	if (setPathCodeStr == NULL)
-	{
-		printf("Fatal: Unable to alloc string to set load path in lua!\n");
-		return -2;
-	}
+    size_t len_of_path_str = strlen(turtleLuaDir) + 1024;
+    char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
+    if (setPathCodeStr == NULL)
+    {
+        printf("Fatal: Unable to alloc string to set load path in lua!\n");
+        return -2;
+    }
 
-	snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
-	// for debug
-	// turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
+    snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
+    // for debug
+    // turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
 
-	run_lua_script(L, setPathCodeStr);
+    run_lua_script(L, setPathCodeStr);
 
-	// create the default turtle as global variable t
-	run_lua_script(L, "t = require'picoturtle'.new()");
+    // create the default turtle as global variable t
+    run_lua_script(L, "t = require'picoturtle'.new()");
 
-	return 0;
+    return 0;
 }
 
 /**
  * @brief Main command handler for the PicoTurtle CLI.
- * 
+ *
  * @param cmd The command object received from ZClk
  * @param handler_args any args passed to ZClk (unused)
  * @return zclk_res returns error code indicating whether turtle execution
@@ -357,6 +357,6 @@ int main(int argc, char* argv[])
         PTCLI_ARG_FILE_DESC,
         1
     );
-    
+
     zclk_command_exec(cmd, NULL, argc, argv);
 }
