@@ -144,6 +144,7 @@ void add_to_lua_path(lua_State* L, const char* path_fragment)
         // for debug
         // print_to_repl("Setting path via code -> |" + std::string(setPathCodeStr) + "|");
         run_lua_script(L, setPathCodeStr);
+        free(setPathCodeStr);
     }
 }
 
