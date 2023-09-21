@@ -168,8 +168,10 @@ int run_lua_file(lua_State* L, const char* filename)
 
     //printf("parent path = %s\n", parentpath.c_str());
 
+    //TODO: fix the cast below. Not sure why c_str does not return a const char *
+    // on windows.
     // add the parent path of the script to the lua path as well
-    add_to_lua_path(L, parentpath.c_str());
+    add_to_lua_path(L, (const char*)(parentpath.c_str()));
 
     // now load the script, run it and return the result
     return dochunk(L, luaL_loadfile(L, filename));
