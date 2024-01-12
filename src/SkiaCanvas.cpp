@@ -3,6 +3,7 @@
 #include <core/SkImageInfo.h>
 #include <core/SkColorType.h>
 #include <core/SkAlphaType.h>
+#include <encode/SkPngEncoder.h>
 
 using namespace turtle;
 
@@ -11,8 +12,13 @@ void SkiaCanvas::CreateCanvas()
     // SkImageInfo image_info = SkImageInfo::Make(getWidth(), getHeight(),
     //     SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
     // rasterSurface = SkSurface::MakeRaster(image_info);
+    // rasterSurface =
+    //     SkSurface::MakeRasterN32Premul(get_width(), get_height());
+
+    SkImageInfo image_info = SkImageInfo::Make(get_width(), get_height(),
+        SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
     rasterSurface =
-        SkSurface::MakeRasterN32Premul(get_width(), get_height());
+         SkSurfaces::Raster(image_info);
     rasterCanvas = rasterSurface->getCanvas();
 
     rasterCanvas->drawColor(SK_ColorWHITE);
@@ -120,7 +126,7 @@ void SkiaCanvas::export_img(const char *filename)
     {
         return;
     }
-    sk_sp<SkData> png(img->encodeToData());
+    sk_sp<SkData> png(SkPngEncoder::Encode(nullptr, img.get(), SkPngEncoder::Options()));
     if (!png)
     {
         return;
