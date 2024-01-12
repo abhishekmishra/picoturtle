@@ -66,9 +66,18 @@ void TurtleGLWidget::paintEvent(QPaintEvent *event)
 	else
 	{
 		sk_sp<SkImage> img = turtle->getRasterSurface()->makeImageSnapshot();
+
+		// See change below to make a specific kind of image info
+		// the extraction of sk_color_type is perhaps no longer required
+		// as it can be hardcoded to be the same value as created in SkiaCanvas
 		TurtleGLWidget::extract_sk_color_props(img);
 
-		SkImageInfo info = SkImageInfo::MakeN32Premul(img->width(), img->height());
+		// 12/01/2024 Create the same kind of image info as created in SkiaCanvas
+		// This was a result of changes to Skia API wherein we always create an
+		// image with specific image info instead of a premul.
+		SkImageInfo info = SkImageInfo::Make(img->width(), img->height(),
+        	SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
+		
 		std::vector<uint32_t> srcPixels;
 		const int rowBytes = img->width() * 4;
 		srcPixels.resize(img->height() * rowBytes);
