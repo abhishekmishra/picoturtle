@@ -7,7 +7,7 @@ Currently an early dev only alpla release. Expect many changes.
 
 # Install
 ## Windows 64-bit
-Latest release installer is [PicoTurtle 0.2.0-alpha.2](https://github.com/abhishekmishra/picoturtle/releases/download/v0.2.0-alpha.2/picoturtle-0.2.0-win64.exe)
+Latest release installer is [PicoTurtle 0.2.0-alpha.7](https://github.com/abhishekmishra/picoturtle/releases/download/v0.2.0-alpha.7/picoturtle-0.2.0-win64.exe)
 
 ## Linux
 See [Build](#build)
