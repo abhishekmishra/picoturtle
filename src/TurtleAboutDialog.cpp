@@ -32,7 +32,7 @@ TurtleAboutDialog::TurtleAboutDialog(QWidget *parent)
 	QLabel *license_brief = new QLabel("PicoTurtle license - <a href='https://raw.githubusercontent.com/abhishekmishra/picoturtle/main/LICENSE'>GNU General Public License v3.0 only</a>.");
 	enable_hyperlinks(license_brief);
 	QLabel *license_brief_part2 = new QLabel("For full license notices including those of dependencies see the source code.");
-	QLabel *copyright_brief = new QLabel("PicoTurtle  Copyright (C) 2018-2022  Abhishek Mishra");
+	QLabel *copyright_brief = new QLabel("PicoTurtle  Copyright (C) 2018-2024  Abhishek Mishra");
 
 	QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok);
 

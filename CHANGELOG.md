@@ -1,6 +1,17 @@
 # CHANGELOG
 This file documents major changes in every release of the project. The project follows [Semantic Versioning](https://semver.org/). There is a section for each release - which lists major changes made in the release.
 
+**0.2.0-alpha.7**  2024-01-12 Abhishek Mishra  <abhishekmishra3@gmail.com>
+
+- This is the 13th release of PicoTurtle. It's mostly a maintenance release.
+- This release has updated to the latest version of Qt in vcpkg i.e. '6.6.1'.
+- It also uses the latest skia version in vcpkg i.e. '0.38.2'.
+- There are some breaking changes in the latest version skia, requiring
+  some minor fixes. These fixes have only been tested on windows for now.
+  If there are more fixes required for other platforms I will make another
+  release.
+- The fixes relate to changes in SkCanvas class and in PNG encoding.
+
 **0.2.0-alpha.6**  2023-02-12 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - This is the 12th release of PicoTurtle. I've changed the cadence on release 
