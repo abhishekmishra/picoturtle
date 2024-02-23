@@ -386,7 +386,7 @@ if (WIN32)
   add_custom_command(
     TARGET picoturtle-app
     POST_BUILD
-    COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.$<$<CONFIG:Debug>:debug.bat>$<$<CONFIG:Release>:exe> D:/code2/picoturtle/build/bin/$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>/picoturtle.exe
+    COMMAND $ENV{VCPKG_ROOT}/installed/x64-windows/tools/Qt6/bin/windeployqt.$<$<CONFIG:Debug>:debug.bat>$<$<CONFIG:Release>:exe> ${CMAKE_CURRENT_BINARY_DIR}/bin/$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>/picoturtle.exe
   )
 endif(WIN32)
 
@@ -394,7 +394,7 @@ endif(WIN32)
 # TODO: need to check for release or Debug build to run different programs
 if (WIN32)
   if($<CONFIG:Debug>)
-    install(CODE "execute_process(COMMAND D:/vcpkg/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat D:/code2/picoturtle/install/bin/picoturtle.exe)")
+    install(CODE "execute_process(COMMAND $ENV{VCPKG_ROOT}/installed/x64-windows/tools/Qt6/bin/windeployqt.debug.bat ${CMAKE_SOURCE_DIR}/install/bin/picoturtle.exe)")
   endif()
 else()
   install(SCRIPT ${deploy_script})
