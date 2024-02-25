@@ -135,7 +135,8 @@ void Turtle::draw_me()
 
     // store current colour and pen width
     // to reset later
-    short ca = current_state->get_pen_color()->get_a();
+    // TODO: review how to add alpha support to brush.
+    // short ca = current_state->get_pen_color()->get_a();
     short cr = current_state->get_pen_color()->get_r();
     short cg = current_state->get_pen_color()->get_g();
     short cb = current_state->get_pen_color()->get_b();
