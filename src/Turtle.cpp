@@ -5,6 +5,9 @@
 #include "color_names.h"
 #include <algorithm>
 
+//TODO: fix all the memory leaks in this class by changing allocation to use
+// smart pointers.
+
 using namespace turtle;
 
 Turtle::Turtle() : Turtle(new TurtleOptions())
