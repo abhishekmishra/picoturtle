@@ -103,5 +103,6 @@
         "xtree": "cpp",
         "qsettings": "cpp",
         "qfont": "cpp"
-    }
+    },
+    "todo-tree.tree.scanMode": "current file"
 }
