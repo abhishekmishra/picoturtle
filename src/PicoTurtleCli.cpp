@@ -269,6 +269,7 @@ int init_turtle_lua_binding(lua_State *L)
     // turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
 
     run_lua_script(L, setPathCodeStr);
+    free(setPathCodeStr);
 
     // create the default turtle as global variable t
     run_lua_script(L, "t = require'picoturtle'.new()");
