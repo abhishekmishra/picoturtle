@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    "qtbase",
+    "skia",
+    {
+      "name": "lua",
+      "features": [
+        "tools"
+      ]
+    }
+  ]
+}
