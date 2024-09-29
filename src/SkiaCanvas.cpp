@@ -3,6 +3,7 @@
 #include <core/SkImageInfo.h>
 #include <core/SkColorType.h>
 #include <core/SkAlphaType.h>
+#include <core/SkFontMgr.h>
 #include <encode/SkPngEncoder.h>
 
 using namespace turtle;
@@ -16,9 +17,9 @@ void SkiaCanvas::CreateCanvas()
     //     SkSurface::MakeRasterN32Premul(get_width(), get_height());
 
     SkImageInfo image_info = SkImageInfo::Make(get_width(), get_height(),
-        SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
+                                               SkColorType::kRGBA_8888_SkColorType, kPremul_SkAlphaType);
     rasterSurface =
-         SkSurfaces::Raster(image_info);
+        SkSurfaces::Raster(image_info);
     rasterCanvas = rasterSurface->getCanvas();
 
     rasterCanvas->drawColor(SK_ColorWHITE);
@@ -44,7 +45,7 @@ SkiaCanvas::SkiaCanvas()
     update_canvas();
 };
 
-SkiaCanvas::~SkiaCanvas(){};
+SkiaCanvas::~SkiaCanvas() {};
 
 void SkiaCanvas::draw_line(float x1, float y1, float x2, float y2)
 {
@@ -71,7 +72,17 @@ void SkiaCanvas::draw_circle(float x, float y, float radius)
 
 void SkiaCanvas::font(const char *f, unsigned int sz)
 {
-    sk_sp<SkTypeface> typeface = SkTypeface::MakeFromName(f, SkFontStyle::Normal());
+    // Create an instance of SkFontMgr
+    sk_sp<SkFontMgr> fontMgr = SkFontMgr::RefEmpty();
+    // Create typeface from font name
+    sk_sp<SkTypeface> typeface = fontMgr->matchFamilyStyle(f, SkFontStyle::Normal());
+    // Check if typeface creation was successful
+    if (!typeface) {
+        // Handle error: fallback to default typeface if necessary
+        typeface = fontMgr->matchFamilyStyle(nullptr, SkFontStyle::Normal());
+    }
+
+    // sk_sp<SkTypeface> typeface = SkTypeface::MakeFromName(f, SkFontStyle::Normal());
     skfont = SkFont(typeface, (float)sz, 1.0f, 0.0f);
 }
 
