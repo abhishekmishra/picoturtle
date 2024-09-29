@@ -6,6 +6,38 @@
 #include <core/SkFontMgr.h>
 #include <encode/SkPngEncoder.h>
 
+#if defined(SK_BUILD_FOR_WIN) && (defined(SK_FONTMGR_GDI_AVAILABLE) || defined(SK_FONTMGR_DIRECTWRITE_AVAILABLE))
+#include "include/ports/SkTypeface_win.h"
+#endif
+
+#if defined(SK_BUILD_FOR_ANDROID) && defined(SK_FONTMGR_ANDROID_AVAILABLE)
+#include "include/ports/SkFontMgr_android.h"
+#endif
+
+#if defined(SK_FONTMGR_CORETEXT_AVAILABLE) && (defined(SK_BUILD_FOR_IOS) || defined(SK_BUILD_FOR_MAC))
+#include "include/ports/SkFontMgr_mac_ct.h"
+#endif
+
+#if defined(SK_FONTMGR_FONTCONFIG_AVAILABLE)
+#include "include/ports/SkFontMgr_fontconfig.h"
+#endif
+
+#if defined(SK_FONTMGR_FREETYPE_DIRECTORY_AVAILABLE)
+#include "include/ports/SkFontMgr_directory.h"
+#endif
+
+#if defined(SK_FONTMGR_FREETYPE_EMPTY_AVAILABLE)
+#include "include/ports/SkFontMgr_empty.h"
+#endif
+
+#ifndef SK_FONT_FILE_PREFIX
+#  if defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
+#    define SK_FONT_FILE_PREFIX "/System/Library/Fonts/"
+#  else
+#    define SK_FONT_FILE_PREFIX "/usr/share/fonts/"
+#  endif
+#endif
+
 using namespace turtle;
 
 void SkiaCanvas::CreateCanvas()
@@ -72,8 +104,29 @@ void SkiaCanvas::draw_circle(float x, float y, float radius)
 
 void SkiaCanvas::font(const char *f, unsigned int sz)
 {
-    // Create an instance of SkFontMgr
-    sk_sp<SkFontMgr> fontMgr = SkFontMgr::RefEmpty();
+
+    /// Creates a new system font manager, empty if none is available.
+        sk_sp<SkFontMgr> fontMgr;
+#if defined(SK_BUILD_FOR_WIN) && defined(SK_FONTMGR_GDI_AVAILABLE)
+        fontMgr = SkFontMgr_New_GDI();
+#elif defined(SK_BUILD_FOR_ANDROID) && defined(SK_FONTMGR_ANDROID_AVAILABLE)
+        fontMgr = SkFontMgr_New_Android(nullptr);
+#elif defined(SK_BUILD_FOR_WIN) && defined(SK_FONTMGR_DIRECTWRITE_AVAILABLE)
+        fontMgr = SkFontMgr_New_DirectWrite();
+#elif defined(SK_FONTMGR_CORETEXT_AVAILABLE) && (defined(SK_BUILD_FOR_IOS) || defined(SK_BUILD_FOR_MAC))
+        fontMgr = SkFontMgr_New_CoreText(nullptr);
+#elif defined(SK_FONTMGR_FONTCONFIG_AVAILABLE)
+        fontMgr = SkFontMgr_New_FontConfig(nullptr);
+#elif defined(SK_FONTMGR_FREETYPE_DIRECTORY_AVAILABLE)
+        // In particular, this is used on ChromeOS, which is Linux-like but doesn't have
+        // FontConfig.
+        fontMgr = SkFontMgr_New_Custom_Directory(SK_FONT_FILE_PREFIX);
+#elif defined(SK_FONTMGR_FREETYPE_EMPTY_AVAILABLE)
+        fontMgr = SkFontMgr_New_Custom_Empty();
+#else
+        fontMgr = SkFontMgr::RefEmpty();
+#endif
+
     // Create typeface from font name
     sk_sp<SkTypeface> typeface = fontMgr->matchFamilyStyle(f, SkFontStyle::Normal());
     // Check if typeface creation was successful
