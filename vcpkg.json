@@ -1,12 +1,13 @@
 {
   "dependencies": [
-    "qtbase",
-    "skia",
     {
       "name": "lua",
       "features": [
         "tools"
       ]
-    }
+    },
+    "qtbase",
+    "skia",
+    "graphicsmagick"
   ]
 }

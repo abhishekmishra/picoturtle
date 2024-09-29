@@ -122,7 +122,7 @@ if(WIN32)
   set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
   "${skia_interface_defs_fixed}")
 
-  target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-windows/include/skia")
+  target_include_directories(skia INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-windows/include/skia)
 	target_link_libraries(picoturtle PUBLIC skia skia::skia)
 endif(WIN32)
 
