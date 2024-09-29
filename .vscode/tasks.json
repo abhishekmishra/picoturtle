@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Generate CMake Build",
+            "label": "⚙️ Generate Build",
             "type": "shell",
             "command": "make",
             "args": [
@@ -31,7 +31,7 @@
             }
         },
         {
-            "label": "Delete CMake Build",
+            "label": "🗑️ Delete Build",
             "type": "shell",
             "command": "make delbuild",
             "group": "build",
@@ -45,7 +45,7 @@
             }
         },
         {
-            "label": "Build Project",
+            "label": "⚒️ Build Project",
             "type": "shell",
             "command": "make build",
             "group": "build",
@@ -59,7 +59,7 @@
             }
         },
         {
-            "label": "Clean Project",
+            "label": "🧹 Clean Project",
             "type": "shell",
             "command": "make clean",
             "group": "build",
@@ -101,7 +101,7 @@
             }
         },
         {
-            "label": "Run Project",
+            "label": "▶️ Run Project",
             "type": "shell",
             "command": "make run",
             "presentation": {
