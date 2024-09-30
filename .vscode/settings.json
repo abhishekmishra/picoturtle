@@ -104,5 +104,5 @@
         "qsettings": "cpp",
         "qfont": "cpp"
     },
-    "todo-tree.tree.scanMode": "current file"
+    "todo-tree.tree.scanMode": "workspace only"
 }
