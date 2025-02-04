@@ -32,6 +32,10 @@ CMAKE_PRJ_FLAGS=-DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) -DCMAKE_BUILD_TYP
 
 CMAKE_BUILD_DIR=./build
 
+ifeq ($(OSFLAG),OSX)
+	export LUA_CPATH := ${LUA_CPATH};$(realpath ${CMAKE_BUILD_DIR})/lib?.dylib
+endif
+
 all: clean build run
 
 genbuild:
