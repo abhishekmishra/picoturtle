@@ -1,13 +1,23 @@
 {
   "dependencies": [
+    "graphicsmagick",
     {
       "name": "lua",
       "features": [
         "tools"
       ]
     },
-    "qtbase",
-    "skia",
-    "graphicsmagick"
+    {
+      "name": "qtbase",
+      "default-features": false,
+      "features": [
+        "jpeg",
+        "png",
+        "widgets",
+        "harfbuzz",
+        "opengl"
+      ]
+    },
+    "skia"
   ]
 }
