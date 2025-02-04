@@ -3,6 +3,9 @@
 # set the build type for single-config generators.
 CMAKE_BUILD_TYPE=Debug
 
+# see https://stackoverflow.com/questions/68379786/building-postgres-from-source-throws-utils-errcodes-h-file-not-found-when-ca
+MAKELEVEL=0
+
 # see https://gist.github.com/sighingnow/deee806603ec9274fd47
 # for details on the following snippet to get the OS
 # (removed the flags about arch as it is not needed for now)
@@ -25,7 +28,7 @@ else
 	CMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
 endif
 
-CMAKE_PRJ_FLAGS=-DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX=./install
+CMAKE_PRJ_FLAGS=-DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX=./install -DVCPKG_OVERLAY_TRIPLETS=./custom-triplets
 
 CMAKE_BUILD_DIR=./build
 
