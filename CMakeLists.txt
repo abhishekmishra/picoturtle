@@ -138,11 +138,11 @@ if(APPLE)
   set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
   "${skia_interface_defs_fixed}")
 
-  target_include_directories(skia INTERFACE "/Users/abhishekmishra/vcpkg/installed/x64-osx/include/skia/")
+  target_include_directories(skia INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/arm64-osx/include/skia/)
   target_link_libraries(picoturtle PUBLIC skia skia::skia)
   # skiaConfig.cmake generated in vcpkg only looks for dll file.
   # therefore adding the dynamic library file manually
-  target_link_libraries(picoturtle PUBLIC "/Users/abhishekmishra/vcpkg/installed/x64-osx/lib/libskia.dylib")
+  target_link_libraries(picoturtle PUBLIC  ${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/arm64-osx/lib/libskia.dylib)
 
 
   message(CHECK_START "Finding skia")
