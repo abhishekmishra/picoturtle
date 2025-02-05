@@ -172,12 +172,12 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
   set_target_properties(skia PROPERTIES INTERFACE_COMPILE_DEFINITIONS
   "${skia_interface_defs_fixed}")
 
-  target_include_directories(skia INTERFACE "$ENV{VCPKG_ROOT}/installed/x64-linux/include/skia/")
+  target_include_directories(skia INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-linux/include/skia/")
   target_link_libraries(picoturtle PUBLIC skia skia::skia)
   # skiaConfig.cmake generated in vcpkg only looks for dll file.
   # therefore adding the dynamic library file manually
-  target_link_libraries(picoturtle PUBLIC "$ENV{VCPKG_ROOT}/installed/x64-linux/lib/libskia.a")
-  target_link_libraries(picoturtle PUBLIC "$ENV{VCPKG_ROOT}/installed/x64-linux/lib/libfontconfig.a")
+  target_link_libraries(picoturtle PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-linux/lib/libskia.a")
+  target_link_libraries(picoturtle PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-linux/lib/libfontconfig.a")
 
   find_package(PNG REQUIRED)
   target_link_libraries(picoturtle PRIVATE PNG::PNG)
