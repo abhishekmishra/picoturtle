@@ -80,4 +80,4 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: true
 
-copyright: Copyright &copy; 2017 - 2023 Abhishek Mishra
+copyright: Copyright &copy; 2017 - 2024 Abhishek Mishra
