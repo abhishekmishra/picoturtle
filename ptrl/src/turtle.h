@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 /*------------ trtl_location_t --------------*/
 // The Location struct for representing the location
