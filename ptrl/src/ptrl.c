@@ -6,7 +6,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "Hello World - raylib");
+    InitWindow(screenWidth, screenHeight, "PicoTurtle");
 
     SetTargetFPS(60);
 
@@ -16,7 +16,7 @@ int main(void)
         // Draw
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            DrawText("Hello, World!", 350, 200, 20, DARKGRAY);
+            DrawText("This is the new picoturtle", 350, 200, 20, DARKGRAY);
         EndDrawing();
     }
 
