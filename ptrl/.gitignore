@@ -1,0 +1,80 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+*~
+~*
+*.swp
+
+bin/
+obj/
+.vs/
+x64/
+Debug/
+Release/
+
+# Eclipse files ignored
+.project
+.cproject
+.settings
+
+# CMake gitignore
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+build
+
+*.db
+*.db-journal
+
+# output folder for tests
+out/
+*.swp
+*~
+
+# macos ds store
+.DS_Store
+
+# install
+install/
+
+# don't check-in image files from current folder
+/*.png
