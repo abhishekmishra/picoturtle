@@ -60,7 +60,7 @@ endif
 
 run:
 ifeq ($(OSFLAG),WIN32)
-	$(CMAKE_BUILD_DIR)/bin/Debug/ptrl 
+	$(CMAKE_BUILD_DIR)/Debug/ptrl 
 else ifeq ($(OSFLAG),OSX)
 	$(CMAKE_BUILD_DIR)/ptrl
 else
