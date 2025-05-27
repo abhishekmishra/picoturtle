@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "raylib",
+    "glfw3"
+  ]
+}
