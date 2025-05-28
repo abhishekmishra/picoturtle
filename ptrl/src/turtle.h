@@ -76,4 +76,15 @@ float trtl_get_canvas_location_y(const trtl_t *turtle);
 float trtl_get_pen_width(const trtl_t *turtle);
 void trtl_draw_me(const trtl_t *turtle);
 
+// movement functions
+// with pen movement
+void trtl_forward(trtl_t *turtle, float distance);
+void trtl_backward(trtl_t *turtle, float distance);
+// levitate/teleport without drawing
+void trtl_set_position(trtl_t *turtle, float x, float y);
+void trtl_set_x(trtl_t *turtle, float x);
+void trtl_set_y(trtl_t *turtle, float y);
+// heading functions
+void trtl_set_heading(trtl_t *turtle, double heading);
+
 #endif // ___TURTLE_H___

@@ -243,3 +243,58 @@ void trtl_draw_me(const trtl_t *turtle)
         DARKGREEN 
     );
 }
+
+// movement functions
+// with pen movement
+void trtl_forward(trtl_t *turtle, float distance)
+{
+    float theta = trtl_get_heading(turtle) * (M_PI / 180);
+    float canvas_theta = trtl_get_canvas_heading(turtle) * (M_PI / 180);
+    // y2 = d sin (theta) + y1
+    // x2 = d cos (theta) + x1
+    trtl_location_t *current_location = trtl_get_location(turtle);
+    float y2 = distance * (sin(theta)) + location_get_y(current_location);
+    float x2 = distance * (cos(theta)) + location_get_x(current_location);
+    float cy2 = distance * (sin(canvas_theta)) + trtl_get_canvas_location_y(turtle);
+    float cx2 = distance * (cos(canvas_theta)) + trtl_get_canvas_location_x(turtle);
+
+    // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, turtle_state->get_location()->getX(), turtle_state->get_location()->getY(), x2, y2);
+    trtl_state_t *current_state = turtle->current_state;
+    if (current_state == NULL || current_location == NULL) {
+        return; // No state or location to draw from
+    }
+    if (trtl_state_is_pen_down(current_state)) {
+        // Draw the line from the current location to the new location
+        // using the pen colour and width
+        Color color = (Color){
+            current_state->pen_colour->r,
+            current_state->pen_colour->g,
+            current_state->pen_colour->b,
+            current_state->pen_colour->a
+        };
+        DrawLineEx(
+            (Vector2){location_get_x(current_location), location_get_y(current_location)},
+            (Vector2){x2, y2},
+            current_state->pen_width,
+            color
+        );
+    }
+
+    // set the new location
+    location_set_x(current_location, x2);
+    location_set_y(current_location, y2);
+}
+
+void trtl_backward(trtl_t *turtle, float distance)
+{
+    // to move backward, we just move forward in the opposite direction
+    trtl_forward(turtle, -distance);
+}
+
+// TODO: Implement these functions
+// levitate/teleport without drawing
+// void trtl_set_position(trtl_t *turtle, float x, float y);
+// void trtl_set_x(trtl_t *turtle, float x);
+// void trtl_set_y(trtl_t *turtle, float y);
+// // heading functions
+// void trtl_set_heading(trtl_t *turtle, double heading);

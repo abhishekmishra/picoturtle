@@ -10,6 +10,8 @@
 
 #include "turtle.h"
 
+#include "test_drawing_features.h"
+
 /**
  * accept a lua error code, and print
  * an appropriate message to the console.
@@ -244,6 +246,7 @@ int main(void)
             // Draw the turtle
             if (turtle != NULL && turtle->current_state != NULL)
             {
+                draw_test_graphics_start(turtle);
                 trtl_draw_me(turtle);
             }
             else
