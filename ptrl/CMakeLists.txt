@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 set(PTRL_SRC
+    src/turtle.h
+    src/turtle.c
     src/ptrl.c
     src/ptrl.h
 )

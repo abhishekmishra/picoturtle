@@ -5,324 +5,75 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-
 #define _USE_MATH_DEFINES
 #include <math.h>
-
 #include <raylib.h>
 
 /*------------ trtl_location_t --------------*/
-// The Location struct for representing the location
-// of the turtle in a 2D space.
 typedef struct {
     float x;
     float y;
 } trtl_location_t;
 
-float location_get_x(const trtl_location_t *loc) {
-    return loc->x;
-}
-float location_get_y(const trtl_location_t *loc) {
-    return loc->y;
-}
-void location_set_x(trtl_location_t *loc, float x) {
-    loc->x = x;
-}
-void location_set_y(trtl_location_t *loc, float y) {
-    loc->y = y;
-}
-
-void make_location(trtl_location_t **loc)
-{
-    *loc = (trtl_location_t *)malloc(sizeof(trtl_location_t));
-    if (*loc != NULL) {
-        (*loc)->x = 0.0f;
-        (*loc)->y = 0.0f;
-    }
-}
-
-void make_location_xy(trtl_location_t **loc, float x, float y) {
-    make_location(loc);
-    if (*loc != NULL) {
-        (*loc)->x = x;
-        (*loc)->y = y;
-    }
-}
-
-void free_location(trtl_location_t *loc) {
-    if (loc != NULL) {
-        free(loc);
-    }
-}
-
-void print_location(const trtl_location_t *loc) {
-    if (loc != NULL) {
-        printf("Location: (%.2f, %.2f)\n", loc->x, loc->y);
-    } else {
-        printf("Location is NULL\n");
-    }
-}
+float location_get_x(const trtl_location_t *loc);
+float location_get_y(const trtl_location_t *loc);
+void location_set_x(trtl_location_t *loc, float x);
+void location_set_y(trtl_location_t *loc, float y);
+void make_location(trtl_location_t **loc);
+void make_location_xy(trtl_location_t **loc, float x, float y);
+void free_location(trtl_location_t *loc);
+void print_location(const trtl_location_t *loc);
 
 /*------------ trtl_colour_t --------------*/
-
-// using uint8_t for RGBA values,
-// and char* for the name of the colour
 typedef struct {
-    uint8_t r; // Red component
-    uint8_t g; // Green component
-    uint8_t b; // Blue component
-    uint8_t a; // Alpha component
-    char *name; // Name of the colour
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+    char *name;
 } trtl_colour_t;
 
-void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name) {
-    *col = (trtl_colour_t *)malloc(sizeof(trtl_colour_t));
-    if (*col != NULL) {
-        (*col)->r = r;
-        (*col)->g = g;
-        (*col)->b = b;
-        (*col)->a = a;
-        (*col)->name = (char *)malloc(strlen(name) + 1);
-        if ((*col)->name != NULL) {
-            strcpy((*col)->name, name);
-        }
-    }
-}
-void free_colour(trtl_colour_t *col) {
-    if (col != NULL) {
-        if (col->name != NULL) {
-            free(col->name);
-        }
-        free(col);
-    }
-}
-
-void print_colour(const trtl_colour_t *col) {
-    if (col != NULL) {
-        printf("Colour: (%d, %d, %d, %d), Name: %s\n", col->r, col->g, col->b, col->a, col->name);
-    } else {
-        printf("Colour is NULL\n");
-    }
-}
+void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name);
+void free_colour(trtl_colour_t *col);
+void print_colour(const trtl_colour_t *col);
 
 /*------------ trtl_state_t --------------*/
-
 typedef struct {
     trtl_location_t *location;
     trtl_colour_t *pen_colour;
     double heading;
-    int pen_down; // 1 for down, 0 for up
+    int pen_down;
     float pen_width;
 } trtl_state_t;
 
-void make_state(trtl_state_t **state) {
-    *state = (trtl_state_t *)malloc(sizeof(trtl_state_t));
-    if (*state != NULL) {
-        (*state)->location = NULL;
-        (*state)->pen_colour = NULL;
-        (*state)->heading = 0.0;
-        (*state)->pen_down = 0; // pen is up by default
-        (*state)->pen_width = 1.0f; // default pen width
-    }
-
-    make_location(&(*state)->location); // Initialize location
-    if ((*state)->location == NULL) {
-        free(*state);
-        *state = NULL;
-        return; // Failed to allocate location
-    }
-    make_colour(&(*state)->pen_colour, 0, 0, 0, 255, "black"); // Default colour
-    if ((*state)->pen_colour == NULL) {
-        free_location((*state)->location);
-        free(*state);
-        *state = NULL;
-        return; // Failed to allocate colour
-    }
-}
-
-void free_state(trtl_state_t *state) {
-    if (state != NULL) {
-        free_location(state->location);
-        free_colour(state->pen_colour);
-        free(state);
-    }
-}
-
-trtl_location_t* trtl_state_get_location(const trtl_state_t *state) {
-    return state->location;
-}
-
-trtl_colour_t* trtl_state_get_pen_colour(const trtl_state_t *state) {
-    return state->pen_colour;
-}
-
-double trtl_state_get_heading(const trtl_state_t *state) {
-    return state->heading;
-}
-
-void trtl_state_set_heading(trtl_state_t *state, double heading) {
-    state->heading = heading;
-}
-
-int trtl_state_is_pen_down(const trtl_state_t *state) {
-    return state->pen_down;
-}
-
-void trtl_state_set_pen_down(trtl_state_t *state, int pen_down) {
-    state->pen_down = pen_down;
-}
-
-float trtl_state_get_pen_width(const trtl_state_t *state) {
-    return state->pen_width;
-}
-
-void trtl_state_set_pen_width(trtl_state_t *state, float pen_width) {
-    state->pen_width = pen_width;
-}
+void make_state(trtl_state_t **state);
+void free_state(trtl_state_t *state);
+trtl_location_t* trtl_state_get_location(const trtl_state_t *state);
+trtl_colour_t* trtl_state_get_pen_colour(const trtl_state_t *state);
+double trtl_state_get_heading(const trtl_state_t *state);
+void trtl_state_set_heading(trtl_state_t *state, double heading);
+int trtl_state_is_pen_down(const trtl_state_t *state);
+void trtl_state_set_pen_down(trtl_state_t *state, int pen_down);
+float trtl_state_get_pen_width(const trtl_state_t *state);
+void trtl_state_set_pen_width(trtl_state_t *state, float pen_width);
 
 /*------------ trtl_t --------------*/
-
 typedef struct {
-    // TODO: need to add stack for saved states
     trtl_state_t *current_state;
-    // Name of the turtle
     char* name;
-    // Unique identifier for the turtle
     char* id;
-    // Start time of the turtle's activity
     long start_time;
 } trtl_t;
 
-void make_turtle(trtl_t **turtle, const char *name, const char *id) {
-    *turtle = (trtl_t *)malloc(sizeof(trtl_t));
-    if (*turtle != NULL) {
-        (*turtle)->current_state = NULL;
-        (*turtle)->name = (char *)malloc(strlen(name) + 1);
-        if ((*turtle)->name != NULL) {
-            strcpy((*turtle)->name, name);
-        }
-        (*turtle)->id = (char *)malloc(strlen(id) + 1);
-        if ((*turtle)->id != NULL) {
-            strcpy((*turtle)->id, id);
-        }
-        (*turtle)->start_time = 0; // Initialize start time
-        make_state(&(*turtle)->current_state); // Initialize current state
-    }
-}
-
-void free_turtle(trtl_t *turtle) {
-    if (turtle != NULL) {
-        free_state(turtle->current_state);
-        if (turtle->name != NULL) {
-            free(turtle->name);
-        }
-        if (turtle->id != NULL) {
-            free(turtle->id);
-        }
-        free(turtle);
-    }
-}
-
-trtl_location_t* trtl_get_location(const trtl_t *turtle)
-{
-    if (turtle != NULL && turtle->current_state != NULL) {
-        return trtl_state_get_location(turtle->current_state);
-    }
-    return NULL; // Return NULL if turtle or state is NULL
-}
-
-trtl_colour_t* trtl_get_pen_colour(const trtl_t *turtle)
-{
-    if (turtle != NULL && turtle->current_state != NULL) {
-        return trtl_state_get_pen_colour(turtle->current_state);
-    }
-    return NULL; // Return NULL if turtle or state is NULL
-}
-
-double trtl_get_heading(const trtl_t *turtle)
-{
-    if (turtle != NULL && turtle->current_state != NULL) {
-        return trtl_state_get_heading(turtle->current_state);
-    }
-    return 0.0; // Default heading if turtle or state is NULL
-}
-
-double trtl_get_canvas_heading(const trtl_t *turtle)
-{
-    return 360.0 - trtl_get_heading(turtle);
-}
-
-float trtl_get_canvas_location_x(const trtl_t *turtle)
-{
-    return location_get_x(trtl_get_location(turtle));
-}
-
-float trtl_get_canvas_location_y(const trtl_t *turtle)
-{
-    // Assuming the canvas origin is at the top-left corner,
-    // return this->canvas->get_height() - current_state->get_location()->getY();
-    // TODO: fix this to use the canvas height
-    return location_get_y(trtl_get_location(turtle));
-}
-
-float trtl_get_pen_width(const trtl_t *turtle)
-{
-    if (turtle != NULL && turtle->current_state != NULL) {
-        return trtl_state_get_pen_width(turtle->current_state);
-    }
-    return 1.0f; // Default pen width if turtle or state is NULL
-}
-
-// Draw the turtle on the screen
-void trtl_draw_me(const trtl_t *turtle)
-{
-    int d = 25;
-    float theta1 = (trtl_get_canvas_heading(turtle) - 145) * (M_PI / 180);
-    float y2 = d * (sin(theta1)) + trtl_get_canvas_location_y(turtle);
-    float x2 = d * (cos(theta1)) + trtl_get_canvas_location_x(turtle);
-    float theta2 = (trtl_get_canvas_heading(turtle) + 145) * (M_PI / 180);
-    float y3 = d * (sin(theta2)) + trtl_get_canvas_location_y(turtle);
-    float x3 = d * (cos(theta2)) + trtl_get_canvas_location_x(turtle);
-
-    // store current colour and pen width
-    // to reset later
-    // TODO: review how to add alpha support to brush.
-    // short ca = current_state->get_pen_color()->get_a();
-    short cr = trtl_get_pen_colour(turtle)->r;
-    short cg = trtl_get_pen_colour(turtle)->g;
-    short cb = trtl_get_pen_colour(turtle)->b;
-    const char* cname = trtl_get_pen_colour(turtle)->name ? trtl_get_pen_colour(turtle)->name : "unknown";
-
-    float cpw = trtl_get_pen_width(turtle);
-
-    // TODO: need to set the drawing colour before and unset it afterwards.
-    // set turtle colour
-    // pencolor(255u, 0u, 0u);
-    // penwidth(2);
-
-    // canvas->draw_triangle(trtl_get_canvas_location_x(turtle), trtl_get_canvas_location_y(turtle), x2, y2, x3, y3);
-    //void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color);
-    Vector2 v1 = {trtl_get_canvas_location_x(turtle), trtl_get_canvas_location_y(turtle)};
-    Vector2 v2 = {x2, y2};
-    Vector2 v3 = {x3, y3};
-    // Draw the triangle representing the turtle
-    DrawTriangle(
-        v1,
-        v2,
-        v3,
-        DARKGREEN 
-    );
-
-    // reset turtle colour and pen width
-    // if (cname == "unknown")
-    // {
-    //     pencolor(cr, cg, cb);
-    // }
-    // else
-    // {
-    //     pencolor(cname.c_str());
-    // }
-    // penwidth(cpw);
-}
+void make_turtle(trtl_t **turtle, const char *name, const char *id);
+void free_turtle(trtl_t *turtle);
+trtl_location_t* trtl_get_location(const trtl_t *turtle);
+trtl_colour_t* trtl_get_pen_colour(const trtl_t *turtle);
+double trtl_get_heading(const trtl_t *turtle);
+double trtl_get_canvas_heading(const trtl_t *turtle);
+float trtl_get_canvas_location_x(const trtl_t *turtle);
+float trtl_get_canvas_location_y(const trtl_t *turtle);
+float trtl_get_pen_width(const trtl_t *turtle);
+void trtl_draw_me(const trtl_t *turtle);
 
 #endif // ___TURTLE_H___
