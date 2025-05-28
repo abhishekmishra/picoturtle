@@ -1,5 +1,11 @@
 {
   "dependencies": [
+    {
+      "name": "lua",
+      "features": [
+        "tools"
+      ]
+    },
     "raylib",
     "glfw3"
   ]
