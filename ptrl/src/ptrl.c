@@ -192,6 +192,16 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    // Run a Lua script
+    const char *script = "print('Hello from Lua!')";
+    res = run_lua_script(L, script);
+    if (res != LUA_OK)
+    {
+        printf("Fatal: Unable to run Lua script!\n");
+        cleanup_lua(L);
+        return EXIT_FAILURE;
+    }
+
     InitWindow(screenWidth, screenHeight, "PicoTurtle");
 
     SetTargetFPS(60);
