@@ -6,7 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "raylib.h"
+#include <raylib.h>
+
+#include "turtle.h"
 
 /**
  * accept a lua error code, and print
@@ -202,6 +204,32 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    // Initialize Turtle
+    trtl_t *turtle = NULL;
+    make_turtle(&turtle, "picoturtle", "picoturtle-1");
+    if (turtle == NULL)
+    {
+        printf("Fatal: Unable to create turtle!\n");
+        cleanup_lua(L);
+        return EXIT_FAILURE;
+    }
+    // Set turtle's location to 100,100 and heading to 0
+    trtl_location_t *location = trtl_get_location(turtle);
+    if (location != NULL)
+    {
+        location_set_x(location, 100.0f);
+        location_set_y(location, 100.0f);
+    }
+    else
+    {
+        printf("Fatal: Unable to set turtle's location!\n");
+        free_turtle(turtle);
+        cleanup_lua(L);
+        return EXIT_FAILURE;
+    }
+    // Set heading to 0 degrees
+    trtl_state_set_heading(turtle->current_state, 0.0);
+
     InitWindow(screenWidth, screenHeight, "PicoTurtle");
 
     SetTargetFPS(60);
@@ -213,7 +241,26 @@ int main(void)
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawText("This is the new picoturtle", 350, 200, 20, DARKGRAY);
+            // Draw the turtle
+            if (turtle != NULL && turtle->current_state != NULL)
+            {
+                trtl_draw_me(turtle);
+            }
+            else
+            {
+                DrawText("Turtle not initialized", 350, 220, 20, RED);
+            }
         EndDrawing();
+    }
+
+    // Deallocate the turtle
+    if (turtle != NULL)
+    {
+        free_turtle(turtle);
+    }
+    else
+    {
+        printf("Warning: Turtle was not initialized, nothing to free.\n");
     }
 
     // De-Initialization
