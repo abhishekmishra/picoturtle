@@ -181,6 +181,22 @@ int init_lua(lua_State ** Lptr)
     return EXIT_SUCCESS;
 }
 
+// raylib offscreen gpu rendering
+RenderTexture2D init_offscreen_rendering(void)
+{
+    RenderTexture2D target = LoadRenderTexture(800, 450);
+    BeginTextureMode(target);
+    ClearBackground(RAYWHITE);
+    EndTextureMode();
+    return target;
+}
+
+void destroy_offscreen_rendering(RenderTexture2D target)
+{
+    // Unload the render texture
+    UnloadRenderTexture(target);
+}
+
 int main(void)
 {
     // Initialization
@@ -236,23 +252,52 @@ int main(void)
 
     SetTargetFPS(60);
 
+    // Initialize offscreen rendering
+    RenderTexture2D offscreenTarget = init_offscreen_rendering();
+    if (offscreenTarget.id == 0)
+    {
+        printf("Fatal: Unable to initialize offscreen rendering!\n");
+        free_turtle(turtle);
+        cleanup_lua(L);
+        CloseWindow();
+        return EXIT_FAILURE;
+    }
+
+    // Initial turtle drawing
+    BeginTextureMode(offscreenTarget); // Start drawing to the offscreen target
+        // Draw the turtle
+        if (turtle != NULL && turtle->current_state != NULL)
+        {
+            draw_test_graphics_start(turtle);
+            trtl_draw_me(turtle);
+        }
+        else
+        {
+            DrawText("Turtle not initialized", 350, 220, 20, RED);
+        }
+    EndTextureMode(); // End drawing to the offscreen target
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Draw
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("This is the new picoturtle", 350, 200, 20, DARKGRAY);
+        // Turtle Draw Loop (if exists)
+        BeginTextureMode(offscreenTarget); // Start drawing to the offscreen target
             // Draw the turtle
             if (turtle != NULL && turtle->current_state != NULL)
             {
-                draw_test_graphics_start(turtle);
-                trtl_draw_me(turtle);
+                // TODO: turtle draw loop (if exists)
             }
             else
             {
                 DrawText("Turtle not initialized", 350, 220, 20, RED);
             }
+        EndTextureMode(); // End drawing to the offscreen target
+
+        // Draw
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+            // Draw the offscreen texture to the screen
+            DrawTextureRec(offscreenTarget.texture, (Rectangle){0, 0, offscreenTarget.texture.width, -offscreenTarget.texture.height}, (Vector2){0, 0}, WHITE);            
         EndDrawing();
     }
 
@@ -265,6 +310,9 @@ int main(void)
     {
         printf("Warning: Turtle was not initialized, nothing to free.\n");
     }
+
+    // Deallocate offscreen rendering
+    destroy_offscreen_rendering(offscreenTarget);
 
     // De-Initialization
     CloseWindow();

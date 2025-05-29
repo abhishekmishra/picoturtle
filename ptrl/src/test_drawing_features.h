@@ -25,7 +25,7 @@ void draw_test_graphics_start(trtl_t *turtle)
 
     // Set heading to 0 degrees
     // TODO: use turtle function after implementing it
-    trtl_state_set_heading(turtle->current_state, -45.0);
+    trtl_state_set_heading(turtle->current_state, 45.0);
 
     // move turtle to the center of the screen
     trtl_forward(turtle, 100.0f);
