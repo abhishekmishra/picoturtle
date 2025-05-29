@@ -203,7 +203,7 @@ double trtl_get_heading(const trtl_t *turtle)
 
 double trtl_get_canvas_heading(const trtl_t *turtle)
 {
-    return 360.0 - trtl_get_heading(turtle);
+    return trtl_get_heading(turtle);
 }
 
 float trtl_get_canvas_location_x(const trtl_t *turtle)
