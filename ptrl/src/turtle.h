@@ -75,6 +75,8 @@ double trtl_get_canvas_heading(const trtl_t *turtle);
 float trtl_get_canvas_location_x(const trtl_t *turtle);
 float trtl_get_canvas_location_y(const trtl_t *turtle);
 float trtl_get_pen_width(const trtl_t *turtle);
+
+// drawing miscellaneous functions
 void trtl_draw_me(const trtl_t *turtle);
 
 // movement functions
@@ -87,5 +89,9 @@ void trtl_set_x(trtl_t *turtle, float x);
 void trtl_set_y(trtl_t *turtle, float y);
 // heading functions
 void trtl_set_heading(trtl_t *turtle, double heading);
+
+// information functions
+void trtl_print_info(const trtl_t *turtle);
+void trtl_draw_info(const trtl_t *turtle);
 
 #endif // ___TURTLE_H___

@@ -1,5 +1,13 @@
 #include "turtle.h"
 
+#ifdef _MSC_VER
+#include <stdio.h>
+#define snprintf_safe(dest, size, fmt, ...) _snprintf_s(dest, size, _TRUNCATE, fmt, __VA_ARGS__)
+#else
+#include <stdio.h>
+#define snprintf_safe(dest, size, fmt, ...) snprintf(dest, size, fmt, __VA_ARGS__)
+#endif
+
 float location_get_x(const trtl_location_t *loc) {
     return loc->x;
 }
@@ -310,5 +318,71 @@ void trtl_set_heading(trtl_t *turtle, double heading)
 {
     if (turtle != NULL && trtl_get_state(turtle) != NULL) {
         trtl_state_set_heading(trtl_get_state(turtle), heading);
+    }
+}
+
+// Information functions
+void trtl_print_info(const trtl_t *turtle)
+{
+    if (turtle != NULL) {
+        printf("Turtle Name: %s\n", turtle->name ? turtle->name : "Unknown");
+        printf("Turtle ID: %s\n", turtle->id ? turtle->id : "Unknown");
+        printf("Start Time: %ld\n", turtle->start_time);
+        if (turtle->current_state != NULL) {
+            printf("Current Heading: %.2f\n", trtl_state_get_heading(turtle->current_state));
+            printf("Pen Down: %s\n", trtl_state_is_pen_down(turtle->current_state) ? "Yes" : "No");
+            printf("Pen Width: %.2f\n", trtl_state_get_pen_width(turtle->current_state));
+            printf("Pen Colour: ");
+            print_colour(trtl_state_get_pen_colour(turtle->current_state));
+            printf("Location: ");
+            print_location(trtl_state_get_location(turtle->current_state));
+        } else {
+            printf("No current state available.\n");
+        }
+    } else {
+        printf("Turtle is NULL.\n");
+    }
+}
+
+void trtl_draw_info(const trtl_t *turtle)
+{
+    // draw turtle information such that it shows up in a line at the bottom
+    // of the screen, with the turtle's name, id, heading, pen down status, and pen width, and location.
+    int font_size = 12;
+    int x = 10;
+    // Draw at the bottom of the screen
+    int y = GetScreenHeight() - font_size - 8; 
+    if (turtle != NULL) {
+        // Draw turtle information on the screen
+        const char * name_text = turtle->name ? turtle->name : "Unknown Turtle";
+        int tl = MeasureText(name_text, font_size);
+        DrawText(name_text, x, y, font_size, BLACK);
+        x += tl + 10; // Move x position to the right for the next text
+        const char * id_text = turtle->id ? turtle->id : "Unknown ID";
+        tl = MeasureText(id_text, font_size);
+        DrawText(id_text, x, y, font_size, BLACK);
+        x += tl + 10; // Move x position after name
+        char info[256];
+        // Add location info before heading
+        float loc_x = location_get_x(trtl_get_location(turtle));
+        float loc_y = location_get_y(trtl_get_location(turtle));
+        snprintf_safe(info, sizeof(info), "Location: [%.2f, %.2f]", loc_x, loc_y);
+        tl = MeasureText(info, font_size);
+        DrawText(info, x, y, font_size, BLACK);
+        x += tl + 10;
+        snprintf_safe(info, sizeof(info), "Heading: %.2f", trtl_state_get_heading(turtle->current_state));
+        tl = MeasureText(info, font_size);
+        DrawText(info, x, y, font_size, BLACK);
+        x += tl + 10; // Move x position after heading
+        snprintf_safe(info, sizeof(info), "Pen Down: %s", trtl_state_is_pen_down(turtle->current_state) ? "Yes" : "No");
+        tl = MeasureText(info, font_size);
+        DrawText(info, x, y, font_size, BLACK);
+        x += tl + 10; // Move x position after pen down status
+        snprintf_safe(info, sizeof(info), "Pen Width: %.2f", trtl_state_get_pen_width(turtle->current_state));
+        tl = MeasureText(info, font_size);
+        DrawText(info, x, y, font_size, BLACK);
+        // x += tl + 10; // Move x position after pen width (not needed)
+    } else {
+        DrawText("Turtle is NULL", x, 10, font_size, RED);
     }
 }

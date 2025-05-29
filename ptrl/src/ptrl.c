@@ -270,6 +270,8 @@ int main(void)
         {
             draw_test_graphics_start(turtle);
             trtl_draw_me(turtle);
+            // Draw turtle information
+            trtl_draw_info(turtle);
         }
         else
         {
