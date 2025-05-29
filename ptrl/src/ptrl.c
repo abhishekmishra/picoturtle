@@ -231,22 +231,6 @@ int main(void)
         cleanup_lua(L);
         return EXIT_FAILURE;
     }
-    // Set turtle's location to 100,100 and heading to 0
-    trtl_location_t *location = trtl_get_location(turtle);
-    if (location != NULL)
-    {
-        location_set_x(location, 100.0f);
-        location_set_y(location, 100.0f);
-    }
-    else
-    {
-        printf("Fatal: Unable to set turtle's location!\n");
-        free_turtle(turtle);
-        cleanup_lua(L);
-        return EXIT_FAILURE;
-    }
-    // Set heading to 0 degrees
-    trtl_state_set_heading(turtle->current_state, 0.0);
 
     InitWindow(screenWidth, screenHeight, "PicoTurtle");
 
