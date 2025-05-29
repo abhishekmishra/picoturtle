@@ -307,11 +307,31 @@ void trtl_backward(trtl_t *turtle, float distance)
     trtl_forward(turtle, -distance);
 }
 
-// TODO: Implement these functions
 // levitate/teleport without drawing
-// void trtl_set_position(trtl_t *turtle, float x, float y);
-// void trtl_set_x(trtl_t *turtle, float x);
-// void trtl_set_y(trtl_t *turtle, float y);
+void trtl_set_position(trtl_t *turtle, float x, float y)
+{
+    trtl_state_t *state = trtl_get_state(turtle);
+    if (turtle != NULL && state != NULL && state->location != NULL) {
+        location_set_x(state->location, x);
+        location_set_y(state->location, y);
+    }
+}
+
+void trtl_set_x(trtl_t *turtle, float x)
+{
+    trtl_state_t *state = trtl_get_state(turtle);
+    if (turtle != NULL && state != NULL && state->location != NULL) {
+        location_set_x(state->location, x);
+    }
+}
+
+void trtl_set_y(trtl_t *turtle, float y)
+{
+    trtl_state_t *state = trtl_get_state(turtle);
+    if (turtle != NULL && state != NULL && state->location != NULL) {
+        location_set_y(state->location, y);
+    }
+}
 
 // heading functions
 void trtl_set_heading(trtl_t *turtle, double heading)
