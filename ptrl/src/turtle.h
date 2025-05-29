@@ -67,6 +67,7 @@ typedef struct {
 
 void make_turtle(trtl_t **turtle, const char *name, const char *id);
 void free_turtle(trtl_t *turtle);
+trtl_state_t* trtl_get_state(const trtl_t *turtle);
 trtl_location_t* trtl_get_location(const trtl_t *turtle);
 trtl_colour_t* trtl_get_pen_colour(const trtl_t *turtle);
 double trtl_get_heading(const trtl_t *turtle);

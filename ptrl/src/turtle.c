@@ -169,6 +169,14 @@ void free_turtle(trtl_t *turtle) {
     }
 }
 
+trtl_state_t* trtl_get_state(const trtl_t *turtle)
+{
+    if (turtle != NULL) {
+        return turtle->current_state;
+    }
+    return NULL;
+}
+
 trtl_location_t* trtl_get_location(const trtl_t *turtle)
 {
     if (turtle != NULL && turtle->current_state != NULL) {
@@ -296,5 +304,11 @@ void trtl_backward(trtl_t *turtle, float distance)
 // void trtl_set_position(trtl_t *turtle, float x, float y);
 // void trtl_set_x(trtl_t *turtle, float x);
 // void trtl_set_y(trtl_t *turtle, float y);
-// // heading functions
-// void trtl_set_heading(trtl_t *turtle, double heading);
+
+// heading functions
+void trtl_set_heading(trtl_t *turtle, double heading)
+{
+    if (turtle != NULL && trtl_get_state(turtle) != NULL) {
+        trtl_state_set_heading(trtl_get_state(turtle), heading);
+    }
+}
