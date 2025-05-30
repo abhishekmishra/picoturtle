@@ -224,7 +224,7 @@ int main(void)
 
     // Initialize Turtle
     trtl_t *turtle = NULL;
-    make_turtle(&turtle, "picoturtle", "picoturtle-1");
+    trtl_make_turtle(&turtle, "picoturtle", "picoturtle-1");
     if (turtle == NULL)
     {
         printf("Fatal: Unable to create turtle!\n");
@@ -241,7 +241,7 @@ int main(void)
     if (offscreenTarget.id == 0)
     {
         printf("Fatal: Unable to initialize offscreen rendering!\n");
-        free_turtle(turtle);
+        trtl_free_turtle(turtle);
         cleanup_lua(L);
         CloseWindow();
         return EXIT_FAILURE;
@@ -290,7 +290,7 @@ int main(void)
     // Deallocate the turtle
     if (turtle != NULL)
     {
-        free_turtle(turtle);
+        trtl_free_turtle(turtle);
     }
     else
     {

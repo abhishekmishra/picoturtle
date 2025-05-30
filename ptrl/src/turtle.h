@@ -76,8 +76,8 @@ typedef struct {
     float pen_width;
 } trtl_state_t;
 
-void make_state(trtl_state_t **state);
-void free_state(trtl_state_t *state);
+void trtl_make_state(trtl_state_t **state);
+void trtl_free_state(trtl_state_t *state);
 trtl_location_t* trtl_state_get_location(const trtl_state_t *state);
 trtl_colour_t* trtl_state_get_pen_colour(const trtl_state_t *state);
 double trtl_state_get_heading(const trtl_state_t *state);
@@ -95,8 +95,8 @@ typedef struct {
     long start_time;
 } trtl_t;
 
-void make_turtle(trtl_t **turtle, const char *name, const char *id);
-void free_turtle(trtl_t *turtle);
+void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id);
+void trtl_free_turtle(trtl_t *turtle);
 trtl_state_t* trtl_get_state(const trtl_t *turtle);
 trtl_location_t* trtl_get_location(const trtl_t *turtle);
 trtl_colour_t* trtl_get_pen_colour(const trtl_t *turtle);

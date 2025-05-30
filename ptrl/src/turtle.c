@@ -118,7 +118,7 @@ Color trtl_colour_get_raylib_color(const trtl_colour_t *col) {
     return (Color){ 0, 0, 0, 255 };
 }
 
-void make_state(trtl_state_t **state) {
+void trtl_make_state(trtl_state_t **state) {
     *state = (trtl_state_t *)malloc(sizeof(trtl_state_t));
     if (*state != NULL) {
         (*state)->location = NULL;
@@ -143,7 +143,7 @@ void make_state(trtl_state_t **state) {
     }
 }
 
-void free_state(trtl_state_t *state) {
+void trtl_free_state(trtl_state_t *state) {
     if (state != NULL) {
         trtl_free_location(state->location);
         trtl_free_colour(state->pen_colour);
@@ -183,7 +183,7 @@ void trtl_state_set_pen_width(trtl_state_t *state, float pen_width) {
     state->pen_width = pen_width;
 }
 
-void make_turtle(trtl_t **turtle, const char *name, const char *id) {
+void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id) {
     *turtle = (trtl_t *)malloc(sizeof(trtl_t));
     if (*turtle != NULL) {
         (*turtle)->current_state = NULL;
@@ -196,13 +196,13 @@ void make_turtle(trtl_t **turtle, const char *name, const char *id) {
             strcpy((*turtle)->id, id);
         }
         (*turtle)->start_time = 0;
-        make_state(&(*turtle)->current_state);
+        trtl_make_state(&(*turtle)->current_state);
     }
 }
 
-void free_turtle(trtl_t *turtle) {
+void trtl_free_turtle(trtl_t *turtle) {
     if (turtle != NULL) {
-        free_state(turtle->current_state);
+        trtl_free_state(turtle->current_state);
         if (turtle->name != NULL) {
             free(turtle->name);
         }
