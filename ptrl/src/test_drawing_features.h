@@ -4,6 +4,8 @@
 #include <raylib.h>
 #include "turtle.h"
 
+void test1_move_draw_square(trtl_t *turtle);
+
 void draw_test_graphics_start(trtl_t *turtle)
 {
     if (turtle == NULL || turtle->current_state == NULL) {
@@ -20,6 +22,14 @@ void draw_test_graphics_start(trtl_t *turtle)
         return; // No pen colour set
     }
 
+    test1_move_draw_square(turtle);
+
+    // reset turtle to initial state
+    // trtl_reset(turtle);
+}
+
+void test1_move_draw_square(trtl_t *turtle)
+{
     // pen up
     trtl_pen_up(turtle);
 
@@ -41,12 +51,12 @@ void draw_test_graphics_start(trtl_t *turtle)
     // set pen width to 5
     trtl_pen_width(turtle, 5.0f);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         // Draw a square
         trtl_forward(turtle, 100.0f);
         trtl_right(turtle, 90.0f);
     }
-
 }
 
 #endif // __TEST_DRAWING_FEATURES_H__
