@@ -131,6 +131,7 @@ void trtl_right(trtl_t *turtle, float angle);
 // pen functions
 void trtl_pen_down(trtl_t *turtle);
 void trtl_pen_up(trtl_t *turtle);
+void trtl_pen_width(trtl_t *turtle, float width);
 
 // information functions
 void trtl_print_info(const trtl_t *turtle);

@@ -420,6 +420,12 @@ void trtl_pen_up(trtl_t *turtle) {
     }
 }
 
+void trtl_pen_width(trtl_t *turtle, float width) {
+    if (turtle && turtle->current_state) {
+        trtl_state_set_pen_width(turtle->current_state, width);
+    }
+}
+
 // Information functions
 void trtl_print_info(const trtl_t *turtle)
 {

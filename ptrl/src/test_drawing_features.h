@@ -38,6 +38,9 @@ void draw_test_graphics_start(trtl_t *turtle)
     // set pen colour to red
     trtl_colour(turtle, "red");
 
+    // set pen width to 5
+    trtl_pen_width(turtle, 5.0f);
+
     for (int i = 0; i < 4; i++) {
         // Draw a square
         trtl_forward(turtle, 100.0f);
