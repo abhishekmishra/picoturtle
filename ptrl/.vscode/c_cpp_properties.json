@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/build/vcpkg_installed/arm64-osx/include"
+                "${workspaceFolder}/build/vcpkg_installed/arm64-osx/include",
+                "${workspaceFolder}/../c-color-names"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
@@ -16,7 +17,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/build/vcpkg_installed/x64-windows/include"
+                "${workspaceFolder}/build/vcpkg_installed/x64-windows/include",
+                "${workspaceFolder}/../c-color-names"
             ],
             "defines": [
                 "_DEBUG",

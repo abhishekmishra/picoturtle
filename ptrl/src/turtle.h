@@ -8,6 +8,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <raylib.h>
+#include <color_names.h>
 
 /*------------ trtl_location_t --------------*/
 typedef struct {
@@ -34,6 +35,35 @@ typedef struct {
 } trtl_colour_t;
 
 void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name);
+
+/**
+ * @brief Looks up the colour names library for the given RGB values.
+ * If the colour is not found, it creates a colour with the given RGB values
+ * and the name it was given in the c-color-names library.
+ * 
+ * The alpha value is set to fully opaque (255).
+ * 
+ * @param col 
+ * @param r 
+ * @param g 
+ * @param b 
+ */
+void trtl_make_colour_rgba(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b);
+
+/**
+ * @brief Looks up the colour names library for the given name.
+ * If the colour is not found, it creates a colour with the name
+ * and sets the appropriate RGB values to the colour.
+ * 
+ * The alpha value is set to fully opaque (255).
+ * 
+ * @param col 
+ * @param name 
+ */
+void trtl_make_colour_from_name(trtl_colour_t **col, const char *name);
+
+const char* trtl_colour_get_name(const trtl_colour_t *col);
+Color trtl_colour_get_raylib_color(const trtl_colour_t *col);
 void free_colour(trtl_colour_t *col);
 void print_colour(const trtl_colour_t *col);
 
@@ -75,6 +105,8 @@ double trtl_get_canvas_heading(const trtl_t *turtle);
 float trtl_get_canvas_location_x(const trtl_t *turtle);
 float trtl_get_canvas_location_y(const trtl_t *turtle);
 float trtl_get_pen_width(const trtl_t *turtle);
+void trtl_colour(trtl_t *turtle, const char *name);
+void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 // drawing miscellaneous functions
 void trtl_draw_me(const trtl_t *turtle);

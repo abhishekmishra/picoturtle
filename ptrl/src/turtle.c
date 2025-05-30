@@ -1,4 +1,5 @@
 #include "turtle.h"
+#include "color_names.h"
 
 #ifdef _MSC_VER
 #include <stdio.h>
@@ -65,6 +66,26 @@ void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a
         }
     }
 }
+
+void trtl_make_colour_rgba(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b) {
+    // Look up the color name from the c-color-names library
+    const char *name = color_name_find_rgb(r, g, b);
+    if (!name) {
+        name = "unknown";
+    }
+    make_colour(col, r, g, b, 255, name);
+}
+
+void trtl_make_colour_from_name(trtl_colour_t **col, const char *name) {
+    uint8_t r = 0, g = 0, b = 0;
+    int found = color_name_get_rgb(name, &r, &g, &b);
+    if (!found) {
+        // If not found, use black as fallback
+        r = g = b = 0;
+    }
+    make_colour(col, r, g, b, 255, name);
+}
+
 void free_colour(trtl_colour_t *col) {
     if (col != NULL) {
         if (col->name != NULL) {
@@ -80,6 +101,21 @@ void print_colour(const trtl_colour_t *col) {
     } else {
         printf("Colour is NULL\n");
     }
+}
+
+const char* trtl_colour_get_name(const trtl_colour_t *col) {
+    if (col && col->name) {
+        return col->name;
+    }
+    return "unknown";
+}
+
+Color trtl_colour_get_raylib_color(const trtl_colour_t *col) {
+    if (col) {
+        return (Color){ col->r, col->g, col->b, col->a };
+    }
+    // Return opaque black as fallback
+    return (Color){ 0, 0, 0, 255 };
 }
 
 void make_state(trtl_state_t **state) {
@@ -282,12 +318,11 @@ void trtl_forward(trtl_t *turtle, float distance)
     if (trtl_state_is_pen_down(current_state)) {
         // Draw the line from the current location to the new location
         // using the pen colour and width
-        Color color = (Color){
-            current_state->pen_colour->r,
-            current_state->pen_colour->g,
-            current_state->pen_colour->b,
-            current_state->pen_colour->a
-        };
+        trtl_colour_t *pen_colour = trtl_get_pen_colour(turtle);
+        if (pen_colour == NULL) {
+            return; // No pen colour set
+        }
+        Color color = trtl_colour_get_raylib_color(pen_colour);
         DrawLineEx(
             (Vector2){location_get_x(current_location), location_get_y(current_location)},
             (Vector2){x2, y2},
@@ -448,5 +483,28 @@ void trtl_draw_info(const trtl_t *turtle)
         // x += tl + 10; // Move x position after pen width (not needed)
     } else {
         DrawText("Turtle is NULL", x, 10, font_size, RED);
+    }
+}
+
+void trtl_colour(trtl_t *turtle, const char *name) {
+    if (turtle && turtle->current_state) {
+        trtl_colour_t *new_col = NULL;
+        trtl_make_colour_from_name(&new_col, name);
+        if (new_col) {
+            free_colour(turtle->current_state->pen_colour);
+            turtle->current_state->pen_colour = new_col;
+        }
+    }
+}
+
+void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    if (turtle && turtle->current_state) {
+        trtl_colour_t *new_col = NULL;
+        trtl_make_colour_rgba(&new_col, r, g, b);
+        if (new_col) {
+            new_col->a = a;
+            free_colour(turtle->current_state->pen_colour);
+            turtle->current_state->pen_colour = new_col;
+        }
     }
 }

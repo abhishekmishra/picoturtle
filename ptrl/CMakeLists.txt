@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 set(PTRL_SRC
+    ../c-color-names/color_names.h
+    ../c-color-names/color_names.c
     src/turtle.h
     src/turtle.c
     src/ptrl.c
@@ -14,6 +16,7 @@ set(PTRL_SRC
 
 add_executable(ptrl ${PTRL_SRC})
 target_include_directories(ptrl PRIVATE src)
+target_include_directories(ptrl PRIVATE ../c-color-names)
 
 # raylib dependency
 find_package(raylib CONFIG REQUIRED)
