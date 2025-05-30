@@ -20,8 +20,20 @@ void draw_test_graphics_start(trtl_t *turtle)
         return; // No pen colour set
     }
 
+    // pen up
+    trtl_pen_up(turtle);
+
+    // go to 100, 100
+    trtl_set_heading(turtle, 0.0);
+
+    trtl_forward(turtle, 100.0f);
+
+    trtl_set_heading(turtle, 90.0);
+
+    trtl_forward(turtle, 100.0f);
+
     // set the pen down
-    trtl_state_set_pen_down(turtle->current_state, 1);
+    trtl_pen_down(turtle);
 
     // Set heading to 0 degrees
     trtl_set_heading(turtle, 45.0);

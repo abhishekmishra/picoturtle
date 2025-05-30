@@ -341,6 +341,19 @@ void trtl_set_heading(trtl_t *turtle, double heading)
     }
 }
 
+// pen state functions
+void trtl_pen_down(trtl_t *turtle) {
+    if (turtle && turtle->current_state) {
+        trtl_state_set_pen_down(turtle->current_state, 1);
+    }
+}
+
+void trtl_pen_up(trtl_t *turtle) {
+    if (turtle && turtle->current_state) {
+        trtl_state_set_pen_down(turtle->current_state, 0);
+    }
+}
+
 // Information functions
 void trtl_print_info(const trtl_t *turtle)
 {

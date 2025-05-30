@@ -89,6 +89,9 @@ void trtl_set_x(trtl_t *turtle, float x);
 void trtl_set_y(trtl_t *turtle, float y);
 // heading functions
 void trtl_set_heading(trtl_t *turtle, double heading);
+// pen functions
+void trtl_pen_down(trtl_t *turtle);
+void trtl_pen_up(trtl_t *turtle);
 
 // information functions
 void trtl_print_info(const trtl_t *turtle);
