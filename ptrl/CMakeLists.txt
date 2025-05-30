@@ -10,8 +10,7 @@ set(PTRL_SRC
     ../c-color-names/color_names.c
     src/turtle.h
     src/turtle.c
-    src/ptrl.c
-    src/ptrl.h
+    src/ptrtl.c
 )
 
 add_executable(ptrl ${PTRL_SRC})
