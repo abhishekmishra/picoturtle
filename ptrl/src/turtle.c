@@ -126,6 +126,8 @@ void trtl_make_state(trtl_state_t **state) {
         (*state)->heading = 0.0;
         (*state)->pen_down = 0;
         (*state)->pen_width = 1.0f;
+        (*state)->font_size = 20;
+        (*state)->font_name = NULL;
     }
 
     trtl_make_location(&(*state)->location);
@@ -147,6 +149,9 @@ void trtl_free_state(trtl_state_t *state) {
     if (state != NULL) {
         trtl_free_location(state->location);
         trtl_free_colour(state->pen_colour);
+        if (state->font_name) {
+            free(state->font_name);
+        }
         free(state);
     }
 }
@@ -181,6 +186,28 @@ float trtl_state_get_pen_width(const trtl_state_t *state) {
 
 void trtl_state_set_pen_width(trtl_state_t *state, float pen_width) {
     state->pen_width = pen_width;
+}
+
+int trtl_state_get_font_size(const trtl_state_t *state) {
+    return state && state->font_size > 0 ? state->font_size : 20;
+}
+
+void trtl_state_set_font_size(trtl_state_t *state, int size) {
+    if (state) state->font_size = size;
+}
+
+const char* trtl_state_get_font_name(const trtl_state_t *state) {
+    return state && state->font_name ? state->font_name : "default";
+}
+
+void trtl_state_set_font_name(trtl_state_t *state, const char *font_name) {
+    if (!state) return;
+    if (state->font_name) free(state->font_name);
+    if (font_name) {
+        state->font_name = strdup(font_name);
+    } else {
+        state->font_name = NULL;
+    }
 }
 
 void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id) {
@@ -441,6 +468,8 @@ void trtl_print_info(const trtl_t *turtle)
             trtl_print_colour(trtl_state_get_pen_colour(turtle->current_state));
             printf("Location: ");
             trtl_print_location(trtl_state_get_location(turtle->current_state));
+            printf("Font Size: %d\n", trtl_state_get_font_size(turtle->current_state));
+            printf("Font Name: %s\n", trtl_state_get_font_name(turtle->current_state));
         } else {
             printf("No current state available.\n");
         }
@@ -515,6 +544,39 @@ void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a
     }
 }
 
+void trtl_text(const trtl_t *turtle, const char *text) {
+    if (!turtle || !text) return;
+    trtl_state_t *state = turtle->current_state;
+    trtl_location_t *loc = state->location;
+    int font_size = trtl_state_get_font_size(state);
+    Color color = trtl_colour_get_raylib_color(state->pen_colour);
+    float x = loc->x;
+    float y = loc->y;
+    float rotation = (float)state->heading;
+    // For now, use raylib's default font
+    DrawTextPro(GetFontDefault(), text, (Vector2){x, y}, (Vector2){0, 0}, rotation, (float)font_size, 1, color);
+}
+
+void trtl_set_font_size(const trtl_t *turtle, int size) {
+    if (!turtle) return;
+    trtl_state_set_font_size(turtle->current_state, size);
+}
+
+int trtl_get_font_size(const trtl_t *turtle) {
+    if (!turtle) return 20;
+    return trtl_state_get_font_size(turtle->current_state);
+}
+
+void trtl_set_font(const trtl_t *turtle, const char *font_name) {
+    if (!turtle) return;
+    trtl_state_set_font_name(turtle->current_state, font_name);
+}
+
+const char* trtl_get_font(const trtl_t *turtle) {
+    if (!turtle) return NULL;
+    return trtl_state_get_font_name(turtle->current_state);
+}
+
 // fps/timing related functions
 void trtl_set_target_fps(int fps) {
     SetTargetFPS(fps);
@@ -530,4 +592,13 @@ double trtl_get_time(void) {
 
 int trtl_get_fps(void) {
     return GetFPS();
+}
+
+// canvas size related functions
+int trtl_get_canvas_width(void) {
+    return GetRenderWidth();
+}
+
+int trtl_get_canvas_height(void) {
+    return GetRenderHeight();
 }

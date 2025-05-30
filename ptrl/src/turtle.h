@@ -74,6 +74,8 @@ typedef struct {
     double heading;
     int pen_down;
     float pen_width;
+    int font_size;
+    char *font_name;
 } trtl_state_t;
 
 void trtl_make_state(trtl_state_t **state);
@@ -143,5 +145,17 @@ float trtl_get_delta_time(void);
 double trtl_get_time(void);
 int trtl_get_fps(void);
 
+// text related functions
+void trtl_text(const trtl_t *turtle, const char *text);
+void trtl_set_font_size(const trtl_t *turtle, int size);
+int trtl_get_font_size(const trtl_t *turtle);
+void trtl_set_font(const trtl_t *turtle, const char *font_name);
+const char* trtl_get_font(const trtl_t *turtle);
+
+// canvas size related functions
+int trtl_get_canvas_width(void);
+int trtl_get_canvas_height(void);
+// TODO: implement later after thinking of good way to handle hidpi
+// void trtl_set_canvas_size(int width, int height);
 
 #endif // ___TURTLE_H___
