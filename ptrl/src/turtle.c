@@ -334,10 +334,41 @@ void trtl_set_y(trtl_t *turtle, float y)
 }
 
 // heading functions
-void trtl_set_heading(trtl_t *turtle, double heading)
+void trtl_heading(trtl_t *turtle, double heading)
 {
     if (turtle != NULL && trtl_get_state(turtle) != NULL) {
         trtl_state_set_heading(trtl_get_state(turtle), heading);
+    }
+}
+
+void trtl_left(trtl_t *turtle, float angle) {
+    if (turtle) {
+        double current_heading = trtl_get_heading(turtle);
+        double new_heading = fmod(current_heading + angle, 360.0);
+        if (new_heading < 0) new_heading += 360.0;
+        trtl_heading(turtle, new_heading);
+    }
+}
+
+void trtl_right(trtl_t *turtle, float angle) {
+    if (turtle) {
+        double current_heading = trtl_get_heading(turtle);
+        double new_heading = fmod(current_heading - angle, 360.0);
+        if (new_heading < 0) new_heading += 360.0;
+        trtl_heading(turtle, new_heading);
+    }
+}
+
+void trtl_reset(trtl_t *turtle) {
+    if (turtle) {
+        trtl_set_position(turtle, 0.0f, 0.0f);
+        trtl_heading(turtle, 0.0);
+        trtl_pen_down(turtle);
+        // TODO: Replace direct state access with trtl_set_pen_width when available
+        if (turtle->current_state) {
+            trtl_state_set_pen_width(turtle->current_state, 1.0f);
+        }
+        // Not resetting pen_colour here, as it may be user-defined
     }
 }
 

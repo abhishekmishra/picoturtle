@@ -79,6 +79,9 @@ float trtl_get_pen_width(const trtl_t *turtle);
 // drawing miscellaneous functions
 void trtl_draw_me(const trtl_t *turtle);
 
+// reset the turtle to its initial state
+void trtl_reset(trtl_t *turtle);
+
 // movement functions
 // with pen movement
 void trtl_forward(trtl_t *turtle, float distance);
@@ -88,7 +91,11 @@ void trtl_set_position(trtl_t *turtle, float x, float y);
 void trtl_set_x(trtl_t *turtle, float x);
 void trtl_set_y(trtl_t *turtle, float y);
 // heading functions
-void trtl_set_heading(trtl_t *turtle, double heading);
+void trtl_heading(trtl_t *turtle, double heading);
+// turn left by angle degrees
+void trtl_left(trtl_t *turtle, float angle);
+// turn right by angle degrees
+void trtl_right(trtl_t *turtle, float angle);
 // pen functions
 void trtl_pen_down(trtl_t *turtle);
 void trtl_pen_up(trtl_t *turtle);

@@ -24,22 +24,23 @@ void draw_test_graphics_start(trtl_t *turtle)
     trtl_pen_up(turtle);
 
     // go to 100, 100
-    trtl_set_heading(turtle, 0.0);
+    trtl_heading(turtle, 0.0);
 
     trtl_forward(turtle, 100.0f);
 
-    trtl_set_heading(turtle, 90.0);
+    trtl_heading(turtle, 90.0);
 
     trtl_forward(turtle, 100.0f);
 
     // set the pen down
     trtl_pen_down(turtle);
 
-    // Set heading to 0 degrees
-    trtl_set_heading(turtle, 45.0);
+    for (int i = 0; i < 4; i++) {
+        // Draw a square
+        trtl_forward(turtle, 100.0f);
+        trtl_right(turtle, 90.0f);
+    }
 
-    // move turtle to the center of the screen
-    trtl_forward(turtle, 100.0f);
 }
 
 #endif // __TEST_DRAWING_FEATURES_H__
