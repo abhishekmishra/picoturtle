@@ -252,7 +252,7 @@ int main(void)
         // Draw the turtle
         if (turtle != NULL && turtle->current_state != NULL)
         {
-            draw_test_graphics_start(turtle);
+            test_graphics_start(turtle);
             trtl_draw_me(turtle);
             // Draw turtle information
             trtl_draw_info(turtle);
@@ -271,7 +271,10 @@ int main(void)
             // Draw the turtle
             if (turtle != NULL && turtle->current_state != NULL)
             {
-                // TODO: turtle draw loop (if exists)
+                // Update
+                test_graphics_update(turtle);
+                trtl_draw_me(turtle);
+                trtl_draw_info(turtle);
             }
             else
             {

@@ -602,3 +602,35 @@ int trtl_get_canvas_width(void) {
 int trtl_get_canvas_height(void) {
     return GetRenderHeight();
 }
+
+// canvas clear function
+void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name)
+{
+    if (!turtle || !color_name) return;
+
+    trtl_colour_t *col = NULL;
+    trtl_make_colour_from_name(&col, color_name);
+    if (col) {
+        Color color = trtl_colour_get_raylib_color(col);
+        ClearBackground(color);
+        trtl_free_colour(col);
+    } else {
+        // If the color is not found, clear with black
+        ClearBackground(BLACK);
+    }
+}
+
+// clear the canvas with the turtle's pen colour
+void trtl_clear_canvas(const trtl_t *turtle)
+{
+    if (!turtle || !turtle->current_state) return;
+
+    trtl_colour_t *pen_colour = trtl_get_pen_colour(turtle);
+    if (pen_colour) {
+        Color color = trtl_colour_get_raylib_color(pen_colour);
+        ClearBackground(color);
+    } else {
+        // If no pen colour is set, clear with black
+        ClearBackground(BLACK);
+    }
+}

@@ -158,4 +158,10 @@ int trtl_get_canvas_height(void);
 // TODO: implement later after thinking of good way to handle hidpi
 // void trtl_set_canvas_size(int width, int height);
 
+// canvas clear function
+void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name);
+
+// clear the canvas with the turtle's pen colour
+void trtl_clear_canvas(const trtl_t *turtle);
+
 #endif // ___TURTLE_H___
