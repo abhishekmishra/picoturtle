@@ -514,3 +514,20 @@ void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a
         }
     }
 }
+
+// fps/timing related functions
+void trtl_set_target_fps(int fps) {
+    SetTargetFPS(fps);
+}
+
+float trtl_get_delta_time(void) {
+    return GetFrameTime();
+}
+
+double trtl_get_time(void) {
+    return GetTime();
+}
+
+int trtl_get_fps(void) {
+    return GetFPS();
+}

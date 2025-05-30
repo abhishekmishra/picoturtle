@@ -137,4 +137,11 @@ void trtl_pen_width(trtl_t *turtle, float width);
 void trtl_print_info(const trtl_t *turtle);
 void trtl_draw_info(const trtl_t *turtle);
 
+// fps/timing related functions
+void trtl_set_target_fps(int fps);
+float trtl_get_delta_time(void);
+double trtl_get_time(void);
+int trtl_get_fps(void);
+
+
 #endif // ___TURTLE_H___
