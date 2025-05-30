@@ -9,20 +9,20 @@
 #define snprintf_safe(dest, size, fmt, ...) snprintf(dest, size, fmt, __VA_ARGS__)
 #endif
 
-float location_get_x(const trtl_location_t *loc) {
+float trtl_location_get_x(const trtl_location_t *loc) {
     return loc->x;
 }
-float location_get_y(const trtl_location_t *loc) {
+float trtl_location_get_y(const trtl_location_t *loc) {
     return loc->y;
 }
-void location_set_x(trtl_location_t *loc, float x) {
+void trtl_location_set_x(trtl_location_t *loc, float x) {
     loc->x = x;
 }
-void location_set_y(trtl_location_t *loc, float y) {
+void trtl_location_set_y(trtl_location_t *loc, float y) {
     loc->y = y;
 }
 
-void make_location(trtl_location_t **loc)
+void trtl_make_location(trtl_location_t **loc)
 {
     *loc = (trtl_location_t *)malloc(sizeof(trtl_location_t));
     if (*loc != NULL) {
@@ -31,21 +31,21 @@ void make_location(trtl_location_t **loc)
     }
 }
 
-void make_location_xy(trtl_location_t **loc, float x, float y) {
-    make_location(loc);
+void trtl_make_location_xy(trtl_location_t **loc, float x, float y) {
+    trtl_make_location(loc);
     if (*loc != NULL) {
         (*loc)->x = x;
         (*loc)->y = y;
     }
 }
 
-void free_location(trtl_location_t *loc) {
+void trtl_free_location(trtl_location_t *loc) {
     if (loc != NULL) {
         free(loc);
     }
 }
 
-void print_location(const trtl_location_t *loc) {
+void trtl_print_location(const trtl_location_t *loc) {
     if (loc != NULL) {
         printf("Location: (%.2f, %.2f)\n", loc->x, loc->y);
     } else {
@@ -53,7 +53,7 @@ void print_location(const trtl_location_t *loc) {
     }
 }
 
-void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name) {
+void trtl_make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name) {
     *col = (trtl_colour_t *)malloc(sizeof(trtl_colour_t));
     if (*col != NULL) {
         (*col)->r = r;
@@ -73,7 +73,7 @@ void trtl_make_colour_rgba(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b)
     if (!name) {
         name = "unknown";
     }
-    make_colour(col, r, g, b, 255, name);
+    trtl_make_colour(col, r, g, b, 255, name);
 }
 
 void trtl_make_colour_from_name(trtl_colour_t **col, const char *name) {
@@ -83,10 +83,10 @@ void trtl_make_colour_from_name(trtl_colour_t **col, const char *name) {
         // If not found, use black as fallback
         r = g = b = 0;
     }
-    make_colour(col, r, g, b, 255, name);
+    trtl_make_colour(col, r, g, b, 255, name);
 }
 
-void free_colour(trtl_colour_t *col) {
+void trtl_free_colour(trtl_colour_t *col) {
     if (col != NULL) {
         if (col->name != NULL) {
             free(col->name);
@@ -95,7 +95,7 @@ void free_colour(trtl_colour_t *col) {
     }
 }
 
-void print_colour(const trtl_colour_t *col) {
+void trtl_print_colour(const trtl_colour_t *col) {
     if (col != NULL) {
         printf("Colour: (%d, %d, %d, %d), Name: %s\n", col->r, col->g, col->b, col->a, col->name);
     } else {
@@ -128,15 +128,15 @@ void make_state(trtl_state_t **state) {
         (*state)->pen_width = 1.0f;
     }
 
-    make_location(&(*state)->location);
+    trtl_make_location(&(*state)->location);
     if ((*state)->location == NULL) {
         free(*state);
         *state = NULL;
         return;
     }
-    make_colour(&(*state)->pen_colour, 0, 0, 0, 255, "black");
+    trtl_make_colour(&(*state)->pen_colour, 0, 0, 0, 255, "black");
     if ((*state)->pen_colour == NULL) {
-        free_location((*state)->location);
+        trtl_free_location((*state)->location);
         free(*state);
         *state = NULL;
         return;
@@ -145,8 +145,8 @@ void make_state(trtl_state_t **state) {
 
 void free_state(trtl_state_t *state) {
     if (state != NULL) {
-        free_location(state->location);
-        free_colour(state->pen_colour);
+        trtl_free_location(state->location);
+        trtl_free_colour(state->pen_colour);
         free(state);
     }
 }
@@ -252,12 +252,12 @@ double trtl_get_canvas_heading(const trtl_t *turtle)
 
 float trtl_get_canvas_location_x(const trtl_t *turtle)
 {
-    return location_get_x(trtl_get_location(turtle));
+    return trtl_location_get_x(trtl_get_location(turtle));
 }
 
 float trtl_get_canvas_location_y(const trtl_t *turtle)
 {
-    return location_get_y(trtl_get_location(turtle));
+    return trtl_location_get_y(trtl_get_location(turtle));
 }
 
 float trtl_get_pen_width(const trtl_t *turtle)
@@ -305,8 +305,8 @@ void trtl_forward(trtl_t *turtle, float distance)
     // y2 = d sin (theta) + y1
     // x2 = d cos (theta) + x1
     trtl_location_t *current_location = trtl_get_location(turtle);
-    float y2 = distance * (sin(theta)) + location_get_y(current_location);
-    float x2 = distance * (cos(theta)) + location_get_x(current_location);
+    float y2 = distance * (sin(theta)) + trtl_location_get_y(current_location);
+    float x2 = distance * (cos(theta)) + trtl_location_get_x(current_location);
     float cy2 = distance * (sin(canvas_theta)) + trtl_get_canvas_location_y(turtle);
     float cx2 = distance * (cos(canvas_theta)) + trtl_get_canvas_location_x(turtle);
 
@@ -324,7 +324,7 @@ void trtl_forward(trtl_t *turtle, float distance)
         }
         Color color = trtl_colour_get_raylib_color(pen_colour);
         DrawLineEx(
-            (Vector2){location_get_x(current_location), location_get_y(current_location)},
+            (Vector2){trtl_location_get_x(current_location), trtl_location_get_y(current_location)},
             (Vector2){x2, y2},
             current_state->pen_width,
             color
@@ -332,8 +332,8 @@ void trtl_forward(trtl_t *turtle, float distance)
     }
 
     // set the new location
-    location_set_x(current_location, x2);
-    location_set_y(current_location, y2);
+    trtl_location_set_x(current_location, x2);
+    trtl_location_set_y(current_location, y2);
 }
 
 void trtl_backward(trtl_t *turtle, float distance)
@@ -347,8 +347,8 @@ void trtl_set_position(trtl_t *turtle, float x, float y)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        location_set_x(state->location, x);
-        location_set_y(state->location, y);
+        trtl_location_set_x(state->location, x);
+        trtl_location_set_y(state->location, y);
     }
 }
 
@@ -356,7 +356,7 @@ void trtl_set_x(trtl_t *turtle, float x)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        location_set_x(state->location, x);
+        trtl_location_set_x(state->location, x);
     }
 }
 
@@ -364,7 +364,7 @@ void trtl_set_y(trtl_t *turtle, float y)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        location_set_y(state->location, y);
+        trtl_location_set_y(state->location, y);
     }
 }
 
@@ -438,9 +438,9 @@ void trtl_print_info(const trtl_t *turtle)
             printf("Pen Down: %s\n", trtl_state_is_pen_down(turtle->current_state) ? "Yes" : "No");
             printf("Pen Width: %.2f\n", trtl_state_get_pen_width(turtle->current_state));
             printf("Pen Colour: ");
-            print_colour(trtl_state_get_pen_colour(turtle->current_state));
+            trtl_print_colour(trtl_state_get_pen_colour(turtle->current_state));
             printf("Location: ");
-            print_location(trtl_state_get_location(turtle->current_state));
+            trtl_print_location(trtl_state_get_location(turtle->current_state));
         } else {
             printf("No current state available.\n");
         }
@@ -469,8 +469,8 @@ void trtl_draw_info(const trtl_t *turtle)
         x += tl + 10; // Move x position after name
         char info[256];
         // Add location info before heading
-        float loc_x = location_get_x(trtl_get_location(turtle));
-        float loc_y = location_get_y(trtl_get_location(turtle));
+        float loc_x = trtl_location_get_x(trtl_get_location(turtle));
+        float loc_y = trtl_location_get_y(trtl_get_location(turtle));
         snprintf_safe(info, sizeof(info), "Location: [%.2f, %.2f]", loc_x, loc_y);
         tl = MeasureText(info, font_size);
         DrawText(info, x, y, font_size, BLACK);
@@ -497,7 +497,7 @@ void trtl_colour(trtl_t *turtle, const char *name) {
         trtl_colour_t *new_col = NULL;
         trtl_make_colour_from_name(&new_col, name);
         if (new_col) {
-            free_colour(turtle->current_state->pen_colour);
+            trtl_free_colour(turtle->current_state->pen_colour);
             turtle->current_state->pen_colour = new_col;
         }
     }
@@ -509,7 +509,7 @@ void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a
         trtl_make_colour_rgba(&new_col, r, g, b);
         if (new_col) {
             new_col->a = a;
-            free_colour(turtle->current_state->pen_colour);
+            trtl_free_colour(turtle->current_state->pen_colour);
             turtle->current_state->pen_colour = new_col;
         }
     }

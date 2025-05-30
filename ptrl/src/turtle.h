@@ -16,14 +16,14 @@ typedef struct {
     float y;
 } trtl_location_t;
 
-float location_get_x(const trtl_location_t *loc);
-float location_get_y(const trtl_location_t *loc);
-void location_set_x(trtl_location_t *loc, float x);
-void location_set_y(trtl_location_t *loc, float y);
-void make_location(trtl_location_t **loc);
-void make_location_xy(trtl_location_t **loc, float x, float y);
-void free_location(trtl_location_t *loc);
-void print_location(const trtl_location_t *loc);
+float trtl_location_get_x(const trtl_location_t *loc);
+float trtl_location_get_y(const trtl_location_t *loc);
+void trtl_location_set_x(trtl_location_t *loc, float x);
+void trtl_location_set_y(trtl_location_t *loc, float y);
+void trtl_make_location(trtl_location_t **loc);
+void trtl_make_location_xy(trtl_location_t **loc, float x, float y);
+void trtl_free_location(trtl_location_t *loc);
+void trtl_print_location(const trtl_location_t *loc);
 
 /*------------ trtl_colour_t --------------*/
 typedef struct {
@@ -34,7 +34,7 @@ typedef struct {
     char *name;
 } trtl_colour_t;
 
-void make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name);
+void trtl_make_colour(trtl_colour_t **col, uint8_t r, uint8_t g, uint8_t b, uint8_t a, const char *name);
 
 /**
  * @brief Looks up the colour names library for the given RGB values.
@@ -64,8 +64,8 @@ void trtl_make_colour_from_name(trtl_colour_t **col, const char *name);
 
 const char* trtl_colour_get_name(const trtl_colour_t *col);
 Color trtl_colour_get_raylib_color(const trtl_colour_t *col);
-void free_colour(trtl_colour_t *col);
-void print_colour(const trtl_colour_t *col);
+void trtl_free_colour(trtl_colour_t *col);
+void trtl_print_colour(const trtl_colour_t *col);
 
 /*------------ trtl_state_t --------------*/
 typedef struct {
