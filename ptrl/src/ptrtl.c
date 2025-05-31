@@ -12,6 +12,7 @@
 #include <coll_arraylist.h>
 
 #include "turtle.h"
+#include "ptrtllua.h"
 
 #include "test_drawing_features.h"
 
@@ -215,7 +216,7 @@ void destroy_offscreen_rendering(RenderTexture2D target)
     UnloadRenderTexture(target);
 }
 
-zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
+zclk_res test_c_main(zclk_command* cmd, void* handler_args)
 {
     // Initialization
     const int screenWidth = 800;
@@ -329,8 +330,128 @@ zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
     return EXIT_SUCCESS;
 }
 
+int init_turtle_lua_binding(lua_State *L)
+{
+    // PicoTurtle::set_init_callback(&turtle_init_cb, NULL);
+    // PicoTurtle::set_update_callback(&turtle_update_cb, NULL);
+    // PicoTurtle::set_paint_callback(&turtle_paint_cb, NULL);
+    // PicoTurtle::set_delay_callback(&turtle_delay);
+    // PicoTurtle::set_destroy_callback(&turtle_destroy_cb, NULL);
+
+    // picoturtle = require "picoturtle"
+    luaL_requiref(L, "picoturtle", luaopen_picoturtle, 1);
+    lua_pop(L, 1); /* remove result from previous call */
+
+    // TODO: Set path using optional args
+    char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
+    if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
+    {
+        // turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
+        turtleLuaDir = (char*)"lua";
+    }
+
+    size_t len_of_path_str = strlen(turtleLuaDir) + 1024;
+    char* setPathCodeStr = (char*)calloc(len_of_path_str, sizeof(char));
+    if (setPathCodeStr == NULL)
+    {
+        printf("Fatal: Unable to alloc string to set load path in lua!\n");
+        return -2;
+    }
+
+    snprintf(setPathCodeStr, len_of_path_str, "package.path = '%s/?.lua;?.lua;' .. package.path", turtleLuaDir);
+    // for debug
+    // turtle_message("app", QString("Setting path via code -> |") + setPathCodeStr + "|");
+
+    run_lua_script(L, setPathCodeStr);
+    free(setPathCodeStr);
+
+    // create the default turtle as global variable t
+    run_lua_script(L, "t = require'picoturtle'.new()");
+    run_lua_script(L, "print('PicoTurtle Lua binding initialized successfully!')");
+
+    return 0;
+}
+
+
+/**
+ * @brief Main command handler for the PicoTurtle CLI.
+ *
+ * @param cmd The command object received from ZClk
+ * @param handler_args any args passed to ZClk (unused)
+ * @return zclk_res returns error code indicating whether turtle execution
+ *  was a success.
+ */
+zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
+{
+    lua_State *L = NULL;
+    int res = init_lua(&L);
+    if(res == 0)
+    {
+        res = init_turtle_lua_binding(L);
+        if (res == 0)
+        {
+            zclk_argument *turtle_prog = zclk_command_get_argument(cmd, PTRTL_ARG_FILE_NAME);
+            zclk_option *img_file = zclk_command_get_option(cmd, PTRTL_OPT_IMGFILE_NAME);
+            if(turtle_prog != NULL && img_file != NULL)
+            {
+                const char *program_path = zclk_argument_get_val_string(turtle_prog);
+                const char *img_filename = zclk_option_get_val_string(img_file);
+
+                if (program_path != NULL)
+                {
+                    printf("Program to run: %s\n", program_path);
+                    res = run_lua_file(L, program_path);
+                    if (res != 0)
+                    {
+                        cleanup_lua(L);
+                        printf("Error executing Turtle Lua program.\n");
+                        return ZCLK_RES_ERR_UNKNOWN;
+                    }
+
+                    char lua_export_cmd[TURTLE_EXPORT_CMD_LEN];
+                    lua_export_cmd[0] = '\0';
+
+                    snprintf(lua_export_cmd, TURTLE_EXPORT_CMD_LEN, "t:export_img('%s')", img_filename);
+                    printf("Running export command: [%s]\n", lua_export_cmd);
+                    res = run_lua_script(L, lua_export_cmd);
+                    if (res != 0)
+                    {
+                        cleanup_lua(L);
+                        printf("Error executing Turtle Lua program.\n");
+                        return ZCLK_RES_ERR_UNKNOWN;
+                    }
+                }
+            }
+            else
+            {
+                cleanup_lua(L);
+                printf("Program path not provided.\n");
+                return ZCLK_RES_ERR_UNKNOWN;
+            }
+
+
+            cleanup_lua(L);
+            return ZCLK_RES_SUCCESS;
+        }
+        else
+        {
+            printf("Error initializing picoturtle lua binding.\n");
+            cleanup_lua(L);
+            return ZCLK_RES_ERR_UNKNOWN;
+        }
+    }
+    else
+    {
+        printf("Error: Unable to initialize Lua\n");
+        handle_lua_error(L, res);
+        return ZCLK_RES_ERR_UNKNOWN;
+    }
+}
+
 int main(int argc, char* argv[])
 {
+    // zclk_command *cmd = new_zclk_command(argv[0], "ptrtl",
+    //                         "PicoTurtle (experimental raylib version)", &test_c_main);
     zclk_command *cmd = new_zclk_command(argv[0], "ptrtl",
                             "PicoTurtle (experimental raylib version)", &ptrtl_main);
 
