@@ -391,11 +391,10 @@ zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
         if (res == 0)
         {
             zclk_argument *turtle_prog = zclk_command_get_argument(cmd, PTRTL_ARG_FILE_NAME);
-            zclk_option *img_file = zclk_command_get_option(cmd, PTRTL_OPT_IMGFILE_NAME);
-            if(turtle_prog != NULL && img_file != NULL)
+            // zclk_option *img_file = zclk_command_get_option(cmd, PTRTL_OPT_IMGFILE_NAME);
+            if(turtle_prog != NULL)
             {
                 const char *program_path = zclk_argument_get_val_string(turtle_prog);
-                const char *img_filename = zclk_option_get_val_string(img_file);
 
                 if (program_path != NULL)
                 {
@@ -408,18 +407,6 @@ zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
                         return ZCLK_RES_ERR_UNKNOWN;
                     }
 
-                    char lua_export_cmd[TURTLE_EXPORT_CMD_LEN];
-                    lua_export_cmd[0] = '\0';
-
-                    snprintf(lua_export_cmd, TURTLE_EXPORT_CMD_LEN, "t:export_img('%s')", img_filename);
-                    printf("Running export command: [%s]\n", lua_export_cmd);
-                    res = run_lua_script(L, lua_export_cmd);
-                    if (res != 0)
-                    {
-                        cleanup_lua(L);
-                        printf("Error executing Turtle Lua program.\n");
-                        return ZCLK_RES_ERR_UNKNOWN;
-                    }
                 }
             }
             else
