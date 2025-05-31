@@ -128,54 +128,54 @@ static trtl_t *lua_turtle_getobj(lua_State *L) {
 }
 
 // --- Implemented functions ---
-static int c_turtle_penup(lua_State *L) {
+static int rl_turtle_penup(lua_State *L) {
     trtl_t *t = lua_turtle_getobj(L);
     trtl_pen_up(t);
     return 0;
 }
-static int c_turtle_pendown(lua_State *L) {
+static int rl_turtle_pendown(lua_State *L) {
     trtl_t *t = lua_turtle_getobj(L);
     trtl_pen_down(t);
     return 0;
 }
-static int c_turtle_forward(lua_State *L) {
+static int rl_turtle_forward(lua_State *L) {
     float len = luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_forward(t, len);
     return 0;
 }
-static int c_turtle_back(lua_State *L) {
+static int rl_turtle_back(lua_State *L) {
     float len = luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_backward(t, len);
     return 0;
 }
-static int c_turtle_left(lua_State *L) {
+static int rl_turtle_left(lua_State *L) {
     float a = luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_left(t, a);
     return 0;
 }
-static int c_turtle_right(lua_State *L) {
+static int rl_turtle_right(lua_State *L) {
     float a = luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_right(t, a);
     return 0;
 }
-static int c_turtle_setpos(lua_State *L) {
+static int rl_turtle_setpos(lua_State *L) {
     float y = luaL_checknumber(L, lua_gettop(L));
     float x = luaL_checknumber(L, lua_gettop(L) - 1);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_set_position(t, x, y);
     return 0;
 }
-static int c_turtle_getx(lua_State *L) {
+static int rl_turtle_getx(lua_State *L) {
     trtl_t *t = lua_turtle_getobj(L);
     trtl_location_t *loc = trtl_get_location(t);
     lua_pushnumber(L, trtl_location_get_x(loc));
     return 1;
 }
-static int c_turtle_gety(lua_State *L) {
+static int rl_turtle_gety(lua_State *L) {
     trtl_t *t = lua_turtle_getobj(L);
     trtl_location_t *loc = trtl_get_location(t);
     lua_pushnumber(L, trtl_location_get_y(loc));
@@ -184,21 +184,21 @@ static int c_turtle_gety(lua_State *L) {
 
 // --- Not implemented in turtle.h ---
 // TODO: Implement trtl_penwidth in turtle.h
-// static int c_turtle_penwidth(lua_State *L) { ... }
+// static int rl_turtle_penwidth(lua_State *L) { ... }
 // TODO: Implement trtl_pencolor in turtle.h
-// static int c_turtle_pencolor(lua_State *L) { ... }
+// static int rl_turtle_pencolor(lua_State *L) { ... }
 // TODO: Implement trtl_home in turtle.h
-// static int c_turtle_home(lua_State *L) { ... }
+// static int rl_turtle_home(lua_State *L) { ... }
 // TODO: Implement trtl_clear in turtle.h
-// static int c_turtle_clear(lua_State *L) { ... }
+// static int rl_turtle_clear(lua_State *L) { ... }
 // TODO: Implement trtl_reset in turtle.h
-// static int c_turtle_reset(lua_State *L) { ... }
+// static int rl_turtle_reset(lua_State *L) { ... }
 // TODO: Implement trtl_heading in turtle.h
-// static int c_turtle_heading(lua_State *L) { ... }
+// static int rl_turtle_heading(lua_State *L) { ... }
 // TODO: Implement trtl_circle in turtle.h
-// static int c_turtle_circle(lua_State *L) { ... }
+// static int rl_turtle_circle(lua_State *L) { ... }
 // TODO: Implement trtl_arc in turtle.h
-// static int c_turtle_arc(lua_State *L) { ... }
+// static int rl_turtle_arc(lua_State *L) { ... }
 
 static const luaL_Reg PicoTurtle_funcs[] =
     {
@@ -214,32 +214,32 @@ static const luaL_Reg PicoTurtle_meths[] =
         // {"setwidth", skia_turtle_setwidth}, // TODO
         // {"getheight", skia_turtle_getheight}, // TODO
         // {"setheight", skia_turtle_setheight}, // TODO
-        {"penup", c_turtle_penup},
-        {"pu", c_turtle_penup},
-        {"pendown", c_turtle_pendown},
-        {"pd", c_turtle_pendown},
-        // {"penwidth", c_turtle_penwidth}, // TODO
-        // {"pw", c_turtle_penwidth}, // TODO
-        // {"pencolor", c_turtle_pencolor}, // TODO
-        // {"pc", c_turtle_pencolor}, // TODO
+        {"penup", rl_turtle_penup},
+        {"pu", rl_turtle_penup},
+        {"pendown", rl_turtle_pendown},
+        {"pd", rl_turtle_pendown},
+        // {"penwidth", rl_turtle_penwidth}, // TODO
+        // {"pw", rl_turtle_penwidth}, // TODO
+        // {"pencolor", rl_turtle_pencolor}, // TODO
+        // {"pc", rl_turtle_pencolor}, // TODO
         // {"stop", skia_turtle_stop}, // TODO
-        // {"home", c_turtle_home}, // TODO
-        // {"clear", c_turtle_clear}, // TODO
-        // {"reset", c_turtle_reset}, // TODO
-        {"forward", c_turtle_forward},
-        {"fd", c_turtle_forward},
-        {"back", c_turtle_back},
-        {"bk", c_turtle_back},
-        {"setpos", c_turtle_setpos},
-        {"getx", c_turtle_getx},
-        {"gety", c_turtle_gety},
+        // {"home", rl_turtle_home}, // TODO
+        // {"clear", rl_turtle_clear}, // TODO
+        // {"reset", rl_turtle_reset}, // TODO
+        {"forward", rl_turtle_forward},
+        {"fd", rl_turtle_forward},
+        {"back", rl_turtle_back},
+        {"bk", rl_turtle_back},
+        {"setpos", rl_turtle_setpos},
+        {"getx", rl_turtle_getx},
+        {"gety", rl_turtle_gety},
         // {"setx", skia_turtle_setx}, // TODO
         // {"sety", skia_turtle_sety}, // TODO
-        {"right", c_turtle_right},
-        {"rt", c_turtle_right},
-        {"left", c_turtle_left},
-        {"lt", c_turtle_left},
-        // {"heading", c_turtle_heading}, // TODO
+        {"right", rl_turtle_right},
+        {"rt", rl_turtle_right},
+        {"left", rl_turtle_left},
+        {"lt", rl_turtle_left},
+        // {"heading", rl_turtle_heading}, // TODO
         // {"export_img", skia_turtle_export_img}, // TODO
         // {"snap", skia_turtle_export_img}, // TODO
         // {"font", skia_turtle_font}, // TODO
@@ -253,8 +253,8 @@ static const luaL_Reg PicoTurtle_meths[] =
         // {"delay", skia_turtle_delay}, // TODO
         // {"paint", skia_turtle_paint}, // TODO
         // {"drawme", skia_turtle_drawme}, // TODO
-        // {"circle", c_turtle_circle}, // TODO
-        // {"arc", c_turtle_arc}, // TODO
+        // {"circle", rl_turtle_circle}, // TODO
+        // {"arc", rl_turtle_arc}, // TODO
         // {"enable_update", skia_turtle_enable_update}, // TODO
         // {"disable_update", skia_turtle_disable_update}, // TODO
         // {"loadpic", skia_turtle_loadpic}, // TODO
