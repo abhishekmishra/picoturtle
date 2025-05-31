@@ -27,3 +27,9 @@ target_link_libraries(ptrl PRIVATE glfw)
 find_package(Lua REQUIRED)
 target_include_directories(ptrl PUBLIC ${LUA_INCLUDE_DIR})
 target_link_libraries(ptrl PUBLIC ${LUA_LIBRARIES})
+
+find_package(coll CONFIG REQUIRED)
+target_link_libraries(ptrl PUBLIC coll::coll)
+
+find_package(zclk CONFIG REQUIRED)
+target_link_libraries(ptrl PUBLIC zclk::zclk)

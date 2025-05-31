@@ -8,9 +8,27 @@
 
 #include <raylib.h>
 
+#include <zclk.h>
+#include <coll_arraylist.h>
+
 #include "turtle.h"
 
 #include "test_drawing_features.h"
+
+#define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
+
+#define PTRTL_OPT_IMGFILE_NAME      "output"
+#define PTRTL_OPT_IMGFILE_SHORT     "o"
+#define PTRTL_OPT_IMGFILE_DEFAULT   "turtle.png"
+#define PTRTL_OPT_IMGFILE_DESC      "Image filename for PicoTurtle canvas " \
+                                    "output. " \
+                                    "Note: the image file is written in "\
+                                    "PNG format."
+#define PTRTL_ARG_FILE_NAME         "path-to-program"
+#define PTRTL_ARG_FILE_DEFAULT      NULL
+#define PTRTL_ARG_FILE_DESC         "Turtle lua program to execute"
+
+#define TURTLE_EXPORT_CMD_LEN       8192
 
 /**
  * accept a lua error code, and print
@@ -197,7 +215,7 @@ void destroy_offscreen_rendering(RenderTexture2D target)
     UnloadRenderTexture(target);
 }
 
-int main(void)
+zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
 {
     // Initialization
     const int screenWidth = 800;
@@ -309,4 +327,28 @@ int main(void)
     // Cleanup Lua
     cleanup_lua(L);
     return EXIT_SUCCESS;
+}
+
+int main(int argc, char* argv[])
+{
+    zclk_command *cmd = new_zclk_command(argv[0], "ptrtl",
+                            "PicoTurtle (experimental raylib version)", &ptrtl_main);
+
+    zclk_command_string_option(
+        cmd,
+        PTRTL_OPT_IMGFILE_NAME,
+        PTRTL_OPT_IMGFILE_SHORT,
+        PTRTL_OPT_IMGFILE_DEFAULT,
+        PTRTL_OPT_IMGFILE_DESC
+    );
+
+    zclk_command_string_argument(
+        cmd,
+        PTRTL_ARG_FILE_NAME,
+        PTRTL_ARG_FILE_DEFAULT,
+        PTRTL_ARG_FILE_DESC,
+        1
+    );
+
+    zclk_command_exec(cmd, NULL, argc, argv);
 }

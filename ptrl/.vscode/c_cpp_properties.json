@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/build/vcpkg_installed/arm64-osx/include",
-                "${workspaceFolder}/../c-color-names"
+                "${workspaceFolder}/../c-color-names",
+                "${workspaceFolder}/../../zclk/src",
+                "${workspaceFolder}/../../coll/src"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
@@ -18,7 +20,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/build/vcpkg_installed/x64-windows/include",
-                "${workspaceFolder}/../c-color-names"
+                "${workspaceFolder}/../c-color-names",
+                "${workspaceFolder}/../../zclk/src",
+                "${workspaceFolder}/../../coll/src"
             ],
             "defines": [
                 "_DEBUG",
