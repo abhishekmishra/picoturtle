@@ -182,7 +182,6 @@ int init_lua(lua_State ** Lptr)
     // cleanup lua if already initialized
     cleanup_lua(*Lptr);
 
-    int status;
     (*Lptr) = luaL_newstate(); // new lua state
     lua_State *L = *Lptr;
 
@@ -305,7 +304,7 @@ zclk_res test_c_main(zclk_command* cmd, void* handler_args)
         BeginDrawing();
             ClearBackground(RAYWHITE);
             // Draw the offscreen texture to the screen
-            DrawTextureRec(offscreenTarget.texture, (Rectangle){0, 0, offscreenTarget.texture.width, -offscreenTarget.texture.height}, (Vector2){0, 0}, WHITE);            
+            DrawTextureRec(offscreenTarget.texture, (Rectangle){0.0f, 0.0f, (float)offscreenTarget.texture.width, (float)-offscreenTarget.texture.height}, (Vector2){0, 0}, WHITE);            
         EndDrawing();
     }
 
