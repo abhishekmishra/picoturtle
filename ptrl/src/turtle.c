@@ -298,12 +298,12 @@ float trtl_get_pen_width(const trtl_t *turtle)
 void trtl_draw_me(const trtl_t *turtle)
 {
     int d = 25;
-    float theta1 = (trtl_get_canvas_heading(turtle) - 145) * (M_PI / 180);
-    float y2 = d * (sin(theta1)) + trtl_get_canvas_location_y(turtle);
-    float x2 = d * (cos(theta1)) + trtl_get_canvas_location_x(turtle);
-    float theta2 = (trtl_get_canvas_heading(turtle) + 145) * (M_PI / 180);
-    float y3 = d * (sin(theta2)) + trtl_get_canvas_location_y(turtle);
-    float x3 = d * (cos(theta2)) + trtl_get_canvas_location_x(turtle);
+    float theta1 = (float)((trtl_get_canvas_heading(turtle) - 145) * (M_PI / 180));
+    float y2 = (float)(d * (sin(theta1)) + trtl_get_canvas_location_y(turtle));
+    float x2 = (float)(d * (cos(theta1)) + trtl_get_canvas_location_x(turtle));
+    float theta2 = (float)((trtl_get_canvas_heading(turtle) + 145) * (M_PI / 180));
+    float y3 = (float)(d * (sin(theta2)) + trtl_get_canvas_location_y(turtle));
+    float x3 = (float)(d * (cos(theta2)) + trtl_get_canvas_location_x(turtle));
 
     short cr = trtl_get_pen_colour(turtle)->r;
     short cg = trtl_get_pen_colour(turtle)->g;
@@ -327,15 +327,15 @@ void trtl_draw_me(const trtl_t *turtle)
 // with pen movement
 void trtl_forward(trtl_t *turtle, float distance)
 {
-    float theta = trtl_get_heading(turtle) * (M_PI / 180);
-    float canvas_theta = trtl_get_canvas_heading(turtle) * (M_PI / 180);
+    float theta = (float)(trtl_get_heading(turtle) * (M_PI / 180));
+    float canvas_theta = (float)(trtl_get_canvas_heading(turtle) * (M_PI / 180));
     // y2 = d sin (theta) + y1
     // x2 = d cos (theta) + x1
     trtl_location_t *current_location = trtl_get_location(turtle);
-    float y2 = distance * (sin(theta)) + trtl_location_get_y(current_location);
-    float x2 = distance * (cos(theta)) + trtl_location_get_x(current_location);
-    float cy2 = distance * (sin(canvas_theta)) + trtl_get_canvas_location_y(turtle);
-    float cx2 = distance * (cos(canvas_theta)) + trtl_get_canvas_location_x(turtle);
+    float y2 = (float)(distance * (sin(theta)) + trtl_location_get_y(current_location));
+    float x2 = (float)(distance * (cos(theta)) + trtl_location_get_x(current_location));
+    float cy2 = (float)(distance * (sin(canvas_theta)) + trtl_get_canvas_location_y(turtle));
+    float cx2 = (float)(distance * (cos(canvas_theta)) + trtl_get_canvas_location_x(turtle));
 
     // printf("angle %f, from [%f, %f], to [%f, %f]\n", theta, turtle_state->get_location()->getX(), turtle_state->get_location()->getY(), x2, y2);
     trtl_state_t *current_state = turtle->current_state;

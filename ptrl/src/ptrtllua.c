@@ -139,32 +139,32 @@ static int rl_turtle_pendown(lua_State *L) {
     return 0;
 }
 static int rl_turtle_forward(lua_State *L) {
-    float len = luaL_checknumber(L, lua_gettop(L));
+    float len = (float)luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_forward(t, len);
     return 0;
 }
 static int rl_turtle_back(lua_State *L) {
-    float len = luaL_checknumber(L, lua_gettop(L));
+    float len = (float)luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_backward(t, len);
     return 0;
 }
 static int rl_turtle_left(lua_State *L) {
-    float a = luaL_checknumber(L, lua_gettop(L));
+    float a = (float)luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_left(t, a);
     return 0;
 }
 static int rl_turtle_right(lua_State *L) {
-    float a = luaL_checknumber(L, lua_gettop(L));
+    float a = (float)luaL_checknumber(L, lua_gettop(L));
     trtl_t *t = lua_turtle_getobj(L);
     trtl_right(t, a);
     return 0;
 }
 static int rl_turtle_setpos(lua_State *L) {
-    float y = luaL_checknumber(L, lua_gettop(L));
-    float x = luaL_checknumber(L, lua_gettop(L) - 1);
+    float y = (float)luaL_checknumber(L, lua_gettop(L));
+    float x = (float)luaL_checknumber(L, lua_gettop(L) - 1);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_set_position(t, x, y);
     return 0;
