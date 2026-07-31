@@ -8,6 +8,8 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(PTRL_CORE_SRC
     ../c-color-names/color_names.h
     ../c-color-names/color_names.c
+    src/image.h
+    src/image.c
     src/ptrtllua.c
     src/runtime.h
     src/runtime.c

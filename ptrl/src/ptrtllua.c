@@ -4,6 +4,7 @@
 
 #include "ptrtllua.h"
 #include "turtle.h"
+#include "image.h"
 
 // TODO: uncomment when GifUtil.h is available
 // #include "GifUtil.h"
@@ -158,6 +159,18 @@ static trtl_state_t *lua_turtle_state_getobj(lua_State *L) {
         luaL_typeerror(L, 1, LUA_TURTLE_STATE_OBJECT);
     }
     return *state_ptr;
+}
+
+static ptrl_image_t *lua_turtle_image_getobj(lua_State *L, int index) {
+    ptrl_image_t **image_ptr = (ptrl_image_t **)luaL_checkudata(
+        L,
+        index,
+        LUA_TURTLE_IMAGE_OBJECT
+    );
+    if (image_ptr == NULL || *image_ptr == NULL) {
+        luaL_typeerror(L, index, LUA_TURTLE_IMAGE_OBJECT);
+    }
+    return *image_ptr;
 }
 
 // --- Implemented functions ---
@@ -482,6 +495,104 @@ static int rl_turtle_export_img(lua_State *L) {
     return 1;
 }
 
+static int rl_turtle_font(lua_State *L) {
+    require_method_args(L, 2, "font");
+    trtl_t *t = lua_turtle_getobj(L);
+    const char *font_name = luaL_checkstring(L, 2);
+    lua_Integer font_size = luaL_checkinteger(L, 3);
+    luaL_argcheck(L, font_size > 0, 3, "font size must be greater than zero");
+    trtl_set_font(t, font_name);
+    trtl_set_font_size(t, (int)font_size);
+    return 0;
+}
+
+static int rl_turtle_filltext(lua_State *L) {
+    require_method_args(L, 1, "filltext");
+    trtl_text(lua_turtle_getobj(L), luaL_checkstring(L, 2));
+    return 0;
+}
+
+static int rl_turtle_stroketext(lua_State *L) {
+    require_method_args(L, 1, "stroketext");
+    trtl_text(lua_turtle_getobj(L), luaL_checkstring(L, 2));
+    return 0;
+}
+
+static int rl_turtle_loadpic(lua_State *L) {
+    require_method_args(L, 1, "loadpic");
+    trtl_t *t = lua_turtle_getobj(L);
+    const char *path = luaL_checkstring(L, 2);
+    ptrl_image_t *image = ptrl_image_load(t->runtime, path);
+    if (image == NULL) {
+        return luaL_error(L, "unable to load image %s", path);
+    }
+
+    ptrl_image_t **image_ptr = (ptrl_image_t **)lua_newuserdata(
+        L,
+        sizeof(*image_ptr)
+    );
+    *image_ptr = image;
+    luaL_getmetatable(L, LUA_TURTLE_IMAGE_OBJECT);
+    lua_setmetatable(L, -2);
+    return 1;
+}
+
+static int rl_turtle_pic(lua_State *L) {
+    require_method_args(L, 1, "pic");
+    trtl_t *t = lua_turtle_getobj(L);
+
+    ptrl_image_t **image_ptr = (ptrl_image_t **)luaL_testudata(
+        L,
+        2,
+        LUA_TURTLE_IMAGE_OBJECT
+    );
+    if (image_ptr != NULL && *image_ptr != NULL) {
+        ptrl_image_draw(
+            *image_ptr,
+            trtl_get_canvas_location_x(t),
+            trtl_get_canvas_location_y(t)
+        );
+        return 0;
+    }
+
+    if (lua_type(L, 2) == LUA_TSTRING) {
+        const char *path = lua_tostring(L, 2);
+        ptrl_image_t *image = ptrl_image_load(t->runtime, path);
+        if (image == NULL) {
+            return luaL_error(L, "unable to load image %s", path);
+        }
+        ptrl_image_draw(
+            image,
+            trtl_get_canvas_location_x(t),
+            trtl_get_canvas_location_y(t)
+        );
+        ptrl_image_destroy(image);
+        return 0;
+    }
+
+    return luaL_error(L, "pic expects an image object or image path");
+}
+
+static int rl_turtle_image_free(lua_State *L) {
+    ptrl_image_t **image_ptr = (ptrl_image_t **)luaL_checkudata(
+        L,
+        1,
+        LUA_TURTLE_IMAGE_OBJECT
+    );
+    if (image_ptr != NULL && *image_ptr != NULL) {
+        ptrl_image_destroy(*image_ptr);
+        *image_ptr = NULL;
+    }
+    return 0;
+}
+
+static int rl_turtle_image_tostring(lua_State *L) {
+    require_method_args(L, 0, "__tostring");
+    ptrl_image_t *image = lua_turtle_image_getobj(L, 1);
+    lua_pushfstring(L, "Turtle image [%s]", image->path);
+    return 1;
+}
+
 static int rl_turtle_state_free(lua_State *L) {
     trtl_state_t **state_ptr = (trtl_state_t **)luaL_checkudata(
         L,
@@ -610,9 +721,9 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"heading", rl_turtle_heading},
         {"export_img", rl_turtle_export_img},
         {"snap", rl_turtle_export_img},
-        // {"font", skia_turtle_font}, // TODO
-        // {"filltext", skia_turtle_filltext}, // TODO
-        // {"stroketext", skia_turtle_stroketext}, // TODO
+        {"font", rl_turtle_font},
+        {"filltext", rl_turtle_filltext},
+        {"stroketext", rl_turtle_stroketext},
         {"canvas_size", rl_turtle_canvas_size},
         {"state", rl_turtle_state},
         {"save", rl_turtle_save},
@@ -625,8 +736,8 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"arc", rl_turtle_arc},
         // {"enable_update", skia_turtle_enable_update}, // TODO
         // {"disable_update", skia_turtle_disable_update}, // TODO
-        // {"loadpic", skia_turtle_loadpic}, // TODO
-        // {"pic", skia_turtle_pic}, // TODO
+        {"loadpic", rl_turtle_loadpic},
+        {"pic", rl_turtle_pic},
         {NULL, NULL}};
 
 static const luaL_Reg TurtleState_meths[] =
@@ -642,6 +753,11 @@ static const luaL_Reg TurtleState_meths[] =
         {"hd", rl_turtle_state_heading},
         {"pd", rl_turtle_state_pd},
         {"pw", rl_turtle_state_pw},
+        {NULL, NULL}};
+
+static const luaL_Reg TurtleImage_meths[] =
+    {
+        {"__gc", rl_turtle_image_free},
         {NULL, NULL}};
 
 int luaopen_picoturtle(lua_State *L)
@@ -662,6 +778,14 @@ int luaopen_picoturtle(lua_State *L)
     lua_pushcfunction(L, rl_turtle_state_tostring);
     lua_setfield(L, -2, "__tostring");
     luaL_setfuncs(L, TurtleState_meths, 0);
+    lua_pop(L, 1);
+
+    luaL_newmetatable(L, LUA_TURTLE_IMAGE_OBJECT);
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    lua_pushcfunction(L, rl_turtle_image_tostring);
+    lua_setfield(L, -2, "__tostring");
+    luaL_setfuncs(L, TurtleImage_meths, 0);
     lua_pop(L, 1);
 
     // register functions - only turtle.new

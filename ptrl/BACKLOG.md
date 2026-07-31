@@ -88,12 +88,12 @@ item must either be completed or deliberately moved to a later release backlog.
   - [ ] Add a font cache with deterministic ownership and cleanup.
   - [ ] Load the glyph ranges required by the supported Unicode samples.
   - [ ] Implement and bind `font`.
-  - [ ] Implement rotated text drawing at the turtle's logical position.
-  - [ ] Implement and bind `filltext`.
-  - [ ] Implement `stroketext` with documented compatibility behaviour.
-  - [ ] Add TurtleImage Lua userdata with deterministic texture cleanup.
-  - [ ] Implement and bind `loadpic`.
-  - [ ] Implement `pic` for both an image userdata object and an image path.
+  - [x] Implement rotated text drawing at the turtle's logical position.
+  - [x] Implement and bind `filltext`.
+  - [x] Implement `stroketext` with documented compatibility behaviour.
+  - [x] Add TurtleImage Lua userdata with deterministic texture cleanup.
+  - [x] Implement and bind `loadpic`.
+  - [x] Implement `pic` for both an image userdata object and an image path.
   - [ ] Verify `fern.lua`, `text-demo.lua`, `draw_mandrill.lua`, and
         `draw_mandrill_move.lua`.
 
