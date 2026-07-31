@@ -20,6 +20,8 @@ section for each release - which lists major changes made in the release.
 - Replaced the `c-color-names` Git submodule with pinned vendored source and
   removed direct GLFW linkage.
 - Added automated C, Lua API, retained-sample, and CLI tests.
+- Added a self-contained macOS install layout and `--no-wait` mode for
+  non-interactive program execution and PNG export.
 - Replaced the generated MkDocs website with maintainable plain Markdown.
 
 **0.2.0-alpha.8**  2025-02-04 Abhishek Mishra  <abhishekmishra3@gmail.com>

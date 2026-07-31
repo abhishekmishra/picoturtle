@@ -20,6 +20,7 @@ typedef struct {
     const char *output_path;
     bool show_help;
     bool show_version;
+    bool no_wait;
 } picoturtle_cli_options_t;
 
 static void print_version(void)
@@ -39,7 +40,8 @@ static void print_usage(const char *program_name)
         "Options:\n"
         "  -h, --help           Print this help.\n"
         "  -v, --version        Print version information.\n"
-        "  -o, --output PATH    Export the completed canvas to PNG.\n",
+        "  -o, --output PATH    Export the completed canvas to PNG.\n"
+        "      --no-wait        Exit after the program and optional export.\n",
         program_name,
         PICOTURTLE_VERSION,
         PICOTURTLE_CODENAME
@@ -55,6 +57,7 @@ static bool parse_cli_options(
     options->output_path = NULL;
     options->show_help = false;
     options->show_version = false;
+    options->no_wait = false;
 
     for (int i = 1; i < argc; i++) {
         const char *arg = argv[i];
@@ -67,6 +70,11 @@ static bool parse_cli_options(
         if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
             options->show_version = true;
             return true;
+        }
+
+        if (strcmp(arg, "--no-wait") == 0) {
+            options->no_wait = true;
+            continue;
         }
 
         if (strcmp(arg, "-o") == 0 || strcmp(arg, "--output") == 0) {
@@ -340,7 +348,11 @@ int init_turtle_lua_binding(lua_State *L)
 }
 
 
-int picoturtle_main(const char *program_path, const char *output_path)
+int picoturtle_main(
+    const char *program_path,
+    const char *output_path,
+    bool no_wait
+)
 {
     picoturtle_runtime_t runtime;
     if (!picoturtle_runtime_init(
@@ -380,9 +392,11 @@ int picoturtle_main(const char *program_path, const char *output_path)
                 return EXIT_FAILURE;
             }
 
-            while (!picoturtle_runtime_should_close(&runtime))
-            {
-                picoturtle_runtime_present(&runtime);
+            if (!no_wait) {
+                while (!picoturtle_runtime_should_close(&runtime))
+                {
+                    picoturtle_runtime_present(&runtime);
+                }
             }
             cleanup_lua(L);
             picoturtle_runtime_destroy(&runtime);
@@ -421,5 +435,9 @@ int main(int argc, char* argv[])
         return EXIT_SUCCESS;
     }
 
-    return picoturtle_main(options.program_path, options.output_path);
+    return picoturtle_main(
+        options.program_path,
+        options.output_path,
+        options.no_wait
+    );
 }

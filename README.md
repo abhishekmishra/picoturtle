@@ -4,6 +4,9 @@ PicoTurtle is a Raylib-based runtime for drawing with Lua, codenamed
 `matrix-goose` for the `0.3.0` release. It runs turtle programs written in any
 code editor without requiring the former Qt IDE or Skia renderer.
 
+Version 0.3.0 is supported and release-tested on macOS. Windows and Linux
+support is planned after this release but has not yet been verified.
+
 ## Build
 
 The build requires a C11 compiler, CMake, Make, and vcpkg. Set `VCPKG_ROOT` to
@@ -98,6 +101,13 @@ display loop:
 
 ```sh
 ./build/picoturtle -o drawing.png lua/samples/polygons.lua
+```
+
+Add `--no-wait` for automation: PicoTurtle exits after the Lua program and
+optional export complete instead of waiting for the display window to close.
+
+```sh
+./build/picoturtle --no-wait -o drawing.png lua/samples/polygons.lua
 ```
 
 ## Tests

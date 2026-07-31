@@ -159,6 +159,9 @@ PNG and return the path:
 local filename = t:snap("drawing.png")
 ```
 
+For command-line automation, pass `--no-wait` with `--output` so PicoTurtle
+exits as soon as the program and export have completed.
+
 The module-level `picoturtle.makegif` helper from 0.2.x was removed. Assemble
 exported PNG frames with an external animation tool when required.
 

@@ -78,6 +78,26 @@ if(BUILD_TESTING)
     add_test(NAME picoturtle_cli_version COMMAND picoturtle --version)
     add_test(NAME picoturtle_cli_missing_output COMMAND picoturtle -o)
     set_tests_properties(picoturtle_cli_missing_output PROPERTIES WILL_FAIL TRUE)
+    add_test(
+        NAME picoturtle_cli_integration
+        COMMAND
+            ${CMAKE_COMMAND}
+            -DPICOTURTLE=$<TARGET_FILE:picoturtle>
+            -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+            -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR}
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/test/test_cli.cmake
+    )
+    add_test(
+        NAME picoturtle_resource_lifetime
+        COMMAND
+            picoturtle
+            --no-wait
+            ${CMAKE_CURRENT_SOURCE_DIR}/test/resource_lifetime.lua
+    )
+    set_tests_properties(
+        picoturtle_resource_lifetime
+        PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 endif()
 
 install(
@@ -101,7 +121,7 @@ install(
     DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/lua
 )
 install(
-    DIRECTORY res/fonts res/images res/icons
+    DIRECTORY res/fonts res/images
     DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/res
 )
 install(

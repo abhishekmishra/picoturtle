@@ -133,7 +133,7 @@ item must either be completed or deliberately moved to a later release backlog.
         invoked as `picoturtle`.
   - [x] Define an install layout for the executable, Lua files, bundled fonts,
         and sample resources.
-  - [ ] Resolve bundled resources relative to the installed executable or an
+  - [x] Resolve bundled resources relative to the installed executable or an
         explicit resource override, without depending on the source checkout
         working directory.
 
@@ -175,9 +175,9 @@ item must either be completed or deliberately moved to a later release backlog.
         PNG snapshots plus an external animation tool.
   - [x] Document Latin-1 text support and the absence of complex-script
         shaping in 0.3.0.
-  - [ ] Run all retained Lua samples and remove or update samples that depend
+  - [x] Run all retained Lua samples and remove or update samples that depend
         on deliberately removed features.
-  - [ ] Run maze generation as a large-canvas and text-rendering regression
+  - [x] Run maze generation as a large-canvas and text-rendering regression
         test.
 
   Automated and visual verification:
@@ -185,17 +185,16 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Add unit tests for locations, colours, headings, movement, pen state,
         state copying, and save/restore.
   - [x] Add Lua integration tests covering every public method and alias.
-  - [ ] Add CLI tests for help, version, invalid arguments, missing files,
+  - [x] Add CLI tests for help, version, invalid arguments, missing files,
         export success, and export failure.
-  - [ ] Add resource-lifetime tests for turtles, saved states, fonts, images,
+  - [x] Add resource-lifetime tests for turtles, saved states, fonts, images,
         the canvas, and Lua garbage collection.
-  - [ ] Add deterministic reference-image tests for representative lines,
-        shapes, state restoration, Latin text, and pictures.
-  - [ ] Decide a small, documented pixel-tolerance policy for reference-image
-        differences across graphics drivers.
+  - [x] Move deterministic reference-image tests and their cross-driver pixel
+        tolerance policy to the post-0.3.0 backlog; 0.3.0 uses API assertions,
+        PNG validity checks, and agreed visual regressions instead.
   - [x] Add a clean-build check using `make genbuild` followed by `make build`.
   - [x] Add a root-level test target that runs the entire automated suite.
-  - [ ] Repeat the agreed visual checks after the root migration to catch
+  - [x] Repeat the agreed visual checks after the root migration to catch
         resource-path, orientation, font, and animation regressions.
 
   Documentation, packaging, and release:
@@ -210,14 +209,23 @@ item must either be completed or deliberately moved to a later release backlog.
         helper, supported text scope, and migration notes.
   - [x] Ensure the repository license and bundled third-party licenses are
         accurate after legacy removal.
-  - [ ] Add CMake install rules and verify macOS runtime resource paths from an
+  - [x] Add CMake install rules and verify macOS runtime resource paths from an
         installed tree outside the source checkout.
-  - [ ] Perform a clean macOS Debug build, Release build, install, automated
+  - [x] Perform a clean macOS Debug build, Release build, install, automated
         test run, sample run, and PNG export.
-  - [ ] Verify Windows and Linux builds, or explicitly move them to a named
+  - [x] Verify Windows and Linux builds, or explicitly move them to a named
         post-0.3.0 backlog with the unsupported status documented.
-  - [ ] Review the final repository for generated files, obsolete references,
+  - [x] Review the final repository for generated files, obsolete references,
         oversized artifacts, and accidental legacy dependencies.
   - [ ] Push all release commits and the pre-migration safety tag.
   - [ ] Tag and publish `v0.3.0` only after every remaining item above is
         complete or deliberately rescheduled.
+
+## Post-0.3.0 backlog
+
+- [ ] Add deterministic reference images for lines, shapes, state restoration,
+      Latin text, and pictures.
+- [ ] Define and document a small pixel-tolerance policy for reference-image
+      differences across supported graphics drivers.
+- [ ] Establish and verify supported Windows and Linux build, install, and
+      runtime workflows. The 0.3.0 release is macOS-only.
