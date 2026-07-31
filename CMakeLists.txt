@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 set(PICOTURTLE_CORE_SRC
-    c-color-names/color_names.h
-    c-color-names/color_names.c
+    third_party/c-color-names/color_names.h
+    third_party/c-color-names/color_names.c
     src/font.h
     src/font.c
     src/image.h
@@ -21,14 +21,14 @@ set(PICOTURTLE_CORE_SRC
 
 add_library(picoturtle_core STATIC ${PICOTURTLE_CORE_SRC})
 target_include_directories(picoturtle_core PUBLIC src)
-target_include_directories(picoturtle_core PUBLIC c-color-names)
+target_include_directories(
+    picoturtle_core
+    PUBLIC third_party/c-color-names
+)
 
 # raylib dependency
 find_package(raylib CONFIG REQUIRED)
 target_link_libraries(picoturtle_core PUBLIC raylib)
-
-find_package(glfw3 CONFIG REQUIRED)
-target_link_libraries(picoturtle_core PUBLIC glfw)
 
 find_package(Lua REQUIRED)
 target_include_directories(picoturtle_core PUBLIC ${LUA_INCLUDE_DIR})

@@ -6,7 +6,6 @@
         "tools"
       ]
     },
-    "raylib",
-    "glfw3"
+    "raylib"
   ]
 }

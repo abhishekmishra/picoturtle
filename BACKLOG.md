@@ -143,7 +143,7 @@ item must either be completed or deliberately moved to a later release backlog.
         GraphicsMagick dependency; document `picoturtle.makegif` as deprecated.
   - [x] Delete the original Skia/Qt renderer, IDE, editor, REPL, and GUI source
         after the Raylib implementation is promoted.
-  - [ ] Delete obsolete Qt resources, platform launchers, Skia CMake helpers,
+  - [x] Delete obsolete Qt resources, platform launchers, Skia CMake helpers,
         and Skia/Qt-only license files while preserving reusable images and
         Lua samples.
   - [x] Replace the legacy root CMake, Makefile, and vcpkg manifest rather than
@@ -152,15 +152,15 @@ item must either be completed or deliberately moved to a later release backlog.
         build files and documentation.
   - [x] Replace `coll` and `zclk` usage with minimal direct CLI argument
         parsing.
-  - [ ] Confirm whether direct GLFW discovery/linking is redundant when
+  - [x] Confirm whether direct GLFW discovery/linking is redundant when
         linking Raylib, and remove it if Raylib already supplies it.
-  - [ ] Convert the useful `c-color-names` dependency from a Git submodule to
+  - [x] Convert the useful `c-color-names` dependency from a Git submodule to
         a pinned vendored source under `third_party/`, retaining its license.
-  - [ ] Remove `.gitmodules` and stale nested-submodule metadata.
+  - [x] Remove `.gitmodules` and stale nested-submodule metadata.
   - [ ] Verify that a fresh clone builds without `git submodule` commands.
   - [ ] Audit and either update or delete the old Dockerfile, editor settings,
         CI workflows, TODO file, and other root-level legacy configuration.
-  - [ ] Add a third-party notices section covering Raylib, Lua, Noto Sans, and
+  - [x] Add a third-party notices section covering Raylib, Lua, Noto Sans, and
         the vendored colour-name data.
 
   API compatibility audit:
