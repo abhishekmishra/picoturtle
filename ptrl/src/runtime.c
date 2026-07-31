@@ -85,6 +85,28 @@ void ptrl_runtime_clear(ptrl_runtime_t *runtime, Color color) {
     ptrl_runtime_end_canvas(runtime);
 }
 
+bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height) {
+    if (runtime == NULL || !runtime->initialized || width <= 0 || height <= 0) {
+        return false;
+    }
+    if (width == runtime->canvas_width && height == runtime->canvas_height) {
+        return true;
+    }
+
+    RenderTexture2D new_canvas = LoadRenderTexture(width, height);
+    if (new_canvas.id == 0) {
+        return false;
+    }
+
+    UnloadRenderTexture(runtime->canvas);
+    runtime->canvas = new_canvas;
+    runtime->canvas_width = width;
+    runtime->canvas_height = height;
+    SetWindowSize(width, height);
+    ptrl_runtime_clear(runtime, runtime->background);
+    return true;
+}
+
 void ptrl_runtime_present(ptrl_runtime_t *runtime) {
     if (runtime == NULL || !runtime->initialized) {
         return;

@@ -194,19 +194,157 @@ static int rl_turtle_sety(lua_State *L) {
     return 0;
 }
 
-// --- Not implemented in turtle.h ---
-// TODO: Implement trtl_penwidth in turtle.h
-// static int rl_turtle_penwidth(lua_State *L) { ... }
-// TODO: Implement trtl_pencolor in turtle.h
-// static int rl_turtle_pencolor(lua_State *L) { ... }
-// TODO: Implement trtl_home in turtle.h
-// static int rl_turtle_home(lua_State *L) { ... }
-// TODO: Implement trtl_clear in turtle.h
-// static int rl_turtle_clear(lua_State *L) { ... }
-// TODO: Implement trtl_reset in turtle.h
-// static int rl_turtle_reset(lua_State *L) { ... }
-// TODO: Implement trtl_heading in turtle.h
-// static int rl_turtle_heading(lua_State *L) { ... }
+static int rl_turtle_getwidth(lua_State *L) {
+    (void)lua_turtle_getobj(L);
+    lua_pushinteger(L, trtl_get_canvas_width());
+    return 1;
+}
+
+static int rl_turtle_setwidth(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int width = (int)luaL_checkinteger(L, 2);
+    luaL_argcheck(L, width > 0, 2, "width must be greater than zero");
+    if (!trtl_set_canvas_size(t, width, trtl_get_canvas_height())) {
+        return luaL_error(L, "unable to resize the PicoTurtle canvas");
+    }
+    return 0;
+}
+
+static int rl_turtle_getheight(lua_State *L) {
+    (void)lua_turtle_getobj(L);
+    lua_pushinteger(L, trtl_get_canvas_height());
+    return 1;
+}
+
+static int rl_turtle_setheight(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int height = (int)luaL_checkinteger(L, 2);
+    luaL_argcheck(L, height > 0, 2, "height must be greater than zero");
+    if (!trtl_set_canvas_size(t, trtl_get_canvas_width(), height)) {
+        return luaL_error(L, "unable to resize the PicoTurtle canvas");
+    }
+    return 0;
+}
+
+static int rl_turtle_penwidth(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    float width = (float)luaL_checknumber(L, 2);
+    luaL_argcheck(L, width > 0.0f, 2, "pen width must be greater than zero");
+    trtl_pen_width(t, width);
+    return 0;
+}
+
+static int check_colour_component(lua_State *L, int index) {
+    lua_Integer component = luaL_checkinteger(L, index);
+    luaL_argcheck(L, component >= 0 && component <= 255, index,
+                  "colour component must be between 0 and 255");
+    return (int)component;
+}
+
+static int rl_turtle_pencolor(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int argument_count = lua_gettop(L) - 1;
+
+    if (argument_count == 1) {
+        const char *name = luaL_checkstring(L, 2);
+        lua_pushinteger(L, trtl_colour(t, name));
+        return 1;
+    }
+    if (argument_count == 3) {
+        int red = check_colour_component(L, 2);
+        int green = check_colour_component(L, 3);
+        int blue = check_colour_component(L, 4);
+        trtl_colour_rgba(
+            t,
+            (uint8_t)red,
+            (uint8_t)green,
+            (uint8_t)blue,
+            255
+        );
+        lua_pushinteger(L, 0);
+        return 1;
+    }
+    return luaL_error(
+        L,
+        "pencolor expects a colour name or red, green, and blue values"
+    );
+}
+
+static int rl_turtle_stop(lua_State *L) {
+    (void)lua_turtle_getobj(L);
+    return 0;
+}
+
+static int rl_turtle_home(lua_State *L) {
+    trtl_home(lua_turtle_getobj(L));
+    return 0;
+}
+
+static int rl_turtle_clear(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int argument_count = lua_gettop(L) - 1;
+
+    if (argument_count == 0) {
+        trtl_clear_canvas_colour(t, "white");
+        return 0;
+    }
+    if (argument_count == 1) {
+        trtl_clear_canvas_colour(t, luaL_checkstring(L, 2));
+        return 0;
+    }
+    if (argument_count == 3) {
+        Color color = {
+            (unsigned char)check_colour_component(L, 2),
+            (unsigned char)check_colour_component(L, 3),
+            (unsigned char)check_colour_component(L, 4),
+            255
+        };
+        ptrl_runtime_clear(t->runtime, color);
+        return 0;
+    }
+    return luaL_error(
+        L,
+        "clear expects no arguments, a colour name, or red, green, and blue values"
+    );
+}
+
+static int rl_turtle_reset(lua_State *L) {
+    trtl_reset(lua_turtle_getobj(L));
+    return 0;
+}
+
+static int rl_turtle_heading(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    trtl_heading(t, (double)luaL_checknumber(L, 2));
+    return 0;
+}
+
+static int rl_turtle_canvas_size(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int argument_count = lua_gettop(L) - 1;
+
+    if (argument_count == 2) {
+        int width = (int)luaL_checkinteger(L, 2);
+        int height = (int)luaL_checkinteger(L, 3);
+        luaL_argcheck(L, width > 0, 2, "width must be greater than zero");
+        luaL_argcheck(L, height > 0, 3, "height must be greater than zero");
+        if (!trtl_set_canvas_size(t, width, height)) {
+            return luaL_error(L, "unable to resize the PicoTurtle canvas");
+        }
+    } else if (argument_count != 0) {
+        return luaL_error(L, "canvas_size expects either zero or two arguments");
+    }
+
+    lua_pushinteger(L, trtl_get_canvas_width());
+    lua_pushinteger(L, trtl_get_canvas_height());
+    return 2;
+}
+
+static int rl_turtle_drawme(lua_State *L) {
+    trtl_draw_me(lua_turtle_getobj(L));
+    return 0;
+}
+
 // TODO: Implement trtl_circle in turtle.h
 // static int rl_turtle_circle(lua_State *L) { ... }
 // TODO: Implement trtl_arc in turtle.h
@@ -222,22 +360,22 @@ static const luaL_Reg PicoTurtle_funcs[] =
 static const luaL_Reg PicoTurtle_meths[] =
     {
         {"__gc", rl_trtl_free},
-        // {"getwidth", skia_turtle_getwidth}, // TODO
-        // {"setwidth", skia_turtle_setwidth}, // TODO
-        // {"getheight", skia_turtle_getheight}, // TODO
-        // {"setheight", skia_turtle_setheight}, // TODO
+        {"getwidth", rl_turtle_getwidth},
+        {"setwidth", rl_turtle_setwidth},
+        {"getheight", rl_turtle_getheight},
+        {"setheight", rl_turtle_setheight},
         {"penup", rl_turtle_penup},
         {"pu", rl_turtle_penup},
         {"pendown", rl_turtle_pendown},
         {"pd", rl_turtle_pendown},
-        // {"penwidth", rl_turtle_penwidth}, // TODO
-        // {"pw", rl_turtle_penwidth}, // TODO
-        // {"pencolor", rl_turtle_pencolor}, // TODO
-        // {"pc", rl_turtle_pencolor}, // TODO
-        // {"stop", skia_turtle_stop}, // TODO
-        // {"home", rl_turtle_home}, // TODO
-        // {"clear", rl_turtle_clear}, // TODO
-        // {"reset", rl_turtle_reset}, // TODO
+        {"penwidth", rl_turtle_penwidth},
+        {"pw", rl_turtle_penwidth},
+        {"pencolor", rl_turtle_pencolor},
+        {"pc", rl_turtle_pencolor},
+        {"stop", rl_turtle_stop},
+        {"home", rl_turtle_home},
+        {"clear", rl_turtle_clear},
+        {"reset", rl_turtle_reset},
         {"forward", rl_turtle_forward},
         {"fd", rl_turtle_forward},
         {"back", rl_turtle_back},
@@ -251,20 +389,20 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"rt", rl_turtle_right},
         {"left", rl_turtle_left},
         {"lt", rl_turtle_left},
-        // {"heading", rl_turtle_heading}, // TODO
+        {"heading", rl_turtle_heading},
         // {"export_img", skia_turtle_export_img}, // TODO
         // {"snap", skia_turtle_export_img}, // TODO
         // {"font", skia_turtle_font}, // TODO
         // {"filltext", skia_turtle_filltext}, // TODO
         // {"stroketext", skia_turtle_stroketext}, // TODO
-        // {"canvas_size", skia_turtle_canvas_size}, // TODO
+        {"canvas_size", rl_turtle_canvas_size},
         // {"state", skia_turtle_state}, // TODO
         // {"save", skia_turtle_save}, // TODO
         // {"restore", skia_turtle_restore}, // TODO
         // {"elapsed_time_ms", skia_turtle_elapsed_time_ms}, // TODO
         // {"delay", skia_turtle_delay}, // TODO
         // {"paint", skia_turtle_paint}, // TODO
-        // {"drawme", skia_turtle_drawme}, // TODO
+        {"drawme", rl_turtle_drawme},
         // {"circle", rl_turtle_circle}, // TODO
         // {"arc", rl_turtle_arc}, // TODO
         // {"enable_update", skia_turtle_enable_update}, // TODO

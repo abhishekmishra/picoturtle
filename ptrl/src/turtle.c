@@ -80,8 +80,8 @@ void trtl_make_colour_from_name(trtl_colour_t **col, const char *name) {
     uint8_t r = 0, g = 0, b = 0;
     int found = color_name_get_rgb(name, &r, &g, &b);
     if (!found) {
-        // If not found, use black as fallback
-        r = g = b = 0;
+        *col = NULL;
+        return;
     }
     trtl_make_colour(col, r, g, b, 255, name);
 }
@@ -452,23 +452,31 @@ void trtl_right(trtl_t *turtle, float angle) {
 
 void trtl_reset(trtl_t *turtle) {
     if (turtle) {
-        trtl_pen_up(turtle);
-        if (turtle->runtime != NULL) {
-            trtl_set_position(
-                turtle,
-                (float)turtle->runtime->canvas_width / 2.0f,
-                (float)turtle->runtime->canvas_height / 2.0f
-            );
-        } else {
-            trtl_set_position(turtle, 0.0f, 0.0f);
-        }
+        trtl_home(turtle);
         trtl_heading(turtle, 90.0);
         trtl_pen_down(turtle);
         if (turtle->current_state) {
             trtl_state_set_pen_width(turtle->current_state, 1.0f);
         }
-        // Not resetting pen_colour here, as it may be user-defined
+        if (turtle->runtime != NULL) {
+            ptrl_runtime_clear(turtle->runtime, RAYWHITE);
+        }
     }
+}
+
+void trtl_home(trtl_t *turtle) {
+    if (turtle == NULL || turtle->current_state == NULL) {
+        return;
+    }
+
+    float x = 0.0f;
+    float y = 0.0f;
+    if (turtle->runtime != NULL) {
+        x = (float)turtle->runtime->canvas_width / 2.0f;
+        y = (float)turtle->runtime->canvas_height / 2.0f;
+    }
+    trtl_location_set_x(turtle->current_state->location, x);
+    trtl_location_set_y(turtle->current_state->location, y);
 }
 
 // pen state functions
@@ -558,15 +566,17 @@ void trtl_draw_info(const trtl_t *turtle)
     }
 }
 
-void trtl_colour(trtl_t *turtle, const char *name) {
+int trtl_colour(trtl_t *turtle, const char *name) {
     if (turtle && turtle->current_state) {
         trtl_colour_t *new_col = NULL;
         trtl_make_colour_from_name(&new_col, name);
         if (new_col) {
             trtl_free_colour(turtle->current_state->pen_colour);
             turtle->current_state->pen_colour = new_col;
+            return 1;
         }
     }
+    return 0;
 }
 
 void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
@@ -643,6 +653,13 @@ int trtl_get_canvas_height(void) {
     return runtime != NULL ? runtime->canvas_height : 0;
 }
 
+int trtl_set_canvas_size(trtl_t *turtle, int width, int height) {
+    if (turtle == NULL || turtle->runtime == NULL) {
+        return 0;
+    }
+    return ptrl_runtime_resize(turtle->runtime, width, height) ? 1 : 0;
+}
+
 // canvas clear function
 void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name)
 {
@@ -654,9 +671,6 @@ void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name)
         Color color = trtl_colour_get_raylib_color(col);
         ptrl_runtime_clear(turtle->runtime, color);
         trtl_free_colour(col);
-    } else {
-        // If the color is not found, clear with black
-        ptrl_runtime_clear(turtle->runtime, BLACK);
     }
 }
 

@@ -109,7 +109,7 @@ double trtl_get_canvas_heading(const trtl_t *turtle);
 float trtl_get_canvas_location_x(const trtl_t *turtle);
 float trtl_get_canvas_location_y(const trtl_t *turtle);
 float trtl_get_pen_width(const trtl_t *turtle);
-void trtl_colour(trtl_t *turtle, const char *name);
+int trtl_colour(trtl_t *turtle, const char *name);
 void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 // drawing miscellaneous functions
@@ -117,6 +117,7 @@ void trtl_draw_me(const trtl_t *turtle);
 
 // reset the turtle to its initial state
 void trtl_reset(trtl_t *turtle);
+void trtl_home(trtl_t *turtle);
 
 // movement functions
 // with pen movement
@@ -157,8 +158,7 @@ const char* trtl_get_font(const trtl_t *turtle);
 // canvas size related functions
 int trtl_get_canvas_width(void);
 int trtl_get_canvas_height(void);
-// TODO: implement later after thinking of good way to handle hidpi
-// void trtl_set_canvas_size(int width, int height);
+int trtl_set_canvas_size(trtl_t *turtle, int width, int height);
 
 // canvas clear function
 void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name);

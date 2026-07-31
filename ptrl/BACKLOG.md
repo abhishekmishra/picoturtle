@@ -50,17 +50,17 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Restore the initial position at the centre of the canvas.
   - [x] Restore the initial heading of 90 degrees, facing upward.
   - [x] Make `setpos`, `setx`, and `sety` draw when the pen is down.
-  - [ ] Implement and bind `getwidth`, `setwidth`, `getheight`, and `setheight`.
-  - [ ] Implement and bind `canvas_size`.
+  - [x] Implement and bind `getwidth`, `setwidth`, `getheight`, and `setheight`.
+  - [x] Implement and bind `canvas_size`.
   - [x] Implement and bind `penup`/`pu` and `pendown`/`pd`.
-  - [ ] Implement and bind `penwidth`/`pw`.
-  - [ ] Implement and bind named and RGB forms of `pencolor`/`pc`.
-  - [ ] Implement and bind `home`, `clear`, `reset`, and the compatibility
+  - [x] Implement and bind `penwidth`/`pw`.
+  - [x] Implement and bind named and RGB forms of `pencolor`/`pc`.
+  - [x] Implement and bind `home`, `clear`, `reset`, and the compatibility
         no-op `stop`.
   - [x] Implement and bind `forward`/`fd` and `back`/`bk`.
   - [x] Implement and bind `setpos`, `setx`, `sety`, `getx`, and `gety`.
-  - [ ] Implement and bind `left`/`lt`, `right`/`rt`, and `heading`.
-  - [ ] Implement and bind `drawme`.
+  - [x] Implement and bind `left`/`lt`, `right`/`rt`, and `heading`.
+  - [x] Implement and bind `drawme`.
   - [ ] Verify `turtle_basic.lua`, `spiral.lua`, `tree.lua`,
         `sierpinski.lua`, and `polygons.lua`.
 
