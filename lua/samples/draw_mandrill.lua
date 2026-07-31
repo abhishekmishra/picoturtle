@@ -8,5 +8,5 @@
 local t = t or require'picoturtle'.new()
 
 t:pu()
-t:setpos(256, 256)
+t:setpos(256, 768)
 t:pic("res/images/mandrill.png")

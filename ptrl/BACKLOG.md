@@ -94,10 +94,10 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Add TurtleImage Lua userdata with deterministic texture cleanup.
   - [x] Implement and bind `loadpic`.
   - [x] Implement `pic` for both an image userdata object and an image path.
-  - [ ] Verify `fern.lua`, `text-demo.lua`, `draw_mandrill.lua`, and
-        `draw_mandrill_move.lua`.
+  - [x] Verify `draw_mandrill.lua` and `draw_mandrill_move.lua`.
+  - [ ] Verify `fern.lua` and `text-demo.lua`.
 
-- [ ] Milestone 5: Restore presentation and animation semantics
+- [x] Milestone 5: Restore presentation and animation semantics
   - [x] Define when drawing operations update the visible window.
   - [x] Implement and bind `enable_update` and `disable_update`.
   - [x] Implement and bind `paint` as an immediate presentation and event-poll
@@ -108,7 +108,7 @@ item must either be completed or deliberately moved to a later release backlog.
         window-close events.
   - [x] Define behaviour when the user closes the window while Lua is still
         executing.
-  - [ ] Verify animation using `draw_mandrill_move.lua`.
+  - [x] Verify animation using `draw_mandrill_move.lua`.
 
 - [ ] Milestone 6: Complete compatibility, tests, and release preparation
   - [ ] Choose a low-maintenance GIF encoding implementation.
