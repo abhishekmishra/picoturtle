@@ -23,7 +23,7 @@ else
 endif
 
 ifeq ($(OSFLAG),WIN32)
-	CMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
+	CMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 else
 	CMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
 endif
@@ -43,7 +43,11 @@ genbuild:
 	cmake . -B $(CMAKE_BUILD_DIR) $(CMAKE_PRJ_FLAGS)
 
 delbuild:
+ifeq ($(OSFLAG),WIN32)
+	pwsh -C "rm -fo -R $(CMAKE_BUILD_DIR)"
+else
 	rm -fR $(CMAKE_BUILD_DIR)
+endif
 
 build:
 ifeq ($(OSFLAG),WIN32)
