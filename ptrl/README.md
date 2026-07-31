@@ -25,7 +25,12 @@ The normal windowed mode creates a persistent Raylib canvas, executes the Lua
 program, displays the completed canvas, and keeps the window responsive until
 the user closes it or presses Escape.
 
-The `-o`/`--output` option is reserved for PNG export and is not active yet.
+Use `-o`/`--output` to export the completed canvas before the window enters its
+display loop:
+
+```sh
+./build/ptrl -o drawing.png ../lua/samples/polygons.lua
+```
 
 ## Planned non-interactive mode
 

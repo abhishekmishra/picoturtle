@@ -44,7 +44,8 @@ int main(void) {
         "lua/samples/spiral.lua",
         "lua/samples/tree.lua",
         "lua/samples/sierpinski.lua",
-        "lua/samples/polygons.lua"
+        "lua/samples/polygons.lua",
+        "lua/samples/save_restore.lua"
     };
     const size_t sample_count = sizeof(samples) / sizeof(samples[0]);
 

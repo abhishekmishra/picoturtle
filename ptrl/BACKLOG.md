@@ -65,20 +65,20 @@ item must either be completed or deliberately moved to a later release backlog.
         `sierpinski.lua`, and `polygons.lua`.
 
 - [ ] Milestone 3: Add state, shapes, timing, and image export
-  - [ ] Add deep-copy helpers for turtle location, colour, font, and state.
-  - [ ] Add a dynamically sized saved-state stack to each turtle.
-  - [ ] Implement and bind `save` and `restore`.
-  - [ ] Implement the detached TurtleState Lua userdata and its `__gc` and
+  - [x] Add deep-copy helpers for turtle location, colour, font, and state.
+  - [x] Add a dynamically sized saved-state stack to each turtle.
+  - [x] Implement and bind `save` and `restore`.
+  - [x] Implement the detached TurtleState Lua userdata and its `__gc` and
         `__tostring` behaviour.
-  - [ ] Implement TurtleState accessors `x`, `y`, `a`, `r`, `g`, `b`,
+  - [x] Implement TurtleState accessors `x`, `y`, `a`, `r`, `g`, `b`,
         `heading`/`hd`, `pd`, and `pw`.
   - [x] Implement and bind `circle` with the current pen colour and width.
   - [x] Port and bind all `arc` forms: radius; radius and extent; radius,
         extent, and steps.
-  - [ ] Track turtle creation time and bind `elapsed_time_ms`.
-  - [ ] Implement PNG export from the render texture, including vertical
+  - [x] Track turtle creation time and bind `elapsed_time_ms`.
+  - [x] Implement PNG export from the render texture, including vertical
         orientation correction.
-  - [ ] Bind PNG export as `export_img` and `snap`.
+  - [x] Bind PNG export as `export_img` and `snap`.
   - [ ] Verify `save_restore.lua` and exported image dimensions and
         orientation.
 

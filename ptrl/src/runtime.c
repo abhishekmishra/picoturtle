@@ -112,6 +112,23 @@ bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height) {
     return true;
 }
 
+bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename) {
+    if (runtime == NULL || !runtime->initialized ||
+        filename == NULL || filename[0] == '\0') {
+        return false;
+    }
+
+    Image image = LoadImageFromTexture(runtime->canvas.texture);
+    if (image.data == NULL) {
+        return false;
+    }
+
+    ImageFlipVertical(&image);
+    bool exported = ExportImage(image, filename);
+    UnloadImage(image);
+    return exported;
+}
+
 void ptrl_runtime_present(ptrl_runtime_t *runtime) {
     if (runtime == NULL || !runtime->initialized) {
         return;

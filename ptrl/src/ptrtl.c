@@ -15,8 +15,6 @@
 
 #define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
 
-#define PTRTL_OPT_IMGFILE_DEFAULT   "turtle.png"
-
 typedef struct {
     const char *program_path;
     const char *output_path;
@@ -30,9 +28,8 @@ static void print_usage(const char *program_name)
         "PicoTurtle (experimental Raylib version)\n\n"
         "Options:\n"
         "  -h, --help           Print this help.\n"
-        "  -o, --output PATH    PNG output path (default: %s).\n",
-        program_name,
-        PTRTL_OPT_IMGFILE_DEFAULT
+        "  -o, --output PATH    Export the completed canvas to PNG.\n",
+        program_name
     );
 }
 
@@ -42,7 +39,7 @@ static bool parse_cli_options(
     ptrl_cli_options_t *options
 ) {
     options->program_path = NULL;
-    options->output_path = PTRTL_OPT_IMGFILE_DEFAULT;
+    options->output_path = NULL;
     options->show_help = false;
 
     for (int i = 1; i < argc; i++) {
@@ -301,7 +298,7 @@ int init_turtle_lua_binding(lua_State *L)
 }
 
 
-int ptrtl_main(const char *program_path)
+int ptrtl_main(const char *program_path, const char *output_path)
 {
     ptrl_runtime_t runtime;
     if (!ptrl_runtime_init(
@@ -329,6 +326,15 @@ int ptrtl_main(const char *program_path)
                 cleanup_lua(L);
                 ptrl_runtime_destroy(&runtime);
                 printf("Error executing Turtle Lua program.\n");
+                return EXIT_FAILURE;
+            }
+
+            if (output_path != NULL &&
+                !ptrl_runtime_export_png(&runtime, output_path))
+            {
+                cleanup_lua(L);
+                ptrl_runtime_destroy(&runtime);
+                printf("Error exporting the canvas to %s.\n", output_path);
                 return EXIT_FAILURE;
             }
 
@@ -369,7 +375,5 @@ int main(int argc, char* argv[])
         return EXIT_SUCCESS;
     }
 
-    // The output path becomes active when PNG export is implemented.
-    (void)options.output_path;
-    return ptrtl_main(options.program_path);
+    return ptrtl_main(options.program_path, options.output_path);
 }

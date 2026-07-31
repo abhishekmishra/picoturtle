@@ -52,4 +52,6 @@ if(BUILD_TESTING)
     )
 
     add_test(NAME ptrl_cli_help COMMAND ptrl --help)
+    add_test(NAME ptrl_cli_missing_output COMMAND ptrl -o)
+    set_tests_properties(ptrl_cli_missing_output PROPERTIES WILL_FAIL TRUE)
 endif()

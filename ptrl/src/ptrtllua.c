@@ -148,6 +148,18 @@ static trtl_t *lua_turtle_getobj(lua_State *L) {
     return t;
 }
 
+static trtl_state_t *lua_turtle_state_getobj(lua_State *L) {
+    trtl_state_t **state_ptr = (trtl_state_t **)luaL_checkudata(
+        L,
+        1,
+        LUA_TURTLE_STATE_OBJECT
+    );
+    if (state_ptr == NULL || *state_ptr == NULL) {
+        luaL_typeerror(L, 1, LUA_TURTLE_STATE_OBJECT);
+    }
+    return *state_ptr;
+}
+
 // --- Implemented functions ---
 static int rl_turtle_penup(lua_State *L) {
     require_method_args(L, 0, "penup");
@@ -418,6 +430,144 @@ static int rl_turtle_arc(lua_State *L) {
     return 0;
 }
 
+static int rl_turtle_state(lua_State *L) {
+    require_method_args(L, 0, "state");
+    trtl_t *t = lua_turtle_getobj(L);
+    trtl_state_t *copy = NULL;
+    if (!trtl_copy_state(t->current_state, &copy)) {
+        return luaL_error(L, "unable to copy turtle state");
+    }
+
+    trtl_state_t **state_ptr = (trtl_state_t **)lua_newuserdata(
+        L,
+        sizeof(*state_ptr)
+    );
+    *state_ptr = copy;
+    luaL_getmetatable(L, LUA_TURTLE_STATE_OBJECT);
+    lua_setmetatable(L, -2);
+    return 1;
+}
+
+static int rl_turtle_save(lua_State *L) {
+    require_method_args(L, 0, "save");
+    if (!trtl_save(lua_turtle_getobj(L))) {
+        return luaL_error(L, "unable to save turtle state");
+    }
+    return 0;
+}
+
+static int rl_turtle_restore(lua_State *L) {
+    require_method_args(L, 0, "restore");
+    trtl_restore(lua_turtle_getobj(L));
+    return 0;
+}
+
+static int rl_turtle_elapsed_time_ms(lua_State *L) {
+    require_method_args(L, 0, "elapsed_time_ms");
+    lua_pushinteger(
+        L,
+        (lua_Integer)trtl_elapsed_time_ms(lua_turtle_getobj(L))
+    );
+    return 1;
+}
+
+static int rl_turtle_export_img(lua_State *L) {
+    require_method_args(L, 1, "export_img");
+    trtl_t *t = lua_turtle_getobj(L);
+    const char *filename = luaL_checkstring(L, 2);
+    if (!ptrl_runtime_export_png(t->runtime, filename)) {
+        return luaL_error(L, "unable to export canvas to %s", filename);
+    }
+    lua_pushstring(L, filename);
+    return 1;
+}
+
+static int rl_turtle_state_free(lua_State *L) {
+    trtl_state_t **state_ptr = (trtl_state_t **)luaL_checkudata(
+        L,
+        1,
+        LUA_TURTLE_STATE_OBJECT
+    );
+    if (state_ptr != NULL && *state_ptr != NULL) {
+        trtl_free_state(*state_ptr);
+        *state_ptr = NULL;
+    }
+    return 0;
+}
+
+static int rl_turtle_state_x(lua_State *L) {
+    require_method_args(L, 0, "x");
+    lua_pushnumber(L, lua_turtle_state_getobj(L)->location->x);
+    return 1;
+}
+
+static int rl_turtle_state_y(lua_State *L) {
+    require_method_args(L, 0, "y");
+    lua_pushnumber(L, lua_turtle_state_getobj(L)->location->y);
+    return 1;
+}
+
+static int rl_turtle_state_a(lua_State *L) {
+    require_method_args(L, 0, "a");
+    lua_pushinteger(L, lua_turtle_state_getobj(L)->pen_colour->a);
+    return 1;
+}
+
+static int rl_turtle_state_r(lua_State *L) {
+    require_method_args(L, 0, "r");
+    lua_pushinteger(L, lua_turtle_state_getobj(L)->pen_colour->r);
+    return 1;
+}
+
+static int rl_turtle_state_g(lua_State *L) {
+    require_method_args(L, 0, "g");
+    lua_pushinteger(L, lua_turtle_state_getobj(L)->pen_colour->g);
+    return 1;
+}
+
+static int rl_turtle_state_b(lua_State *L) {
+    require_method_args(L, 0, "b");
+    lua_pushinteger(L, lua_turtle_state_getobj(L)->pen_colour->b);
+    return 1;
+}
+
+static int rl_turtle_state_heading(lua_State *L) {
+    require_method_args(L, 0, "heading");
+    lua_pushnumber(L, lua_turtle_state_getobj(L)->heading);
+    return 1;
+}
+
+static int rl_turtle_state_pd(lua_State *L) {
+    require_method_args(L, 0, "pd");
+    lua_pushboolean(L, lua_turtle_state_getobj(L)->pen_down);
+    return 1;
+}
+
+static int rl_turtle_state_pw(lua_State *L) {
+    require_method_args(L, 0, "pw");
+    lua_pushnumber(L, lua_turtle_state_getobj(L)->pen_width);
+    return 1;
+}
+
+static int rl_turtle_state_tostring(lua_State *L) {
+    require_method_args(L, 0, "__tostring");
+    trtl_state_t *state = lua_turtle_state_getobj(L);
+    lua_pushfstring(
+        L,
+        "Turtle state [loc=(%f, %f), col=(%s, %d, %d, %d), "
+        "pen(down=%d, width=%f)]",
+        state->location->x,
+        state->location->y,
+        trtl_colour_get_name(state->pen_colour),
+        state->pen_colour->r,
+        state->pen_colour->g,
+        state->pen_colour->b,
+        state->pen_down,
+        state->pen_width
+    );
+    return 1;
+}
+
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", rl_trtl_new},
@@ -458,16 +608,16 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"left", rl_turtle_left},
         {"lt", rl_turtle_left},
         {"heading", rl_turtle_heading},
-        // {"export_img", skia_turtle_export_img}, // TODO
-        // {"snap", skia_turtle_export_img}, // TODO
+        {"export_img", rl_turtle_export_img},
+        {"snap", rl_turtle_export_img},
         // {"font", skia_turtle_font}, // TODO
         // {"filltext", skia_turtle_filltext}, // TODO
         // {"stroketext", skia_turtle_stroketext}, // TODO
         {"canvas_size", rl_turtle_canvas_size},
-        // {"state", skia_turtle_state}, // TODO
-        // {"save", skia_turtle_save}, // TODO
-        // {"restore", skia_turtle_restore}, // TODO
-        // {"elapsed_time_ms", skia_turtle_elapsed_time_ms}, // TODO
+        {"state", rl_turtle_state},
+        {"save", rl_turtle_save},
+        {"restore", rl_turtle_restore},
+        {"elapsed_time_ms", rl_turtle_elapsed_time_ms},
         // {"delay", skia_turtle_delay}, // TODO
         // {"paint", skia_turtle_paint}, // TODO
         {"drawme", rl_turtle_drawme},
@@ -477,6 +627,21 @@ static const luaL_Reg PicoTurtle_meths[] =
         // {"disable_update", skia_turtle_disable_update}, // TODO
         // {"loadpic", skia_turtle_loadpic}, // TODO
         // {"pic", skia_turtle_pic}, // TODO
+        {NULL, NULL}};
+
+static const luaL_Reg TurtleState_meths[] =
+    {
+        {"__gc", rl_turtle_state_free},
+        {"x", rl_turtle_state_x},
+        {"y", rl_turtle_state_y},
+        {"a", rl_turtle_state_a},
+        {"r", rl_turtle_state_r},
+        {"g", rl_turtle_state_g},
+        {"b", rl_turtle_state_b},
+        {"heading", rl_turtle_state_heading},
+        {"hd", rl_turtle_state_heading},
+        {"pd", rl_turtle_state_pd},
+        {"pw", rl_turtle_state_pw},
         {NULL, NULL}};
 
 int luaopen_picoturtle(lua_State *L)
@@ -491,7 +656,13 @@ int luaopen_picoturtle(lua_State *L)
     // register methods
     luaL_setfuncs(L, PicoTurtle_meths, 0);
 
-    // TODO: TurtleState and TurtleImage metatables are commented out for now
+    luaL_newmetatable(L, LUA_TURTLE_STATE_OBJECT);
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    lua_pushcfunction(L, rl_turtle_state_tostring);
+    lua_setfield(L, -2, "__tostring");
+    luaL_setfuncs(L, TurtleState_meths, 0);
+    lua_pop(L, 1);
 
     // register functions - only turtle.new
     luaL_newlib(L, PicoTurtle_funcs);

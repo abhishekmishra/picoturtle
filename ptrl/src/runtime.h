@@ -30,6 +30,7 @@ void ptrl_runtime_begin_canvas(ptrl_runtime_t *runtime);
 void ptrl_runtime_end_canvas(ptrl_runtime_t *runtime);
 void ptrl_runtime_clear(ptrl_runtime_t *runtime, Color color);
 bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height);
+bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename);
 void ptrl_runtime_present(ptrl_runtime_t *runtime);
 bool ptrl_runtime_should_close(const ptrl_runtime_t *runtime);
 

@@ -1,5 +1,6 @@
 #include "turtle.h"
 #include "color_names.h"
+#include <time.h>
 
 #ifdef _MSC_VER
 #include <stdio.h>
@@ -8,6 +9,13 @@
 #include <stdio.h>
 #define snprintf_safe(dest, size, fmt, ...) snprintf(dest, size, fmt, __VA_ARGS__)
 #endif
+
+static uint64_t current_time_ms(void) {
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return ((uint64_t)now.tv_sec * 1000u) +
+        ((uint64_t)now.tv_nsec / 1000000u);
+}
 
 float trtl_location_get_x(const trtl_location_t *loc) {
     return loc->x;
@@ -145,6 +153,45 @@ void trtl_make_state(trtl_state_t **state) {
     }
 }
 
+int trtl_copy_state(const trtl_state_t *source, trtl_state_t **destination) {
+    if (source == NULL || destination == NULL) {
+        return 0;
+    }
+
+    trtl_state_t *copy = NULL;
+    trtl_make_state(&copy);
+    if (copy == NULL) {
+        return 0;
+    }
+
+    trtl_location_set_x(copy->location, trtl_location_get_x(source->location));
+    trtl_location_set_y(copy->location, trtl_location_get_y(source->location));
+
+    trtl_free_colour(copy->pen_colour);
+    copy->pen_colour = NULL;
+    trtl_make_colour(
+        &copy->pen_colour,
+        source->pen_colour->r,
+        source->pen_colour->g,
+        source->pen_colour->b,
+        source->pen_colour->a,
+        trtl_colour_get_name(source->pen_colour)
+    );
+    if (copy->pen_colour == NULL) {
+        trtl_free_state(copy);
+        return 0;
+    }
+
+    copy->heading = source->heading;
+    copy->pen_down = source->pen_down;
+    copy->pen_width = source->pen_width;
+    copy->font_size = source->font_size;
+    trtl_state_set_font_name(copy, source->font_name);
+
+    *destination = copy;
+    return 1;
+}
+
 void trtl_free_state(trtl_state_t *state) {
     if (state != NULL) {
         trtl_free_location(state->location);
@@ -222,7 +269,10 @@ void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id) {
         if ((*turtle)->id != NULL) {
             strcpy((*turtle)->id, id);
         }
-        (*turtle)->start_time = 0;
+        (*turtle)->saved_states = NULL;
+        (*turtle)->saved_state_count = 0;
+        (*turtle)->saved_state_capacity = 0;
+        (*turtle)->start_time_ms = current_time_ms();
         (*turtle)->runtime = ptrl_runtime_get_default();
         trtl_make_state(&(*turtle)->current_state);
         if ((*turtle)->current_state != NULL) {
@@ -234,6 +284,10 @@ void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id) {
 void trtl_free_turtle(trtl_t *turtle) {
     if (turtle != NULL) {
         trtl_free_state(turtle->current_state);
+        for (size_t index = 0; index < turtle->saved_state_count; index++) {
+            trtl_free_state(turtle->saved_states[index]);
+        }
+        free(turtle->saved_states);
         if (turtle->name != NULL) {
             free(turtle->name);
         }
@@ -481,6 +535,56 @@ void trtl_home(trtl_t *turtle) {
     trtl_location_set_y(turtle->current_state->location, y);
 }
 
+int trtl_save(trtl_t *turtle) {
+    if (turtle == NULL || turtle->current_state == NULL) {
+        return 0;
+    }
+
+    trtl_state_t *copy = NULL;
+    if (!trtl_copy_state(turtle->current_state, &copy)) {
+        return 0;
+    }
+
+    if (turtle->saved_state_count == turtle->saved_state_capacity) {
+        size_t new_capacity = turtle->saved_state_capacity == 0
+            ? 4
+            : turtle->saved_state_capacity * 2;
+        trtl_state_t **new_states = realloc(
+            turtle->saved_states,
+            new_capacity * sizeof(*new_states)
+        );
+        if (new_states == NULL) {
+            trtl_free_state(copy);
+            return 0;
+        }
+        turtle->saved_states = new_states;
+        turtle->saved_state_capacity = new_capacity;
+    }
+
+    turtle->saved_states[turtle->saved_state_count++] = copy;
+    return 1;
+}
+
+int trtl_restore(trtl_t *turtle) {
+    if (turtle == NULL || turtle->saved_state_count == 0) {
+        return 0;
+    }
+
+    trtl_state_t *restored =
+        turtle->saved_states[--turtle->saved_state_count];
+    trtl_free_state(turtle->current_state);
+    turtle->current_state = restored;
+    return 1;
+}
+
+uint64_t trtl_elapsed_time_ms(const trtl_t *turtle) {
+    if (turtle == NULL) {
+        return 0;
+    }
+    uint64_t now = current_time_ms();
+    return now >= turtle->start_time_ms ? now - turtle->start_time_ms : 0;
+}
+
 // pen state functions
 void trtl_pen_down(trtl_t *turtle) {
     if (turtle && turtle->current_state) {
@@ -566,7 +670,8 @@ void trtl_print_info(const trtl_t *turtle)
     if (turtle != NULL) {
         printf("Turtle Name: %s\n", turtle->name ? turtle->name : "Unknown");
         printf("Turtle ID: %s\n", turtle->id ? turtle->id : "Unknown");
-        printf("Start Time: %ld\n", turtle->start_time);
+        printf("Start Time: %llu ms\n",
+               (unsigned long long)turtle->start_time_ms);
         if (turtle->current_state != NULL) {
             printf("Current Heading: %.2f\n", trtl_state_get_heading(turtle->current_state));
             printf("Pen Down: %s\n", trtl_state_is_pen_down(turtle->current_state) ? "Yes" : "No");

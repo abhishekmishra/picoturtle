@@ -80,6 +80,7 @@ typedef struct {
 } trtl_state_t;
 
 void trtl_make_state(trtl_state_t **state);
+int trtl_copy_state(const trtl_state_t *source, trtl_state_t **destination);
 void trtl_free_state(trtl_state_t *state);
 trtl_location_t* trtl_state_get_location(const trtl_state_t *state);
 trtl_colour_t* trtl_state_get_pen_colour(const trtl_state_t *state);
@@ -89,13 +90,20 @@ int trtl_state_is_pen_down(const trtl_state_t *state);
 void trtl_state_set_pen_down(trtl_state_t *state, int pen_down);
 float trtl_state_get_pen_width(const trtl_state_t *state);
 void trtl_state_set_pen_width(trtl_state_t *state, float pen_width);
+int trtl_state_get_font_size(const trtl_state_t *state);
+void trtl_state_set_font_size(trtl_state_t *state, int size);
+const char* trtl_state_get_font_name(const trtl_state_t *state);
+void trtl_state_set_font_name(trtl_state_t *state, const char *font_name);
 
 /*------------ trtl_t --------------*/
 typedef struct {
     trtl_state_t *current_state;
+    trtl_state_t **saved_states;
+    size_t saved_state_count;
+    size_t saved_state_capacity;
     char* name;
     char* id;
-    long start_time;
+    uint64_t start_time_ms;
     ptrl_runtime_t *runtime;
 } trtl_t;
 
@@ -118,6 +126,9 @@ void trtl_draw_me(const trtl_t *turtle);
 // reset the turtle to its initial state
 void trtl_reset(trtl_t *turtle);
 void trtl_home(trtl_t *turtle);
+int trtl_save(trtl_t *turtle);
+int trtl_restore(trtl_t *turtle);
+uint64_t trtl_elapsed_time_ms(const trtl_t *turtle);
 
 // movement functions
 // with pen movement
