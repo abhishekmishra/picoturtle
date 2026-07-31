@@ -1,23 +1,12 @@
 {
   "dependencies": [
-    "graphicsmagick",
     {
       "name": "lua",
       "features": [
         "tools"
       ]
     },
-    {
-      "name": "qtbase",
-      "default-features": false,
-      "features": [
-        "jpeg",
-        "png",
-        "widgets",
-        "harfbuzz",
-        "opengl"
-      ]
-    },
-    "skia"
+    "raylib",
+    "glfw3"
   ]
 }

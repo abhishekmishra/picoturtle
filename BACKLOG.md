@@ -14,8 +14,8 @@ item must either be completed or deliberately moved to a later release backlog.
 
 ## Definition of done
 
-- The Raylib runtime builds reproducibly on macOS through the existing
-  `ptrl/Makefile` and vcpkg setup.
+- The Raylib runtime builds reproducibly on macOS through the root Makefile
+  and vcpkg setup.
 - Existing PicoTurtle Lua programs can run without depending on Qt or Skia.
 - Every public Lua method from the original PicoTurtle implementation is either
   supported or explicitly documented as deprecated with a replacement.
@@ -115,16 +115,16 @@ item must either be completed or deliberately moved to a later release backlog.
 
   Repository promotion and naming:
 
-  - [ ] Create an annotated pre-migration tag at the last known-good Raylib
+  - [x] Create an annotated pre-migration tag at the last known-good Raylib
         implementation before removing legacy files.
   - [ ] Make `PicoTurtle` and `picoturtle` the only product and executable
         names; remove the experimental `ptrl` and `ptrtl` names.
   - [ ] Rename private C types, functions, source files, test targets, and
         diagnostics from `ptrl`/`ptrtl` to `picoturtle` for a coherent
         first-class codebase.
-  - [ ] Promote the Raylib `src/`, `test/`, `res/`, CMake project, Makefile,
+  - [x] Promote the Raylib `src/`, `test/`, `res/`, CMake project, Makefile,
         vcpkg manifests, and triplets from `ptrl/` to the repository root.
-  - [ ] Move this backlog to the repository root and update every path in it.
+  - [x] Move this backlog to the repository root and update every path in it.
   - [ ] Set the CMake project version to `0.3.0` and expose the
         `matrix-goose` codename in version/help output.
   - [ ] Make root-level `make genbuild`, `make build`, `make test`, and
@@ -141,12 +141,12 @@ item must either be completed or deliberately moved to a later release backlog.
 
   - [x] Remove GIF creation from 0.3.0 scope rather than retaining the
         GraphicsMagick dependency; document `picoturtle.makegif` as deprecated.
-  - [ ] Delete the original Skia/Qt renderer, IDE, editor, REPL, and GUI source
+  - [x] Delete the original Skia/Qt renderer, IDE, editor, REPL, and GUI source
         after the Raylib implementation is promoted.
   - [ ] Delete obsolete Qt resources, platform launchers, Skia CMake helpers,
         and Skia/Qt-only license files while preserving reusable images and
         Lua samples.
-  - [ ] Replace the legacy root CMake, Makefile, and vcpkg manifest rather than
+  - [x] Replace the legacy root CMake, Makefile, and vcpkg manifest rather than
         retaining two competing build systems.
   - [ ] Remove Skia, Qt, GraphicsMagick, `coll`, and `zclk` from all active
         build files and documentation.
