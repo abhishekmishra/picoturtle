@@ -18,9 +18,9 @@ for i = 1, 100, 5 do
 	t:save()
 	t:heading(i/5)
     if i%2 == 0 then
-        t:font('Nirmala UI', fs)
+        t:font('Noto Sans', fs)
         t:pencolor(255, 128, 128)
-        t:filltext('पीको टर्टल')
+        t:filltext('PicoTurtle')
     else
         t:font('Calibri', fs)
         t:pencolor(255, 128, 255)

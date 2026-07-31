@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <raylib.h>
 
+typedef struct ptrl_font_cache ptrl_font_cache_t;
+
 #define PTRTL_DEFAULT_CANVAS_WIDTH 1024
 #define PTRTL_DEFAULT_CANVAS_HEIGHT 1024
 
@@ -15,6 +17,7 @@ typedef struct ptrl_runtime {
     bool initialized;
     bool update_enabled;
     bool close_requested;
+    ptrl_font_cache_t *font_cache;
 } ptrl_runtime_t;
 
 bool ptrl_runtime_init(

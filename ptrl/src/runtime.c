@@ -1,4 +1,5 @@
 #include "runtime.h"
+#include "font.h"
 
 #include <stddef.h>
 
@@ -21,6 +22,7 @@ bool ptrl_runtime_init(
     runtime->initialized = false;
     runtime->update_enabled = true;
     runtime->close_requested = false;
+    runtime->font_cache = NULL;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(width, height, title);
@@ -50,6 +52,7 @@ void ptrl_runtime_destroy(ptrl_runtime_t *runtime) {
         default_runtime = NULL;
     }
 
+    ptrl_font_cache_destroy(&runtime->font_cache);
     UnloadRenderTexture(runtime->canvas);
     CloseWindow();
     runtime->canvas = (RenderTexture2D){0};

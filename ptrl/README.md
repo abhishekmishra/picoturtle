@@ -26,6 +26,25 @@ Relative file paths used by a Lua program are resolved from PicoTurtle's
 current working directory. For personal scripts, launch PicoTurtle from the
 directory against which those paths were written.
 
+## Fonts
+
+PicoTurtle uses Raylib font loading and bundles Noto Sans under the SIL Open
+Font License 1.1. The `font` method accepts a font name and pixel size:
+
+```lua
+t:font("Noto Sans", 32)
+t:filltext("PicoTurtle")
+```
+
+`default`, `normal`, and legacy Latin family names such as `Calibri`,
+`Consolas`, and `Courier` use the bundled Noto Sans font. A path to a `.ttf`
+or `.otf` file loads that font directly. Other unavailable family names fall
+back to Noto Sans so output remains portable.
+
+The 0.3.0 text API supports Latin-1. Complex scripts such as Devanagari are
+outside the release scope because Raylib does not provide the shaping needed
+to render them correctly.
+
 The normal windowed mode creates a persistent Raylib canvas, executes the Lua
 program, displays the completed canvas, and keeps the window responsive until
 the user closes it or presses Escape.

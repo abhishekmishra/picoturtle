@@ -1,5 +1,6 @@
 #include "turtle.h"
 #include "color_names.h"
+#include "font.h"
 #include <time.h>
 
 #ifdef _MSC_VER
@@ -767,9 +768,22 @@ void trtl_text(const trtl_t *turtle, const char *text) {
     float x = trtl_get_canvas_location_x(turtle);
     float y = trtl_get_canvas_location_y(turtle);
     float rotation = (float)trtl_get_canvas_heading(turtle);
-    // For now, use raylib's default font
+    Font font = ptrl_font_cache_get(
+        &turtle->runtime->font_cache,
+        trtl_state_get_font_name(state),
+        font_size
+    );
     ptrl_runtime_begin_canvas(turtle->runtime);
-    DrawTextPro(GetFontDefault(), text, (Vector2){x, y}, (Vector2){0, 0}, rotation, (float)font_size, 1, color);
+    DrawTextPro(
+        font,
+        text,
+        (Vector2){x, y},
+        (Vector2){0, 0},
+        rotation,
+        (float)font_size,
+        1,
+        color
+    );
     ptrl_runtime_end_canvas(turtle->runtime);
 }
 

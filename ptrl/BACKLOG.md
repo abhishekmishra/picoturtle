@@ -82,12 +82,13 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Verify `save_restore.lua` and exported image dimensions and
         orientation.
 
-- [ ] Milestone 4: Add text and picture support
-  - [ ] Define portable font behaviour for bundled fonts, font-file paths, and
+- [x] Milestone 4: Add text and picture support
+  - [x] Define portable font behaviour for bundled fonts, font-file paths, and
         unknown family names.
-  - [ ] Add a font cache with deterministic ownership and cleanup.
-  - [ ] Load the glyph ranges required by the supported Unicode samples.
-  - [ ] Implement and bind `font`.
+  - [x] Add a font cache with deterministic ownership and cleanup.
+  - [x] Load the Latin-1 glyph range supported by 0.3.0 and document complex
+        scripts such as Devanagari as out of scope.
+  - [x] Implement and bind `font`.
   - [x] Implement rotated text drawing at the turtle's logical position.
   - [x] Implement and bind `filltext`.
   - [x] Implement `stroketext` with documented compatibility behaviour.
@@ -95,7 +96,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Implement and bind `loadpic`.
   - [x] Implement `pic` for both an image userdata object and an image path.
   - [x] Verify `draw_mandrill.lua` and `draw_mandrill_move.lua`.
-  - [ ] Verify `fern.lua` and `text-demo.lua`.
+  - [x] Verify `fern.lua` and the Latin rendering in `text-demo.lua`.
 
 - [x] Milestone 5: Restore presentation and animation semantics
   - [x] Define when drawing operations update the visible window.
@@ -111,9 +112,8 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Verify animation using `draw_mandrill_move.lua`.
 
 - [ ] Milestone 6: Complete compatibility, tests, and release preparation
-  - [ ] Choose a low-maintenance GIF encoding implementation.
-  - [ ] Implement and bind `picoturtle.makegif`.
-  - [ ] Verify `gif_basic.lua`.
+  - [x] Remove GIF creation from 0.3.0 scope rather than retaining the
+        GraphicsMagick dependency; document `picoturtle.makegif` as deprecated.
   - [ ] Run maze generation as a large-canvas and text-rendering regression
         test.
   - [ ] Add unit tests for locations, colours, headings, movement, pen state,
