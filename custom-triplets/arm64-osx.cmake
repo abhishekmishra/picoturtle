@@ -6,5 +6,5 @@ set(VCPKG_LIBRARY_LINKAGE dynamic)
 set(VCPKG_CMAKE_SYSTEM_NAME Darwin)
 set(VCPKG_OSX_ARCHITECTURES arm64)
 
-# this is to support qt build on macos, which does not support macos 15 yet.
+# Keep deployment compatibility below the current development machine.
 set(VCPKG_OSX_DEPLOYMENT_TARGET 14.0)

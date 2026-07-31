@@ -6,47 +6,7 @@
 #include "turtle.h"
 #include "image.h"
 
-// TODO: uncomment when GifUtil.h is available
-// #include "GifUtil.h"
-
-
 //------LUA BINDING--------
-
-
-static void stackDump(lua_State *L)
-{
-    int i;
-    int top = lua_gettop(L); /* depth of the stack */
-    for (i = 1; i <= top; i++)
-    { /* repeat for each level */
-        int t = lua_type(L, i);
-        switch (t)
-        {
-        case LUA_TSTRING:
-        { /* strings */
-            printf("'%s'", lua_tostring(L, i));
-            break;
-        }
-        case LUA_TBOOLEAN:
-        { /* Booleans */
-            printf(lua_toboolean(L, i) ? "true" : "false");
-            break;
-        }
-        case LUA_TNUMBER:
-        { /* numbers */
-            printf("%g", lua_tonumber(L, i));
-            break;
-        }
-        default:
-        { /* other values */
-            printf("%s", lua_typename(L, t));
-            break;
-        }
-        }
-        printf(" "); /* put a separator */
-    }
-    printf("\n"); /* end the listing */
-}
 
 static void require_method_args(
     lua_State *L,
@@ -93,53 +53,6 @@ static int rl_trtl_new(lua_State *L)
     lua_setmetatable(L, -2);
     return 1;
 }
-
-// static int image_utils_make_gif(lua_State *L)
-// {
-//     const char *gif_fname = luaL_checkstring(L, lua_gettop(L));
-//     lua_pop(L, 1);
-
-//     if(lua_istable(L, lua_gettop(L))) {
-//         int num_images = luaL_len(L, lua_gettop(L));
-//         char** imgnames_arr = (char **)calloc(num_images, sizeof(char *));
-//         if(imgnames_arr == NULL)
-//         {
-//             return luaL_error(L, "Error allocating array of img names.\n");
-//         }
-
-//         /* table is in the stack at index 't' */
-//         lua_pushnil(L);  /* first key */
-
-//         for (int i = 1; i < num_images + 1; i++)
-//         {
-//             if (lua_next(L, -2) != 0)
-//             {
-//                 const char *imgname = luaL_checkstring(L, -1);
-//                 // printf("Found img %s\n", imgname);
-//                 imgnames_arr[i - 1] = (char *)imgname;
-
-//                 /* removes 'value'; keeps 'key' for next iteration */
-//                 lua_pop(L, 1);
-//             }
-//             else
-//             {
-//                 return luaL_error(L, "image name #%d not found.\n", i);
-//             }
-//         }
-
-//         /* pop the index for the lua_next call*/
-//         lua_pop(L, 1);
-
-//         /* pop the image names table */
-//         lua_pop(L, 1);
-
-//         init_gif_util();
-//         make_gif_from_images(imgnames_arr, num_images, gif_fname);
-//         exit_gif_util();
-//     }
-
-//     return 0;
-// }
 
 // --- Pure C turtle binding helpers ---
 static picoturtle_turtle_t *lua_turtle_getobj(lua_State *L) {
@@ -716,7 +629,6 @@ static int rl_turtle_state_tostring(lua_State *L) {
 static const luaL_Reg PicoTurtle_funcs[] =
     {
         {"new", rl_trtl_new},
-        // {"makegif", image_utils_make_gif},
         {NULL, NULL}};
 
 // --- Update method table to use new C bindings and comment out unimplemented ones ---

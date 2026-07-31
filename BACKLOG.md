@@ -158,7 +158,7 @@ item must either be completed or deliberately moved to a later release backlog.
         a pinned vendored source under `third_party/`, retaining its license.
   - [x] Remove `.gitmodules` and stale nested-submodule metadata.
   - [ ] Verify that a fresh clone builds without `git submodule` commands.
-  - [ ] Audit and either update or delete the old Dockerfile, editor settings,
+  - [x] Audit and either update or delete the old Dockerfile, editor settings,
         CI workflows, TODO file, and other root-level legacy configuration.
   - [x] Add a third-party notices section covering Raylib, Lua, Noto Sans, and
         the vendored colour-name data.
