@@ -1,7 +1,3 @@
----
-title: Turtle Graphics
----
-
 # Introduction to Turtle Graphics
 
 Turtle Graphics is one of the simplest ways to draw vector graphics on a canvas. 
@@ -61,7 +57,7 @@ A turtle has the following types of commands typically:
 
 Here's some pseudo-code of a few really simple turtle programs. For a larger
 list of programs that are written in PicoTurtle see the 
-[Samples](/Samples) page.
+[sample programs](samples/README.md).
 
 ### Draw a Square
 

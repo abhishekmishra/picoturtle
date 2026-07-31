@@ -6,12 +6,16 @@ code editor without requiring the former Qt IDE or Skia renderer.
 
 ## Build
 
-The build uses CMake, vcpkg, and the root Makefile:
+The build requires a C11 compiler, CMake, Make, and vcpkg. Set `VCPKG_ROOT` to
+your vcpkg checkout; PicoTurtle's manifest installs Raylib and Lua:
 
 ```sh
+export VCPKG_ROOT="$HOME/vcpkg"
 make genbuild
 make build
 ```
+
+Run the automated suite with `make test`.
 
 ## Run
 
@@ -20,6 +24,12 @@ repository root so their relative `res/` paths resolve correctly:
 
 ```sh
 ./build/picoturtle lua/samples/polygons.lua
+```
+
+`make run` runs that sample by default. Use another program with:
+
+```sh
+make run PROGRAM=lua/samples/fern.lua
 ```
 
 Relative file paths used by a Lua program are resolved from PicoTurtle's
@@ -72,8 +82,27 @@ Build and run the automated tests with:
 
 ```sh
 make build
-ctest --test-dir build --output-on-failure
+make test
 ```
 
 Rendering quality and platform-specific presentation are verified separately
 with the Lua programs under `test/` and the existing samples under `lua/`.
+
+## Documentation
+
+Documentation is maintained as plain Markdown with no site generator:
+
+- [Documentation index](docs/README.md)
+- [Lua API reference](docs/API.md)
+- [0.3.0 compatibility notes](API_COMPATIBILITY.md)
+- [Sample programs](docs/samples/README.md)
+
+## Troubleshooting
+
+- Run repository samples from the repository root so paths such as
+  `res/images/mandrill.png` resolve correctly.
+- If configuration cannot find vcpkg, confirm that `VCPKG_ROOT` points to a
+  bootstrapped vcpkg checkout.
+- Delete and regenerate a stale build with `make delbuild && make genbuild`.
+- Custom fonts must be supplied as readable `.ttf` or `.otf` paths. Unknown
+  family names intentionally fall back to bundled Noto Sans.

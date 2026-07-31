@@ -148,7 +148,7 @@ item must either be completed or deliberately moved to a later release backlog.
         Lua samples.
   - [x] Replace the legacy root CMake, Makefile, and vcpkg manifest rather than
         retaining two competing build systems.
-  - [ ] Remove Skia, Qt, GraphicsMagick, `coll`, and `zclk` from all active
+  - [x] Remove Skia, Qt, GraphicsMagick, `coll`, and `zclk` from all active
         build files and documentation.
   - [x] Replace `coll` and `zclk` usage with minimal direct CLI argument
         parsing.
@@ -200,13 +200,15 @@ item must either be completed or deliberately moved to a later release backlog.
 
   Documentation, packaging, and release:
 
-  - [ ] Replace the root README with 0.3.0 build, run, export, font,
+  - [x] Replace the root README with 0.3.0 build, run, export, font,
         editor-independent, and troubleshooting instructions.
-  - [ ] Update API documentation and examples for all deliberate compatibility
+  - [x] Replace the MkDocs/Python/GitHub Pages stack with directly rendered
+        plain Markdown and canonical links to the Lua samples.
+  - [x] Update API documentation and examples for all deliberate compatibility
         differences.
-  - [ ] Update the changelog with the Raylib rewrite, removed IDE, removed GIF
+  - [x] Update the changelog with the Raylib rewrite, removed IDE, removed GIF
         helper, supported text scope, and migration notes.
-  - [ ] Ensure the repository license and bundled third-party licenses are
+  - [x] Ensure the repository license and bundled third-party licenses are
         accurate after legacy removal.
   - [ ] Add CMake install rules and verify macOS runtime resource paths from an
         installed tree outside the source checkout.

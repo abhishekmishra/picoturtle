@@ -2,6 +2,26 @@
 The project follows [Semantic Versioning](https://semver.org/). There is a
 section for each release - which lists major changes made in the release.
 
+## 0.3.0 (matrix-goose) — unreleased
+
+- Replaced the Skia renderer and Qt desktop IDE with a focused Raylib runtime
+  that runs Lua programs from any code editor.
+- Promoted the Raylib implementation to the repository root and renamed the
+  executable, build targets, source files, and private C API to `picoturtle`.
+- Restored the original public turtle Lua API, with stricter validation and
+  detached state snapshots.
+- Added persistent-canvas presentation, responsive animation, PNG export,
+  pictures, Latin-1 text through bundled Noto Sans, shapes, and multiple
+  turtles on a shared canvas.
+- Removed the GraphicsMagick-backed `picoturtle.makegif` helper. PNG frames can
+  be assembled with an external animation tool.
+- Removed the Qt IDE, editor, console, Skia, GraphicsMagick, obsolete GUI
+  resources, and experimental build scaffolding.
+- Replaced the `c-color-names` Git submodule with pinned vendored source and
+  removed direct GLFW linkage.
+- Added automated C, Lua API, retained-sample, and CLI tests.
+- Replaced the generated MkDocs website with maintainable plain Markdown.
+
 **0.2.0-alpha.8**  2025-02-04 Abhishek Mishra  <abhishekmishra3@gmail.com>
 
 - The 14th release of PicoTurtle incorporates some minor changes and bug fixes.
