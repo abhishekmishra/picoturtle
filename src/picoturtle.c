@@ -13,7 +13,7 @@
 #include "picoturtle_lua.h"
 #include "runtime.h"
 
-#define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
+#define PICOTURTLE_LUA_DIR_ENV_VAR "PICOTURTLE_LUA_DIR"
 
 typedef struct {
     const char *program_path;
@@ -287,11 +287,34 @@ int init_turtle_lua_binding(lua_State *L)
     lua_pop(L, 1); /* remove result from previous call */
 
     // TODO: Set path using optional args
-    char* turtleLuaDir = getenv(TURTLE_LUA_DIR_ENV_VAR);
-    if (turtleLuaDir == NULL || strlen(turtleLuaDir) == 0)
-    {
-        // turtle_message("app", "Warning: TURTLE_LUA_DIR_ENV_VAR is not set or empty!\n");
-        turtleLuaDir = (char*)"lua";
+    char lua_dir_buffer[1024];
+    const char *turtleLuaDir = getenv(PICOTURTLE_LUA_DIR_ENV_VAR);
+    if (turtleLuaDir == NULL || turtleLuaDir[0] == '\0') {
+        if (DirectoryExists("lua")) {
+            turtleLuaDir = "lua";
+        } else {
+            const char *application_dir = GetApplicationDirectory();
+            const char *patterns[] = {
+                "%s../share/picoturtle/lua",
+                "%s../lua"
+            };
+            turtleLuaDir = "lua";
+            for (size_t index = 0;
+                 index < sizeof(patterns) / sizeof(patterns[0]); index++) {
+                int written = snprintf(
+                    lua_dir_buffer,
+                    sizeof(lua_dir_buffer),
+                    patterns[index],
+                    application_dir
+                );
+                if (written > 0 &&
+                    (size_t)written < sizeof(lua_dir_buffer) &&
+                    DirectoryExists(lua_dir_buffer)) {
+                    turtleLuaDir = lua_dir_buffer;
+                    break;
+                }
+            }
+        }
     }
 
     size_t len_of_path_str = strlen(turtleLuaDir) + 1024;

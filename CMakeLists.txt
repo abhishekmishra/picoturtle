@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
 project(picoturtle VERSION 0.3.0 LANGUAGES C)
+
+include(GNUInstallDirs)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -36,6 +38,17 @@ target_link_libraries(picoturtle_core PUBLIC ${LUA_LIBRARIES})
 
 add_executable(picoturtle src/picoturtle.c)
 target_link_libraries(picoturtle PRIVATE picoturtle_core)
+if(APPLE)
+    set_target_properties(
+        picoturtle
+        PROPERTIES INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}"
+    )
+elseif(UNIX)
+    set_target_properties(
+        picoturtle
+        PROPERTIES INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}"
+    )
+endif()
 target_compile_definitions(
     picoturtle
     PRIVATE
@@ -66,3 +79,49 @@ if(BUILD_TESTING)
     add_test(NAME picoturtle_cli_missing_output COMMAND picoturtle -o)
     set_tests_properties(picoturtle_cli_missing_output PROPERTIES WILL_FAIL TRUE)
 endif()
+
+install(
+    TARGETS picoturtle
+    RUNTIME_DEPENDENCY_SET picoturtle_runtime_dependencies
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(
+    RUNTIME_DEPENDENCY_SET picoturtle_runtime_dependencies
+    PRE_EXCLUDE_REGEXES
+        "^/System/Library/"
+        "^/usr/lib/"
+    POST_EXCLUDE_REGEXES
+        "^/System/Library/"
+        "^/usr/lib/"
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+install(
+    DIRECTORY lua/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/lua
+)
+install(
+    DIRECTORY res/fonts res/images res/icons
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/res
+)
+install(
+    DIRECTORY docs/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/docs
+)
+install(
+    FILES
+        README.md
+        API_COMPATIBILITY.md
+        CHANGELOG.md
+        LICENSE
+        LICENSE-Lua
+        THIRD_PARTY_NOTICES.md
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle
+)
+install(
+    DIRECTORY third_party/c-color-names/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/picoturtle/licenses/c-color-names
+    FILES_MATCHING
+        PATTERN "LICENSE"
+        PATTERN "UPSTREAM.md"
+)

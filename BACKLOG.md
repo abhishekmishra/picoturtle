@@ -131,7 +131,7 @@ item must either be completed or deliberately moved to a later release backlog.
         `make run` the canonical developer workflow.
   - [x] Ensure the Lua module remains `require("picoturtle")` and the CLI is
         invoked as `picoturtle`.
-  - [ ] Define an install layout for the executable, Lua files, bundled fonts,
+  - [x] Define an install layout for the executable, Lua files, bundled fonts,
         and sample resources.
   - [ ] Resolve bundled resources relative to the installed executable or an
         explicit resource override, without depending on the source checkout

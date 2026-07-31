@@ -36,8 +36,8 @@ static const char *bundled_font_path(
     const char *application_dir = GetApplicationDirectory();
     const char *patterns[] = {
         "%s/%s",
-        "picoturtle/res/%s",
         "res/%s",
+        "%s../share/picoturtle/res/%s",
         "%s../res/%s",
         "%sres/%s"
     };
@@ -53,7 +53,7 @@ static const char *bundled_font_path(
                 resolved, resolved_size, patterns[index],
                 resource_root, relative
             );
-        } else if (index < 3) {
+        } else if (index < 2) {
             written = snprintf(
                 resolved, resolved_size, patterns[index], relative
             );

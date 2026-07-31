@@ -17,6 +17,30 @@ make build
 
 Run the automated suite with `make test`.
 
+## Install
+
+Install into the configured prefix (`./install` by default):
+
+```sh
+make install
+```
+
+The installed tree is self-contained:
+
+```text
+install/
+├── bin/picoturtle
+├── lib/
+└── share/picoturtle/
+    ├── lua/
+    ├── res/
+    └── docs/
+```
+
+PicoTurtle discovers Lua modules, its bundled font, and bundled sample images
+relative to the executable. `PICOTURTLE_LUA_DIR` and
+`PICOTURTLE_RESOURCE_DIR` can override those locations for custom layouts.
+
 ## Run
 
 Pass one Lua program to the executable. Run repository samples from the
