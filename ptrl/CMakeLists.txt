@@ -5,32 +5,38 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-set(PTRL_SRC
+set(PTRL_CORE_SRC
     ../c-color-names/color_names.h
     ../c-color-names/color_names.c
     src/ptrtllua.c
+    src/runtime.h
+    src/runtime.c
     src/turtle.h
     src/turtle.c
-    src/ptrtl.c
 )
 
-add_executable(ptrl ${PTRL_SRC})
-target_include_directories(ptrl PRIVATE src)
-target_include_directories(ptrl PRIVATE ../c-color-names)
+add_library(ptrl_core STATIC ${PTRL_CORE_SRC})
+target_include_directories(ptrl_core PUBLIC src)
+target_include_directories(ptrl_core PUBLIC ../c-color-names)
 
 # raylib dependency
 find_package(raylib CONFIG REQUIRED)
-target_link_libraries(ptrl PRIVATE raylib)
+target_link_libraries(ptrl_core PUBLIC raylib)
 
 find_package(glfw3 CONFIG REQUIRED)
-target_link_libraries(ptrl PRIVATE glfw)
+target_link_libraries(ptrl_core PUBLIC glfw)
 
 find_package(Lua REQUIRED)
-target_include_directories(ptrl PUBLIC ${LUA_INCLUDE_DIR})
-target_link_libraries(ptrl PUBLIC ${LUA_LIBRARIES})
+target_include_directories(ptrl_core PUBLIC ${LUA_INCLUDE_DIR})
+target_link_libraries(ptrl_core PUBLIC ${LUA_LIBRARIES})
 
-find_package(coll CONFIG REQUIRED)
-target_link_libraries(ptrl PUBLIC coll::coll)
+add_executable(ptrl src/ptrtl.c)
+target_link_libraries(ptrl PRIVATE ptrl_core)
 
-find_package(zclk CONFIG REQUIRED)
-target_link_libraries(ptrl PUBLIC zclk::zclk)
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(ptrl_api_test test/test_lua_api.c)
+    target_link_libraries(ptrl_api_test PRIVATE ptrl_core)
+    add_test(NAME ptrl_lua_api COMMAND ptrl_api_test)
+    add_test(NAME ptrl_cli_help COMMAND ptrl --help)
+endif()

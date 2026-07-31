@@ -3,33 +3,92 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <raylib.h>
 
-#include <zclk.h>
-#include <coll_arraylist.h>
-
 #include "turtle.h"
 #include "ptrtllua.h"
-
-#include "test_drawing_features.h"
+#include "runtime.h"
 
 #define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
 
-#define PTRTL_OPT_IMGFILE_NAME      "output"
-#define PTRTL_OPT_IMGFILE_SHORT     "o"
 #define PTRTL_OPT_IMGFILE_DEFAULT   "turtle.png"
-#define PTRTL_OPT_IMGFILE_DESC      "Image filename for PicoTurtle canvas " \
-                                    "output. " \
-                                    "Note: the image file is written in "\
-                                    "PNG format."
-#define PTRTL_ARG_FILE_NAME         "path-to-program"
-#define PTRTL_ARG_FILE_DEFAULT      NULL
-#define PTRTL_ARG_FILE_DESC         "Turtle lua program to execute"
 
-#define TURTLE_EXPORT_CMD_LEN       8192
+typedef struct {
+    const char *program_path;
+    const char *output_path;
+    bool show_help;
+} ptrl_cli_options_t;
+
+static void print_usage(const char *program_name)
+{
+    printf(
+        "Usage: %s [OPTIONS] <path-to-program>\n\n"
+        "PicoTurtle (experimental Raylib version)\n\n"
+        "Options:\n"
+        "  -h, --help           Print this help.\n"
+        "  -o, --output PATH    PNG output path (default: %s).\n",
+        program_name,
+        PTRTL_OPT_IMGFILE_DEFAULT
+    );
+}
+
+static bool parse_cli_options(
+    int argc,
+    char **argv,
+    ptrl_cli_options_t *options
+) {
+    options->program_path = NULL;
+    options->output_path = PTRTL_OPT_IMGFILE_DEFAULT;
+    options->show_help = false;
+
+    for (int i = 1; i < argc; i++) {
+        const char *arg = argv[i];
+
+        if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
+            options->show_help = true;
+            return true;
+        }
+
+        if (strcmp(arg, "-o") == 0 || strcmp(arg, "--output") == 0) {
+            if (++i >= argc) {
+                fprintf(stderr, "Missing path after %s.\n", arg);
+                return false;
+            }
+            options->output_path = argv[i];
+            continue;
+        }
+
+        if (strncmp(arg, "--output=", 9) == 0) {
+            if (arg[9] == '\0') {
+                fprintf(stderr, "Missing path after --output=.\n");
+                return false;
+            }
+            options->output_path = arg + 9;
+            continue;
+        }
+
+        if (arg[0] == '-') {
+            fprintf(stderr, "Unknown option: %s\n", arg);
+            return false;
+        }
+
+        if (options->program_path != NULL) {
+            fprintf(stderr, "Only one Lua program path may be supplied.\n");
+            return false;
+        }
+        options->program_path = arg;
+    }
+
+    if (options->program_path == NULL) {
+        fprintf(stderr, "A Lua program path is required.\n");
+        return false;
+    }
+    return true;
+}
 
 /**
  * accept a lua error code, and print
@@ -199,136 +258,6 @@ int init_lua(lua_State ** Lptr)
     return EXIT_SUCCESS;
 }
 
-// raylib offscreen gpu rendering
-RenderTexture2D init_offscreen_rendering(void)
-{
-    RenderTexture2D target = LoadRenderTexture(800, 450);
-    BeginTextureMode(target);
-    ClearBackground(RAYWHITE);
-    EndTextureMode();
-    return target;
-}
-
-void destroy_offscreen_rendering(RenderTexture2D target)
-{
-    // Unload the render texture
-    UnloadRenderTexture(target);
-}
-
-zclk_res test_c_main(zclk_command* cmd, void* handler_args)
-{
-    // Initialization
-    const int screenWidth = 800;
-    const int screenHeight = 450;
-
-    // Lua initialization
-    lua_State *L = NULL;
-    int res = init_lua(&L);
-    if(res != 0)
-    {
-        printf("Fatal: Unable to initialize Lua!\n");
-        return EXIT_FAILURE;
-    }
-
-    // Run a Lua script
-    const char *script = "print('Hello from Lua!')";
-    res = run_lua_script(L, script);
-    if (res != LUA_OK)
-    {
-        printf("Fatal: Unable to run Lua script!\n");
-        cleanup_lua(L);
-        return EXIT_FAILURE;
-    }
-
-    // Initialize Turtle
-    trtl_t *turtle = NULL;
-    trtl_make_turtle(&turtle, "picoturtle", "picoturtle-1");
-    if (turtle == NULL)
-    {
-        printf("Fatal: Unable to create turtle!\n");
-        cleanup_lua(L);
-        return EXIT_FAILURE;
-    }
-
-    InitWindow(screenWidth, screenHeight, "PicoTurtle");
-
-    SetTargetFPS(60);
-
-    // Initialize offscreen rendering
-    RenderTexture2D offscreenTarget = init_offscreen_rendering();
-    if (offscreenTarget.id == 0)
-    {
-        printf("Fatal: Unable to initialize offscreen rendering!\n");
-        trtl_free_turtle(turtle);
-        cleanup_lua(L);
-        CloseWindow();
-        return EXIT_FAILURE;
-    }
-
-    // Initial turtle drawing
-    BeginTextureMode(offscreenTarget); // Start drawing to the offscreen target
-        // Draw the turtle
-        if (turtle != NULL && turtle->current_state != NULL)
-        {
-            test_graphics_start(turtle);
-            trtl_draw_me(turtle);
-            // Draw turtle information
-            trtl_draw_info(turtle);
-        }
-        else
-        {
-            DrawText("Turtle not initialized", 350, 220, 20, RED);
-        }
-    EndTextureMode(); // End drawing to the offscreen target
-
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Turtle Draw Loop (if exists)
-        BeginTextureMode(offscreenTarget); // Start drawing to the offscreen target
-            // Draw the turtle
-            if (turtle != NULL && turtle->current_state != NULL)
-            {
-                // Update
-                test_graphics_update(turtle);
-                trtl_draw_me(turtle);
-                trtl_draw_info(turtle);
-            }
-            else
-            {
-                DrawText("Turtle not initialized", 350, 220, 20, RED);
-            }
-        EndTextureMode(); // End drawing to the offscreen target
-
-        // Draw
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-            // Draw the offscreen texture to the screen
-            DrawTextureRec(offscreenTarget.texture, (Rectangle){0.0f, 0.0f, (float)offscreenTarget.texture.width, (float)-offscreenTarget.texture.height}, (Vector2){0, 0}, WHITE);            
-        EndDrawing();
-    }
-
-    // Deallocate the turtle
-    if (turtle != NULL)
-    {
-        trtl_free_turtle(turtle);
-    }
-    else
-    {
-        printf("Warning: Turtle was not initialized, nothing to free.\n");
-    }
-
-    // Deallocate offscreen rendering
-    destroy_offscreen_rendering(offscreenTarget);
-
-    // De-Initialization
-    CloseWindow();
-
-    // Cleanup Lua
-    cleanup_lua(L);
-    return EXIT_SUCCESS;
-}
-
 int init_turtle_lua_binding(lua_State *L)
 {
     // PicoTurtle::set_init_callback(&turtle_init_cb, NULL);
@@ -372,16 +301,20 @@ int init_turtle_lua_binding(lua_State *L)
 }
 
 
-/**
- * @brief Main command handler for the PicoTurtle CLI.
- *
- * @param cmd The command object received from ZClk
- * @param handler_args any args passed to ZClk (unused)
- * @return zclk_res returns error code indicating whether turtle execution
- *  was a success.
- */
-zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
+int ptrtl_main(const char *program_path)
 {
+    ptrl_runtime_t runtime;
+    if (!ptrl_runtime_init(
+            &runtime,
+            PTRTL_DEFAULT_CANVAS_WIDTH,
+            PTRTL_DEFAULT_CANVAS_HEIGHT,
+            "PicoTurtle"
+        ))
+    {
+        printf("Error: Unable to initialize the PicoTurtle window and canvas.\n");
+        return EXIT_FAILURE;
+    }
+
     lua_State *L = NULL;
     int res = init_lua(&L);
     if(res == 0)
@@ -389,73 +322,54 @@ zclk_res ptrtl_main(zclk_command* cmd, void* handler_args)
         res = init_turtle_lua_binding(L);
         if (res == 0)
         {
-            zclk_argument *turtle_prog = zclk_command_get_argument(cmd, PTRTL_ARG_FILE_NAME);
-            // zclk_option *img_file = zclk_command_get_option(cmd, PTRTL_OPT_IMGFILE_NAME);
-            if(turtle_prog != NULL)
-            {
-                const char *program_path = zclk_argument_get_val_string(turtle_prog);
-
-                if (program_path != NULL)
-                {
-                    printf("Program to run: %s\n", program_path);
-                    res = run_lua_file(L, program_path);
-                    if (res != 0)
-                    {
-                        cleanup_lua(L);
-                        printf("Error executing Turtle Lua program.\n");
-                        return ZCLK_RES_ERR_UNKNOWN;
-                    }
-
-                }
-            }
-            else
+            printf("Program to run: %s\n", program_path);
+            res = run_lua_file(L, program_path);
+            if (res != 0)
             {
                 cleanup_lua(L);
-                printf("Program path not provided.\n");
-                return ZCLK_RES_ERR_UNKNOWN;
+                ptrl_runtime_destroy(&runtime);
+                printf("Error executing Turtle Lua program.\n");
+                return EXIT_FAILURE;
             }
 
-
+            while (!ptrl_runtime_should_close(&runtime))
+            {
+                ptrl_runtime_present(&runtime);
+            }
             cleanup_lua(L);
-            return ZCLK_RES_SUCCESS;
+            ptrl_runtime_destroy(&runtime);
+            return EXIT_SUCCESS;
         }
         else
         {
             printf("Error initializing picoturtle lua binding.\n");
             cleanup_lua(L);
-            return ZCLK_RES_ERR_UNKNOWN;
+            ptrl_runtime_destroy(&runtime);
+            return EXIT_FAILURE;
         }
     }
     else
     {
         printf("Error: Unable to initialize Lua\n");
         handle_lua_error(L, res);
-        return ZCLK_RES_ERR_UNKNOWN;
+        ptrl_runtime_destroy(&runtime);
+        return EXIT_FAILURE;
     }
 }
 
 int main(int argc, char* argv[])
 {
-    // zclk_command *cmd = new_zclk_command(argv[0], "ptrtl",
-    //                         "PicoTurtle (experimental raylib version)", &test_c_main);
-    zclk_command *cmd = new_zclk_command(argv[0], "ptrtl",
-                            "PicoTurtle (experimental raylib version)", &ptrtl_main);
+    ptrl_cli_options_t options;
+    if (!parse_cli_options(argc, argv, &options)) {
+        print_usage(argv[0]);
+        return EXIT_FAILURE;
+    }
+    if (options.show_help) {
+        print_usage(argv[0]);
+        return EXIT_SUCCESS;
+    }
 
-    zclk_command_string_option(
-        cmd,
-        PTRTL_OPT_IMGFILE_NAME,
-        PTRTL_OPT_IMGFILE_SHORT,
-        PTRTL_OPT_IMGFILE_DEFAULT,
-        PTRTL_OPT_IMGFILE_DESC
-    );
-
-    zclk_command_string_argument(
-        cmd,
-        PTRTL_ARG_FILE_NAME,
-        PTRTL_ARG_FILE_DEFAULT,
-        PTRTL_ARG_FILE_DESC,
-        1
-    );
-
-    zclk_command_exec(cmd, NULL, argc, argv);
+    // The output path becomes active when PNG export is implemented.
+    (void)options.output_path;
+    return ptrtl_main(options.program_path);
 }

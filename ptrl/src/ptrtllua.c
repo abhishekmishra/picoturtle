@@ -121,9 +121,9 @@ static int rl_trtl_new(lua_State *L)
 
 // --- Pure C turtle binding helpers ---
 static trtl_t *lua_turtle_getobj(lua_State *L) {
-    trtl_t **turtle_ptr = (trtl_t **)luaL_checkudata(L, lua_gettop(L), LUA_PICOTURTLE_OBJECT);
+    trtl_t **turtle_ptr = (trtl_t **)luaL_checkudata(L, 1, LUA_PICOTURTLE_OBJECT);
     trtl_t *t = *turtle_ptr;
-    if (!t) luaL_typeerror(L, lua_gettop(L), LUA_PICOTURTLE_OBJECT);
+    if (!t) luaL_typeerror(L, 1, LUA_PICOTURTLE_OBJECT);
     return t;
 }
 
@@ -139,32 +139,32 @@ static int rl_turtle_pendown(lua_State *L) {
     return 0;
 }
 static int rl_turtle_forward(lua_State *L) {
-    float len = (float)luaL_checknumber(L, lua_gettop(L));
+    float len = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_forward(t, len);
     return 0;
 }
 static int rl_turtle_back(lua_State *L) {
-    float len = (float)luaL_checknumber(L, lua_gettop(L));
+    float len = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_backward(t, len);
     return 0;
 }
 static int rl_turtle_left(lua_State *L) {
-    float a = (float)luaL_checknumber(L, lua_gettop(L));
+    float a = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_left(t, a);
     return 0;
 }
 static int rl_turtle_right(lua_State *L) {
-    float a = (float)luaL_checknumber(L, lua_gettop(L));
+    float a = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_right(t, a);
     return 0;
 }
 static int rl_turtle_setpos(lua_State *L) {
-    float y = (float)luaL_checknumber(L, lua_gettop(L));
-    float x = (float)luaL_checknumber(L, lua_gettop(L) - 1);
+    float x = (float)luaL_checknumber(L, 2);
+    float y = (float)luaL_checknumber(L, 3);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_set_position(t, x, y);
     return 0;
@@ -180,6 +180,18 @@ static int rl_turtle_gety(lua_State *L) {
     trtl_location_t *loc = trtl_get_location(t);
     lua_pushnumber(L, trtl_location_get_y(loc));
     return 1;
+}
+static int rl_turtle_setx(lua_State *L) {
+    float x = (float)luaL_checknumber(L, 2);
+    trtl_t *t = lua_turtle_getobj(L);
+    trtl_set_x(t, x);
+    return 0;
+}
+static int rl_turtle_sety(lua_State *L) {
+    float y = (float)luaL_checknumber(L, 2);
+    trtl_t *t = lua_turtle_getobj(L);
+    trtl_set_y(t, y);
+    return 0;
 }
 
 // --- Not implemented in turtle.h ---
@@ -233,8 +245,8 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"setpos", rl_turtle_setpos},
         {"getx", rl_turtle_getx},
         {"gety", rl_turtle_gety},
-        // {"setx", skia_turtle_setx}, // TODO
-        // {"sety", skia_turtle_sety}, // TODO
+        {"setx", rl_turtle_setx},
+        {"sety", rl_turtle_sety},
         {"right", rl_turtle_right},
         {"rt", rl_turtle_right},
         {"left", rl_turtle_left},

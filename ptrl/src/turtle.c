@@ -223,7 +223,11 @@ void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id) {
             strcpy((*turtle)->id, id);
         }
         (*turtle)->start_time = 0;
+        (*turtle)->runtime = ptrl_runtime_get_default();
         trtl_make_state(&(*turtle)->current_state);
+        if ((*turtle)->current_state != NULL) {
+            trtl_reset(*turtle);
+        }
     }
 }
 
@@ -274,7 +278,7 @@ double trtl_get_heading(const trtl_t *turtle)
 
 double trtl_get_canvas_heading(const trtl_t *turtle)
 {
-    return trtl_get_heading(turtle);
+    return 360.0 - trtl_get_heading(turtle);
 }
 
 float trtl_get_canvas_location_x(const trtl_t *turtle)
@@ -284,6 +288,10 @@ float trtl_get_canvas_location_x(const trtl_t *turtle)
 
 float trtl_get_canvas_location_y(const trtl_t *turtle)
 {
+    if (turtle != NULL && turtle->runtime != NULL) {
+        return (float)turtle->runtime->canvas_height -
+            trtl_location_get_y(trtl_get_location(turtle));
+    }
     return trtl_location_get_y(trtl_get_location(turtle));
 }
 
@@ -297,6 +305,10 @@ float trtl_get_pen_width(const trtl_t *turtle)
 
 void trtl_draw_me(const trtl_t *turtle)
 {
+    if (turtle == NULL || turtle->runtime == NULL) {
+        return;
+    }
+
     int d = 25;
     float theta1 = (float)((trtl_get_canvas_heading(turtle) - 145) * (M_PI / 180));
     float y2 = (float)(d * (sin(theta1)) + trtl_get_canvas_location_y(turtle));
@@ -305,22 +317,17 @@ void trtl_draw_me(const trtl_t *turtle)
     float y3 = (float)(d * (sin(theta2)) + trtl_get_canvas_location_y(turtle));
     float x3 = (float)(d * (cos(theta2)) + trtl_get_canvas_location_x(turtle));
 
-    short cr = trtl_get_pen_colour(turtle)->r;
-    short cg = trtl_get_pen_colour(turtle)->g;
-    short cb = trtl_get_pen_colour(turtle)->b;
-    const char* cname = trtl_get_pen_colour(turtle)->name ? trtl_get_pen_colour(turtle)->name : "unknown";
-
-    float cpw = trtl_get_pen_width(turtle);
-
     Vector2 v1 = {trtl_get_canvas_location_x(turtle), trtl_get_canvas_location_y(turtle)};
     Vector2 v2 = {x2, y2};
     Vector2 v3 = {x3, y3};
+    ptrl_runtime_begin_canvas(turtle->runtime);
     DrawTriangle(
         v1,
         v2,
         v3,
         DARKGREEN 
     );
+    ptrl_runtime_end_canvas(turtle->runtime);
 }
 
 // movement functions
@@ -350,12 +357,19 @@ void trtl_forward(trtl_t *turtle, float distance)
             return; // No pen colour set
         }
         Color color = trtl_colour_get_raylib_color(pen_colour);
-        DrawLineEx(
-            (Vector2){trtl_location_get_x(current_location), trtl_location_get_y(current_location)},
-            (Vector2){x2, y2},
-            current_state->pen_width,
-            color
-        );
+        if (turtle->runtime != NULL) {
+            ptrl_runtime_begin_canvas(turtle->runtime);
+            DrawLineEx(
+                (Vector2){
+                    trtl_get_canvas_location_x(turtle),
+                    trtl_get_canvas_location_y(turtle)
+                },
+                (Vector2){cx2, cy2},
+                current_state->pen_width,
+                color
+            );
+            ptrl_runtime_end_canvas(turtle->runtime);
+        }
     }
 
     // set the new location
@@ -369,11 +383,26 @@ void trtl_backward(trtl_t *turtle, float distance)
     trtl_forward(turtle, -distance);
 }
 
-// levitate/teleport without drawing
 void trtl_set_position(trtl_t *turtle, float x, float y)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
+        if (trtl_state_is_pen_down(state) && turtle->runtime != NULL) {
+            trtl_colour_t *pen_colour = trtl_get_pen_colour(turtle);
+            Color color = trtl_colour_get_raylib_color(pen_colour);
+            float canvas_y = (float)turtle->runtime->canvas_height - y;
+            ptrl_runtime_begin_canvas(turtle->runtime);
+            DrawLineEx(
+                (Vector2){
+                    trtl_get_canvas_location_x(turtle),
+                    trtl_get_canvas_location_y(turtle)
+                },
+                (Vector2){x, canvas_y},
+                state->pen_width,
+                color
+            );
+            ptrl_runtime_end_canvas(turtle->runtime);
+        }
         trtl_location_set_x(state->location, x);
         trtl_location_set_y(state->location, y);
     }
@@ -383,7 +412,7 @@ void trtl_set_x(trtl_t *turtle, float x)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        trtl_location_set_x(state->location, x);
+        trtl_set_position(turtle, x, trtl_location_get_y(state->location));
     }
 }
 
@@ -391,7 +420,7 @@ void trtl_set_y(trtl_t *turtle, float y)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        trtl_location_set_y(state->location, y);
+        trtl_set_position(turtle, trtl_location_get_x(state->location), y);
     }
 }
 
@@ -423,10 +452,18 @@ void trtl_right(trtl_t *turtle, float angle) {
 
 void trtl_reset(trtl_t *turtle) {
     if (turtle) {
-        trtl_set_position(turtle, 0.0f, 0.0f);
-        trtl_heading(turtle, 0.0);
+        trtl_pen_up(turtle);
+        if (turtle->runtime != NULL) {
+            trtl_set_position(
+                turtle,
+                (float)turtle->runtime->canvas_width / 2.0f,
+                (float)turtle->runtime->canvas_height / 2.0f
+            );
+        } else {
+            trtl_set_position(turtle, 0.0f, 0.0f);
+        }
+        trtl_heading(turtle, 90.0);
         trtl_pen_down(turtle);
-        // TODO: Replace direct state access with trtl_set_pen_width when available
         if (turtle->current_state) {
             trtl_state_set_pen_width(turtle->current_state, 1.0f);
         }
@@ -545,16 +582,17 @@ void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a
 }
 
 void trtl_text(const trtl_t *turtle, const char *text) {
-    if (!turtle || !text) return;
+    if (!turtle || !text || !turtle->runtime) return;
     trtl_state_t *state = turtle->current_state;
-    trtl_location_t *loc = state->location;
     int font_size = trtl_state_get_font_size(state);
     Color color = trtl_colour_get_raylib_color(state->pen_colour);
-    float x = loc->x;
-    float y = loc->y;
-    float rotation = (float)state->heading;
+    float x = trtl_get_canvas_location_x(turtle);
+    float y = trtl_get_canvas_location_y(turtle);
+    float rotation = (float)trtl_get_canvas_heading(turtle);
     // For now, use raylib's default font
+    ptrl_runtime_begin_canvas(turtle->runtime);
     DrawTextPro(GetFontDefault(), text, (Vector2){x, y}, (Vector2){0, 0}, rotation, (float)font_size, 1, color);
+    ptrl_runtime_end_canvas(turtle->runtime);
 }
 
 void trtl_set_font_size(const trtl_t *turtle, int size) {
@@ -596,11 +634,13 @@ int trtl_get_fps(void) {
 
 // canvas size related functions
 int trtl_get_canvas_width(void) {
-    return GetRenderWidth();
+    ptrl_runtime_t *runtime = ptrl_runtime_get_default();
+    return runtime != NULL ? runtime->canvas_width : 0;
 }
 
 int trtl_get_canvas_height(void) {
-    return GetRenderHeight();
+    ptrl_runtime_t *runtime = ptrl_runtime_get_default();
+    return runtime != NULL ? runtime->canvas_height : 0;
 }
 
 // canvas clear function
@@ -612,11 +652,11 @@ void trtl_clear_canvas_colour(const trtl_t *turtle, const char *color_name)
     trtl_make_colour_from_name(&col, color_name);
     if (col) {
         Color color = trtl_colour_get_raylib_color(col);
-        ClearBackground(color);
+        ptrl_runtime_clear(turtle->runtime, color);
         trtl_free_colour(col);
     } else {
         // If the color is not found, clear with black
-        ClearBackground(BLACK);
+        ptrl_runtime_clear(turtle->runtime, BLACK);
     }
 }
 
@@ -628,9 +668,9 @@ void trtl_clear_canvas(const trtl_t *turtle)
     trtl_colour_t *pen_colour = trtl_get_pen_colour(turtle);
     if (pen_colour) {
         Color color = trtl_colour_get_raylib_color(pen_colour);
-        ClearBackground(color);
+        ptrl_runtime_clear(turtle->runtime, color);
     } else {
         // If no pen colour is set, clear with black
-        ClearBackground(BLACK);
+        ptrl_runtime_clear(turtle->runtime, BLACK);
     }
 }

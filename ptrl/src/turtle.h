@@ -9,6 +9,7 @@
 #include <math.h>
 #include <raylib.h>
 #include <color_names.h>
+#include "runtime.h"
 
 /*------------ trtl_location_t --------------*/
 typedef struct {
@@ -95,6 +96,7 @@ typedef struct {
     char* name;
     char* id;
     long start_time;
+    ptrl_runtime_t *runtime;
 } trtl_t;
 
 void trtl_make_turtle(trtl_t **turtle, const char *name, const char *id);

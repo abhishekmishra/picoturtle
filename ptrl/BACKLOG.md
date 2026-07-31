@@ -27,38 +27,38 @@ item must either be completed or deliberately moved to a later release backlog.
 ## Milestones
 
 - [ ] Milestone 1: Establish a sound Raylib runtime and canvas
-  - [ ] Add a runtime/canvas structure that owns the Raylib window and
+  - [x] Add a runtime/canvas structure that owns the Raylib window and
         persistent `RenderTexture2D`.
-  - [ ] Associate each turtle with the shared runtime canvas.
-  - [ ] Initialize Raylib and the canvas before initializing and executing Lua.
-  - [ ] Route all drawing operations through valid `BeginTextureMode` and
+  - [x] Associate each turtle with the shared runtime canvas.
+  - [x] Initialize Raylib and the canvas before initializing and executing Lua.
+  - [x] Route all drawing operations through valid `BeginTextureMode` and
         `EndTextureMode` scopes.
-  - [ ] Present the persistent canvas texture in a responsive window loop.
-  - [ ] Define clean shutdown and release all Raylib resources.
+  - [x] Present the persistent canvas texture in a responsive window loop.
+  - [x] Define clean shutdown and release all Raylib resources.
   - [ ] Support multiple turtles drawing on the shared canvas.
   - [ ] Decide and document normal windowed and non-interactive export
         behaviour.
-  - [ ] Remove the experimental drawing harness from the production execution
+  - [x] Remove the experimental drawing harness from the production execution
         path.
 
 - [ ] Milestone 2: Restore core turtle and Lua API compatibility
   - [ ] Rewrite Lua bindings to read turtle userdata from stack index 1 and
         method arguments from subsequent indices.
   - [ ] Add consistent Lua argument-count, type, and range validation.
-  - [ ] Restore the original logical coordinate system, including Y-axis
+  - [x] Restore the original logical coordinate system, including Y-axis
         conversion between turtle and Raylib coordinates.
-  - [ ] Restore the initial position at the centre of the canvas.
-  - [ ] Restore the initial heading of 90 degrees, facing upward.
-  - [ ] Make `setpos`, `setx`, and `sety` draw when the pen is down.
+  - [x] Restore the initial position at the centre of the canvas.
+  - [x] Restore the initial heading of 90 degrees, facing upward.
+  - [x] Make `setpos`, `setx`, and `sety` draw when the pen is down.
   - [ ] Implement and bind `getwidth`, `setwidth`, `getheight`, and `setheight`.
   - [ ] Implement and bind `canvas_size`.
-  - [ ] Implement and bind `penup`/`pu` and `pendown`/`pd`.
+  - [x] Implement and bind `penup`/`pu` and `pendown`/`pd`.
   - [ ] Implement and bind `penwidth`/`pw`.
   - [ ] Implement and bind named and RGB forms of `pencolor`/`pc`.
   - [ ] Implement and bind `home`, `clear`, `reset`, and the compatibility
         no-op `stop`.
-  - [ ] Implement and bind `forward`/`fd` and `back`/`bk`.
-  - [ ] Implement and bind `setpos`, `setx`, `sety`, `getx`, and `gety`.
+  - [x] Implement and bind `forward`/`fd` and `back`/`bk`.
+  - [x] Implement and bind `setpos`, `setx`, `sety`, `getx`, and `gety`.
   - [ ] Implement and bind `left`/`lt`, `right`/`rt`, and `heading`.
   - [ ] Implement and bind `drawme`.
   - [ ] Verify `turtle_basic.lua`, `spiral.lua`, `tree.lua`,
@@ -122,10 +122,10 @@ item must either be completed or deliberately moved to a later release backlog.
   - [ ] Add reference-image tests for representative static drawings.
   - [ ] Add resource-lifetime tests for turtles, saved states, fonts, images,
         the canvas, and Lua garbage collection.
-  - [ ] Add a clean-build check using `make genbuild` followed by `make build`.
+  - [x] Add a clean-build check using `make genbuild` followed by `make build`.
   - [ ] Remove the Skia, Qt, and GraphicsMagick dependencies from the 0.3.0
         build.
-  - [ ] Decide whether to replace `coll` and `zclk` with minimal direct CLI
+  - [x] Decide whether to replace `coll` and `zclk` with minimal direct CLI
         argument parsing.
   - [ ] Update the README with 0.3.0 build, run, and editor-independent usage
         instructions.
