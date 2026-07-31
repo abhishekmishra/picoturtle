@@ -47,6 +47,24 @@ static void stackDump(lua_State *L)
     printf("\n"); /* end the listing */
 }
 
+static void require_method_args(
+    lua_State *L,
+    int expected,
+    const char *method_name
+) {
+    int actual = lua_gettop(L) - 1;
+    if (actual != expected) {
+        luaL_error(
+            L,
+            "%s expects %d argument%s, received %d",
+            method_name,
+            expected,
+            expected == 1 ? "" : "s",
+            actual
+        );
+    }
+}
+
 static int rl_trtl_free(lua_State *L)
 {
     trtl_t **turtle_ptr = (trtl_t **)luaL_checkudata(L, 1, LUA_PICOTURTLE_OBJECT);
@@ -59,6 +77,9 @@ static int rl_trtl_free(lua_State *L)
 
 static int rl_trtl_new(lua_State *L)
 {
+    if (lua_gettop(L) != 0) {
+        return luaL_error(L, "picoturtle.new expects no arguments");
+    }
     trtl_t **turtle_ptr = (trtl_t **)lua_newuserdata(L, sizeof(trtl_t *));
     *turtle_ptr = NULL;
     trtl_make_turtle(turtle_ptr, "picoturtle", "picoturtle-1");
@@ -129,40 +150,47 @@ static trtl_t *lua_turtle_getobj(lua_State *L) {
 
 // --- Implemented functions ---
 static int rl_turtle_penup(lua_State *L) {
+    require_method_args(L, 0, "penup");
     trtl_t *t = lua_turtle_getobj(L);
     trtl_pen_up(t);
     return 0;
 }
 static int rl_turtle_pendown(lua_State *L) {
+    require_method_args(L, 0, "pendown");
     trtl_t *t = lua_turtle_getobj(L);
     trtl_pen_down(t);
     return 0;
 }
 static int rl_turtle_forward(lua_State *L) {
+    require_method_args(L, 1, "forward");
     float len = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_forward(t, len);
     return 0;
 }
 static int rl_turtle_back(lua_State *L) {
+    require_method_args(L, 1, "back");
     float len = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_backward(t, len);
     return 0;
 }
 static int rl_turtle_left(lua_State *L) {
+    require_method_args(L, 1, "left");
     float a = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_left(t, a);
     return 0;
 }
 static int rl_turtle_right(lua_State *L) {
+    require_method_args(L, 1, "right");
     float a = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_right(t, a);
     return 0;
 }
 static int rl_turtle_setpos(lua_State *L) {
+    require_method_args(L, 2, "setpos");
     float x = (float)luaL_checknumber(L, 2);
     float y = (float)luaL_checknumber(L, 3);
     trtl_t *t = lua_turtle_getobj(L);
@@ -170,24 +198,28 @@ static int rl_turtle_setpos(lua_State *L) {
     return 0;
 }
 static int rl_turtle_getx(lua_State *L) {
+    require_method_args(L, 0, "getx");
     trtl_t *t = lua_turtle_getobj(L);
     trtl_location_t *loc = trtl_get_location(t);
     lua_pushnumber(L, trtl_location_get_x(loc));
     return 1;
 }
 static int rl_turtle_gety(lua_State *L) {
+    require_method_args(L, 0, "gety");
     trtl_t *t = lua_turtle_getobj(L);
     trtl_location_t *loc = trtl_get_location(t);
     lua_pushnumber(L, trtl_location_get_y(loc));
     return 1;
 }
 static int rl_turtle_setx(lua_State *L) {
+    require_method_args(L, 1, "setx");
     float x = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_set_x(t, x);
     return 0;
 }
 static int rl_turtle_sety(lua_State *L) {
+    require_method_args(L, 1, "sety");
     float y = (float)luaL_checknumber(L, 2);
     trtl_t *t = lua_turtle_getobj(L);
     trtl_set_y(t, y);
@@ -195,12 +227,14 @@ static int rl_turtle_sety(lua_State *L) {
 }
 
 static int rl_turtle_getwidth(lua_State *L) {
+    require_method_args(L, 0, "getwidth");
     (void)lua_turtle_getobj(L);
     lua_pushinteger(L, trtl_get_canvas_width());
     return 1;
 }
 
 static int rl_turtle_setwidth(lua_State *L) {
+    require_method_args(L, 1, "setwidth");
     trtl_t *t = lua_turtle_getobj(L);
     int width = (int)luaL_checkinteger(L, 2);
     luaL_argcheck(L, width > 0, 2, "width must be greater than zero");
@@ -211,12 +245,14 @@ static int rl_turtle_setwidth(lua_State *L) {
 }
 
 static int rl_turtle_getheight(lua_State *L) {
+    require_method_args(L, 0, "getheight");
     (void)lua_turtle_getobj(L);
     lua_pushinteger(L, trtl_get_canvas_height());
     return 1;
 }
 
 static int rl_turtle_setheight(lua_State *L) {
+    require_method_args(L, 1, "setheight");
     trtl_t *t = lua_turtle_getobj(L);
     int height = (int)luaL_checkinteger(L, 2);
     luaL_argcheck(L, height > 0, 2, "height must be greater than zero");
@@ -227,6 +263,7 @@ static int rl_turtle_setheight(lua_State *L) {
 }
 
 static int rl_turtle_penwidth(lua_State *L) {
+    require_method_args(L, 1, "penwidth");
     trtl_t *t = lua_turtle_getobj(L);
     float width = (float)luaL_checknumber(L, 2);
     luaL_argcheck(L, width > 0.0f, 2, "pen width must be greater than zero");
@@ -271,11 +308,13 @@ static int rl_turtle_pencolor(lua_State *L) {
 }
 
 static int rl_turtle_stop(lua_State *L) {
+    require_method_args(L, 0, "stop");
     (void)lua_turtle_getobj(L);
     return 0;
 }
 
 static int rl_turtle_home(lua_State *L) {
+    require_method_args(L, 0, "home");
     trtl_home(lua_turtle_getobj(L));
     return 0;
 }
@@ -309,11 +348,13 @@ static int rl_turtle_clear(lua_State *L) {
 }
 
 static int rl_turtle_reset(lua_State *L) {
+    require_method_args(L, 0, "reset");
     trtl_reset(lua_turtle_getobj(L));
     return 0;
 }
 
 static int rl_turtle_heading(lua_State *L) {
+    require_method_args(L, 1, "heading");
     trtl_t *t = lua_turtle_getobj(L);
     trtl_heading(t, (double)luaL_checknumber(L, 2));
     return 0;
@@ -341,14 +382,41 @@ static int rl_turtle_canvas_size(lua_State *L) {
 }
 
 static int rl_turtle_drawme(lua_State *L) {
+    require_method_args(L, 0, "drawme");
     trtl_draw_me(lua_turtle_getobj(L));
     return 0;
 }
 
-// TODO: Implement trtl_circle in turtle.h
-// static int rl_turtle_circle(lua_State *L) { ... }
-// TODO: Implement trtl_arc in turtle.h
-// static int rl_turtle_arc(lua_State *L) { ... }
+static int rl_turtle_circle(lua_State *L) {
+    require_method_args(L, 1, "circle");
+    trtl_t *t = lua_turtle_getobj(L);
+    float radius = (float)luaL_checknumber(L, 2);
+    luaL_argcheck(L, radius != 0.0f, 2, "radius must not be zero");
+    trtl_circle(t, radius);
+    return 0;
+}
+
+static int rl_turtle_arc(lua_State *L) {
+    trtl_t *t = lua_turtle_getobj(L);
+    int argument_count = lua_gettop(L) - 1;
+    if (argument_count < 1 || argument_count > 3) {
+        return luaL_error(L, "arc expects radius, optional extent, and optional steps");
+    }
+
+    float radius = (float)luaL_checknumber(L, 2);
+    float extent = argument_count >= 2
+        ? (float)luaL_checknumber(L, 3)
+        : -1.0f;
+    int steps = argument_count == 3
+        ? (int)luaL_checkinteger(L, 4)
+        : -1;
+    luaL_argcheck(L, radius != 0.0f, 2, "radius must not be zero");
+    if (argument_count == 3) {
+        luaL_argcheck(L, steps > 0, 4, "steps must be greater than zero");
+    }
+    trtl_arc(t, radius, extent, steps);
+    return 0;
+}
 
 static const luaL_Reg PicoTurtle_funcs[] =
     {
@@ -403,8 +471,8 @@ static const luaL_Reg PicoTurtle_meths[] =
         // {"delay", skia_turtle_delay}, // TODO
         // {"paint", skia_turtle_paint}, // TODO
         {"drawme", rl_turtle_drawme},
-        // {"circle", rl_turtle_circle}, // TODO
-        // {"arc", rl_turtle_arc}, // TODO
+        {"circle", rl_turtle_circle},
+        {"arc", rl_turtle_arc},
         // {"enable_update", skia_turtle_enable_update}, // TODO
         // {"disable_update", skia_turtle_disable_update}, // TODO
         // {"loadpic", skia_turtle_loadpic}, // TODO

@@ -86,8 +86,13 @@ void ptrl_runtime_clear(ptrl_runtime_t *runtime, Color color) {
 }
 
 bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height) {
-    if (runtime == NULL || !runtime->initialized || width <= 0 || height <= 0) {
+    if (runtime == NULL || width <= 0 || height <= 0) {
         return false;
+    }
+    if (!runtime->initialized) {
+        runtime->canvas_width = width;
+        runtime->canvas_height = height;
+        return true;
     }
     if (width == runtime->canvas_width && height == runtime->canvas_height) {
         return true;

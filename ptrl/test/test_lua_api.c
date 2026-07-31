@@ -50,10 +50,23 @@ static int run_api_test(lua_State *L) {
         "t:forward(10)\n"
         "assert(math.abs(t:getx()) < 0.001)\n"
         "assert(math.abs(t:gety() - 10) < 0.001)\n"
+        "t:penup()\n"
+        "t:setpos(0, 0)\n"
+        "t:circle(25)\n"
+        "assert(math.abs(t:getx()) < 0.001)\n"
+        "assert(math.abs(t:gety()) < 0.001)\n"
+        "t:heading(0)\n"
+        "t:arc(25, 90, 12)\n"
+        "assert(math.abs(t:getx()) > 0.001 or math.abs(t:gety()) > 0.001)\n"
         "t:clear()\n"
         "t:clear('white')\n"
         "t:clear(255, 255, 255)\n"
-        "t:stop()\n";
+        "t:stop()\n"
+        "assert(not pcall(function() t:forward() end))\n"
+        "assert(not pcall(function() t:forward(1, 2) end))\n"
+        "assert(not pcall(function() t:penwidth(0) end))\n"
+        "assert(not pcall(function() t:pencolor(256, 0, 0) end))\n"
+        "assert(not pcall(function() t:canvas_size(100) end))\n";
 
     int status = luaL_dostring(L, script);
     if (status != LUA_OK) {

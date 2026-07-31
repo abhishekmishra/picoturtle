@@ -305,7 +305,8 @@ float trtl_get_pen_width(const trtl_t *turtle)
 
 void trtl_draw_me(const trtl_t *turtle)
 {
-    if (turtle == NULL || turtle->runtime == NULL) {
+    if (turtle == NULL || turtle->runtime == NULL ||
+        !turtle->runtime->initialized) {
         return;
     }
 
@@ -357,7 +358,7 @@ void trtl_forward(trtl_t *turtle, float distance)
             return; // No pen colour set
         }
         Color color = trtl_colour_get_raylib_color(pen_colour);
-        if (turtle->runtime != NULL) {
+        if (turtle->runtime != NULL && turtle->runtime->initialized) {
             ptrl_runtime_begin_canvas(turtle->runtime);
             DrawLineEx(
                 (Vector2){
@@ -387,7 +388,8 @@ void trtl_set_position(trtl_t *turtle, float x, float y)
 {
     trtl_state_t *state = trtl_get_state(turtle);
     if (turtle != NULL && state != NULL && state->location != NULL) {
-        if (trtl_state_is_pen_down(state) && turtle->runtime != NULL) {
+        if (trtl_state_is_pen_down(state) && turtle->runtime != NULL &&
+            turtle->runtime->initialized) {
             trtl_colour_t *pen_colour = trtl_get_pen_colour(turtle);
             Color color = trtl_colour_get_raylib_color(pen_colour);
             float canvas_y = (float)turtle->runtime->canvas_height - y;
@@ -498,6 +500,66 @@ void trtl_pen_width(trtl_t *turtle, float width) {
     }
 }
 
+void trtl_circle(trtl_t *turtle, float radius) {
+    if (turtle == NULL || turtle->current_state == NULL ||
+        turtle->runtime == NULL || !turtle->runtime->initialized ||
+        radius == 0.0f) {
+        return;
+    }
+
+    float absolute_radius = fabsf(radius);
+    float half_width = trtl_get_pen_width(turtle) / 2.0f;
+    float inner_radius = fmaxf(0.0f, absolute_radius - half_width);
+    float outer_radius = absolute_radius + half_width;
+    int segments = (int)fminf(fmaxf(absolute_radius, 32.0f), 180.0f);
+    Color color = trtl_colour_get_raylib_color(trtl_get_pen_colour(turtle));
+
+    ptrl_runtime_begin_canvas(turtle->runtime);
+    DrawRing(
+        (Vector2){
+            trtl_get_canvas_location_x(turtle),
+            trtl_get_canvas_location_y(turtle)
+        },
+        inner_radius,
+        outer_radius,
+        0.0f,
+        360.0f,
+        segments,
+        color
+    );
+    ptrl_runtime_end_canvas(turtle->runtime);
+}
+
+void trtl_arc(trtl_t *turtle, float radius, float extent, int steps) {
+    if (turtle == NULL || radius == 0.0f) {
+        return;
+    }
+    if (extent < 0.0f) {
+        extent = 360.0f;
+    }
+    if (steps <= 0) {
+        float fraction = fabsf(extent) / 360.0f;
+        steps = 1 + (int)(fminf(11.0f + fabsf(radius) / 6.0f, 59.0f) *
+                          fraction);
+    }
+
+    float turn = extent / (float)steps;
+    float half_turn = turn / 2.0f;
+    float segment = 2.0f * radius * sinf(half_turn * (float)(M_PI / 180.0));
+    if (radius < 0.0f) {
+        segment = -segment;
+        turn = -turn;
+        half_turn = -half_turn;
+    }
+
+    trtl_left(turtle, half_turn);
+    for (int i = 0; i < steps; i++) {
+        trtl_forward(turtle, segment);
+        trtl_right(turtle, turn);
+    }
+    trtl_right(turtle, half_turn);
+}
+
 // Information functions
 void trtl_print_info(const trtl_t *turtle)
 {
@@ -592,7 +654,8 @@ void trtl_colour_rgba(trtl_t *turtle, uint8_t r, uint8_t g, uint8_t b, uint8_t a
 }
 
 void trtl_text(const trtl_t *turtle, const char *text) {
-    if (!turtle || !text || !turtle->runtime) return;
+    if (!turtle || !text || !turtle->runtime ||
+        !turtle->runtime->initialized) return;
     trtl_state_t *state = turtle->current_state;
     int font_size = trtl_state_get_font_size(state);
     Color color = trtl_colour_get_raylib_color(state->pen_colour);

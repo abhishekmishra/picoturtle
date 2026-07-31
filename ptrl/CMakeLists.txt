@@ -42,5 +42,14 @@ if(BUILD_TESTING)
     add_executable(ptrl_api_test test/test_lua_api.c)
     target_link_libraries(ptrl_api_test PRIVATE ptrl_core)
     add_test(NAME ptrl_lua_api COMMAND ptrl_api_test)
+
+    add_executable(ptrl_samples_test test/test_samples.c)
+    target_link_libraries(ptrl_samples_test PRIVATE ptrl_core)
+    add_test(NAME ptrl_core_samples COMMAND ptrl_samples_test)
+    set_tests_properties(
+        ptrl_core_samples
+        PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
+    )
+
     add_test(NAME ptrl_cli_help COMMAND ptrl --help)
 endif()

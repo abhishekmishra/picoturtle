@@ -41,10 +41,10 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Remove the experimental drawing harness from the production execution
         path.
 
-- [ ] Milestone 2: Restore core turtle and Lua API compatibility
-  - [ ] Rewrite Lua bindings to read turtle userdata from stack index 1 and
+- [x] Milestone 2: Restore core turtle and Lua API compatibility
+  - [x] Rewrite Lua bindings to read turtle userdata from stack index 1 and
         method arguments from subsequent indices.
-  - [ ] Add consistent Lua argument-count, type, and range validation.
+  - [x] Add consistent Lua argument-count, type, and range validation.
   - [x] Restore the original logical coordinate system, including Y-axis
         conversion between turtle and Raylib coordinates.
   - [x] Restore the initial position at the centre of the canvas.
@@ -61,7 +61,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Implement and bind `setpos`, `setx`, `sety`, `getx`, and `gety`.
   - [x] Implement and bind `left`/`lt`, `right`/`rt`, and `heading`.
   - [x] Implement and bind `drawme`.
-  - [ ] Verify `turtle_basic.lua`, `spiral.lua`, `tree.lua`,
+  - [x] Verify `turtle_basic.lua`, `spiral.lua`, `tree.lua`,
         `sierpinski.lua`, and `polygons.lua`.
 
 - [ ] Milestone 3: Add state, shapes, timing, and image export
@@ -72,8 +72,8 @@ item must either be completed or deliberately moved to a later release backlog.
         `__tostring` behaviour.
   - [ ] Implement TurtleState accessors `x`, `y`, `a`, `r`, `g`, `b`,
         `heading`/`hd`, `pd`, and `pw`.
-  - [ ] Implement and bind `circle` with the current pen colour and width.
-  - [ ] Port and bind all `arc` forms: radius; radius and extent; radius,
+  - [x] Implement and bind `circle` with the current pen colour and width.
+  - [x] Port and bind all `arc` forms: radius; radius and extent; radius,
         extent, and steps.
   - [ ] Track turtle creation time and bind `elapsed_time_ms`.
   - [ ] Implement PNG export from the render texture, including vertical
