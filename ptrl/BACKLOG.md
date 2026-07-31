@@ -64,7 +64,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Verify `turtle_basic.lua`, `spiral.lua`, `tree.lua`,
         `sierpinski.lua`, and `polygons.lua`.
 
-- [ ] Milestone 3: Add state, shapes, timing, and image export
+- [x] Milestone 3: Add state, shapes, timing, and image export
   - [x] Add deep-copy helpers for turtle location, colour, font, and state.
   - [x] Add a dynamically sized saved-state stack to each turtle.
   - [x] Implement and bind `save` and `restore`.
@@ -79,7 +79,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Implement PNG export from the render texture, including vertical
         orientation correction.
   - [x] Bind PNG export as `export_img` and `snap`.
-  - [ ] Verify `save_restore.lua` and exported image dimensions and
+  - [x] Verify `save_restore.lua` and exported image dimensions and
         orientation.
 
 - [ ] Milestone 4: Add text and picture support

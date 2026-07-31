@@ -15,11 +15,16 @@ make build
 
 ## Run
 
-Pass one Lua program to the executable:
+Pass one Lua program to the executable. Run repository samples from the
+repository root so their relative `res/` paths resolve correctly:
 
 ```sh
-./build/ptrl ../lua/samples/polygons.lua
+./ptrl/build/ptrl lua/samples/polygons.lua
 ```
+
+Relative file paths used by a Lua program are resolved from PicoTurtle's
+current working directory. For personal scripts, launch PicoTurtle from the
+directory against which those paths were written.
 
 The normal windowed mode creates a persistent Raylib canvas, executes the Lua
 program, displays the completed canvas, and keeps the window responsive until
@@ -39,7 +44,7 @@ Use `-o`/`--output` to export the completed canvas before the window enters its
 display loop:
 
 ```sh
-./build/ptrl -o drawing.png ../lua/samples/polygons.lua
+./ptrl/build/ptrl -o drawing.png lua/samples/polygons.lua
 ```
 
 ## Planned non-interactive mode
