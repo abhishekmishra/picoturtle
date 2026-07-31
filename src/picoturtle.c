@@ -10,7 +10,7 @@
 #include <raylib.h>
 
 #include "turtle.h"
-#include "ptrtllua.h"
+#include "picoturtle_lua.h"
 #include "runtime.h"
 
 #define TURTLE_LUA_DIR_ENV_VAR      "TURTLE_LUA_DIR"
@@ -19,34 +19,53 @@ typedef struct {
     const char *program_path;
     const char *output_path;
     bool show_help;
-} ptrl_cli_options_t;
+    bool show_version;
+} picoturtle_cli_options_t;
+
+static void print_version(void)
+{
+    printf(
+        "PicoTurtle %s (%s)\n",
+        PICOTURTLE_VERSION,
+        PICOTURTLE_CODENAME
+    );
+}
 
 static void print_usage(const char *program_name)
 {
     printf(
         "Usage: %s [OPTIONS] <path-to-program>\n\n"
-        "PicoTurtle (experimental Raylib version)\n\n"
+        "PicoTurtle %s (%s)\n\n"
         "Options:\n"
         "  -h, --help           Print this help.\n"
+        "  -v, --version        Print version information.\n"
         "  -o, --output PATH    Export the completed canvas to PNG.\n",
-        program_name
+        program_name,
+        PICOTURTLE_VERSION,
+        PICOTURTLE_CODENAME
     );
 }
 
 static bool parse_cli_options(
     int argc,
     char **argv,
-    ptrl_cli_options_t *options
+    picoturtle_cli_options_t *options
 ) {
     options->program_path = NULL;
     options->output_path = NULL;
     options->show_help = false;
+    options->show_version = false;
 
     for (int i = 1; i < argc; i++) {
         const char *arg = argv[i];
 
         if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
             options->show_help = true;
+            return true;
+        }
+
+        if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
+            options->show_version = true;
             return true;
         }
 
@@ -298,13 +317,13 @@ int init_turtle_lua_binding(lua_State *L)
 }
 
 
-int ptrtl_main(const char *program_path, const char *output_path)
+int picoturtle_main(const char *program_path, const char *output_path)
 {
-    ptrl_runtime_t runtime;
-    if (!ptrl_runtime_init(
+    picoturtle_runtime_t runtime;
+    if (!picoturtle_runtime_init(
             &runtime,
-            PTRTL_DEFAULT_CANVAS_WIDTH,
-            PTRTL_DEFAULT_CANVAS_HEIGHT,
+            PICOTURTLE_DEFAULT_CANVAS_WIDTH,
+            PICOTURTLE_DEFAULT_CANVAS_HEIGHT,
             "PicoTurtle"
         ))
     {
@@ -324,33 +343,33 @@ int ptrtl_main(const char *program_path, const char *output_path)
             if (res != 0)
             {
                 cleanup_lua(L);
-                ptrl_runtime_destroy(&runtime);
+                picoturtle_runtime_destroy(&runtime);
                 printf("Error executing Turtle Lua program.\n");
                 return EXIT_FAILURE;
             }
 
             if (output_path != NULL &&
-                !ptrl_runtime_export_png(&runtime, output_path))
+                !picoturtle_runtime_export_png(&runtime, output_path))
             {
                 cleanup_lua(L);
-                ptrl_runtime_destroy(&runtime);
+                picoturtle_runtime_destroy(&runtime);
                 printf("Error exporting the canvas to %s.\n", output_path);
                 return EXIT_FAILURE;
             }
 
-            while (!ptrl_runtime_should_close(&runtime))
+            while (!picoturtle_runtime_should_close(&runtime))
             {
-                ptrl_runtime_present(&runtime);
+                picoturtle_runtime_present(&runtime);
             }
             cleanup_lua(L);
-            ptrl_runtime_destroy(&runtime);
+            picoturtle_runtime_destroy(&runtime);
             return EXIT_SUCCESS;
         }
         else
         {
             printf("Error initializing picoturtle lua binding.\n");
             cleanup_lua(L);
-            ptrl_runtime_destroy(&runtime);
+            picoturtle_runtime_destroy(&runtime);
             return EXIT_FAILURE;
         }
     }
@@ -358,14 +377,14 @@ int ptrtl_main(const char *program_path, const char *output_path)
     {
         printf("Error: Unable to initialize Lua\n");
         handle_lua_error(L, res);
-        ptrl_runtime_destroy(&runtime);
+        picoturtle_runtime_destroy(&runtime);
         return EXIT_FAILURE;
     }
 }
 
 int main(int argc, char* argv[])
 {
-    ptrl_cli_options_t options;
+    picoturtle_cli_options_t options;
     if (!parse_cli_options(argc, argv, &options)) {
         print_usage(argv[0]);
         return EXIT_FAILURE;
@@ -374,6 +393,10 @@ int main(int argc, char* argv[])
         print_usage(argv[0]);
         return EXIT_SUCCESS;
     }
+    if (options.show_version) {
+        print_version();
+        return EXIT_SUCCESS;
+    }
 
-    return ptrtl_main(options.program_path, options.output_path);
+    return picoturtle_main(options.program_path, options.output_path);
 }

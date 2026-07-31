@@ -3,10 +3,10 @@
 
 #include <stddef.h>
 
-static ptrl_runtime_t *default_runtime = NULL;
+static picoturtle_runtime_t *default_runtime = NULL;
 
-bool ptrl_runtime_init(
-    ptrl_runtime_t *runtime,
+bool picoturtle_runtime_init(
+    picoturtle_runtime_t *runtime,
     int width,
     int height,
     const char *title
@@ -38,12 +38,12 @@ bool ptrl_runtime_init(
     }
 
     runtime->initialized = true;
-    ptrl_runtime_clear(runtime, runtime->background);
-    ptrl_runtime_set_default(runtime);
+    picoturtle_runtime_clear(runtime, runtime->background);
+    picoturtle_runtime_set_default(runtime);
     return true;
 }
 
-void ptrl_runtime_destroy(ptrl_runtime_t *runtime) {
+void picoturtle_runtime_destroy(picoturtle_runtime_t *runtime) {
     if (runtime == NULL || !runtime->initialized) {
         return;
     }
@@ -52,48 +52,48 @@ void ptrl_runtime_destroy(ptrl_runtime_t *runtime) {
         default_runtime = NULL;
     }
 
-    ptrl_font_cache_destroy(&runtime->font_cache);
+    picoturtle_font_cache_destroy(&runtime->font_cache);
     UnloadRenderTexture(runtime->canvas);
     CloseWindow();
     runtime->canvas = (RenderTexture2D){0};
     runtime->initialized = false;
 }
 
-void ptrl_runtime_set_default(ptrl_runtime_t *runtime) {
+void picoturtle_runtime_set_default(picoturtle_runtime_t *runtime) {
     default_runtime = runtime;
 }
 
-ptrl_runtime_t *ptrl_runtime_get_default(void) {
+picoturtle_runtime_t *picoturtle_runtime_get_default(void) {
     return default_runtime;
 }
 
-void ptrl_runtime_begin_canvas(ptrl_runtime_t *runtime) {
+void picoturtle_runtime_begin_canvas(picoturtle_runtime_t *runtime) {
     if (runtime != NULL && runtime->initialized) {
         BeginTextureMode(runtime->canvas);
     }
 }
 
-void ptrl_runtime_end_canvas(ptrl_runtime_t *runtime) {
+void picoturtle_runtime_end_canvas(picoturtle_runtime_t *runtime) {
     if (runtime != NULL && runtime->initialized) {
         EndTextureMode();
         if (runtime->update_enabled) {
-            ptrl_runtime_present(runtime);
+            picoturtle_runtime_present(runtime);
         }
     }
 }
 
-void ptrl_runtime_clear(ptrl_runtime_t *runtime, Color color) {
+void picoturtle_runtime_clear(picoturtle_runtime_t *runtime, Color color) {
     if (runtime == NULL || !runtime->initialized) {
         return;
     }
 
     runtime->background = color;
-    ptrl_runtime_begin_canvas(runtime);
+    picoturtle_runtime_begin_canvas(runtime);
     ClearBackground(color);
-    ptrl_runtime_end_canvas(runtime);
+    picoturtle_runtime_end_canvas(runtime);
 }
 
-bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height) {
+bool picoturtle_runtime_resize(picoturtle_runtime_t *runtime, int width, int height) {
     if (runtime == NULL || width <= 0 || height <= 0) {
         return false;
     }
@@ -116,11 +116,11 @@ bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height) {
     runtime->canvas_width = width;
     runtime->canvas_height = height;
     SetWindowSize(width, height);
-    ptrl_runtime_clear(runtime, runtime->background);
+    picoturtle_runtime_clear(runtime, runtime->background);
     return true;
 }
 
-bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename) {
+bool picoturtle_runtime_export_png(picoturtle_runtime_t *runtime, const char *filename) {
     if (runtime == NULL || !runtime->initialized ||
         filename == NULL || filename[0] == '\0') {
         return false;
@@ -137,32 +137,32 @@ bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename) {
     return exported;
 }
 
-void ptrl_runtime_set_update_enabled(ptrl_runtime_t *runtime, bool enabled) {
+void picoturtle_runtime_set_update_enabled(picoturtle_runtime_t *runtime, bool enabled) {
     if (runtime == NULL) {
         return;
     }
     runtime->update_enabled = enabled;
     if (enabled && runtime->initialized) {
-        ptrl_runtime_present(runtime);
+        picoturtle_runtime_present(runtime);
     }
 }
 
-void ptrl_runtime_paint(ptrl_runtime_t *runtime) {
-    ptrl_runtime_present(runtime);
+void picoturtle_runtime_paint(picoturtle_runtime_t *runtime) {
+    picoturtle_runtime_present(runtime);
 }
 
-void ptrl_runtime_delay(ptrl_runtime_t *runtime, int milliseconds) {
+void picoturtle_runtime_delay(picoturtle_runtime_t *runtime, int milliseconds) {
     if (runtime == NULL || !runtime->initialized || milliseconds <= 0) {
         return;
     }
 
     double deadline = GetTime() + ((double)milliseconds / 1000.0);
-    while (GetTime() < deadline && !ptrl_runtime_should_close(runtime)) {
-        ptrl_runtime_present(runtime);
+    while (GetTime() < deadline && !picoturtle_runtime_should_close(runtime)) {
+        picoturtle_runtime_present(runtime);
     }
 }
 
-void ptrl_runtime_present(ptrl_runtime_t *runtime) {
+void picoturtle_runtime_present(picoturtle_runtime_t *runtime) {
     if (runtime == NULL || !runtime->initialized || runtime->close_requested) {
         return;
     }
@@ -196,7 +196,7 @@ void ptrl_runtime_present(ptrl_runtime_t *runtime) {
     }
 }
 
-bool ptrl_runtime_should_close(ptrl_runtime_t *runtime) {
+bool picoturtle_runtime_should_close(picoturtle_runtime_t *runtime) {
     if (runtime == NULL || !runtime->initialized || runtime->close_requested) {
         return true;
     }

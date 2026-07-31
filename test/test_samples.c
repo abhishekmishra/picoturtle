@@ -4,16 +4,16 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
-#include "ptrtllua.h"
+#include "picoturtle_lua.h"
 #include "runtime.h"
 
 static int run_sample(const char *path) {
-    ptrl_runtime_t runtime = {
-        .canvas_width = PTRTL_DEFAULT_CANVAS_WIDTH,
-        .canvas_height = PTRTL_DEFAULT_CANVAS_HEIGHT,
+    picoturtle_runtime_t runtime = {
+        .canvas_width = PICOTURTLE_DEFAULT_CANVAS_WIDTH,
+        .canvas_height = PICOTURTLE_DEFAULT_CANVAS_HEIGHT,
         .initialized = false
     };
-    ptrl_runtime_set_default(&runtime);
+    picoturtle_runtime_set_default(&runtime);
 
     lua_State *L = luaL_newstate();
     if (L == NULL) {
@@ -34,7 +34,7 @@ static int run_sample(const char *path) {
     }
 
     lua_close(L);
-    ptrl_runtime_set_default(NULL);
+    picoturtle_runtime_set_default(NULL);
     return status == LUA_OK ? 0 : 1;
 }
 

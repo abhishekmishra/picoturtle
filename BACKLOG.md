@@ -117,19 +117,19 @@ item must either be completed or deliberately moved to a later release backlog.
 
   - [x] Create an annotated pre-migration tag at the last known-good Raylib
         implementation before removing legacy files.
-  - [ ] Make `PicoTurtle` and `picoturtle` the only product and executable
+  - [x] Make `PicoTurtle` and `picoturtle` the only product and executable
         names; remove the experimental `ptrl` and `ptrtl` names.
-  - [ ] Rename private C types, functions, source files, test targets, and
+  - [x] Rename private C types, functions, source files, test targets, and
         diagnostics from `ptrl`/`ptrtl` to `picoturtle` for a coherent
         first-class codebase.
   - [x] Promote the Raylib `src/`, `test/`, `res/`, CMake project, Makefile,
         vcpkg manifests, and triplets from `ptrl/` to the repository root.
   - [x] Move this backlog to the repository root and update every path in it.
-  - [ ] Set the CMake project version to `0.3.0` and expose the
+  - [x] Set the CMake project version to `0.3.0` and expose the
         `matrix-goose` codename in version/help output.
-  - [ ] Make root-level `make genbuild`, `make build`, `make test`, and
+  - [x] Make root-level `make genbuild`, `make build`, `make test`, and
         `make run` the canonical developer workflow.
-  - [ ] Ensure the Lua module remains `require("picoturtle")` and the CLI is
+  - [x] Ensure the Lua module remains `require("picoturtle")` and the CLI is
         invoked as `picoturtle`.
   - [ ] Define an install layout for the executable, Lua files, bundled fonts,
         and sample resources.
@@ -194,7 +194,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [ ] Decide a small, documented pixel-tolerance policy for reference-image
         differences across graphics drivers.
   - [x] Add a clean-build check using `make genbuild` followed by `make build`.
-  - [ ] Add a root-level test target that runs the entire automated suite.
+  - [x] Add a root-level test target that runs the entire automated suite.
   - [ ] Repeat the agreed visual checks after the root migration to catch
         resource-path, orientation, font, and animation regressions.
 

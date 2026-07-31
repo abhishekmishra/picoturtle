@@ -4,39 +4,39 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PTRTL_LATIN_FIRST 0x20
-#define PTRTL_LATIN_LAST 0xff
+#define PICOTURTLE_LATIN_FIRST 0x20
+#define PICOTURTLE_LATIN_LAST 0xff
 
-typedef enum ptrl_font_kind {
-    PTRTL_FONT_LATIN,
-    PTRTL_FONT_FILE
-} ptrl_font_kind_t;
+typedef enum picoturtle_font_kind {
+    PICOTURTLE_FONT_LATIN,
+    PICOTURTLE_FONT_FILE
+} picoturtle_font_kind_t;
 
-struct ptrl_font_cache {
+struct picoturtle_font_cache {
     char *key;
     Font font;
-    struct ptrl_font_cache *next;
+    struct picoturtle_font_cache *next;
 };
 
-static ptrl_font_kind_t classify_font(const char *font_name) {
+static picoturtle_font_kind_t classify_font(const char *font_name) {
     if (font_name != NULL && FileExists(font_name)) {
-        return PTRTL_FONT_FILE;
+        return PICOTURTLE_FONT_FILE;
     }
-    return PTRTL_FONT_LATIN;
+    return PICOTURTLE_FONT_LATIN;
 }
 
 static const char *bundled_font_path(
-    ptrl_font_kind_t kind,
+    picoturtle_font_kind_t kind,
     char *resolved,
     size_t resolved_size
 ) {
     (void)kind;
     const char *relative = "fonts/noto-sans/NotoSans.ttf";
-    const char *resource_root = getenv("PTRTL_RESOURCE_DIR");
+    const char *resource_root = getenv("PICOTURTLE_RESOURCE_DIR");
     const char *application_dir = GetApplicationDirectory();
     const char *patterns[] = {
         "%s/%s",
-        "ptrl/res/%s",
+        "picoturtle/res/%s",
         "res/%s",
         "%s../res/%s",
         "%sres/%s"
@@ -71,9 +71,9 @@ static const char *bundled_font_path(
     return NULL;
 }
 
-static int *make_codepoints(ptrl_font_kind_t kind, int *count) {
+static int *make_codepoints(picoturtle_font_kind_t kind, int *count) {
     (void)kind;
-    int latin_count = PTRTL_LATIN_LAST - PTRTL_LATIN_FIRST + 1;
+    int latin_count = PICOTURTLE_LATIN_LAST - PICOTURTLE_LATIN_FIRST + 1;
     *count = latin_count;
     int *codepoints = malloc((size_t)*count * sizeof(*codepoints));
     if (codepoints == NULL) {
@@ -82,15 +82,15 @@ static int *make_codepoints(ptrl_font_kind_t kind, int *count) {
     }
 
     int output = 0;
-    for (int codepoint = PTRTL_LATIN_FIRST;
-         codepoint <= PTRTL_LATIN_LAST; codepoint++) {
+    for (int codepoint = PICOTURTLE_LATIN_FIRST;
+         codepoint <= PICOTURTLE_LATIN_LAST; codepoint++) {
         codepoints[output++] = codepoint;
     }
     return codepoints;
 }
 
-Font ptrl_font_cache_get(
-    ptrl_font_cache_t **cache,
+Font picoturtle_font_cache_get(
+    picoturtle_font_cache_t **cache,
     const char *font_name,
     int font_size
 ) {
@@ -98,9 +98,9 @@ Font ptrl_font_cache_get(
         return GetFontDefault();
     }
 
-    ptrl_font_kind_t kind = classify_font(font_name);
+    picoturtle_font_kind_t kind = classify_font(font_name);
     char resolved[1024];
-    const char *path = kind == PTRTL_FONT_FILE
+    const char *path = kind == PICOTURTLE_FONT_FILE
         ? font_name
         : bundled_font_path(kind, resolved, sizeof(resolved));
     if (path == NULL) {
@@ -113,7 +113,7 @@ Font ptrl_font_cache_get(
     if (written <= 0 || (size_t)written >= sizeof(key)) {
         return GetFontDefault();
     }
-    for (ptrl_font_cache_t *entry = *cache; entry != NULL;
+    for (picoturtle_font_cache_t *entry = *cache; entry != NULL;
          entry = entry->next) {
         if (strcmp(entry->key, key) == 0) {
             return entry->font;
@@ -132,7 +132,7 @@ Font ptrl_font_cache_get(
         return GetFontDefault();
     }
 
-    ptrl_font_cache_t *entry = calloc(1, sizeof(*entry));
+    picoturtle_font_cache_t *entry = calloc(1, sizeof(*entry));
     if (entry == NULL) {
         UnloadFont(font);
         return GetFontDefault();
@@ -150,13 +150,13 @@ Font ptrl_font_cache_get(
     return font;
 }
 
-void ptrl_font_cache_destroy(ptrl_font_cache_t **cache) {
+void picoturtle_font_cache_destroy(picoturtle_font_cache_t **cache) {
     if (cache == NULL) {
         return;
     }
-    ptrl_font_cache_t *entry = *cache;
+    picoturtle_font_cache_t *entry = *cache;
     while (entry != NULL) {
-        ptrl_font_cache_t *next = entry->next;
+        picoturtle_font_cache_t *next = entry->next;
         UnloadFont(entry->font);
         free(entry->key);
         free(entry);

@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-ptrl_image_t *ptrl_image_load(ptrl_runtime_t *runtime, const char *path) {
+picoturtle_image_t *picoturtle_image_load(picoturtle_runtime_t *runtime, const char *path) {
     if (runtime == NULL || !runtime->initialized ||
         path == NULL || path[0] == '\0') {
         return NULL;
     }
 
-    ptrl_image_t *image = calloc(1, sizeof(*image));
+    picoturtle_image_t *image = calloc(1, sizeof(*image));
     if (image == NULL) {
         return NULL;
     }
@@ -32,7 +32,7 @@ ptrl_image_t *ptrl_image_load(ptrl_runtime_t *runtime, const char *path) {
     return image;
 }
 
-void ptrl_image_destroy(ptrl_image_t *image) {
+void picoturtle_image_destroy(picoturtle_image_t *image) {
     if (image == NULL) {
         return;
     }
@@ -44,13 +44,13 @@ void ptrl_image_destroy(ptrl_image_t *image) {
     free(image);
 }
 
-void ptrl_image_draw(const ptrl_image_t *image, float x, float y) {
+void picoturtle_image_draw(const picoturtle_image_t *image, float x, float y) {
     if (image == NULL || image->runtime == NULL ||
         !image->runtime->initialized || image->texture.id == 0) {
         return;
     }
 
-    ptrl_runtime_begin_canvas(image->runtime);
+    picoturtle_runtime_begin_canvas(image->runtime);
     DrawTextureV(image->texture, (Vector2){x, y}, WHITE);
-    ptrl_runtime_end_canvas(image->runtime);
+    picoturtle_runtime_end_canvas(image->runtime);
 }

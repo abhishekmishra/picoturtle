@@ -1,16 +1,16 @@
-#ifndef ___PTRTL_IMAGE_H___
-#define ___PTRTL_IMAGE_H___
+#ifndef ___PICOTURTLE_IMAGE_H___
+#define ___PICOTURTLE_IMAGE_H___
 
 #include "runtime.h"
 
-typedef struct ptrl_image {
+typedef struct picoturtle_image {
     Texture2D texture;
     char *path;
-    ptrl_runtime_t *runtime;
-} ptrl_image_t;
+    picoturtle_runtime_t *runtime;
+} picoturtle_image_t;
 
-ptrl_image_t *ptrl_image_load(ptrl_runtime_t *runtime, const char *path);
-void ptrl_image_destroy(ptrl_image_t *image);
-void ptrl_image_draw(const ptrl_image_t *image, float x, float y);
+picoturtle_image_t *picoturtle_image_load(picoturtle_runtime_t *runtime, const char *path);
+void picoturtle_image_destroy(picoturtle_image_t *image);
+void picoturtle_image_draw(const picoturtle_image_t *image, float x, float y);
 
-#endif // ___PTRTL_IMAGE_H___
+#endif // ___PICOTURTLE_IMAGE_H___

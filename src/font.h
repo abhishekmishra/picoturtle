@@ -1,15 +1,15 @@
-#ifndef ___PTRTL_FONT_H___
-#define ___PTRTL_FONT_H___
+#ifndef ___PICOTURTLE_FONT_H___
+#define ___PICOTURTLE_FONT_H___
 
 #include <raylib.h>
 
-typedef struct ptrl_font_cache ptrl_font_cache_t;
+typedef struct picoturtle_font_cache picoturtle_font_cache_t;
 
-Font ptrl_font_cache_get(
-    ptrl_font_cache_t **cache,
+Font picoturtle_font_cache_get(
+    picoturtle_font_cache_t **cache,
     const char *font_name,
     int font_size
 );
-void ptrl_font_cache_destroy(ptrl_font_cache_t **cache);
+void picoturtle_font_cache_destroy(picoturtle_font_cache_t **cache);
 
 #endif

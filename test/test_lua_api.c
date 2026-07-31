@@ -4,7 +4,7 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
-#include "ptrtllua.h"
+#include "picoturtle_lua.h"
 
 static int run_api_test(lua_State *L) {
     const char *script =

@@ -1,12 +1,12 @@
-# PicoTurtle 0.3.0 experiment
+# PicoTurtle 0.3.0
 
-This directory contains the Raylib-based PicoTurtle runtime being developed for
-the `0.3.0` release, codenamed `matrix-goose`. It runs Lua turtle programs
-without the original Qt IDE or Skia renderer.
+PicoTurtle is a Raylib-based runtime for drawing with Lua, codenamed
+`matrix-goose` for the `0.3.0` release. It runs turtle programs written in any
+code editor without requiring the former Qt IDE or Skia renderer.
 
 ## Build
 
-The build uses CMake, vcpkg, and the Makefile in this directory:
+The build uses CMake, vcpkg, and the root Makefile:
 
 ```sh
 make genbuild
@@ -19,7 +19,7 @@ Pass one Lua program to the executable. Run repository samples from the
 repository root so their relative `res/` paths resolve correctly:
 
 ```sh
-./build/ptrl lua/samples/polygons.lua
+./build/picoturtle lua/samples/polygons.lua
 ```
 
 Relative file paths used by a Lua program are resolved from PicoTurtle's
@@ -63,15 +63,8 @@ Use `-o`/`--output` to export the completed canvas before the window enters its
 display loop:
 
 ```sh
-./build/ptrl -o drawing.png lua/samples/polygons.lua
+./build/picoturtle -o drawing.png lua/samples/polygons.lua
 ```
-
-## Planned non-interactive mode
-
-The `0.3.0` runtime will add a headless/export mode for automation. It will
-create the graphics context without showing a normal window, execute the Lua
-program, export the canvas to the requested path, and exit. This mode will not
-wait for user input after the program finishes.
 
 ## Tests
 
@@ -83,4 +76,4 @@ ctest --test-dir build --output-on-failure
 ```
 
 Rendering quality and platform-specific presentation are verified separately
-with the Lua programs under `test/` and the existing samples under `../lua/`.
+with the Lua programs under `test/` and the existing samples under `lua/`.
