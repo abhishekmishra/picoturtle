@@ -26,7 +26,7 @@ item must either be completed or deliberately moved to a later release backlog.
 
 ## Milestones
 
-- [ ] Milestone 1: Establish a sound Raylib runtime and canvas
+- [x] Milestone 1: Establish a sound Raylib runtime and canvas
   - [x] Add a runtime/canvas structure that owns the Raylib window and
         persistent `RenderTexture2D`.
   - [x] Associate each turtle with the shared runtime canvas.
@@ -35,8 +35,8 @@ item must either be completed or deliberately moved to a later release backlog.
         `EndTextureMode` scopes.
   - [x] Present the persistent canvas texture in a responsive window loop.
   - [x] Define clean shutdown and release all Raylib resources.
-  - [ ] Support multiple turtles drawing on the shared canvas.
-  - [ ] Decide and document normal windowed and non-interactive export
+  - [x] Support multiple turtles drawing on the shared canvas.
+  - [x] Decide and document normal windowed and non-interactive export
         behaviour.
   - [x] Remove the experimental drawing harness from the production execution
         path.

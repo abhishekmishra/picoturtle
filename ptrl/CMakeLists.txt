@@ -35,6 +35,10 @@ target_link_libraries(ptrl PRIVATE ptrl_core)
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(ptrl_turtle_test test/test_turtle.c)
+    target_link_libraries(ptrl_turtle_test PRIVATE ptrl_core)
+    add_test(NAME ptrl_turtle_core COMMAND ptrl_turtle_test)
+
     add_executable(ptrl_api_test test/test_lua_api.c)
     target_link_libraries(ptrl_api_test PRIVATE ptrl_core)
     add_test(NAME ptrl_lua_api COMMAND ptrl_api_test)
