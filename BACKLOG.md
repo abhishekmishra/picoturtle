@@ -165,15 +165,15 @@ item must either be completed or deliberately moved to a later release backlog.
 
   API compatibility audit:
 
-  - [ ] Build a method-and-alias inventory from the original Lua binding and
+  - [x] Build a method-and-alias inventory from the original Lua binding and
         compare it with the Raylib binding.
-  - [ ] Mark every original public method as supported, deliberately changed,
+  - [x] Mark every original public method as supported, deliberately changed,
         or deprecated with a documented replacement.
-  - [ ] Confirm argument counts, accepted forms, return values, aliases, and
+  - [x] Confirm argument counts, accepted forms, return values, aliases, and
         Lua error behaviour for every supported method.
-  - [ ] Document `picoturtle.makegif` as removed in 0.3.0 and point users to
+  - [x] Document `picoturtle.makegif` as removed in 0.3.0 and point users to
         PNG snapshots plus an external animation tool.
-  - [ ] Document Latin-1 text support and the absence of complex-script
+  - [x] Document Latin-1 text support and the absence of complex-script
         shaping in 0.3.0.
   - [ ] Run all retained Lua samples and remove or update samples that depend
         on deliberately removed features.
@@ -182,9 +182,9 @@ item must either be completed or deliberately moved to a later release backlog.
 
   Automated and visual verification:
 
-  - [ ] Add unit tests for locations, colours, headings, movement, pen state,
+  - [x] Add unit tests for locations, colours, headings, movement, pen state,
         state copying, and save/restore.
-  - [ ] Add Lua integration tests covering every public method and alias.
+  - [x] Add Lua integration tests covering every public method and alias.
   - [ ] Add CLI tests for help, version, invalid arguments, missing files,
         export success, and export failure.
   - [ ] Add resource-lifetime tests for turtles, saved states, fonts, images,

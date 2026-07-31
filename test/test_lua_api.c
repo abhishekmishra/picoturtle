@@ -5,13 +5,39 @@
 #include <lualib.h>
 
 #include "picoturtle_lua.h"
+#include "runtime.h"
 
 static int run_api_test(lua_State *L) {
     const char *script =
         "local picoturtle = require('picoturtle')\n"
+        "assert(picoturtle.makegif == nil)\n"
         "local t = picoturtle.new()\n"
-        "assert(math.abs(t:getx()) < 0.001)\n"
-        "assert(math.abs(t:gety()) < 0.001)\n"
+        "local methods = {\n"
+        "  'getwidth', 'setwidth', 'getheight', 'setheight',\n"
+        "  'penup', 'pu', 'pendown', 'pd', 'penwidth', 'pw',\n"
+        "  'pencolor', 'pc', 'stop', 'home', 'clear', 'reset',\n"
+        "  'forward', 'fd', 'back', 'bk', 'setpos', 'getx', 'gety',\n"
+        "  'setx', 'sety', 'right', 'rt', 'left', 'lt', 'heading',\n"
+        "  'export_img', 'snap', 'font', 'filltext', 'stroketext',\n"
+        "  'canvas_size', 'state', 'save', 'restore',\n"
+        "  'elapsed_time_ms', 'delay', 'paint', 'drawme', 'circle',\n"
+        "  'arc', 'enable_update', 'disable_update', 'loadpic', 'pic'\n"
+        "}\n"
+        "for _, name in ipairs(methods) do\n"
+        "  assert(type(t[name]) == 'function', 'missing method: ' .. name)\n"
+        "end\n"
+        "assert(math.abs(t:getx() - 512) < 0.001)\n"
+        "assert(math.abs(t:gety() - 512) < 0.001)\n"
+        "assert(t:getwidth() == 1024 and t:getheight() == 1024)\n"
+        "t:setwidth(800)\n"
+        "t:setheight(600)\n"
+        "local width, height = t:canvas_size()\n"
+        "assert(width == 800 and height == 600)\n"
+        "width, height = t:canvas_size(640, 480)\n"
+        "assert(width == 640 and height == 480)\n"
+        "t:canvas_size(800, 600)\n"
+        "t:penup()\n"
+        "t:setpos(0, 0)\n"
         "t:forward(10)\n"
         "assert(math.abs(t:getx()) < 0.001)\n"
         "assert(math.abs(t:gety() - 10) < 0.001)\n"
@@ -24,6 +50,7 @@ static int run_api_test(lua_State *L) {
         "assert(math.abs(t:getx() - 5) < 0.001)\n"
         "assert(math.abs(t:gety() - 8) < 0.001)\n"
         "t:penup()\n"
+        "t:pu()\n"
         "t:setpos(12, 34)\n"
         "assert(math.abs(t:getx() - 12) < 0.001)\n"
         "assert(math.abs(t:gety() - 34) < 0.001)\n"
@@ -32,21 +59,26 @@ static int run_api_test(lua_State *L) {
         "assert(math.abs(t:getx() - 56) < 0.001)\n"
         "assert(math.abs(t:gety() - 78) < 0.001)\n"
         "t:pendown()\n"
+        "t:pd()\n"
         "assert(t:pencolor('red') == 1)\n"
         "assert(t:pencolor('not-a-real-colour') == 0)\n"
         "assert(t:pc(12, 34, 56) == 0)\n"
         "t:penwidth(3)\n"
         "t:pw(2)\n"
         "t:heading(0)\n"
+        "t:rt(90)\n"
+        "t:lt(90)\n"
         "t:penup()\n"
         "t:setpos(0, 0)\n"
         "t:forward(10)\n"
         "assert(math.abs(t:getx() - 10) < 0.001)\n"
         "assert(math.abs(t:gety()) < 0.001)\n"
         "t:home()\n"
-        "assert(math.abs(t:getx()) < 0.001)\n"
-        "assert(math.abs(t:gety()) < 0.001)\n"
+        "assert(math.abs(t:getx() - 400) < 0.001)\n"
+        "assert(math.abs(t:gety() - 300) < 0.001)\n"
         "t:reset()\n"
+        "t:penup()\n"
+        "t:setpos(0, 0)\n"
         "t:forward(10)\n"
         "assert(math.abs(t:getx()) < 0.001)\n"
         "assert(math.abs(t:gety() - 10) < 0.001)\n"
@@ -72,6 +104,7 @@ static int run_api_test(lua_State *L) {
         "assert(snapshot:a() == 255)\n"
         "assert(snapshot:pw() == 6 and snapshot:pd() == false)\n"
         "assert(type(snapshot:heading()) == 'number')\n"
+        "assert(snapshot:hd() == snapshot:heading())\n"
         "assert(string.find(tostring(snapshot), 'Turtle state', 1, true))\n"
         "t:save()\n"
         "t:setpos(99, 88)\n"
@@ -84,10 +117,12 @@ static int run_api_test(lua_State *L) {
         "t:filltext('hello')\n"
         "t:stroketext('world')\n"
         "t:disable_update()\n"
+        "t:drawme()\n"
         "t:paint()\n"
         "t:enable_update()\n"
         "t:delay(0)\n"
         "assert(not pcall(function() t:export_img('headless.png') end))\n"
+        "assert(not pcall(function() t:snap('headless.png') end))\n"
         "assert(not pcall(function() t:loadpic('missing.png') end))\n"
         "assert(not pcall(function() t:pic('missing.png') end))\n"
         "assert(not pcall(function() t:forward() end))\n"
@@ -105,6 +140,13 @@ static int run_api_test(lua_State *L) {
 }
 
 int main(void) {
+    picoturtle_runtime_t runtime = {
+        .canvas_width = PICOTURTLE_DEFAULT_CANVAS_WIDTH,
+        .canvas_height = PICOTURTLE_DEFAULT_CANVAS_HEIGHT,
+        .initialized = false
+    };
+    picoturtle_runtime_set_default(&runtime);
+
     lua_State *L = luaL_newstate();
     if (L == NULL) {
         fprintf(stderr, "Unable to create Lua state.\n");
@@ -117,5 +159,6 @@ int main(void) {
 
     int status = run_api_test(L);
     lua_close(L);
+    picoturtle_runtime_set_default(NULL);
     return status == LUA_OK ? 0 : 1;
 }
