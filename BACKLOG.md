@@ -157,7 +157,7 @@ item must either be completed or deliberately moved to a later release backlog.
   - [x] Convert the useful `c-color-names` dependency from a Git submodule to
         a pinned vendored source under `third_party/`, retaining its license.
   - [x] Remove `.gitmodules` and stale nested-submodule metadata.
-  - [ ] Verify that a fresh clone builds without `git submodule` commands.
+  - [x] Verify that a fresh clone builds without `git submodule` commands.
   - [x] Audit and either update or delete the old Dockerfile, editor settings,
         CI workflows, TODO file, and other root-level legacy configuration.
   - [x] Add a third-party notices section covering Raylib, Lua, Noto Sans, and
