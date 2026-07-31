@@ -83,12 +83,17 @@ static int run_api_test(lua_State *L) {
         "t:font('default', 24)\n"
         "t:filltext('hello')\n"
         "t:stroketext('world')\n"
+        "t:disable_update()\n"
+        "t:paint()\n"
+        "t:enable_update()\n"
+        "t:delay(0)\n"
         "assert(not pcall(function() t:export_img('headless.png') end))\n"
         "assert(not pcall(function() t:loadpic('missing.png') end))\n"
         "assert(not pcall(function() t:pic('missing.png') end))\n"
         "assert(not pcall(function() t:forward() end))\n"
         "assert(not pcall(function() t:forward(1, 2) end))\n"
         "assert(not pcall(function() t:penwidth(0) end))\n"
+        "assert(not pcall(function() t:delay(-1) end))\n"
         "assert(not pcall(function() t:pencolor(256, 0, 0) end))\n"
         "assert(not pcall(function() t:canvas_size(100) end))\n";
 

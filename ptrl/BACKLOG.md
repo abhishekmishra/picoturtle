@@ -98,15 +98,15 @@ item must either be completed or deliberately moved to a later release backlog.
         `draw_mandrill_move.lua`.
 
 - [ ] Milestone 5: Restore presentation and animation semantics
-  - [ ] Define when drawing operations update the visible window.
-  - [ ] Implement and bind `enable_update` and `disable_update`.
-  - [ ] Implement and bind `paint` as an immediate presentation and event-poll
+  - [x] Define when drawing operations update the visible window.
+  - [x] Implement and bind `enable_update` and `disable_update`.
+  - [x] Implement and bind `paint` as an immediate presentation and event-poll
         operation.
-  - [ ] Implement and bind responsive `delay` without freezing the Raylib
+  - [x] Implement and bind responsive `delay` without freezing the Raylib
         window.
-  - [ ] Ensure long-running and animated Lua programs continue to process
+  - [x] Ensure long-running and animated Lua programs continue to process
         window-close events.
-  - [ ] Define behaviour when the user closes the window while Lua is still
+  - [x] Define behaviour when the user closes the window while Lua is still
         executing.
   - [ ] Verify animation using `draw_mandrill_move.lua`.
 

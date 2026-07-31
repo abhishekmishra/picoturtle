@@ -19,6 +19,8 @@ bool ptrl_runtime_init(
     runtime->canvas_height = height;
     runtime->background = RAYWHITE;
     runtime->initialized = false;
+    runtime->update_enabled = true;
+    runtime->close_requested = false;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(width, height, title);
@@ -71,6 +73,9 @@ void ptrl_runtime_begin_canvas(ptrl_runtime_t *runtime) {
 void ptrl_runtime_end_canvas(ptrl_runtime_t *runtime) {
     if (runtime != NULL && runtime->initialized) {
         EndTextureMode();
+        if (runtime->update_enabled) {
+            ptrl_runtime_present(runtime);
+        }
     }
 }
 
@@ -129,8 +134,33 @@ bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename) {
     return exported;
 }
 
+void ptrl_runtime_set_update_enabled(ptrl_runtime_t *runtime, bool enabled) {
+    if (runtime == NULL) {
+        return;
+    }
+    runtime->update_enabled = enabled;
+    if (enabled && runtime->initialized) {
+        ptrl_runtime_present(runtime);
+    }
+}
+
+void ptrl_runtime_paint(ptrl_runtime_t *runtime) {
+    ptrl_runtime_present(runtime);
+}
+
+void ptrl_runtime_delay(ptrl_runtime_t *runtime, int milliseconds) {
+    if (runtime == NULL || !runtime->initialized || milliseconds <= 0) {
+        return;
+    }
+
+    double deadline = GetTime() + ((double)milliseconds / 1000.0);
+    while (GetTime() < deadline && !ptrl_runtime_should_close(runtime)) {
+        ptrl_runtime_present(runtime);
+    }
+}
+
 void ptrl_runtime_present(ptrl_runtime_t *runtime) {
-    if (runtime == NULL || !runtime->initialized) {
+    if (runtime == NULL || !runtime->initialized || runtime->close_requested) {
         return;
     }
 
@@ -158,8 +188,18 @@ void ptrl_runtime_present(ptrl_runtime_t *runtime) {
         WHITE
     );
     EndDrawing();
+    if (WindowShouldClose()) {
+        runtime->close_requested = true;
+    }
 }
 
-bool ptrl_runtime_should_close(const ptrl_runtime_t *runtime) {
-    return runtime == NULL || !runtime->initialized || WindowShouldClose();
+bool ptrl_runtime_should_close(ptrl_runtime_t *runtime) {
+    if (runtime == NULL || !runtime->initialized || runtime->close_requested) {
+        return true;
+    }
+    if (WindowShouldClose()) {
+        runtime->close_requested = true;
+        return true;
+    }
+    return false;
 }

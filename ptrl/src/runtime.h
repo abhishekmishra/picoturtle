@@ -13,6 +13,8 @@ typedef struct ptrl_runtime {
     int canvas_height;
     Color background;
     bool initialized;
+    bool update_enabled;
+    bool close_requested;
 } ptrl_runtime_t;
 
 bool ptrl_runtime_init(
@@ -31,7 +33,10 @@ void ptrl_runtime_end_canvas(ptrl_runtime_t *runtime);
 void ptrl_runtime_clear(ptrl_runtime_t *runtime, Color color);
 bool ptrl_runtime_resize(ptrl_runtime_t *runtime, int width, int height);
 bool ptrl_runtime_export_png(ptrl_runtime_t *runtime, const char *filename);
+void ptrl_runtime_set_update_enabled(ptrl_runtime_t *runtime, bool enabled);
+void ptrl_runtime_paint(ptrl_runtime_t *runtime);
+void ptrl_runtime_delay(ptrl_runtime_t *runtime, int milliseconds);
 void ptrl_runtime_present(ptrl_runtime_t *runtime);
-bool ptrl_runtime_should_close(const ptrl_runtime_t *runtime);
+bool ptrl_runtime_should_close(ptrl_runtime_t *runtime);
 
 #endif // ___PTRTL_RUNTIME_H___

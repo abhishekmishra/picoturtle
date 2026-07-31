@@ -25,6 +25,16 @@ The normal windowed mode creates a persistent Raylib canvas, executes the Lua
 program, displays the completed canvas, and keeps the window responsive until
 the user closes it or presses Escape.
 
+Canvas updates are visible after each drawing operation by default.
+`disable_update()` keeps drawing into the off-screen canvas without presenting
+it, `paint()` presents it explicitly, and `enable_update()` restores automatic
+presentation. `delay(milliseconds)` continues presenting and processing window
+events while it waits.
+
+If the window is closed while Lua is executing, the runtime records the close
+request, stops further presentation, allows the current Lua call or script to
+finish, and then releases its Lua and Raylib resources normally.
+
 Use `-o`/`--output` to export the completed canvas before the window enters its
 display loop:
 

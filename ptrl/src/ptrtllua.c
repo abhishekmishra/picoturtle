@@ -593,6 +593,40 @@ static int rl_turtle_image_tostring(lua_State *L) {
     return 1;
 }
 
+static int rl_turtle_enable_update(lua_State *L) {
+    require_method_args(L, 0, "enable_update");
+    trtl_t *t = lua_turtle_getobj(L);
+    ptrl_runtime_set_update_enabled(t->runtime, true);
+    return 0;
+}
+
+static int rl_turtle_disable_update(lua_State *L) {
+    require_method_args(L, 0, "disable_update");
+    trtl_t *t = lua_turtle_getobj(L);
+    ptrl_runtime_set_update_enabled(t->runtime, false);
+    return 0;
+}
+
+static int rl_turtle_paint(lua_State *L) {
+    require_method_args(L, 0, "paint");
+    ptrl_runtime_paint(lua_turtle_getobj(L)->runtime);
+    return 0;
+}
+
+static int rl_turtle_delay(lua_State *L) {
+    require_method_args(L, 1, "delay");
+    trtl_t *t = lua_turtle_getobj(L);
+    lua_Integer milliseconds = luaL_checkinteger(L, 2);
+    luaL_argcheck(
+        L,
+        milliseconds >= 0,
+        2,
+        "delay must not be negative"
+    );
+    ptrl_runtime_delay(t->runtime, (int)milliseconds);
+    return 0;
+}
+
 static int rl_turtle_state_free(lua_State *L) {
     trtl_state_t **state_ptr = (trtl_state_t **)luaL_checkudata(
         L,
@@ -729,13 +763,13 @@ static const luaL_Reg PicoTurtle_meths[] =
         {"save", rl_turtle_save},
         {"restore", rl_turtle_restore},
         {"elapsed_time_ms", rl_turtle_elapsed_time_ms},
-        // {"delay", skia_turtle_delay}, // TODO
-        // {"paint", skia_turtle_paint}, // TODO
+        {"delay", rl_turtle_delay},
+        {"paint", rl_turtle_paint},
         {"drawme", rl_turtle_drawme},
         {"circle", rl_turtle_circle},
         {"arc", rl_turtle_arc},
-        // {"enable_update", skia_turtle_enable_update}, // TODO
-        // {"disable_update", skia_turtle_disable_update}, // TODO
+        {"enable_update", rl_turtle_enable_update},
+        {"disable_update", rl_turtle_disable_update},
         {"loadpic", rl_turtle_loadpic},
         {"pic", rl_turtle_pic},
         {NULL, NULL}};
