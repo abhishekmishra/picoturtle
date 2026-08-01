@@ -4,8 +4,9 @@ PicoTurtle is a Raylib-based runtime for drawing with Lua, codenamed
 `matrix-goose` for the `0.3.0` release. It runs turtle programs written in any
 code editor without requiring the former Qt IDE or Skia renderer.
 
-Version 0.3.0 is supported and release-tested on macOS. Windows and Linux
-support is planned after this release but has not yet been verified.
+Version 0.3.0 source builds and runtime operation are verified on macOS and
+Windows. The self-contained install layout is release-tested on macOS. Linux
+support is planned after this release and has not yet been verified.
 
 ## Build
 

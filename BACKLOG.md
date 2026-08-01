@@ -111,7 +111,7 @@ item must either be completed or deliberately moved to a later release backlog.
         executing.
   - [x] Verify animation using `draw_mandrill_move.lua`.
 
-- [ ] Milestone 6: Complete compatibility, tests, and release preparation
+- [x] Milestone 6: Complete compatibility, tests, and release preparation
 
   Repository promotion and naming:
 
@@ -217,8 +217,8 @@ item must either be completed or deliberately moved to a later release backlog.
         post-0.3.0 backlog with the unsupported status documented.
   - [x] Review the final repository for generated files, obsolete references,
         oversized artifacts, and accidental legacy dependencies.
-  - [ ] Push all release commits and the pre-migration safety tag.
-  - [ ] Tag and publish `v0.3.0` only after every remaining item above is
+  - [x] Push all release commits and the pre-migration safety tag.
+  - [x] Tag and publish `v0.3.0` only after every remaining item above is
         complete or deliberately rescheduled.
 
 ## Post-0.3.0 backlog
@@ -227,5 +227,7 @@ item must either be completed or deliberately moved to a later release backlog.
       Latin text, and pictures.
 - [ ] Define and document a small pixel-tolerance policy for reference-image
       differences across supported graphics drivers.
-- [ ] Establish and verify supported Windows and Linux build, install, and
-      runtime workflows. The 0.3.0 release is macOS-only.
+- [ ] Establish and verify a supported Linux build, install, and runtime
+      workflow. Linux is not supported by the 0.3.0 release.
+- [ ] Add and verify a self-contained Windows install/package layout; the
+      Windows source build and runtime are verified for 0.3.0.

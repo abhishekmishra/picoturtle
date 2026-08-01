@@ -2,7 +2,7 @@
 The project follows [Semantic Versioning](https://semver.org/). There is a
 section for each release - which lists major changes made in the release.
 
-## 0.3.0 (matrix-goose) — unreleased
+## 0.3.0 (matrix-goose) — 2026-08-01
 
 - Replaced the Skia renderer and Qt desktop IDE with a focused Raylib runtime
   that runs Lua programs from any code editor.
@@ -22,6 +22,8 @@ section for each release - which lists major changes made in the release.
 - Added automated C, Lua API, retained-sample, and CLI tests.
 - Added a self-contained macOS install layout and `--no-wait` mode for
   non-interactive program execution and PNG export.
+- Verified source builds and runtime operation on macOS and Windows; Linux
+  support remains deferred.
 - Replaced the generated MkDocs website with maintainable plain Markdown.
 
 **0.2.0-alpha.8**  2025-02-04 Abhishek Mishra  <abhishekmishra3@gmail.com>
