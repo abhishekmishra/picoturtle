@@ -1,5 +1,9 @@
 # PicoTurtle documentation
 
+The project homepage is available at
+[picoturtle.neolateral.in](https://picoturtle.neolateral.in/). The Markdown
+files in this directory remain the canonical detailed documentation.
+
 The documentation is plain Markdown so it can be read directly on GitHub or in
 any code editor. No documentation generator is required.
 
